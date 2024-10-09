@@ -12,11 +12,11 @@ Route::prefix('admin')->as('admin.')->group(function () {
         return view('admin.contents.dashboard');
     })->name('dashboard');
     // Route quản lý categories
-    Route::controller(CategoryController::class)->prefix('categories')->as('categories.')
-        ->group(function () {
-            Route::get('list', 'listCategories')->name('list');
-            // Route::get('add', 'addCategory')->name('add');
-        });
+    // Route::controller(CategoryController::class)->prefix('categories')->as('categories.')
+    //     ->group(function () {
+    //         Route::get('list', 'listCategories')->name('list');
+    //         // Route::get('add', 'addCategory')->name('add');
+    //     });
     // Route quản lý products
     Route::controller(ProductController::class)->prefix('product')->as('product.')->group(function () {
         Route::get('addProduct', 'showFormAdd')->name('addProduct');
