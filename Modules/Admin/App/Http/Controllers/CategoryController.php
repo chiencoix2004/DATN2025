@@ -75,9 +75,10 @@ class CategoryController extends Controller
      * Show the form for editing the specified resource.
      */
     public function edit($id)
-    {
+    {   
+        $categories = CategoryModel::all();
         $danhMuc = CategoryModel::find($id);
-        return view('admin::category.update',compact('danhMuc',));
+        return view('admin::category.update',compact('danhMuc','categories'));
     }
 
     /**
