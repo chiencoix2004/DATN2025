@@ -6,7 +6,7 @@
                   <div class="newsletter-area">
                       <div class="newsletter-logo">
                           <a href="javascript:void(0)">
-                              <img src="assets/images/footer/logo/1.png" alt="Logo">
+                              <img src="{{ asset('theme/user//images/rsz_2logo2.png') }}" alt="Logo">
                           </a>
                       </div>
                       <p class="short-desc">Subscribe to our newsleter, Enter your emil address</p>
