@@ -1,7 +1,7 @@
 
 
 
-@extends('user::layouts.master')
+@extends('user::layouts.main')
 
 {{-- @section('title')
     @parent

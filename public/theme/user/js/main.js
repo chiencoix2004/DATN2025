@@ -1,5 +1,3 @@
-//import jQuery from 'jquery';
-import 'jquery';
 (function ($) {
 	'use strict';
 	/*---------------------------------------
@@ -688,7 +686,7 @@ import 'jquery';
 	$('.zoom').zoom();
 
 	/*----------------------------------
-	/* 	Instafeed active
+	/* 	Instafeed active 
 ------------------------------------*/
 	if ($('#Instafeed').length) {
 		var feed = new Instafeed({
