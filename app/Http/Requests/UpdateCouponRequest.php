@@ -26,7 +26,7 @@ class UpdateCouponRequest extends FormRequest
 
         return [
            'name' => 'required|string|max:255',
-        'date_start' => 'required|date|after_or_equal:today',
+        'date_start' => 'required|date',
         'date_end' => 'required|date|after:date_start',
         'code' => [
             'required',
@@ -71,8 +71,7 @@ class UpdateCouponRequest extends FormRequest
 
             'date_start.required' => 'Ngày bắt đầu là bắt buộc.',
             'date_start.date' => 'Ngày bắt đầu phải là một ngày hợp lệ.',
-            'date_start.after_or_equal' => 'Ngày bắt đầu phải là ngày hôm nay hoặc sau ngày hôm nay.',
-
+    
             'date_end.required' => 'Ngày kết thúc là bắt buộc.',
             'date_end.date' => 'Ngày kết thúc phải là một ngày hợp lệ.',
             'date_end.after' => 'Ngày kết thúc phải sau ngày bắt đầu.',
