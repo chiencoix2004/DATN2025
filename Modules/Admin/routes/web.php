@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use Modules\Admin\App\Http\Controllers\AccountController;
 use Modules\Admin\App\Http\Controllers\AttributeController;
+use Modules\Admin\App\Http\Controllers\BannerController;
 use Modules\Admin\App\Http\Controllers\CategoryController;
 use Modules\Admin\App\Http\Controllers\OrderController;
 use Modules\Admin\App\Http\Controllers\ProductController;
@@ -29,6 +30,16 @@ Route::controller(AccountController::class)
 ->prefix('admin/account')
 ->group(function () {
    Route::get('list', 'index')->name('list');
+});
+
+Route::controller(BannerController::class)
+->name('admin.banner.')
+->prefix('admin/banner')
+->group(function () {
+   Route::get('list', 'index')->name('list');
+   route::put('update', 'update')->name('update');
+   route::get('delete/{id}', 'delete')->name('delete');
+   route::post('add', 'add')->name('add');
 });
 
 
