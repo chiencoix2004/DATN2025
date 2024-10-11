@@ -40,7 +40,12 @@ Route::prefix('admin')->as('admin.')->group(function () {
     Route::controller(CategoryController::class)->prefix('categories')->as('categories.')
         ->group(function () {
             Route::get('list', 'listCategories')->name('list');
-            // Route::get('add', 'addCategory')->name('add');
+            Route::get('create', 'create')->name('create');
+            Route::post('store', 'store')->name('store');
+            Route::get('/{id}/show', 'show')->name('show');
+            Route::get('/{id}/edit', 'edit')->name('edit');
+            Route::put('{id}update', 'update')->name('update');
+            Route::delete('/{id}/destroy', 'destroy')->name('destroy');
         });
     // Route quản lý products
     Route::controller(ProductController::class)->prefix('product')->as('product.')->group(function () {
