@@ -26,6 +26,7 @@ return new class extends Migration
             $table->string('ship_user_address',255);
             $table->string('ship_user_note',255);
             $table->enum('status_order',['reorder', 'pending','confirmed','shipping','received','canceled']);
+            $table->enum('status_payment',['paid', 'unpaid']);
             $table->enum('payment_method',['cod', 'momo-card','momo_qr']);
             $table->integer('total_price');
             $table->dateTime('date_create_order');

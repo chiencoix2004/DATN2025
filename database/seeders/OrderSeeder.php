@@ -18,6 +18,8 @@ class OrderSeeder extends Seeder
         $orderStatuses = ['reorder', 'pending', 'confirmed', 'shipping', 'received', 'canceled'];
         $paymentMethods = ['cod', 'momo-card', 'momo_qr'];
         $shippingMethods = ['express', 'normal'];
+        $statusPayments = ['paid', 'unpaid'];
+
 
         for ($i = 1; $i <= 30; $i++) {
             DB::table('orders')->insert([
@@ -34,6 +36,7 @@ class OrderSeeder extends Seeder
                 'ship_user_note' => "lêu lêu $i",
                 'total_price' => rand(100000, 2000000),
                 'status_order' => $orderStatuses[array_rand($orderStatuses)],
+                'status_payment' => $statusPayments[array_rand($statusPayments)],
                 'payment_method' => $paymentMethods[array_rand($paymentMethods)],
                 'date_create_order' => now(),
                 'code_coupon' => 'KHONGGIAMGIA',

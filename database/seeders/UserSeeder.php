@@ -25,10 +25,9 @@ class UserSeeder extends Seeder
                 'address' => "Ba Vì $i",
                 'user_image' => "https://mcdn.coolmate.me/image/January2023/pho-thoi-trang-870_220.jpg",
                 'roles_id' => rand(1, 3),
-                'fullname' => "Đỗ Phương Uy $i",
+                'full_name' => "Đỗ Phương Uy $i",
                 'verify' => 1,
                 'status' => 'active',
-                'name' => "Uy$i"
             ]);
         }
     }
