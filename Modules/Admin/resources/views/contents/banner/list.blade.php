@@ -1,6 +1,10 @@
 @extends('admin::layout.master')
 @section('title')
     Admin | Banner manager
+    <?php
+    $count = 0;
+    $counttitle = 0;
+    ?>
 @endsection
 @section('contents')
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -17,15 +21,15 @@
                                 <li class="nav-item">
                                     <a @if ($idbanner->id == 1) class="nav-link active" @else class="nav-link" @endif
                                         data-bs-toggle="tab" href="#overview{{ $idbanner->id }}" role="tab">
-                                        <span>Banner {{ $idbanner->id }}</span>
+                                        <span>Banner {{ $count+=1 }}</span>
                                     </a>
                                 </li>
                             @endforeach
-                            {{-- <li class="nav-item">
+                            <li class="nav-item">
                                 <a class="nav-link" data-bs-toggle="tab" href="#adder" role="tab">
                                     <span>Thêm mới</span>
                                 </a>
-                            </li> --}}
+                            </li>
                         </ul>
 
 
@@ -44,7 +48,7 @@
                                             <div id="banner{{ $items->id }}-productinfo-collapse" class="collapse show"
                                                 data-bs-parent="#banner{{ $items->id }}-accordion">
                                                 <div class="p-4 border-top">
-                                                    <h4 class="font-size-16 mb-3 mt-3">Banner {{ $items->id }}</h4>
+                                                     <h4 class="font-size-16 mb-3 mt-3">Banner {{   $counttitle+=1 }}</h4>
                                                     <form action="{{ route('admin.banner.update') }}" method="POST"
                                                         enctype="multipart/form-data">
                                                         @csrf
@@ -83,8 +87,11 @@
                                                             </select>
                                                         </div>
                                                         <button type="submit" class="btn btn-primary">Cập nhật</button>
-                                                        {{-- <a type="button" id="confrim_butt" href="{{ route('admin.banner.delete', $items->id) }}" onclick=" return confrim()" class="btn btn-danger">Xóa</a> --}}
+                                                        <a href="{{ route('admin.banner.delete', ['id' => $items->id]) }}"
+                                                            class="btn btn-danger" onclick="return confrim()">Xóa</a>
+
                                                     </form>
+
 
                                                 </div>
                                             </div>
@@ -107,15 +114,21 @@
                                             data-bs-parent="#banner-accordion">
                                             <div class="p-4 border-top">
                                                 <h4 class="font-size-16 mb-3 mt-3">Thêm Banner</h4>
-                                                <form action="#" method="POST" enctype="multipart/form-data">
+                                                <form action="{{ route('admin.banner.add') }}" method="POST" enctype="multipart/form-data">
                                                     @csrf
-                                                    @method('PUT')
+                                                    @method('POST')
 
                                                     <div class="mb-3">
                                                         <label for="adder" class="form-label">Ảnh</label>
                                                         <input id="adder" name="hinh_anh" type="file" class="form-control" accept="image/*" onchange="previewImagesindex(event)">
                                                         <div id="image-preview-container" class="mt-2"></div>
 
+                                                    </div>
+                                                    <div class="mb-3">
+                                                        <label for="projectname" class="form-label">Liên kết sản
+                                                            phẩm</label>
+                                                        <input id="projectname" name="lien_ket" type="text"
+                                                            class="form-control">
                                                     </div>
 
                                                     <div class="mb-3">

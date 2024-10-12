@@ -28,10 +28,9 @@ class Banner extends Model
         return $this->select('id', 'img_banner', 'link','banner_position')->get();
     }
 
-    public function Addbanner($id, $image, $link, $banner_position)
+    public function Addbanner( $image, $link, $banner_position)
     {
         return $this->insert([
-            'id' => $id,
             'img_banner' => $image,
             'link' => $link,
             'banner_position' => $banner_position,
