@@ -44,6 +44,31 @@ class BannerController extends Controller
         }
 
     }
+    public function delete($id)
+    {
+        $data = new Banner();
+        $banner = $data->deleteBanner($id);
+        if($banner){
+            return redirect()->route('admin.banner.list')->with('success', 'Xóa banner thành công');
+        } else {
+            return redirect()->route('admin.banner.list')->with('error', 'Xóa banner thất bại');
+        }
+    }
+    public function add(Request $request)
+    {
+        $file = $request->file('hinh_anh');
+        $fileName = time() . '_' . $file->getClientOriginalName();
+        $data =  $file->move(public_path('uploads'), $fileName);
+        if ($data) {
+            try {
+                $data = new Banner();
+                $banner = $data->Addbanner( $fileName, $request->lien_ket, $request->vi_tri);
+                return redirect()->route('admin.banner.list')->with('success', 'Thêm banner thành công');
+            } catch (\Exception $e) {
+                dd($e->getMessage());
+            }
+        }
+    }
 
 
 }
