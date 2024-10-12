@@ -8,6 +8,7 @@ use Modules\Admin\App\Http\Controllers\OrderController;
 use Modules\Admin\App\Http\Controllers\ProductController;
 use Modules\Admin\App\Http\Controllers\CouponController;
 use Modules\Admin\App\Http\Controllers\AdminController;
+use Modules\Admin\App\Http\Controllers\StatisticalController;
 
 /*
 |--------------------------------------------------------------------------
@@ -74,5 +75,9 @@ Route::prefix('admin')->as('admin.')->group(function () {
         Route::get('/{id}/edit', 'edit')->name('edit');
         Route::put('{id}update', 'update')->name('update');
         Route::delete('/{id}/destroy', 'destroy')->name('destroy');
+    });
+    //thống kê
+    Route::controller(StatisticalController::class)->prefix('statistical')->as('statistical.')->group(function () {
+        Route::get('listStatistical', 'index')->name('listStatistical');
     });
 });
