@@ -1,5 +1,7 @@
 @extends('admin::layout.master')
-
+@section('title')
+    Sửa mã giảm giá : {{ $coupon->name }}
+@endsection
 
 @section('css-libs')
     <link rel="stylesheet" href="{{ asset('bootstrap-5.3.3/css/bootstrap.min.css') }}">

@@ -1,5 +1,8 @@
 @extends('admin::layout.master')
 
+@section('title')
+    Danh sách mã giảm giá
+@endsection
 
 @section('css-libs')
     <link rel="stylesheet" href="{{ asset('bootstrap-5.3.3/css/bootstrap.min.css') }}">
