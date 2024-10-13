@@ -93,23 +93,23 @@
                         aria-expanded="false" aria-controls="orders">
                         <div class="d-flex align-items-center">
                             <span class="nav-link-icon">
-                                <span class="fab fa-opencart"></span>
+                                <span class="far fa-file-alt"></span>
                             </span>
-                            <span class="nav-link-text ps-1">Orders</span>
+                            <span class="nav-link-text ps-1">Đơn hàng</span>
                         </div>
                     </a>
                     <ul class="nav collapse" id="orders">
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('admin.orders.list') }}">
                                 <div class="d-flex align-items-center">
-                                    <span class="nav-link-text ps-1">List Orders</span>
+                                    <span class="nav-link-text ps-1">Danh sách đơn hàng</span>
                                 </div>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ route('admin.orders.detail') }}">
+                            <a class="nav-link" href="{{ route('admin.invoice.list') }}">
                                 <div class="d-flex align-items-center">
-                                    <span class="nav-link-text ps-1">Detail Order</span>
+                                    <span class="nav-link-text ps-1">Danh sách hóa đơn</span>
                                 </div>
                             </a>
                         </li>
