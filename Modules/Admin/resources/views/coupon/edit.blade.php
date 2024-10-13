@@ -46,20 +46,20 @@
                                 <input class="form-control" name="name" id="name" type="text"
                                     value="{{ $coupon->name }}">
                                 @error('name')
-                                    <div class="alert alert-danger">{{ $message }}</div>
+                                    <label class="form-label text-danger">{{ $message }} </label>
                                 @enderror
                             </div>
                             <div class="col-12 mb-3"><label class="form-label" for="code">Mã giảm giá:</label>
                                 <input class="form-control" name="code" id="code" type="text"
                                     value="{{ $coupon->code }}">
                                 @error('code')
-                                    <div class="alert alert-danger">{{ $message }}</div>
+                                    <label class="form-label text-danger">{{ $message }} </label>
                                 @enderror
                             </div>
                             <div class="col-12 mb-3"><label class="form-label" for="description">Mô tả:</label>
                                 <textarea class="form-control" name="description" id="description" rows="3">{{ $coupon->description }}</textarea>
                                 @error('description')
-                                    <div class="alert alert-danger">{{ $message }}</div>
+                                    <label class="form-label text-danger">{{ $message }} </label>
                                 @enderror
                             </div>
                             <div class="col-12 mb-3">
@@ -67,7 +67,7 @@
                                 <input class="form-control" name="quantity" id="quantity" type="number"
                                     value="{{ $coupon->quantity }}">
                                 @error('quantity')
-                                    <div class="alert alert-danger">{{ $message }}</div>
+                                    <label class="form-label text-danger">{{ $message }} </label>
                                 @enderror
                             </div>
                         </div>
@@ -85,7 +85,7 @@
                                 <input type="datetime-local" class="form-control" id="date_start" name="date_start"
                                     value="{{ $coupon->date_start }}">
                                 @error('date_start')
-                                    <div class="alert alert-danger">{{ $message }}</div>
+                                    <label class="form-label text-danger">{{ $message }} </label>
                                 @enderror
                             </div>
                             <div class="col-sm-6 mb-3">
@@ -93,7 +93,7 @@
                                 <input type="datetime-local" class="form-control" id="date_end" name="date_end"
                                     value="{{ $coupon->date_end }}">
                                 @error('date_end')
-                                    <div class="alert alert-danger">{{ $message }}</div>
+                                    <label class="form-label text-danger">{{ $message }} </label>
                                 @enderror
                             </div>
                         </div>
@@ -118,7 +118,7 @@
                                             Cố định</option>
                                     </select>
                                     @error('discount_type')
-                                        <div class="alert alert-danger">{{ $message }}</div>
+                                        <label class="form-label text-danger">{{ $message }} </label>
                                     @enderror
                                 </div>
                                 <div class="col-12">
@@ -126,7 +126,7 @@
                                     <input class="form-control" name="discount_amount" id="discount_amount"
                                         type="number" value="{{ $coupon->discount_amount }}">
                                     @error('discount_amount')
-                                        <div class="alert alert-danger">{{ $message }}</div>
+                                        <label class="form-label text-danger">{{ $message }} </label>
                                     @enderror
                                 </div>
                             </div>
@@ -144,7 +144,7 @@
                                     <input class="form-control" id="minimum_spend" name="minimum_spend" type="text"
                                         value="{{ $coupon->minimum_spend }}">
                                     @error('minimum_spend')
-                                        <div class="alert alert-danger">{{ $message }}</div>
+                                        <label class="form-label text-danger">{{ $message }} </label>
                                     @enderror
                                 </div>
                                 <div class="col-12">
@@ -153,7 +153,7 @@
                                         value="{{ $coupon->maximum_spend }}">
                                 </div>
                                 @error('maximum_spend')
-                                    <div class="alert alert-danger">{{ $message }}</div>
+                                    <label class="form-label text-danger">{{ $message }} </label>
                                 @enderror
                             </div>
                         </div>
