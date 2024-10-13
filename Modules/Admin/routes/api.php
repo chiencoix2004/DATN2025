@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Modules\Admin\App\Http\Controllers\Api\CouponController;
+use Modules\Admin\App\Http\Controllers\Api\UserController;
 
 /*
     |--------------------------------------------------------------------------
@@ -29,3 +30,13 @@ Route::controller(CouponController::class)
         Route::put('/{id}', 'update')->name('update');
         Route::delete('/{id}', 'destroy')->name('destroy');
     });
+
+    // Route::controller(UserController::class)
+    // ->prefix('users') // Add 'api' prefix
+    // ->as('api.users.')    // Add 'api' prefix for route names
+    // ->group(function () {
+    //     Route::get('/', 'index')->name('index');
+    //     Route::post('/', 'store')->name('store');
+    //     Route::get('/{id}', 'show')->name('show');
+    //     Route::put('/{id}', 'update')->name('update');
+    // });

@@ -9,6 +9,7 @@ use Modules\Admin\App\Http\Controllers\OrderController;
 use Modules\Admin\App\Http\Controllers\ProductController;
 use Modules\Admin\App\Http\Controllers\CouponController;
 use Modules\Admin\App\Http\Controllers\AdminController;
+use Modules\Admin\App\Http\Controllers\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -82,6 +83,18 @@ Route::prefix('admin')->as('admin.')->group(function () {
     Route::controller(CouponController::class)
     ->prefix('coupons')
     ->as('coupons.')
+    ->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::get('create', 'create')->name('create');
+        Route::post('store', 'store')->name('store');
+        Route::get('/{id}/show', 'show')->name('show');
+        Route::get('/{id}/edit', 'edit')->name('edit');
+        Route::put('{id}update', 'update')->name('update');
+        Route::delete('/{id}/destroy', 'destroy')->name('destroy');
+    });
+    Route::controller(UserController::class)
+    ->prefix('users')
+    ->as('users.')
     ->group(function () {
         Route::get('/', 'index')->name('index');
         Route::get('create', 'create')->name('create');
