@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Order;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
@@ -14,10 +15,11 @@ class OrderSeeder extends Seeder
      */
     public function run(): void
     {
-        $discountTypes = ['percent', 'fixed'];
-        $orderStatuses = ['reorder', 'pending', 'confirmed', 'shipping', 'received', 'canceled'];
-        $paymentMethods = ['cod', 'momo-card', 'momo_qr'];
-        $shippingMethods = ['express', 'normal'];
+        $discountTypes = Order::TYPE_DISCOUNT;
+        $orderStatuses = Order::STATUS_ORDER;
+        $paymentStatus = Order::STATUS_PAYMENT;
+        $paymentMethods = Order::METHOD_PAYMENT;
+        $shippingMethods = Order::METHOD_SHIPPING;
 
         for ($i = 1; $i <= 30; $i++) {
             DB::table('orders')->insert([
@@ -35,6 +37,7 @@ class OrderSeeder extends Seeder
                 'total_price' => rand(100000, 2000000),
                 'status_order' => $orderStatuses[array_rand($orderStatuses)],
                 'payment_method' => $paymentMethods[array_rand($paymentMethods)],
+                'status_payment' => $paymentStatus[array_rand($paymentStatus)],
                 'date_create_order' => now(),
                 'code_coupon' => 'KHONGGIAMGIA',
                 'discount_type' => $discountTypes[array_rand($discountTypes)],
