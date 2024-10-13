@@ -33,12 +33,12 @@
                             <hr class="mb-0 navbar-vertical-divider" />
                         </div>
                     </div>
-                    <a class="nav-link" href="" role="button">
+                    <a class="nav-link" href="{{ route('admin.coupons.index') }}" role="button">
                         <div class="d-flex align-items-center">
                             <span class="nav-link-icon">
                                 <span class="fas fa-ticket-alt"></span>
                             </span>
-                            <span class="nav-link-text ps-1">Coupons</span>
+                            <span class="nav-link-text ps-1">Mã Giảm giá</span>
                         </div>
                     </a>
                     <a class="nav-link" href="{{ route('admin.categories.list') }}">
@@ -46,7 +46,7 @@
                             <span class="nav-link-icon">
                                 <span class="fas fa-list-alt"></span>
                             </span>
-                            <span class="nav-link-text ps-1">Categories</span>
+                            <span class="nav-link-text ps-1">Danh mục</span>
                         </div>
                     </a>
                     <a class="nav-link dropdown-indicator" href="#product" role="button" data-bs-toggle="collapse"
@@ -55,21 +55,21 @@
                             <span class="nav-link-icon">
                                 <span class="fas fa-boxes"></span>
                             </span>
-                            <span class="nav-link-text ps-1">Products</span>
+                            <span class="nav-link-text ps-1">Sản phẩm</span>
                         </div>
                     </a>
                     <ul class="nav collapse" id="product">
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('admin.product.list') }}">
                                 <div class="d-flex align-items-center">
-                                    <span class="nav-link-text ps-1">List Products</span>
+                                    <span class="nav-link-text ps-1">Danh sách sản phẩm</span>
                                 </div>
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('admin.product.addProduct') }}">
                                 <div class="d-flex align-items-center">
-                                    <span class="nav-link-text ps-1">Add Product</span>
+                                    <span class="nav-link-text ps-1">Thêm sản phẩm</span>
                                 </div>
                             </a>
                         </li>

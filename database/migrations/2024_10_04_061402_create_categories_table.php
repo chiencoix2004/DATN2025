@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('slug',255);
             $table->string('note',255);
             $table->text('image_cover');
-            $table->integer('parent_id',);
+            $table->integer('parent_id',)->nullable()->default(null);
             $table->timestamps();
             $table->softDeletes();
         });
