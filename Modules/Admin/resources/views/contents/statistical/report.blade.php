@@ -3,192 +3,312 @@
     Admin | Report
 @endsection
 @section('contents')
-  <div class="d-flex mb-4 mt-3"><span class="fa-stack me-2 ms-n1"><i class="fas fa-circle fa-stack-2x text-300"></i><i class="fa-inverse fa-stack-1x text-primary fas fa-percentage"></i></span>
-    <div class="col">
-      <h5 class="mb-0 text-primary position-relative"><span class="bg-200 dark__bg-1100 pe-3">Thống kê doanh thu</span><span class="border position-absolute top-50 translate-middle-y w-100 start-0 z-n1"></span></h5>
+    <div class="d-flex mb-4 mt-3">
+        <span class="fa-stack me-2 ms-n1">
+            <i class="fas fa-circle fa-stack-2x text-300"></i>
+            <i class="fa-inverse fa-stack-1x text-primary fas fa-percentage"></i>
+        </span>
+        <div class="col">
+            <h5 class="mb-0 text-primary position-relative">
+                <span class="bg-200 dark__bg-1100 pe-3">Thống kê doanh thu</span>
+                <span class="border position-absolute top-50 translate-middle-y w-100 start-0 z-n1"></span>
+            </h5>
+        </div>
     </div>
-  </div>
-  <div class="card mb-3">
-    <div class="card-body px-xxl-0 pt-4">
-      <div class="row g-0">
-        <div class="col-xxl-3 col-md-6 px-3 text-center border-end-md border-bottom border-bottom-xxl-0 pb-3 p-xxl-0 ps-md-0">
-          <div class="icon-circle icon-circle-primary"><span class="fs-7 fas fa-user-graduate text-primary"></span></div>
-          <h4 class="mb-1 font-sans-serif"><span class="text-700 mx-2" data-countup='{"endValue":"4968"}'></span><span class="fw-normal text-600">Tài khoản khách hàng</span></h4>
-          <p class="fs-10 fw-semi-bold mb-0">4203 <span class="text-600 fw-normal"></span></p>
+
+    <div class="row g-3 mb-3">
+        <div class="card">
+          <div class="card-header d-flex flex-between-center bg-body-tertiary py-2">
+            <h5 class="mb-0">Lọc </h5>
+          </div>
+          <div class="card-body">
+            <form action="{{ route('admin.statistical.listStatistical') }}" method="GET">
+                <div class="row g-3">
+                  <div class="col-md-3">
+                    <div class="form-group">
+                      <label for="start_date">Ngày bắt đầu:</label>
+                      <div class="input-group"> 
+                        <input type="date" class="form-control" id="start_date" name="start_date" value="{{ $startDate }}">
+                        <span class="input-group-text"><i class="fas fa-calendar-alt"></i></span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-3">
+                    <div class="form-group">
+                      <label for="end_date">Ngày kết thúc:</label>
+                      <div class="input-group">
+                        <input type="date" class="form-control" id="end_date" name="end_date" value="{{ $endDate }}">
+                        <span class="input-group-text"><i class="fas fa-calendar-alt"></i></span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label for="status_order">Trạng thái đơn hàng:</label>
+                      <select class="form-select" id="status_order" name="status_order">
+                        <option value="">Tất cả</option>
+                        <option value="reorder" {{ request('status_order') == 'reorder' ? 'selected' : '' }}>Đặt lại</option>
+                        <option value="pending" {{ request('status_order') == 'pending' ? 'selected' : '' }}>Chờ xử lý</option>
+                        <option value="confirmed" {{ request('status_order') == 'confirmed' ? 'selected' : '' }}>Đã xác nhận</option>
+                        <option value="shipping" {{ request('status_order') == 'shipping' ? 'selected' : '' }}>Đang giao</option>
+                        <option value="received" {{ request('status_order') == 'received' ? 'selected' : '' }}>Đã nhận</option>
+                        <option value="canceled" {{ request('status_order') == 'canceled' ? 'selected' : '' }}>Đã hủy</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label for="phone">Số điện thoại:</label>
+                      <input type="text" class="form-control" id="phone" name="phone" value="{{ request('phone') }}">
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label for="email">Email:</label>
+                      <input type="email" class="form-control" id="email" name="email" value="{{ request('email') }}">
+                    </div>
+                  </div>
+                  <div class="col-12 d-flex justify-content-end">
+                    <button type="submit" class="btn btn-primary">Thống kê</button>
+                  </div>
+                </div>
+            </form>
+          </div>    
         </div>
-        <div class="col-xxl-3 col-md-6 px-3 text-center border-end-xxl border-bottom border-bottom-xxl-0 pb-3 pt-4 pt-md-0 pe-md-0 p-xxl-0">
-          <div class="icon-circle icon-circle-info"><span class="fs-7 fas fa-chalkboard-teacher text-info"></span></div>
-          <h4 class="mb-1 font-sans-serif"><span class="text-700 mx-2" data-countup='{"endValue":"324"}'></span><span class="fw-normal text-600">Sản phẩm</span></h4>
-          <p class="fs-10 fw-semi-bold mb-0">301 <span class="text-600 fw-normal"></span></p>
-        </div>
-        <div class="col-xxl-3 col-md-6 px-3 text-center border-end-md border-bottom border-bottom-md-0 pb-3 pt-4 p-xxl-0 pb-md-0 ps-md-0">
-          <div class="icon-circle icon-circle-success"><span class="fs-7 fas fa-book-open text-success"></span></div>
-          <h4 class="mb-1 font-sans-serif"><span class="text-700 mx-2" data-countup='{"endValue":"3712"}'></span><span class="fw-normal text-600">Đơn hàng</span></h4>
-          <p class="fs-10 fw-semi-bold mb-0">2779 <span class="text-600 fw-normal"></span></p>
-        </div>
-        <div class="col-xxl-3 col-md-6 px-3 text-center pt-4 p-xxl-0 pb-0 pe-md-0">
-          <div class="icon-circle icon-circle-warning"><span class="fs-7 fas fa-dollar-sign text-warning"></span></div>
-          <h4 class="mb-1 font-sans-serif"><span class="text-700 mx-2" data-countup='{"endValue":"1054"}'></span><span class="fw-normal text-600">Lãi xuất</span></h4>
-          <p class="fs-10 fw-semi-bold mb-0">1201 <span class="text-600 fw-normal"></span></p>
-        </div>
-      </div>
     </div>
-  </div>
-  <div class="row g-3 mb-3">
-    <div class="col-xxl-8">
-      <div class="card overflow-hidden">
-        <div class="card-header audience-chart-header p-0 bg-body-tertiary scrollbar-overlay">
-          <ul class="nav nav-tabs border-0 chart-tab flex-nowrap" id="audience-chart-tab" role="tablist">
-            <li class="nav-item" role="presentation"><a class="nav-link mb-0 active" id="users-tab" data-bs-toggle="tab" href="#users" role="tab" aria-controls="users" aria-selected="true">
-                <div class="audience-tab-item p-2 pe-4">
-                  <h6 class="text-800 fs-11 text-nowrap">Tài khoản</h6>
-                  <h5 class="text-800">3.9K</h5>
-                  <div class="d-flex align-items-center"><span class="fas fa-caret-up text-success"></span>
-                    <h6 class="fs-11 mb-0 ms-2 text-success">62.0%</h6>
+
+
+    <div class="row g-3 mb-3">
+        <div class="col-sm-6 col-md-4">
+          <div class="card overflow-hidden" style="min-width: 12rem">
+            <div class="bg-holder bg-card" style="background-image:url({{ asset('theme/admin/img/icons/spot-illustrations/corner-1.png') }});"></div>
+            <div class="card-body position-relative">
+              <h6>Doanh thu</h6>
+              <div class="display-4 fs-5 mb-2 fw-normal font-sans-serif text-warning" data-countup='{"endValue":58.386,"decimalPlaces":2,"suffix":"k"}'>{{ number_format($revenue) }}</div><a class="fw-semi-bold fs-10 text-nowrap" href="{{ route('admin.statistical.statisticalDetail') }}">Chi tiết<span class="fas fa-angle-right ms-1" data-fa-transform="down-1"></span></a>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-6 col-md-4">
+          <div class="card overflow-hidden" style="min-width: 12rem">
+            <div class="bg-holder bg-card" style="background-image:url({{ asset('theme/admin/img/icons/spot-illustrations/corner-2.png') }});"></div>
+            <div class="card-body position-relative">
+              <h6>Đơn hàng</h6>
+              <div class="display-4 fs-5 mb-2 fw-normal font-sans-serif text-info" data-countup='{"endValue":23.434,"decimalPlaces":2,"suffix":"k"}'>{{ $totalOrders }}</div><a class="fw-semi-bold fs-10 text-nowrap" href="{{ route('admin.statistical.statisticalDetail') }}">Chi tiết <span class="fas fa-angle-right ms-1" data-fa-transform="down-1"></span></a>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card overflow-hidden" style="min-width: 12rem">
+            <div class="bg-holder bg-card" style="background-image:url({{ asset('theme/admin/img/icons/spot-illustrations/corner-3.png') }});"></div>
+            <div class="card-body position-relative">
+              <h6>Tỷ lệ thành công</h6>
+              <div class="display-4 fs-5 mb-2 fw-normal font-sans-serif" data-countup='{"endValue":43594,"prefix":"$"}'>{{ $successRate }}%</div><a class="fw-semi-bold fs-10 text-nowrap" href="{{ route('admin.statistical.statisticalDetail') }}">Chi tiết<span class="fas fa-angle-right ms-1" data-fa-transform="down-1"></span></a>
+            </div>
+          </div>
+        </div>
+    </div>
+      
+    <div class="card overflow-hidden mb-3">
+        <div class="card-header p-0 scrollbar">
+          <ul class="nav nav-tabs border-0 top-courses-tab flex-nowrap" role="tablist">
+            
+            <li class="nav-item" role="presentation"><a class="nav-link p-x1 mb-0 false active" role="tab" id="popularFree-tab" data-bs-toggle="tab" href="#popularFree" aria-controls="popularFree" aria-selected="true">
+                <div class="d-flex gap-1 py-1 pe-3">
+                  <div class="ms-2">
+                    <h5 class="mb-0 lh-1">Top 5 sản phẩm bán chạy</h5>
                   </div>
                 </div>
               </a></li>
-            <li class="nav-item" role="presentation"><a class="nav-link mb-0" id="sessions-tab" data-bs-toggle="tab" href="#sessions" role="tab" aria-controls="sessions" aria-selected="false">
-                <div class="audience-tab-item p-2 pe-4">
-                  <h6 class="text-800 fs-11 text-nowrap">Sản phẩm</h6>
-                  <h5 class="text-800">6.3K</h5>
-                  <div class="d-flex align-items-center"><span class="fas fa-caret-up text-success"></span>
-                    <h6 class="fs-11 mb-0 ms-2 text-success">46.2%</h6>
-                  </div>
-                </div>
-              </a></li>
-            <li class="nav-item" role="presentation"><a class="nav-link mb-0" id="rate-tab" data-bs-toggle="tab" href="#rate" role="tab" aria-controls="rate" aria-selected="false">
-                <div class="audience-tab-item p-2 pe-4">
-                  <h6 class="text-800 fs-11 text-nowrap">Doanh thu</h6>
-                  <h5 class="text-800">9.49%</h5>
-                  <div class="d-flex align-items-center"><span class="fas fa-caret-down text-warning"></span>
-                    <h6 class="fs-11 mb-0 ms-2 text-warning">56.1%</h6>
-                  </div>
-                </div>
-              </a></li>
-            <li class="nav-item" role="presentation"><a class="nav-link mb-0" id="duration-tab" data-bs-toggle="tab" href="#duration" role="tab" aria-controls="duration" aria-selected="false">
-                <div class="audience-tab-item p-2 pe-4">
-                  <h6 class="text-800 fs-11 text-nowrap">Đơn hàng</h6>
-                  <h5 class="text-800">4m 03s</h5>
-                  <div class="d-flex align-items-center"><span class="fas fa-caret-down text-warning"></span>
-                    <h6 class="fs-11 mb-0 ms-2 text-warning">32.2%</h6>
+            <li class="nav-item" role="presentation"><a class="nav-link p-x1 mb-0" role="tab" id="popularPaid-tab" data-bs-toggle="tab" href="#popularPaid" aria-controls="popularPaid" aria-selected="false" tabindex="-1">
+                <div class="d-flex gap-1 py-1 pe-3">
+                  <div class="ms-2">
+                    <h5 class="mb-0 lh-1">Top 5 tài khoản đặt hàng nhiều</h5>
                   </div>
                 </div>
               </a></li>
           </ul>
         </div>
-        <div class="card-body">
+        <div class="card-body p-0">
           <div class="tab-content">
-            <div class="tab-pane active" id="users" role="tabpanel" aria-labelledby="users-tab"><!-- Find the JS file for the following chart at: src/js/charts/echarts/audience.js--><!-- If you are not using gulp based workflow, you can find the transpiled code at: public/assets/js/theme.js-->
-              <div class="echart-audience" data-echart-responsive="true" style="height:320px;"></div>
+            <div class="tab-pane" id="popularPaid" role="tabpanel" aria-labelledby="popularPaid-tab">
+              <div class="z-1" id="popularPaidCourses" data-list="{&quot;valueNames&quot;:[&quot;title&quot;,&quot;name&quot;,&quot;published&quot;,&quot;enrolled&quot;,&quot;price&quot;],&quot;page&quot;:10}">
+                <div class="px-0 py-0">
+                  <div class="table-responsive scrollbar">
+                    <table class="table fs-10 mb-0 overflow-hidden">
+                      <thead class="bg-body-tertiary">
+                        <tr class="font-sans-serif">
+                          <th class="text-900 fw-medium sort pe-1 align-middle" data-sort="title">STT</th>
+                          <th class="text-900 fw-medium sort pe-1 align-middle" data-sort="name">Tên người dùng</th>
+                          <th class="text-900 fw-medium sort pe-1 align-middle text-end" data-sort="enrolled">Số lượng đơn hàng</th>
+                          <th class="text-900 fw-medium sort pe-1 align-middle text-end text-end" data-sort="price">Tổng số tiền</th>
+                        </tr>
+                      </thead>
+                      <tbody class="list">
+                        @foreach ($topUsers as $index => $user)
+                        <tr class="btn-reveal-trigger fw-semi-bold">
+                          <td class="align-middle white-space-nowrap title">
+                            {{ $index + 1 }}
+                          </td>
+                          <td class="align-middle text-nowrap name">
+                            {{ $user->user_name }}
+                          </td>
+                          <td class="align-middle white-space-nowrap text-end published">{{ $user->total_orders }}</td>
+                          <td class="align-middle text-end enrolled">{{ number_format($user->total_amount) }}</td>
+                        </tr>
+                        @endforeach
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
             </div>
-            <div class="tab-pane" id="sessions" role="tabpanel" aria-labelledby="sessions-tab">
-              <div class="echart-audience" data-echart-responsive="true" style="height:320px;"></div>
-            </div>
-            <div class="tab-pane" id="rate" role="tabpanel" aria-labelledby="rate-tab">
-              <div class="echart-audience" data-echart-responsive="true" style="height:320px;"></div>
-            </div>
-            <div class="tab-pane" id="duration" role="tabpanel" aria-labelledby="duration-tab">
-              <div class="echart-audience" data-echart-responsive="true" style="height:320px;"></div>
+            <div class="tab-pane active show" id="popularFree" role="tabpanel" aria-labelledby="popularFree-tab">
+              <div class="z-1" id="popularFreeCourses" data-list="{&quot;valueNames&quot;:[&quot;title&quot;,&quot;name&quot;,&quot;published&quot;,&quot;enrolled&quot;,&quot;price&quot;],&quot;page&quot;:10}">
+                <div class="px-0 py-0">
+                  <div class="table-responsive scrollbar">
+                    <table class="table fs-10 mb-0 overflow-hidden">
+                      <thead class="bg-body-tertiary">
+                        <tr class="font-sans-serif">
+                          <th class="text-900 fw-medium sort pe-1 align-middle" data-sort="title">STT</th>
+                          <th class="text-900 fw-medium sort pe-1 align-middle" data-sort="name">Tên sản phẩm</th>
+                          <th class="text-900 fw-medium sort pe-1 align-middle text-end" data-sort="published">Số lượng bán</th>
+                          <th class="text-900 fw-medium sort pe-1 align-middle text-end" data-sort="enrolled">Doanh thu</th>
+                          <th class="text-900 fw-medium no-sort pe-1 align-middle data-table-row-action"></th>
+                        </tr>
+                      </thead>
+                      <tbody class="list">
+                        @foreach ($topProducts as $index => $product)
+                        <tr class="btn-reveal-trigger fw-semi-bold">
+                          <td class="align-middle white-space-nowrap title">{{ $index + 1 }}</td>
+                          <td class="align-middle text-nowrap name">{{ $product->name }}</td>
+                          <td class="align-middle white-space-nowrap text-end published">{{ $product->total_quantity }}</td>
+                          <td class="align-middle text-end enrolled">{{ number_format($product->total_revenue) }}</td>
+                        </tr>
+                        @endforeach
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
         <div class="card-footer bg-body-tertiary py-2">
           <div class="row flex-between-center g-0">
-            <div class="col-auto"><select class="form-select form-select-sm audience-select-menu">
-                <option value="week" selected="selected">Last 7 days</option>
-                <option value="month">Last month</option>
-              </select></div>
-            <div class="col-auto"><a class="btn btn-link btn-sm px-0 fw-medium" href="#!">Chi tiết<span class="fas fa-chevron-right ms-1 fs-11"></span></a></div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="col-md-6 col-xxl-4">
-      <div class="card echart-session-by-browser-card h-100">
-        <div class="card-header d-flex flex-between-center bg-body-tertiary py-2">
-          <h6 class="mb-0">Session By Browser</h6>
-          <div class="dropdown font-sans-serif btn-reveal-trigger"><button class="btn btn-link text-600 btn-sm dropdown-toggle dropdown-caret-none btn-reveal" type="button" id="dropdown-session-by-browser" data-bs-toggle="dropdown" data-boundary="viewport" aria-haspopup="true" aria-expanded="false"><span class="fas fa-ellipsis-h fs-11"></span></button>
-            <div class="dropdown-menu dropdown-menu-end border py-2" aria-labelledby="dropdown-session-by-browser"><a class="dropdown-item" href="#!">View</a><a class="dropdown-item" href="#!">Export</a>
-              <div class="dropdown-divider"></div><a class="dropdown-item text-danger" href="#!">Remove</a>
             </div>
-          </div>
         </div>
-        <div class="card-body d-flex flex-column justify-content-between py-0">
-          <div class="my-auto py-5 py-md-0"><!-- Find the JS file for the following chart at: src/js/charts/echarts/session-by-browser.js--><!-- If you are not using gulp based workflow, you can find the transpiled code at: public/assets/js/theme.js-->
-            <div class="echart-session-by-browser h-100" data-echart-responsive="true"></div>
-          </div>
-          <div class="border-top">
-            <table class="table table-sm mb-0">
-              <tbody>
-                <tr>
-                  <td class="py-3">
-                    <div class="d-flex align-items-center"><img src="assets/img/icons/chrome-logo.png" alt="" width="16" />
-                      <h6 class="text-600 mb-0 ms-2">Chrome</h6>
-                    </div>
-                  </td>
-                  <td class="py-3">
-                    <div class="d-flex align-items-center"><span class="fas fa-circle fs-11 me-2 text-primary"></span>
-                      <h6 class="fw-normal text-700 mb-0">50.3%</h6>
-                    </div>
-                  </td>
-                  <td class="py-3">
-                    <div class="d-flex align-items-center justify-content-end"><span class="fas fa-caret-down text-danger"></span>
-                      <h6 class="fs-11 mb-0 ms-2 text-700">2.9%</h6>
-                    </div>
-                  </td>
-                </tr>
-                <tr>
-                  <td class="py-3">
-                    <div class="d-flex align-items-center"><img src="assets/img/icons/safari-logo.png" alt="" width="16" />
-                      <h6 class="text-600 mb-0 ms-2">Safari</h6>
-                    </div>
-                  </td>
-                  <td class="py-3">
-                    <div class="d-flex align-items-center"><span class="fas fa-circle fs-11 me-2 text-success"></span>
-                      <h6 class="fw-normal text-700 mb-0">30.1%</h6>
-                    </div>
-                  </td>
-                  <td class="py-3">
-                    <div class="d-flex align-items-center justify-content-end"><span class="fas fa-caret-up text-success"></span>
-                      <h6 class="fs-11 mb-0 ms-2 text-700">29.4%</h6>
-                    </div>
-                  </td>
-                </tr>
-                <tr>
-                  <td class="py-3">
-                    <div class="d-flex align-items-center"><img src="assets/img/icons/firefox-logo.png" alt="" width="16" />
-                      <h6 class="text-600 mb-0 ms-2">Mozilla</h6>
-                    </div>
-                  </td>
-                  <td class="py-3">
-                    <div class="d-flex align-items-center"><span class="fas fa-circle fs-11 me-2 text-info"></span>
-                      <h6 class="fw-normal text-700 mb-0">20.6%</h6>
-                    </div>
-                  </td>
-                  <td class="py-3">
-                    <div class="d-flex align-items-center justify-content-end"><span class="fas fa-caret-up text-success"></span>
-                      <h6 class="fs-11 mb-0 ms-2 text-700">220.7%</h6>
-                    </div>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-        <div class="card-footer bg-body-tertiary py-2">
-          <div class="row flex-between-center g-0">
-            <div class="col-auto"><select class="form-select form-select-sm" data-target=".echart-session-by-browser">
-                <option value="week" selected="selected">Last 7 days</option>
-                <option value="month">Last month</option>
-                <option value="year">Last Year</option>
-              </select></div>
-            <div class="col-auto"><a class="btn btn-link btn-sm px-0 fw-medium" href="#!">Browser overview<span class="fas fa-chevron-right ms-1 fs-11"></span></a></div>
-          </div>
-        </div>
-      </div>
     </div>
-  </div>
+
+ 
+  
+    <div class="card mb-3">
+          <div class="card-header">
+              <div class="row flex-between-center">
+                  <div class="col-4 col-sm-auto d-flex align-items-center pe-0">
+                      <h5 class="fs-0 mb-0 text-nowrap py-2 py-xl-0">Danh sách đơn hàng</h5>
+                  </div>
+                  <div class="col-8 col-sm-auto text-end ps-2">
+                    <div class="d-flex">
+                              <select class="form-select form-select-sm" aria-label="Bulk actions">
+                                  <option selected="">Bulk actions</option>
+                                  <option value="Refund">Refund</option>
+                                  <option value="Delete">Delete</option>
+                                  <option value="Archive">Archive</option>
+                              </select>
+                              <button class="btn btn-falcon-default btn-sm ms-2" type="button">Apply</button>
+                          </div>
+                      <div class="d-none" id="table-customers-actions">
+                          <div class="d-flex">
+                              <select class="form-select form-select-sm" aria-label="Bulk actions">
+                                  <option selected="">Bulk actions</option>
+                                  <option value="Refund">Refund</option>
+                                  <option value="Delete">Delete</option>
+                                  <option value="Archive">Archive</option>
+                              </select>
+                              <button class="btn btn-falcon-default btn-sm ms-2" type="button">Apply</button>
+                          </div>
+                      </div>
+                      <div id="table-customers-replace-element"> 
+                          <form action="{{ route('admin.statistical.listStatistical') }}" method="GET">
+                              <input type="hidden" name="start_date" value="{{ $startDate }}">
+                              <input type="hidden" name="end_date" value="{{ $endDate }}">
+                              <input type="hidden" name="status_order" value="{{ request('status_order') }}">
+                              <input type="hidden" name="phone" value="{{ request('phone') }}">
+                              <input type="hidden" name="email" value="{{ request('email') }}"> 
+                          </form>
+                      </div>
+                  </div>
+              </div>
+          </div>
+          <div class="card-body pt-0">
+              <div class="table-responsive scrollbar">
+                  <table class="table table-hover table-striped overflow-hidden">
+                      <thead>
+                          <tr>
+                              <th class="fs-10 fw-semi-bold text-nowrap">
+                                  <div class="form-check mb-0 fs-10 d-flex align-items-center">
+                                      <input class="form-check-input" id="checkbox-bulk-customers-select" type="checkbox" data-bulk-select='{"body":"table-customers-body","actions":"table-customers-actions","replaceElement":"table-customers-replace-element"}' />
+                                  </div>
+                              </th>
+                              <th class="fs-10 fw-semi-bold text-nowrap">ID</th>
+                              <th class="fs-10 fw-semi-bold text-nowrap">Khách hàng</th>
+                              <th class="fs-10 fw-semi-bold text-nowrap">Ngày đặt</th>
+                              <th class="fs-10 fw-semi-bold text-nowrap">Tổng tiền</th>
+                              <th class="fs-10 fw-semi-bold text-nowrap">Trạng thái</th>
+                              <th class="fs-10 fw-semi-bold text-nowrap"></th>
+                          </tr>
+                      </thead>
+                      <tbody class="fs-10" id="table-customers-body">
+                          @foreach ($orders as $order)
+                              <tr>
+                                  <td class="align-middle">
+                                      <div class="form-check mb-0 fs-10">
+                                          <input class="form-check-input" type="checkbox" name="order[]" value="{{ $order->id }}" />
+                                      </div>
+                                  </td>
+                                  <td class="align-middle">{{ $order->id }}</td>
+                                  <td class="align-middle">{{ $order->user_name }}</td>
+                                  <td class="align-middle">{{ $order->date_create_order }}</td>
+                                  <td class="align-middle">{{ number_format($order->total_price) }}</td>
+                                  <td class="align-middle">
+                                      @switch($order->status_order)
+                                          @case('reorder')
+                                              <span class='badge badge-subtle-info'>Đặt lại</span>
+                                          @break
+                                          @case('pending')
+                                              <span class='badge badge-subtle-warning'>Chờ xử lý</span>
+                                          @break
+                                          @case('confirmed')
+                                              <span class='badge badge-subtle-primary'>Đã xác nhận</span>
+                                          @break
+                                          @case('shipping')
+                                              <span class='badge badge-subtle-secondary'>Đang giao</span>
+                                          @break
+                                          @case('received')
+                                              <span class='badge badge-subtle-success'>Đã nhận</span>
+                                          @break
+                                          @case('canceled')
+                                              <span class='badge badge-subtle-danger'>Đã hủy</span>
+                                          @break
+                                          @default
+                                              <span class='badge badge-subtle-secondary'>Chưa xác định</span>
+                                      @endswitch
+                                  </td>
+                                  <td class="align-middle text-end">
+                                      <a href='{{ route('admin.orders.detail', ['id' => $order->id]) }}' class='btn btn-sm btn-info'>
+                                          <span class='text-white fas fa-eye'></span>
+                                      </a>
+                                  </td>
+                              </tr>
+                          @endforeach
+                      </tbody>
+                  </table>
+              </div>
+              <div class='d-flex justify-content-center mt-3'>
+                  {{ $orders->withQueryString()->links('pagination::bootstrap-5') }}
+              </div>
+          </div>
+    </div>
 @endsection
 @section('js-setting')
 <script src="{{asset('theme/admin/vendors/chart/chart.umd.js')}}"></script>

@@ -79,5 +79,6 @@ Route::prefix('admin')->as('admin.')->group(function () {
     //thống kê
     Route::controller(StatisticalController::class)->prefix('statistical')->as('statistical.')->group(function () {
         Route::get('listStatistical', 'index')->name('listStatistical');
+        Route::get('statisticalDetail', 'show')->name('statisticalDetail');
     });
 });
