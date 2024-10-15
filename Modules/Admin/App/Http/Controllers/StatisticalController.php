@@ -122,12 +122,53 @@ class StatisticalController extends Controller
         return Excel::download(new OrdersExport($startDate, $endDate, $status, $phone, $email), 'orders.xlsx');
     }
 
+    public function order(){
+       //đơn hàng theo ngày
+       $orderData = OrderModel::select(DB::raw('DATE(date_create_order) as date'), DB::raw('COUNT(*) as count'))
+       ->whereBetween('date_create_order', [Carbon::now()->subDays(6), Carbon::now()])
+       ->groupBy('date')
+       ->orderBy('date')
+       ->get();
 
+        $orderLabels = $orderData->pluck('date');
+        $orderValues = $orderData->pluck('count');
+
+        return view('admin::contents.statistical.order', compact( 
+            'orderLabels', 
+            'orderValues'
+        ));
+    }
+
+
+
+    public function success()
+    {
+        $successRateData = OrderModel::select(
+            DB::raw('DATE(date_create_order) as date'),
+            DB::raw('COUNT(CASE WHEN status_order = "received" THEN 1 END) as successful_orders'),
+            DB::raw('COUNT(*) as total_orders')
+        )
+        ->whereBetween('date_create_order', [Carbon::now()->subDays(6), Carbon::now()])
+        ->groupBy('date')
+        ->orderBy('date')
+        ->get();
+    
+        $successRateLabels = $successRateData->pluck('date');
+        $successRateValues = $successRateData->map(function ($item) {
+            return $item->total_orders > 0 ? ($item->successful_orders / $item->total_orders) * 100 : 0;
+        });
+
+        return view('admin::contents.statistical.success', compact(
+            'successRateLabels',
+            'successRateValues'
+        ));
+    }
     /**
      * Show the form for creating a new resource.
      */
     public function create()
     {
+        
         return view('admin::create');
     }
 
@@ -142,9 +183,23 @@ class StatisticalController extends Controller
     /**
      * Show the specified resource.
      */
-    public function show()
+    public function revenue()
     {
-        return view('admin::contents.statistical.detail');
+         //doanh thu theo ngày trong 7 ngày qua
+         $revenueData = OrderModel::select(DB::raw('DATE(date_create_order) as date'), DB::raw('SUM(total_price) as total'))
+         ->whereBetween('date_create_order', [Carbon::now()->subDays(6), Carbon::now()])
+         ->groupBy('date')
+         ->orderBy('date')
+         ->get();
+ 
+         $revenueLabels = $revenueData->pluck('date');
+         $revenueValues = $revenueData->pluck('total');
+ 
+ 
+         return view('admin::contents.statistical.revenue', compact(
+             'revenueLabels', 
+             'revenueValues'
+         ));
     }
 
     /**

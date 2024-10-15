@@ -1,6 +1,6 @@
 @extends('admin::layout.master')
 @section('title')
-    Admin | Report
+    Admin | Thống kê
 @endsection
 @section('contents')
     <div class="d-flex mb-4 mt-3">
@@ -84,7 +84,7 @@
             <div class="bg-holder bg-card" style="background-image:url({{ asset('theme/admin/img/icons/spot-illustrations/corner-1.png') }});"></div>
             <div class="card-body position-relative">
               <h6>Doanh thu</h6>
-              <div class="display-4 fs-5 mb-2 fw-normal font-sans-serif text-warning" data-countup='{"endValue":58.386,"decimalPlaces":2,"suffix":"k"}'>{{ number_format($revenue) }}</div><a class="fw-semi-bold fs-10 text-nowrap" href="{{ route('admin.statistical.statisticalDetail') }}">Chi tiết<span class="fas fa-angle-right ms-1" data-fa-transform="down-1"></span></a>
+              <div class="display-4 fs-5 mb-2 fw-normal font-sans-serif text-warning" data-countup='{"endValue":58.386,"decimalPlaces":2,"suffix":"k"}'>{{ number_format($revenue) }}</div><a class="fw-semi-bold fs-10 text-nowrap" href="{{ route('admin.statistical.saticticalRevenue') }}">Chi tiết<span class="fas fa-angle-right ms-1" data-fa-transform="down-1"></span></a>
             </div>
           </div>
         </div>
@@ -93,7 +93,7 @@
             <div class="bg-holder bg-card" style="background-image:url({{ asset('theme/admin/img/icons/spot-illustrations/corner-2.png') }});"></div>
             <div class="card-body position-relative">
               <h6>Đơn hàng</h6>
-              <div class="display-4 fs-5 mb-2 fw-normal font-sans-serif text-info" data-countup='{"endValue":23.434,"decimalPlaces":2,"suffix":"k"}'>{{ $totalOrders }}</div><a class="fw-semi-bold fs-10 text-nowrap" href="{{ route('admin.statistical.statisticalDetail') }}">Chi tiết <span class="fas fa-angle-right ms-1" data-fa-transform="down-1"></span></a>
+              <div class="display-4 fs-5 mb-2 fw-normal font-sans-serif text-info" data-countup='{"endValue":23.434,"decimalPlaces":2,"suffix":"k"}'>{{ $totalOrders }}</div><a class="fw-semi-bold fs-10 text-nowrap" href="{{ route('admin.statistical.statisticalOrder') }}">Chi tiết <span class="fas fa-angle-right ms-1" data-fa-transform="down-1"></span></a>
             </div>
           </div>
         </div>
@@ -102,7 +102,7 @@
             <div class="bg-holder bg-card" style="background-image:url({{ asset('theme/admin/img/icons/spot-illustrations/corner-3.png') }});"></div>
             <div class="card-body position-relative">
               <h6>Tỷ lệ thành công</h6>
-              <div class="display-4 fs-5 mb-2 fw-normal font-sans-serif" data-countup='{"endValue":43594,"prefix":"$"}'>{{ $successRate }}%</div><a class="fw-semi-bold fs-10 text-nowrap" href="{{ route('admin.statistical.statisticalDetail') }}">Chi tiết<span class="fas fa-angle-right ms-1" data-fa-transform="down-1"></span></a>
+              <div class="display-4 fs-5 mb-2 fw-normal font-sans-serif" data-countup='{"endValue":43594,"prefix":"$"}'>{{ $successRate }}%</div><a class="fw-semi-bold fs-10 text-nowrap" href="{{ route('admin.statistical.success') }}">Chi tiết<span class="fas fa-angle-right ms-1" data-fa-transform="down-1"></span></a>
             </div>
           </div>
         </div>
@@ -209,25 +209,6 @@
                   </div>
                   <div class="col-8 col-sm-auto text-end ps-2">
                     <div class="d-flex">
-                              <select class="form-select form-select-sm" aria-label="Bulk actions">
-                                  <option selected="">Bulk actions</option>
-                                  <option value="Refund">Refund</option>
-                                  <option value="Delete">Delete</option>
-                                  <option value="Archive">Archive</option>
-                              </select>
-                              <button class="btn btn-falcon-default btn-sm ms-2" type="button">Apply</button>
-                          </div>
-                      <div class="d-none" id="table-customers-actions">
-                          <div class="d-flex">
-                              <select class="form-select form-select-sm" aria-label="Bulk actions">
-                                  <option selected="">Bulk actions</option>
-                                  <option value="Refund">Refund</option>
-                                  <option value="Delete">Delete</option>
-                                  <option value="Archive">Archive</option>
-                              </select>
-                              <button class="btn btn-falcon-default btn-sm ms-2" type="button">Apply</button>
-                          </div>
-                      </div>
                       <div id="table-customers-replace-element"> 
                           <form action="{{ route('admin.statistical.listStatistical') }}" method="GET">
                               <input type="hidden" name="start_date" value="{{ $startDate }}">
@@ -235,6 +216,7 @@
                               <input type="hidden" name="status_order" value="{{ request('status_order') }}">
                               <input type="hidden" name="phone" value="{{ request('phone') }}">
                               <input type="hidden" name="email" value="{{ request('email') }}"> 
+                              <a href="{{ route('admin.statistical.export') }}" class="btn btn-success">Xuất Excel</a>
                           </form>
                       </div>
                   </div>

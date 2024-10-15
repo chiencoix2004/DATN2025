@@ -79,6 +79,11 @@ Route::prefix('admin')->as('admin.')->group(function () {
     //thống kê
     Route::controller(StatisticalController::class)->prefix('statistical')->as('statistical.')->group(function () {
         Route::get('listStatistical', 'index')->name('listStatistical');
-        Route::get('statisticalDetail', 'show')->name('statisticalDetail');
+        Route::get('statisticalOrder', 'order')->name('statisticalOrder');
+        Route::get('saticticalRevenue', 'revenue')->name('saticticalRevenue');
+        Route::get('saticticalSuccess', 'success')->name('success');
+        Route::get('export', 'export')->name('export');
     });
+    //xuất danh excel
+    //Route::get('/admin/report/export', [ReportController::class, 'export'])->name('admin.report.export');
 });
