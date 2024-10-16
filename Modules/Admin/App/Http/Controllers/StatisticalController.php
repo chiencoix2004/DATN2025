@@ -143,19 +143,20 @@ class StatisticalController extends Controller
 
     public function success()
     {
-        $successRateData = OrderModel::select(
-            DB::raw('DATE(date_create_order) as date'),
-            DB::raw('COUNT(CASE WHEN status_order = "received" THEN 1 END) as successful_orders'),
-            DB::raw('COUNT(*) as total_orders')
-        )
+        $successRateData = OrderModel::select(DB::raw('DATE(date_create_order) as date'))
         ->whereBetween('date_create_order', [Carbon::now()->subDays(6), Carbon::now()])
         ->groupBy('date')
         ->orderBy('date')
         ->get();
     
         $successRateLabels = $successRateData->pluck('date');
+        
         $successRateValues = $successRateData->map(function ($item) {
-            return $item->total_orders > 0 ? ($item->successful_orders / $item->total_orders) * 100 : 0;
+            $totalOrders = OrderModel::whereDate('date_create_order', $item->date)->count();
+            $successfulOrders = OrderModel::whereDate('date_create_order', $item->date)
+                ->where('status_order', 'received')
+                ->count();
+            return $totalOrders > 0 ? ($successfulOrders / $totalOrders) * 100 : 0;
         });
 
         return view('admin::contents.statistical.success', compact(

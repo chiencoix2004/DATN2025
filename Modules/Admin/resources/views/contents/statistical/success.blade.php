@@ -10,6 +10,8 @@
     <div class="card-body">
       <div class="echart-browsed-courses h-100" >
         <canvas id="successRateChart"></canvas>
+
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
         <script>
             const successRateCtx = document.getElementById('successRateChart').getContext('2d');
             new Chart(successRateCtx, {

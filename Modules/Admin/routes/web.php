@@ -81,7 +81,7 @@ Route::prefix('admin')->as('admin.')->group(function () {
         Route::get('listStatistical', 'index')->name('listStatistical');
         Route::get('statisticalOrder', 'order')->name('statisticalOrder');
         Route::get('saticticalRevenue', 'revenue')->name('saticticalRevenue');
-        Route::get('saticticalSuccess', 'success')->name('success');
+        Route::get('saticticalSuccess', 'success')->name('saticticalSuccess');
         Route::get('export', 'export')->name('export');
     });
     //xuất danh excel

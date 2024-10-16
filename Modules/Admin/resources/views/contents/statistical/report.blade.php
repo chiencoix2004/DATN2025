@@ -102,7 +102,7 @@
             <div class="bg-holder bg-card" style="background-image:url({{ asset('theme/admin/img/icons/spot-illustrations/corner-3.png') }});"></div>
             <div class="card-body position-relative">
               <h6>Tỷ lệ thành công</h6>
-              <div class="display-4 fs-5 mb-2 fw-normal font-sans-serif" data-countup='{"endValue":43594,"prefix":"$"}'>{{ $successRate }}%</div><a class="fw-semi-bold fs-10 text-nowrap" href="{{ route('admin.statistical.success') }}">Chi tiết<span class="fas fa-angle-right ms-1" data-fa-transform="down-1"></span></a>
+              <div class="display-4 fs-5 mb-2 fw-normal font-sans-serif" data-countup='{"endValue":43594,"prefix":"$"}'>{{ $successRate }}%</div><a class="fw-semi-bold fs-10 text-nowrap" href="{{ route('admin.statistical.saticticalSuccess') }}">Chi tiết<span class="fas fa-angle-right ms-1" data-fa-transform="down-1"></span></a>
             </div>
           </div>
         </div>
