@@ -10,7 +10,6 @@ use Modules\Admin\App\Http\Controllers\OrderController;
 use Modules\Admin\App\Http\Controllers\ProductController;
 use Modules\Admin\App\Http\Controllers\CouponController;
 use Modules\Admin\App\Http\Controllers\AdminController;
-use Modules\Admin\App\Http\Controllers\StatisticalController;
 
 /*
 |--------------------------------------------------------------------------
@@ -87,25 +86,15 @@ Route::prefix('admin')->as('admin.')->group(function () {
     //     Route::get('listAcc', 'listAccounts')->name('list');
     // });
     Route::controller(CouponController::class)
-    ->prefix('coupons')
-    ->as('coupons.')
-    ->group(function () {
-        Route::get('/', 'index')->name('index');
-        Route::get('create', 'create')->name('create');
-        Route::post('store', 'store')->name('store');
-        Route::get('/{id}/show', 'show')->name('show');
-        Route::get('/{id}/edit', 'edit')->name('edit');
-        Route::put('{id}update', 'update')->name('update');
-        Route::delete('/{id}/destroy', 'destroy')->name('destroy');
-    });
-    //thống kê
-    Route::controller(StatisticalController::class)->prefix('statistical')->as('statistical.')->group(function () {
-        Route::get('listStatistical', 'index')->name('listStatistical');
-        Route::get('statisticalOrder', 'order')->name('statisticalOrder');
-        Route::get('saticticalRevenue', 'revenue')->name('saticticalRevenue');
-        Route::get('saticticalSuccess', 'success')->name('saticticalSuccess');
-        Route::get('export', 'export')->name('export');
-    });
-    //xuất danh excel
-    //Route::get('/admin/report/export', [ReportController::class, 'export'])->name('admin.report.export');
+        ->prefix('coupons')
+        ->as('coupons.')
+        ->group(function () {
+            Route::get('/', 'index')->name('index');
+            Route::get('create', 'create')->name('create');
+            Route::post('store', 'store')->name('store');
+            Route::get('/{id}/show', 'show')->name('show');
+            Route::get('/{id}/edit', 'edit')->name('edit');
+            Route::put('{id}update', 'update')->name('update');
+            Route::delete('/{id}/destroy', 'destroy')->name('destroy');
+        });
 });
