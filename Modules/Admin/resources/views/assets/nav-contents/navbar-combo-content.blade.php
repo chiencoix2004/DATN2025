@@ -31,15 +31,14 @@
                             <div class="row">
                                 <div class="col-6 col-md-4">
                                     <div class="nav flex-column">
-                                        <p class="nav-link text-700 mb-0 fw-bold">Coupons</p>
-                                        <a class="nav-link py-1 link-600 fw-medium" href="">
-                                            List Coupons
+                                        <p class="nav-link text-700 mb-0 fw-bold">coupons</p>
+                                        <a class="nav-link py-1 link-600 fw-medium"
+                                            href="{{ route('admin.coupons.index') }}">
+                                            List coupons
                                         </a>
-                                        <a class="nav-link py-1 link-600 fw-medium" href="">
-                                            Detail Coupon
-                                        </a>
-                                        <a class="nav-link py-1 link-600 fw-medium" href="">
-                                            Add Coupon
+                                        <a class="nav-link py-1 link-600 fw-medium"
+                                            href="{{ route('admin.coupons.create') }}">
+                                            Add coupons
                                         </a>
                                     </div>
                                 </div>
@@ -79,10 +78,6 @@
                                         <a class="nav-link py-1 link-600 fw-medium"
                                             href="{{ route('admin.orders.list') }}">
                                             List Orders
-                                        </a>
-                                        <a class="nav-link py-1 link-600 fw-medium"
-                                            href="{{ route('admin.orders.detail') }}">
-                                            Detail Order
                                         </a>
                                     </div>
                                 </div>

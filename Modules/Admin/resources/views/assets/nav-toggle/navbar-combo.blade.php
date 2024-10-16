@@ -79,10 +79,6 @@
                                             href="{{ route('admin.orders.list') }}">
                                             List Orders
                                         </a>
-                                        <a class="nav-link py-1 link-600 fw-medium"
-                                            href="{{ route('admin.orders.detail') }}">
-                                            Detail Order
-                                        </a>
                                     </div>
                                 </div>
                             </div>
