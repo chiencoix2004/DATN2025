@@ -1,48 +1,56 @@
 @extends('admin::layout.master')
 
 @section('title')
-    List Orders
+    DANH SÁCH ĐƠN HÀNG
 @endsection
 
 @section('contents')
     <form action="" method="POST" class="card mb-3" id="ordersTable"
-        data-list='{"valueNames":["order","date","address","status","amount"],"page":10,"pagination":true}'>
+        data-list='{"valueNames":["order","address","status_order","status_payment"],"filter":{"key":"status_order"}}'>
         @csrf
         <div class="card-header">
             <div class="row flex-between-center">
                 <div class="col-4 col-sm-auto d-flex align-items-center pe-0">
-                    @if (session('success'))
-                        <h5 class="fs-9 mb-0 text-success py-2 py-xl-0">{{ session('success') }}</h5>
-                    @else
-                        @if (session('error'))
-                            <h5 class="fs-9 mb-0 text-danger py-2 py-xl-0">{{ session('error') }}</h5>
-                        @else
-                            <h5 class="fs-9 mb-0 text-nowrap py-2 py-xl-0">Orders</h5>
-                        @endif
-                    @endif
+                    <h5 class="fs-9 mb-0 text-nowrap py-2 py-xl-0">ĐƠN HÀNG</h5>
                 </div>
                 <div class="col-8 col-sm-auto ms-auto text-end ps-0">
                     <div class="d-none" id="orders-bulk-actions">
                         <div class="d-flex">
                             <select class="form-select form-select-sm" name="slAction" aria-label="Bulk actions">
-                                <option value="sltNull" selected>Bulk actions</option>
+                                <option value="sltNull" selected>Chọn hành động</option>
                                 <option value="confirmed">Đã xác nhận</option>
                                 <option value="preparing_goods">Đang chuẩn bị hàng</option>
                                 <option value="shipping">Đang giao hàng</option>
                                 <option value="delivered">Đã giao hàng</option>
-                                <option value="paid">Đã thanh toán</option>
-                                <option value="unpaid">Chưa thanh toán</option>
-                                <option value="delete">Delete</option>
                             </select>
-                            <input type="submit" class="btn btn-falcon-default btn-sm ms-2" name="btnApply" value="Apply">
+                            <input type="submit" class="btn btn-falcon-default btn-sm ms-2" name="btnApply"
+                                value="Áp dụng">
                         </div>
                     </div>
                     <div id="orders-actions">
                         <button class="btn btn-falcon-default btn-sm mx-2" type="button">
                             <span class="fas fa-filter" data-fa-transform="shrink-3 down-2"></span>
-                            <span class="d-none d-sm-inline-block ms-1">Filter</span>
+                            <span class="d-none d-sm-inline-block ms-1">Hành động</span>
                         </button>
                     </div>
+                </div>
+            </div>
+            <hr>
+            <div class="row flex-between-center mb-3">
+                <div class="col-6 col-sm-auto d-flex align-items-center pe-0">
+                    <div class="input-group">
+                        <input class="form-control form-control-sm shadow-none search" type="search"
+                            placeholder="Tìm kiếm tại đây" aria-label="search" />
+                    </div>
+                </div>
+                <div class="col-6 col-sm-auto ms-auto text-end ps-0">
+                    <select class="form-select form-select-sm mb-3" aria-label="Bulk actions"
+                        data-list-filter="data-list-filter">
+                        <option selected value="sltNull">Lọc</option>
+                        @foreach (\App\Models\Order::STATUS_ORDER as $value)
+                            <option value="{{ $value }}">{{ $value }}</option>
+                        @endforeach
+                    </select>
                 </div>
             </div>
         </div>
@@ -57,104 +65,102 @@
                                         data-bulk-select='{"body":"table-orders-body","actions":"orders-bulk-actions","replacedElement":"orders-actions"}' />
                                 </div>
                             </th>
-                            <th class="text-900 sort pe-1 align-middle white-space-nowrap" data-sort="order">Order</th>
-                            <th class="text-900 sort pe-1 align-middle white-space-nowrap pe-7" data-sort="date">Date</th>
+                            <th class="text-900 sort pe-1 align-middle white-space-nowrap" data-sort="order">Đơn hàng</th>
+                            <th class="text-900 sort pe-1 align-middle white-space-nowrap pe-7">Ngày đặt</th>
                             <th class="text-900 sort pe-1 align-middle white-space-nowrap" data-sort="address"
-                                style="min-width: 12.5rem;">Ship To</th>
-                            <th class="text-900 sort pe-1 align-middle white-space-nowrap text-center" data-sort="status">
-                                Status Orders
+                                style="min-width: 12.5rem;">Địa chỉ giao hàng</th>
+                            <th class="text-900 sort pe-1 align-middle white-space-nowrap text-center"
+                                data-sort="status_order">
+                                Trạng thái đơn hàng
                             </th>
-                            <th class="text-900 sort pe-1 align-middle white-space-nowrap text-center" data-sort="status">
-                                Status Payment
+                            <th class="text-900 sort pe-1 align-middle white-space-nowrap text-center"
+                                data-sort="status_payment">
+                                Trạng thái thanh toán
                             </th>
-                            <th class="text-900 sort pe-1 align-middle white-space-nowrap text-end" data-sort="amount">
-                                Amount (VNĐ)
+                            <th class="text-900 sort pe-1 align-middle white-space-nowrap text-end">
+                                Tổng đơn hàng (VNĐ)
                             </th>
                             <th class="no-sort"></th>
                         </tr>
                     </thead>
                     <tbody class="list" id="table-orders-body">
-                        {{-- @php
+                        @php
                             $badgeColors = [
-                                $statusOrder['reorder'] => 'info',
+                                $statusOrder['reorder'] => 'warning',
                                 $statusOrder['pending'] => 'secondary',
-                                $statusOrder['confirmed'] => 'dark',
-                                $statusOrder['preparing_goods'] => 'primary',
+                                $statusOrder['confirmed'] => 'info',
                                 $statusOrder['shipping'] => 'primary',
-                                $statusOrder['delivered'] => 'primary',
                                 $statusOrder['received'] => 'success',
                                 $statusOrder['canceled'] => 'danger',
                                 $statusPayment['paid'] => 'success',
                                 $statusPayment['unpaid'] => 'danger',
                             ];
-                        @endphp --}}
-                        <tr class="btn-reveal-trigger">
-                            <td class="align-middle" style="width: 28px;">
-                                <div class="form-check fs-9 mb-0 d-flex align-items-center">
-                                    <input class="form-check-input" type="checkbox" name="idOrder[]" id="checkbox-0"
-                                        data-bulk-select-row="data-bulk-select-row" value="234" />
-                                </div>
-                            </td>
-                            <td class="order py-2 align-middle white-space-nowrap">
-                                <a href="order-details.html">
-                                    <strong>#345</strong>
-                                </a>
-                                by <strong>binhnx</strong>
-                                <br />
-                                <a href="mailto:mailtest01@gmail.com">mailtest01@gmail.com</a>
-                            </td>
-                            <td class="date py-2 align-middle">20/11/2024</td>
-                            <td class="address py-2 align-middle white-space-nowrap">
-                                Địa chỉ 1
-                            </td>
-                            <td class="status py-2 align-middle text-center fs-9 white-space-nowrap">
-                                <span class="badge badge rounded-pill d-block badge-subtle-info">
-                                    status order
-                                </span>
-                            </td>
-                            <td class="status py-2 align-middle text-center fs-9 white-space-nowrap">
-                                <span class="badge badge rounded-pill d-block badge-subtle-success">
-                                    status payment
-                                </span>
-                            </td>
-                            <td class="amount py-2 align-middle text-end fs-9 fw-medium">
-                                {{ number_format((int) 35344353, 0, ',', '.') }}
-                            </td>
-                            <td class="py-2 align-middle white-space-nowrap text-end">
-                                <div class="dropdown font-sans-serif position-static">
-                                    <button class="btn btn-link text-600 btn-sm dropdown-toggle btn-reveal" type="button"
-                                        id="order-dropdown-0" data-bs-toggle="dropdown" data-boundary="viewport"
-                                        aria-haspopup="true" aria-expanded="false">
-                                        <span class="fas fa-ellipsis-h fs-10"></span>
-                                    </button>
-                                    <div class="dropdown-menu dropdown-menu-end border py-0"
-                                        aria-labelledby="order-dropdown-0">
-                                        <div class="py-2">
-                                            {{-- @if ($lOrders->status_order == 'Đã nhận hàng' && $lOrders->payment == 'Đã thanh toán') --}}
-                                            <a class="dropdown-item text-primary" href="#!">Print invoice</a>
-                                            {{-- @endif --}}
-                                            <a class="dropdown-item text-warning" href="">Detail</a>
-                                            <a class="dropdown-item text-danger" href="#!">Delete</a>
+                        @endphp
+                        @foreach ($data as $order)
+                            <tr class="btn-reveal-trigger">
+                                <td class="align-middle" style="width: 28px;">
+                                    <div class="form-check fs-9 mb-0 d-flex align-items-center">
+                                        <input class="form-check-input" type="checkbox" name="idOrder[]"
+                                            id="checkbox-{{ $order->id }}" data-bulk-select-row="data-bulk-select-row"
+                                            value="{{ $order->id }}" />
+                                    </div>
+                                </td>
+                                <td class="order py-2 align-middle white-space-nowrap">
+                                    <a href="order-details.html">
+                                        <strong>#{{ $order->id }}</strong>
+                                    </a>
+                                    của <strong>{{ $order->user_name }}</strong>
+                                    <br />
+                                    <a href="mailto:{{ $order->user_email }}">{{ $order->user_email }}</a>
+                                </td>
+                                <td class="py-2 align-middle">{{ $order->date_create_order }}</td>
+                                <td class="address py-2 align-middle white-space-nowrap">
+                                    {{ $order->ship_user_address }}
+                                </td>
+                                <td class="status_order py-2 align-middle text-center fs-9 white-space-nowrap">
+                                    <span
+                                        class="badge badge rounded-pill d-block badge-subtle-{{ $badgeColors[$order->status_order] }}">
+                                        {{ $order->status_order }}
+                                    </span>
+                                </td>
+                                <td class="status_payment py-2 align-middle text-center fs-9 white-space-nowrap">
+                                    <span
+                                        class="badge badge rounded-pill d-block badge-subtle-{{ $badgeColors[$order->status_payment] }}">
+                                        {{ $order->status_payment }}
+                                    </span>
+                                </td>
+                                <td class="py-2 align-middle text-end fs-9 fw-medium">
+                                    {{ number_format((int) $order->total_price, 0, ',', '.') }}
+                                </td>
+                                <td class="py-2 align-middle white-space-nowrap text-end">
+                                    <div class="dropdown font-sans-serif position-static">
+                                        <button class="btn btn-link text-600 btn-sm dropdown-toggle btn-reveal"
+                                            type="button" id="order-dropdown-{{ $order->id }}"
+                                            data-bs-toggle="dropdown" data-boundary="viewport" aria-haspopup="true"
+                                            aria-expanded="false">
+                                            <span class="fas fa-ellipsis-h fs-10"></span>
+                                        </button>
+                                        <div class="dropdown-menu dropdown-menu-end border py-0"
+                                            aria-labelledby="order-dropdown-0">
+                                            <div class="py-2">
+                                                <a class="dropdown-item text-warning"
+                                                    href="{{ route('admin.orders.detail', $order) }}">Chi tiết</a>
+                                                <a class="dropdown-item text-primary" href="{{ route('admin.invoice.save', $order) }}">In hóa đơn</a>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                            </td>
-                        </tr>
+                                </td>
+                            </tr>
+                        @endforeach
                     </tbody>
                 </table>
             </div>
         </div>
         <div class="card-footer">
-            <div class="d-flex align-items-center justify-content-center">
-                <button class="btn btn-sm btn-falcon-default me-1" type="button" title="Previous"
-                    data-list-pagination="prev">
-                    <span class="fas fa-chevron-left"></span>
-                </button>
-                <ul class="pagination mb-0"></ul>
-                <button class="btn btn-sm btn-falcon-default ms-1" type="button" title="Next"
-                    data-list-pagination="next">
-                    <span class="fas fa-chevron-right"> </span>
-                </button>
+            <div class="row">
+                <div class="col-lg-12">
+                    {{ $data->links('pagination::bootstrap-5') }}
+                </div>
             </div>
         </div>
     </form>
