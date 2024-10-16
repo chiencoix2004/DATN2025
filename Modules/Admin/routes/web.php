@@ -3,7 +3,9 @@
 use Illuminate\Support\Facades\Route;
 use Modules\Admin\App\Http\Controllers\AccountController;
 use Modules\Admin\App\Http\Controllers\AttributeController;
+use Modules\Admin\App\Http\Controllers\BannerController;
 use Modules\Admin\App\Http\Controllers\CategoryController;
+use Modules\Admin\App\Http\Controllers\InvoiceController;
 use Modules\Admin\App\Http\Controllers\OrderController;
 use Modules\Admin\App\Http\Controllers\ProductController;
 use Modules\Admin\App\Http\Controllers\CouponController;
@@ -26,10 +28,20 @@ use Modules\Admin\App\Http\Controllers\StatisticalController;
 // });
 
 Route::controller(AccountController::class)
-->name('admin.account.')
-->prefix('admin/account')
+    ->name('admin.account.')
+    ->prefix('admin/account')
+    ->group(function () {
+        Route::get('list', 'index')->name('list');
+    });
+
+Route::controller(BannerController::class)
+->name('admin.banner.')
+->prefix('admin/banner')
 ->group(function () {
    Route::get('list', 'index')->name('list');
+   route::put('update', 'update')->name('update');
+   route::get('delete/{id}', 'delete')->name('delete');
+   route::post('add', 'add')->name('add');
 });
 
 
@@ -41,7 +53,12 @@ Route::prefix('admin')->as('admin.')->group(function () {
     Route::controller(CategoryController::class)->prefix('categories')->as('categories.')
         ->group(function () {
             Route::get('list', 'listCategories')->name('list');
-            // Route::get('add', 'addCategory')->name('add');
+            Route::get('create', 'create')->name('create');
+            Route::post('store', 'store')->name('store');
+            Route::get('/{id}/show', 'show')->name('show');
+            Route::get('/{id}/edit', 'edit')->name('edit');
+            Route::put('{id}update', 'update')->name('update');
+            Route::delete('/{id}/destroy', 'destroy')->name('destroy');
         });
     // Route quản lý products
     Route::controller(ProductController::class)->prefix('product')->as('product.')->group(function () {
@@ -57,8 +74,13 @@ Route::prefix('admin')->as('admin.')->group(function () {
     // Route quản lý orders
     Route::controller(OrderController::class)->prefix('orders')->as('orders.')->group(function () {
         Route::get('listOrders', 'listOrder')->name('list');
-        Route::get('orderDetail', 'orderDetail')->name('detail');
-        Route::get('orderTracking', 'orderTracking')->name('tracking');
+        Route::get('{order}/orderDetail', 'orderDetail')->name('detail');
+        Route::put('{order}/update', 'orderUpdate')->name('update');
+    });
+    // Route quản lý in hóa đơn
+    Route::controller(InvoiceController::class)->prefix('invoice')->as('invoice.')->group(function () {
+        Route::get('{order}/savePDF', 'savePDF')->name('save');
+        Route::get('list', 'listPDF')->name('list');
     });
     // Route quản lý users
     // Route::controller(AccountController::class)->prefix('account')->as('account.')->group(function(){

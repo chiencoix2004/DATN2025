@@ -105,7 +105,7 @@ class StoreCouponRequest extends FormRequest
             'description.nullable' => 'Mô tả có thể để trống.',
             'description.string' => 'Mô tả phải là chuỗi ký tự.',
 
-            'discount_amount.required' => 'Giảm giá là bắt buộc.',
+            'discount_amount.required' => 'Giảm giá là bắt buộc!',
             'discount_amount.numeric' => 'Giảm giá phải là một giá trị số.',
             'discount_amount.min' => 'Giảm giá không được nhỏ hơn 0.',
 

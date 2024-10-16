@@ -1,5 +1,8 @@
 @extends('admin::layout.master')
 
+@section('title')
+    Danh sách mã giảm giá
+@endsection
 
 @section('css-libs')
     <link rel="stylesheet" href="{{ asset('bootstrap-5.3.3/css/bootstrap.min.css') }}">
@@ -13,27 +16,33 @@
 @section('css-setting')
 @endsection
 @section('contents')
-    <div class="container">
-        <a name="" id="" class="btn btn-primary" href="{{ route('admin.coupons.create') }}" role="button">Thêm
-            mới</a>
-        <table class="table table-bordered" id="example" class="display">
-            <thead>
-                <tr>
-                    <th>Mã</th> <!-- id -->
-                    <th>Tên</th> <!-- name -->
-                    <th>Mã giảm giá</th> <!-- code -->
-                    <th>giá trị giảm</th> <!-- discount_amount -->
-                    <th>Loại giảm giá</th> <!-- discount_type -->
-                    <th>Số lượng</th> <!-- quantity -->
-                    <th>Hành động</th> <!-- action -->
-                </tr>
-            </thead>
-            <tbody class="table-striped">
-                <tr>
+    <div class="container mt-4">
+        <div class="card mb-3 p-5">
 
-                </tr>
-            </tbody>
-        </table>
+            <div>
+                <a name="" id="" class="btn btn-primary" href="{{ route('admin.coupons.create') }}"
+                    role="button">Thêm
+                    mới</a>
+            </div>
+            <table class="table table-bordered" id="example" class="display">
+                <thead>
+                    <tr>
+                        <th>Mã</th> <!-- id -->
+                        <th>Tên</th> <!-- name -->
+                        <th>Mã giảm giá</th> <!-- code -->
+                        <th>giá trị giảm</th> <!-- discount_amount -->
+                        <th>Loại giảm giá</th> <!-- discount_type -->
+                        <th>Số lượng</th> <!-- quantity -->
+                        <th>Hành động</th> <!-- action -->
+                    </tr>
+                </thead>
+                <tbody class="table-striped">
+                    <tr>
+
+                    </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
     <script type="text/javascript">
         $(document).ready(function() {

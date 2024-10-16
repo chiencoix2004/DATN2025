@@ -39380,7 +39380,7 @@ module.exports = ZStream;
 			 * to the information (`info`) to give an idea of how strong the filtering
 			 * is. The variable _MAX_ is dynamically updated.
 			 */
-			"sInfoFiltered": "(filtered from _MAX_ total _ENTRIES-MAX_)",
+			"sInfoFiltered": "(lọc từ tổng số _MAX_ dòng)",
 	
 	
 			/**
@@ -39480,7 +39480,7 @@ module.exports = ZStream;
 			 * displayed after filtering. `emptyTable` is shown when there is simply no
 			 * information in the table at all (regardless of filtering).
 			 */
-			"sZeroRecords": "No matching records found"
+			"sZeroRecords": "Không tìm thấy dòng nào phù hợp"
 		},
 	
 	
