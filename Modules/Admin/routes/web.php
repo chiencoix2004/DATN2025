@@ -26,13 +26,6 @@ use Modules\Admin\App\Http\Controllers\AdminController;
 //     Route::resource('admin', AdminController::class)->names('admin');
 // });
 
-Route::controller(AccountController::class)
-    ->name('admin.account.')
-    ->prefix('admin/account')
-    ->group(function () {
-        Route::get('list', 'index')->name('list');
-    });
-
 Route::controller(BannerController::class)
 ->name('admin.banner.')
 ->prefix('admin/banner')
@@ -95,6 +88,21 @@ Route::prefix('admin')->as('admin.')->group(function () {
             Route::get('/{id}/show', 'show')->name('show');
             Route::get('/{id}/edit', 'edit')->name('edit');
             Route::put('{id}update', 'update')->name('update');
-            Route::delete('/{id}/destroy', 'destroy')->name('destroy');
+            // Route::delete('/{id}/destroy', 'destroy')->name('destroy');
         });
+    
+    
+        Route::controller(AccountController::class)
+        ->prefix('accounts')
+        ->as('accounts.')
+        ->group(function () {
+            Route::get('/', 'index')->name('index');
+            Route::get('create', 'create')->name('create');
+            Route::post('store', 'store')->name('store');
+            Route::get('/{id}/show', 'show')->name('show');
+            Route::get('/{id}/edit', 'edit')->name('edit');
+            Route::put('{id}update', 'update')->name('update');
+            // Route::delete('/{id}/destroy', 'destroy')->name('destroy');
+        });
+        
 });
