@@ -5,6 +5,7 @@ namespace Modules\Admin\App\Http\Controllers;
 use App\Exports\OrdersExport;
 use App\Http\Controllers\Controller;
 use App\Models\OrderModel;
+use App\Models\Order;
 use App\Models\ProductModel;
 use App\Models\User;
 use Carbon\Carbon;
@@ -27,7 +28,7 @@ class StatisticalController extends Controller
         $phone = $request->input('phone');
         $email = $request->input('email');
 
-        $orders = OrderModel::query();
+        $orders = Order::query();
 
         if ($status) {
             $orders->where('status_order', $status);
@@ -48,7 +49,7 @@ class StatisticalController extends Controller
         $orders = $orders->paginate(10);
 
         // Thống kê doanh thu
-        $revenue = OrderModel::whereBetween('date_create_order', [$startDate, $endDate])
+        $revenue = Order::whereBetween('date_create_order', [$startDate, $endDate])
             ->sum('total_price');
 
         // Thống kê 5 user đặt hàng nhiều nhất
@@ -86,18 +87,18 @@ class StatisticalController extends Controller
         ->get();
 
         // Thống kê đơn hàng theo khoảng thời gian
-        $totalOrders = OrderModel::whereBetween('date_create_order', [$startDate, $endDate])
+        $totalOrders = Order::whereBetween('date_create_order', [$startDate, $endDate])
             ->count();
 
         // Thống kê tỷ lệ thành công của đơn hàng 
-        $successRate = OrderModel::whereBetween('date_create_order', [$startDate, $endDate])
+        $successRate = Order::whereBetween('date_create_order', [$startDate, $endDate])
             ->whereHas('orderDetails', function ($query) {
                 $query->where('status_order', 'received');
-            })
-            ->count();
+            })->count();
+        
 
         $successRate = $totalOrders > 0 ? ($successRate / $totalOrders) * 100 : 0;
-        // dd($successRate);
+        //dd($successRate);
 
         return view('admin::contents.statistical.report', compact(
             'revenue',
@@ -124,7 +125,7 @@ class StatisticalController extends Controller
 
     public function order(){
        //đơn hàng theo ngày
-       $orderData = OrderModel::select(DB::raw('DATE(date_create_order) as date'), DB::raw('COUNT(*) as count'))
+       $orderData = Order::select(DB::raw('DATE(date_create_order) as date'), DB::raw('COUNT(*) as count'))
        ->whereBetween('date_create_order', [Carbon::now()->subDays(6), Carbon::now()])
        ->groupBy('date')
        ->orderBy('date')
@@ -143,7 +144,7 @@ class StatisticalController extends Controller
 
     public function success()
     {
-        $successRateData = OrderModel::select(DB::raw('DATE(date_create_order) as date'))
+        $successRateData = Order::select(DB::raw('DATE(date_create_order) as date'))
         ->whereBetween('date_create_order', [Carbon::now()->subDays(6), Carbon::now()])
         ->groupBy('date')
         ->orderBy('date')
@@ -152,8 +153,8 @@ class StatisticalController extends Controller
         $successRateLabels = $successRateData->pluck('date');
         
         $successRateValues = $successRateData->map(function ($item) {
-            $totalOrders = OrderModel::whereDate('date_create_order', $item->date)->count();
-            $successfulOrders = OrderModel::whereDate('date_create_order', $item->date)
+            $totalOrders = Order::whereDate('date_create_order', $item->date)->count();
+            $successfulOrders = Order::whereDate('date_create_order', $item->date)
                 ->where('status_order', 'received')
                 ->count();
             return $totalOrders > 0 ? ($successfulOrders / $totalOrders) * 100 : 0;
@@ -187,7 +188,7 @@ class StatisticalController extends Controller
     public function revenue()
     {
          //doanh thu theo ngày trong 7 ngày qua
-         $revenueData = OrderModel::select(DB::raw('DATE(date_create_order) as date'), DB::raw('SUM(total_price) as total'))
+         $revenueData = Order::select(DB::raw('DATE(date_create_order) as date'), DB::raw('SUM(total_price) as total'))
          ->whereBetween('date_create_order', [Carbon::now()->subDays(6), Carbon::now()])
          ->groupBy('date')
          ->orderBy('date')

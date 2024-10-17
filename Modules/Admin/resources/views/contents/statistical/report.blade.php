@@ -277,7 +277,7 @@
                                       @endswitch
                                   </td>
                                   <td class="align-middle text-end">
-                                      <a href='{{ route('admin.orders.detail', ['id' => $order->id]) }}' class='btn btn-sm btn-info'>
+                                         <a href='{{ route('admin.orders.detail', ['id' => $order->id]) }}' class='btn btn-sm btn-info'>
                                           <span class='text-white fas fa-eye'></span>
                                       </a>
                                   </td>
