@@ -159,7 +159,7 @@
                         <div class="card-body">
                             <div class="row gx-2">
                                 <div class="col-12 mb-3">
-                                    
+                                    <img class="img-fluid" src="{{ Storage::url($user->user_image) }}" alt="">
                                 </div>
                             </div>
                         </div>
@@ -175,7 +175,9 @@
                                     <select class="form-select" id="roles_id" name="roles_id">
                                         <option value="">chọn chức vụ</option>
                                         @foreach ($roles as $role)
-                                            <option value="{{ $role->id }}" {{ $user->roles_id == $role->id ? 'selected' : '' }}>{{ $role->role_type }}</option>
+                                            <option value="{{ $role->id }}"
+                                                {{ $user->roles_id == $role->id ? 'selected' : '' }}>
+                                                {{ $role->role_type }}</option>
                                         @endforeach
                                     </select>
                                     @error('roles_id')
@@ -194,8 +196,10 @@
                                 <div class="col-12 mb-3">
                                     <label class="form-label" for="status">Chọn trạng thái:</label>
                                     <select class="form-select" id="status" name="status">
-                                        <option value="activate" {{ $user->status == 'activate' ? 'selected' : '' }}>Kích hoạt</option>
-                                        <option value="deactivate" {{ $user->status == 'deactivate' ? 'selected' : '' }}>Hủy kích hoạt</option>
+                                        <option value="activate" {{ $user->status == 'activate' ? 'selected' : '' }}>Kích
+                                            hoạt</option>
+                                        <option value="deactivate" {{ $user->status == 'deactivate' ? 'selected' : '' }}>
+                                            Hủy kích hoạt</option>
                                     </select>
                                     @error('status')
                                         <label class="form-label text-danger">{{ $message }} </label>
@@ -273,13 +277,74 @@
                         // Gán danh sách file vào input file ẩn
                         hiddenFilesInput.files = dataTransfer.files;
                         // Sau đó submit form bình thường
-                        document.getElementById("create").submit();
+                        Swal.fire({
+                            title: 'Bạn có chắc chắn sửa không?',
+                            text: "Hành động này không thể hoàn tác!",
+                            icon: 'warning',
+                            showCancelButton: true,
+                            confirmButtonColor: '#3085d6',
+                            cancelButtonColor: '#d33',
+                            confirmButtonText: 'Vâng, áp dụng!',
+                            cancelButtonText: 'Hủy'
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                // If confirmed, submit the form
+                                document.getElementById("create").submit();
+                            }
+                        });
+
                     } else {
                         // Nếu không có file trong Dropzone, submit form ngay lập tức
-                        document.getElementById("create").submit();
+                        Swal.fire({
+                            title: 'Bạn có chắc chắn sửa không?',
+                            text: "Hành động này không thể hoàn tác!",
+                            icon: 'warning',
+                            showCancelButton: true,
+                            confirmButtonColor: '#3085d6',
+                            cancelButtonColor: '#d33',
+                            confirmButtonText: 'Vâng, áp dụng!',
+                            cancelButtonText: 'Hủy'
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                // If confirmed, submit the form
+                                document.getElementById("create").submit();
+                            }
+                        });
+
                     }
                 });
             }
         });
     </script>
+
+
+    @if (session('success'))
+        <script>
+            Swal.fire({
+                title: "Thành Công",
+                text: "{{ session('success') }}",
+                icon: "success"
+            });
+        </script>
+    @endif
+
+    @if (session('error'))
+        <script>
+            Swal.fire({
+                title: "Thất bại",
+                text: "{{ session('error') }}",
+                icon: "error"
+            });
+        </script>
+    @endif
+
+    @if (session('info'))
+        <script>
+            Swal.fire({
+                title: "Thông tin",
+                text: "{{ session('info') }}",
+                icon: "info"
+            });
+        </script>
+    @endif
 @endsection
