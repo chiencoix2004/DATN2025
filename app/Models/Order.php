@@ -27,12 +27,13 @@ class Order extends Model
     ];
     const METHOD_PAYMENT = [
         'cod' => 'Thanh toán khi nhận hàng',
-        'momo-card' => 'Thanh toán qua thẻ MOMO',
+        'momo_card' => 'Thanh toán qua thẻ MOMO',
         'momo_qr' => 'Thanh toán qua mã MOMO',
     ];
     const METHOD_SHIPPING = [
         'express' => 'Giao hàng nhanh',
-        'normal' => 'Giao hàng thường',
+        'normal' => 'Giao hàng tiết kiệm',
+        'free_ship' => 'Giao hàng miễn phí',
     ];
     protected $fillable = [
         'users_id',
