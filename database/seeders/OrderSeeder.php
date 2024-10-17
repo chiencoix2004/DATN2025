@@ -13,7 +13,7 @@ class OrderSeeder extends Seeder
     /**
      * Run the database seeds.
      */
-    public function run(): void
+   public function run(): void
     {
         $discountTypes = Order::TYPE_DISCOUNT;
         $orderStatuses = Order::STATUS_ORDER;
