@@ -22,6 +22,7 @@ use Modules\Admin\App\Http\Controllers\AdminController;
 |
 */
 
+
 // Route::group([], function () {
 //     Route::resource('admin', AdminController::class)->names('admin');
 // });
@@ -56,6 +57,7 @@ Route::prefix('admin')->as('admin.')->group(function () {
     Route::controller(ProductController::class)->prefix('product')->as('product.')->group(function () {
         Route::get('addProduct', 'showFormAdd')->name('addProduct');
         Route::get('listProduct', 'listProduct')->name('list');
+        Route::post('createProduct', 'createProduct')->name('create');
     });
     // Route quản lý attributes
     Route::controller(AttributeController::class)->prefix('attributes')->as('attributes.')
@@ -73,6 +75,7 @@ Route::prefix('admin')->as('admin.')->group(function () {
     Route::controller(InvoiceController::class)->prefix('invoice')->as('invoice.')->group(function () {
         Route::get('{order}/savePDF', 'savePDF')->name('save');
         Route::get('list', 'listPDF')->name('list');
+        Route::post('bulkActions', 'bulkActions')->name('bulkActions');
     });
     // Route quản lý users
     // Route::controller(AccountController::class)->prefix('account')->as('account.')->group(function(){
