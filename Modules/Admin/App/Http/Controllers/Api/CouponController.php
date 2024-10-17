@@ -16,6 +16,7 @@ class CouponController extends Controller
     public function index()
     {
         $query = CouponModel::select('id', 'name', 'code', 'discount_amount', 'discount_type', 'quantity');
+        // dd(datatables($query)->make(true));
         return datatables($query)->make(true);
     }
 
