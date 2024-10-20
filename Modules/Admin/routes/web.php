@@ -90,7 +90,7 @@ Route::prefix('admin')->as('admin.')->group(function () {
             Route::post('store', 'store')->name('store');
             Route::get('/{id}/show', 'show')->name('show');
             Route::get('/{id}/edit', 'edit')->name('edit');
-            Route::put('{id}update', 'update')->name('update');
+            Route::put('{id}/update', 'update')->name('update');
             // Route::delete('/{id}/destroy', 'destroy')->name('destroy');
         });
     
@@ -104,7 +104,7 @@ Route::prefix('admin')->as('admin.')->group(function () {
             Route::post('store', 'store')->name('store');
             Route::get('/{id}/show', 'show')->name('show');
             Route::get('/{id}/edit', 'edit')->name('edit');
-            Route::put('{id}update', 'update')->name('update');
+            Route::put('{id}/update', 'update')->name('update');
             // Route::delete('/{id}/destroy', 'destroy')->name('destroy');
         });
         
