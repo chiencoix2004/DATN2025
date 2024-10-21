@@ -7,40 +7,42 @@
         <div class="card-body">
             <div class="row flex-between-center">
                 <div class="col-md">
-                    <h5 class="mb-2 mb-md-0">Add a product</h5>
+                    <h5 class="mb-2 mb-md-0">Thêm mới sản phẩm</h5>
                 </div>
             </div>
         </div>
     </div>
-    <form action="" method="POST" enctype="multipart/form-data" id="productForm">
+    <form action="{{ route('admin.product.create') }}" method="POST" enctype="multipart/form-data" id="productForm">
         @csrf
         <div class="row g-0">
             <div class="col-lg-8 pe-lg-2">
                 <div class="card mb-3">
                     <div class="card-header bg-body-tertiary">
-                        <h6 class="mb-0">Basic information</h6>
+                        <h6 class="mb-0">Thông tin cơ bản</h6>
                     </div>
                     <div class="card-body">
-                        <form>
-                            <div class="row gx-2">
-                                <div class="col-12 mb-3"><label class="form-label" for="product-name">Product
-                                        name:</label><input class="form-control" id="product-name" type="text" /></div>
-                                <div class="col-12 mb-3"><label class="form-label" for="manufacturar-name">Manufacturar
-                                        Name:</label><input class="form-control" id="manufacturar-name" type="text" />
-                                </div>
-                                <div class="col-12 mb-3"><label class="form-label" for="identification-no">Product
-                                        Identification
-                                        No.:</label><input class="form-control" id="identification-no" type="text" />
-                                </div>
-                                <div class="col-12 mb-3"><label class="form-label" for="product-summary">Product Summary:
-                                    </label><input class="form-control" id="product-summary" type="text" /></div>
+                        <div class="row gx-2">
+                            <div class="col-12 mb-3">
+                                <label class="form-label" for="prd-name">Tên sản phẩm:</label>
+                                <input class="form-control" id="prd-name" type="text" name="prd-name" />
+                                @error('prd-name')
+                                    <label class="form-label text-danger">{{ $message }}</label>
+                                @enderror
                             </div>
-                        </form>
+                            <div class="col-12 mb-3">
+                                <label class="form-label" for="prd-sku">MÃ sản phẩm:</label>
+                                <input class="form-control" id="prd-sku" type="text" name="prd-sku" />
+                            </div>
+                            <div class="col-12 mb-3">
+                                <label class="form-label" for="prd-slug">Slug sản phẩm:</label>
+                                <input class="form-control" id="prd-slug" type="text" name="prd-slug" />
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="card mb-3">
                     <div class="card-header bg-body-tertiary">
-                        <h6 class="mb-0">Add images</h6>
+                        <h6 class="mb-0">Thư viện ảnh sản phẩm</h6>
                     </div>
                     <div class="card-body">
                         <div class="dropzone dropzone-multiple p-0" id="dropzoneMultipleFileUpload"
