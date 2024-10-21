@@ -10,6 +10,7 @@ use Modules\Admin\App\Http\Controllers\OrderController;
 use Modules\Admin\App\Http\Controllers\ProductController;
 use Modules\Admin\App\Http\Controllers\CouponController;
 use Modules\Admin\App\Http\Controllers\AdminController;
+use Modules\Admin\App\Http\Controllers\CommentController;
 use Modules\Admin\App\Http\Controllers\UserController;
 
 /*
@@ -60,6 +61,15 @@ Route::prefix('admin')->as('admin.')->group(function () {
         Route::get('listProduct', 'listProduct')->name('list');
         Route::post('createProduct', 'createProduct')->name('create');
     });
+
+      // Route quản lý comment
+    Route::controller(CommentController::class)->prefix('comment')->as('comment.')->group(function () {
+        Route::get('listComment', 'listComment')->name('listComment');
+        Route::get('/{id}/editComment', 'editComment')->name('editComment');
+        Route::put('{id}updateComment', 'updateComment')->name('updateComment');
+    });
+    
+
     // Route quản lý attributes
     Route::controller(AttributeController::class)->prefix('attributes')->as('attributes.')
         ->group(function () {
