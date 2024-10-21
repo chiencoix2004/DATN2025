@@ -89,15 +89,15 @@
                             <span class="nav-link-text ps-1">Attributes</span>
                         </div>
                     </a>
-                    <a class="nav-link dropdown-indicator" href="#orders" role="button" data-bs-toggle="collapse"
-                        aria-expanded="false" aria-controls="orders">
+                    <a class="nav-link dropdown-indicator" href="#orders" role="button" data-bs-toggle="collapse"  aria-expanded="false" aria-controls="orders">
                         <div class="d-flex align-items-center">
                             <span class="nav-link-icon">
                                 <span class="far fa-file-alt"></span>
                             </span>
                             <span class="nav-link-text ps-1">Đơn hàng</span>
                         </div>
-                    </a>
+                    </a >
+                       
                     <ul class="nav collapse" id="orders">
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('admin.orders.list') }}">
