@@ -10,29 +10,7 @@ use App\Models\User;
 
 class CommentController extends Controller
 {
-// public function listComment(){
 
-//     $listComment = Comment::join('users', 'users.id', '=', 'comments.users_id')
-//         ->join('products', 'products.id', '=', 'comments.products_id')
-//         ->select(
-//             'comments.id',
-//             'users.user_name',
-//             'products.name',
-//             'comments.comments',
-//             'comments.rating',
-//             'comments.comment_date',
-//             'comments.status'
-//         )->orderBy('comments.comment_date', 'DESC')
-//         ->paginate(15);
-
-//     foreach ($listComment as $comment) {
-//         $commentDate = Carbon::parse($comment->comment_date);
-//         $comment->isNewComment = $commentDate->diffInDays(Carbon::now()) <= 1;
-//     }
-
-//     // Truyền dữ liệu vào view
-//     return view('admin::contents.comments.listComment', compact('listComment'));
-// }
 public function listComment(Request $request){
     $query = Comment::join('users', 'users.id', '=', 'comments.users_id')
         ->join('products', 'products.id', '=', 'comments.products_id')
@@ -47,18 +25,15 @@ public function listComment(Request $request){
             'comments.status'
         );
         
-    // Lọc theo số sao
+    
     if ($request->has('rating_filter') && $request->get('rating_filter') != '') {
         $query->where('comments.rating', $request->get('rating_filter'));
     }
 
-    // Lọc theo trạng thái
     if ($request->has('status_filter') && $request->get('status_filter') != '') {
         $query->where('comments.status', $request->get('status_filter'));
     }
-    // $query->orderBy('comments.comment_date', 'desc');
-
-    // Paginate sau khi lọc
+    
     $listComment = $query->orderBy('comments.comment_date', 'desc')->paginate(10)->appends($request->except('page'));
 
     foreach ($listComment as $comment) {
