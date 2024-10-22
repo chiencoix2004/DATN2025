@@ -1,4 +1,5 @@
-@extends('user::layouts.main')
+@extends('user::layouts.master')
+
 {{-- @section('title')
     @parent
     Danh sách sản phẩm

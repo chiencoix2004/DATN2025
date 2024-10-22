@@ -16,8 +16,8 @@
                 <div class="col-lg-12">
                     <div class="transparent-header_nav position-relative">
                         <div class="header-logo_area">
-                            <a href="{{ route('/') }}">
-                                <img src="{{ asset('theme/user//images/rsz_2logo2.png') }}" alt="Header Logo">
+                            <a href="index.html">
+                                <img src="assets/images/menu/logo/1.png" alt="Header Logo">
                             </a>
                         </div>
                         <div class="main-menu_area d-none d-lg-block">
@@ -155,7 +155,7 @@
                             <div class="col-lg-2 col-sm-6">
                                 <div class="header-logo_area">
                                     <a href="index.html">
-                                        <img src="{{ asset('theme/user//images/rsz_2logo2.png') }}" alt="Header Logo">
+                                        <img src="assets/images/menu/logo/1.png" alt="Header Logo">
                                     </a>
                                 </div>
                             </div>
@@ -351,16 +351,15 @@
             <div class="container">
                 <a href="#" class="btn-close white-close_btn"><i class="ion-android-close"></i></a>
                 <div class="offcanvas-inner_logo">
-                    <a href="{{ route('/') }}">
-                        <li class="dropdown-holder">
-                        <img src="{{ asset('theme/user//images/rsz_2logo2.png') }}" alt="Header Logo">
+                    <a href="index.html">
+                        <img src="assets/images/menu/logo/1.png" alt="Header Logo">
                     </a>
                 </div>
                 <nav class="offcanvas-navigation">
                     <ul class="mobile-menu">
-                        <li class="menu-item-has-children active"><a href="{{ route('/') }}"><span
+                        <li class="menu-item-has-children active"><a href="#"><span
                                 class="mm-text">Home</span></a>
-                            {{-- <ul class="sub-menu">
+                            <ul class="sub-menu">
                                 <li>
                                     <a href="index.html">
                                         <span class="mm-text">Home One</span>
@@ -376,7 +375,7 @@
                                         <span class="mm-text">Home Three</span>
                                     </a>
                                 </li>
-                            </ul> --}}
+                            </ul>
                         </li>
                         <li class="menu-item-has-children">
                             <a href="{{route('product_list')}}">
@@ -653,7 +652,7 @@
             <a href="#" class="btn-close"><i class="ion-android-close"></i></a>
             <div class="offcanvas-inner_logo">
                 <a href="shop-left-sidebar.html">
-                    <img src="{{ asset('theme/user//images/rsz_2logo2.png') }}" alt="Munoz's Offcanvas Logo">
+                    <img src="assets/images/menu/logo/1.png" alt="Munoz's Offcanvas Logo">
                 </a>
             </div>
             <div class="short-desc">

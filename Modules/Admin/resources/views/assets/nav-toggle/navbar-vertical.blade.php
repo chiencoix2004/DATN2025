@@ -33,12 +33,12 @@
                             <hr class="mb-0 navbar-vertical-divider" />
                         </div>
                     </div>
-                    <a class="nav-link" href="" role="button">
+                    <a class="nav-link" href="{{ route('admin.coupons.index') }}" role="button">
                         <div class="d-flex align-items-center">
                             <span class="nav-link-icon">
                                 <span class="fas fa-ticket-alt"></span>
                             </span>
-                            <span class="nav-link-text ps-1">Coupons</span>
+                            <span class="nav-link-text ps-1">Mã Giảm giá</span>
                         </div>
                     </a>
                     <a class="nav-link" href="{{ route('admin.categories.list') }}">
@@ -46,7 +46,7 @@
                             <span class="nav-link-icon">
                                 <span class="fas fa-list-alt"></span>
                             </span>
-                            <span class="nav-link-text ps-1">Categories</span>
+                            <span class="nav-link-text ps-1">Danh mục</span>
                         </div>
                     </a>
                     <a class="nav-link dropdown-indicator" href="#product" role="button" data-bs-toggle="collapse"
@@ -55,21 +55,21 @@
                             <span class="nav-link-icon">
                                 <span class="fas fa-boxes"></span>
                             </span>
-                            <span class="nav-link-text ps-1">Products</span>
+                            <span class="nav-link-text ps-1">Sản phẩm</span>
                         </div>
                     </a>
                     <ul class="nav collapse" id="product">
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('admin.product.list') }}">
                                 <div class="d-flex align-items-center">
-                                    <span class="nav-link-text ps-1">List Products</span>
+                                    <span class="nav-link-text ps-1">Danh sách sản phẩm</span>
                                 </div>
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('admin.product.addProduct') }}">
                                 <div class="d-flex align-items-center">
-                                    <span class="nav-link-text ps-1">Add Product</span>
+                                    <span class="nav-link-text ps-1">Thêm sản phẩm</span>
                                 </div>
                             </a>
                         </li>
@@ -93,23 +93,23 @@
                         aria-expanded="false" aria-controls="orders">
                         <div class="d-flex align-items-center">
                             <span class="nav-link-icon">
-                                <span class="fab fa-opencart"></span>
+                                <span class="far fa-file-alt"></span>
                             </span>
-                            <span class="nav-link-text ps-1">Orders</span>
+                            <span class="nav-link-text ps-1">Đơn hàng</span>
                         </div>
                     </a>
                     <ul class="nav collapse" id="orders">
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('admin.orders.list') }}">
                                 <div class="d-flex align-items-center">
-                                    <span class="nav-link-text ps-1">List Orders</span>
+                                    <span class="nav-link-text ps-1">Danh sách đơn hàng</span>
                                 </div>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ route('admin.orders.detail') }}">
+                            <a class="nav-link" href="{{ route('admin.invoice.list') }}">
                                 <div class="d-flex align-items-center">
-                                    <span class="nav-link-text ps-1">Detail Order</span>
+                                    <span class="nav-link-text ps-1">Danh sách hóa đơn</span>
                                 </div>
                             </a>
                         </li>
@@ -117,17 +117,41 @@
                 </li>
                 <li class="nav-item">
                     <div class="row navbar-vertical-label-wrapper mt-3 mb-2">
-                        <div class="col-auto navbar-vertical-label">Authentication</div>
+                        <div class="col-auto navbar-vertical-label">Quản lý tài khoản</div>
                         <div class="col ps-0">
                             <hr class="mb-0 navbar-vertical-divider" />
                         </div>
                     </div>
-                    <a class="nav-link" href="{{ route('admin.account.list') }}">
+                    <a class="nav-link" href="{{ route('admin.accounts.index') }}">
                         <div class="d-flex align-items-center">
                             <span class="nav-link-icon">
                                 <span class="fas fa-user-alt"></span>
                             </span>
-                            <span class="nav-link-text ps-1">List Accounts</span>
+                            <span class="nav-link-text ps-1">Danh sách tài khoản</span>
+                        </div>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <div class="row navbar-vertical-label-wrapper mt-3 mb-2">
+                        <div class="col-auto navbar-vertical-label">Quản lý tài khoản khách hàng</div>
+                        <div class="col ps-0">
+                            <hr class="mb-0 navbar-vertical-divider" />
+                        </div>
+                    </div>
+                    <a class="nav-link" href="{{ route('admin.users.index') }}">
+                        <div class="d-flex align-items-center">
+                            <span class="nav-link-icon">
+                                <span class="fas fa-user-alt"></span>
+                            </span>
+                            <span class="nav-link-text ps-1">Danh sách tài khoản khách hàng</span>
+                        </div>
+                    </a>
+                    <a class="nav-link" href="{{ route('admin.ticket.index') }}">
+                        <div class="d-flex align-items-center">
+                            <span class="nav-link-icon">
+                                <span class="fas fa-user-alt"></span>
+                            </span>
+                            <span class="nav-link-text ps-1">Hỗ trợ khách hàng</span>
                         </div>
                     </a>
                 </li>

@@ -16,7 +16,7 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
-        for ($i = 0; $i <= 10; $i++) {
+        for ($i = 0; $i <= 100; $i++) {
             DB::table('users')->insert([
                 'user_name' => "Uy$i",
                 'phone' => "098765432$i",
@@ -24,11 +24,10 @@ class UserSeeder extends Seeder
                 'password' => bcrypt('pw12345678'),
                 'address' => "Ba Vì $i",
                 'user_image' => "https://mcdn.coolmate.me/image/January2023/pho-thoi-trang-870_220.jpg",
-                'roles_id' => rand(1, 3),
-                'fullname' => "Đỗ Phương Uy $i",
+                'roles_id' => rand(1, 6),
+                'full_name' => "Đỗ Phương Uy $i",
                 'verify' => 1,
                 'status' => 'active',
-                'name' => "Uy$i"
             ]);
         }
     }
