@@ -68,6 +68,8 @@ Route::prefix('admin')->as('admin.')->group(function () {
         Route::get('listComment', 'listComment')->name('listComment');
         Route::get('/{id}/editComment', 'editComment')->name('editComment');
         Route::put('{id}updateComment', 'updateComment')->name('updateComment');
+        Route::post('bulk-action', 'bulkAction')->name('bulkAction');
+
     });
     
 

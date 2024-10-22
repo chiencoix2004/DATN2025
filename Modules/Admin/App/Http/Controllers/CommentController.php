@@ -10,29 +10,64 @@ use App\Models\User;
 
 class CommentController extends Controller
 {
-public function listComment(){
+// public function listComment(){
 
-    $listComment = Comment::join('users', 'users.id', '=', 'comments.users_id')
+//     $listComment = Comment::join('users', 'users.id', '=', 'comments.users_id')
+//         ->join('products', 'products.id', '=', 'comments.products_id')
+//         ->select(
+//             'comments.id',
+//             'users.user_name',
+//             'products.name',
+//             'comments.comments',
+//             'comments.rating',
+//             'comments.comment_date',
+//             'comments.status'
+//         )->orderBy('comments.comment_date', 'DESC')
+//         ->paginate(15);
+
+//     foreach ($listComment as $comment) {
+//         $commentDate = Carbon::parse($comment->comment_date);
+//         $comment->isNewComment = $commentDate->diffInDays(Carbon::now()) <= 1;
+//     }
+
+//     // Truyền dữ liệu vào view
+//     return view('admin::contents.comments.listComment', compact('listComment'));
+// }
+public function listComment(Request $request){
+    $query = Comment::join('users', 'users.id', '=', 'comments.users_id')
         ->join('products', 'products.id', '=', 'comments.products_id')
         ->select(
             'comments.id',
+            'comments.products_id',
             'users.user_name',
             'products.name',
             'comments.comments',
             'comments.rating',
             'comments.comment_date',
             'comments.status'
-        )->orderBy('comments.comment_date', 'DESC')
-        ->get();
+        );
+        
+    // Lọc theo số sao
+    if ($request->has('rating_filter') && $request->get('rating_filter') != '') {
+        $query->where('comments.rating', $request->get('rating_filter'));
+    }
+
+    // Lọc theo trạng thái
+    if ($request->has('status_filter') && $request->get('status_filter') != '') {
+        $query->where('comments.status', $request->get('status_filter'));
+    }
+    // $query->orderBy('comments.comment_date', 'desc');
+
+    // Paginate sau khi lọc
+    $listComment = $query->orderBy('comments.comment_date', 'desc')->paginate(10)->appends($request->except('page'));
 
     foreach ($listComment as $comment) {
         $commentDate = Carbon::parse($comment->comment_date);
         $comment->isNewComment = $commentDate->diffInDays(Carbon::now()) <= 1;
     }
-
-    // Truyền dữ liệu vào view
     return view('admin::contents.comments.listComment', compact('listComment'));
 }
+
 
 public function editComment($id) {
     $detailComment = Comment::join('users', 'users.id', '=', 'comments.users_id')
@@ -57,4 +92,28 @@ public function updateComment($id, Request $request){
         ]);
         return redirect()->route('admin.comment.listComment');
 }
+public function bulkAction(Request $request)
+{
+    $commentIds = $request->input('comment_ids');
+    $action = $request->input('action');
+
+    if ($commentIds && $action) {
+        switch ($action) {
+            case 'approve':
+                // Duyệt các comment (status = 2)
+                Comment::whereIn('id', $commentIds)->update(['status' => 2]);
+                return redirect()->back()->with('success', 'Đã duyệt các bình luận được chọn.');
+            case 'hide':
+                // Ẩn các comment (status = 3)
+                Comment::whereIn('id', $commentIds)->update(['status' => 3]);
+                return redirect()->back()->with('success', 'Đã ẩn các bình luận được chọn.');
+            default:
+                return redirect()->back()->with('error', 'Hành động không hợp lệ.');
+        }
+    }
+
+    return redirect()->back()->with('error', 'Không có bình luận nào được chọn.');
+}
+
+
 }
