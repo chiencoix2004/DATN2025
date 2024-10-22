@@ -1,5 +1,8 @@
 @extends('admin::layout.master')
 
+@section('title')
+    Danh sách mã giảm giá
+@endsection
 
 @section('css-libs')
     <link rel="stylesheet" href="{{ asset('bootstrap-5.3.3/css/bootstrap.min.css') }}">
@@ -15,8 +18,10 @@
 @section('contents')
     <div class="container mt-4">
         <div class="card mb-3 p-5">
-
-            <div>
+            <div class="mb-3">
+                <h3 class="fs-7">Danh sách mã giảm giá</h3>
+            </div>
+            <div class="mb-3">
                 <a name="" id="" class="btn btn-primary" href="{{ route('admin.coupons.create') }}"
                     role="button">Thêm
                     mới</a>
@@ -49,7 +54,8 @@
                 ajax: '{!! route('api.coupons.index') !!}',
                 columns: [{
                         data: 'id',
-                        name: 'id'
+                        name: 'id',
+                        "searchable": false
                     },
                     {
                         data: 'name',

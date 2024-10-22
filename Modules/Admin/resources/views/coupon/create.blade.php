@@ -41,20 +41,20 @@
                             <div class="col-12 mb-3">
                                 <label class="form-label" for="name">Tên mã giảm giá:</label>
                                 <input class="form-control" name="name" id="name" type="text">
-                                @error('name')<div class="alert alert-danger">{{ $message }}</div>@enderror
+                                @error('name')<label class="form-label text-danger">{{ $message }} </label>@enderror
                             </div>
                             <div class="col-12 mb-3"><label class="form-label" for="code">Mã giảm giá:</label>
                                 <input class="form-control" name="code" id="code" type="text">
-                                @error('code')<div class="alert alert-danger">{{ $message }}</div>@enderror
+                                @error('code')<label class="form-label text-danger">{{ $message }} </label>@enderror
                             </div>
                             <div class="col-12 mb-3"><label class="form-label" for="description">Mô tả:</label>
                                 <textarea class="form-control" name="description" id="description" rows="3"></textarea>
-                                @error('description')<div class="alert alert-danger">{{ $message }}</div>@enderror
+                                @error('description')<label class="form-label text-danger">{{ $message }} </label>@enderror
                             </div>
                             <div class="col-12 mb-3">
                                 <label class="form-label" for="quantity">Số lượng:</label>
                                 <input class="form-control" name="quantity" id="quantity" type="number">
-                                @error('quantity')<div class="alert alert-danger">{{ $message }}</div>@enderror
+                                @error('quantity')<label class="form-label text-danger">{{ $message }} </label>@enderror
                             </div>
                         </div>
                     </div>
@@ -69,12 +69,12 @@
                             <div class="col-sm-6 mb-3">
                                 <label class="form-label" for="date_start">Thời gian bắt đầu:</label>
                                 <input type="datetime-local" class="form-control" id="date_start" name="date_start">
-                                @error('date_start')<div class="alert alert-danger">{{ $message }}</div>@enderror
+                                @error('date_start')<label class="form-label text-danger">{{ $message }} </label>@enderror
                             </div>
                             <div class="col-sm-6 mb-3">
                                 <label class="form-label" for="date_end">Thời gian kết thúc:</label>
                                 <input type="datetime-local" class="form-control" id="date_end" name="date_end">
-                                @error('date_end')<div class="alert alert-danger">{{ $message }}</div>@enderror
+                                @error('date_end')<label class="form-label text-danger">{{ $message }} </label>@enderror
                             </div>
                         </div>
                     </div>
@@ -95,12 +95,12 @@
                                         <option value="percent" {{ old('discount_type') == 'percent' ? 'selected' : '' }}>Phần trăm</option>
                                         <option value="fixed" {{ old('discount_type') == 'fixed' ? 'selected' : '' }}>Cố định</option>
                                     </select>
-                                    @error('discount_type')<div class="alert alert-danger">{{ $message }}</div>@enderror
+                                    @error('discount_type')<label class="form-label text-danger">{{ $message }} </label>@enderror
                                 </div>
                                 <div class="col-12">
                                     <label class="form-label" for="discount_amount">Giá trị:</label>
                                     <input class="form-control" name="discount_amount" id="discount_amount" type="number">
-                                    @error('discount_amount')<div class="alert alert-danger">{{ $message }}</div>@enderror
+                                    @error('discount_amount')<label class="form-label text-danger">{{ $message }} </label>@enderror
                                 </div>
                             </div>
                         </div>
@@ -115,12 +115,12 @@
                                 <div class="col-12 mb-4">
                                     <label class="form-label" for="minimum_spend">Chi tiêu tối thiểu:</label>
                                     <input class="form-control" id="minimum_spend" name="minimum_spend" type="text">
-                                    @error('minimum_spend')<div class="alert alert-danger">{{ $message }}</div>@enderror
+                                    @error('minimum_spend')<label class="form-label text-danger">{{ $message }} </label>@enderror
                                 </div>
                                 <div class="col-12">
                                     <label class="form-label" for="maximum_spend">Chi tiêu tối đa:</label>
                                     <input class="form-control" id="maximum_spend" name="maximum_spend" type="text"></div>
-                                    @error('maximum_spend')<div class="alert alert-danger">{{ $message }}</div>@enderror
+                                    @error('maximum_spend')<label class="form-label text-danger">{{ $message }} </label>@enderror
                                 </div>
                             </div>
                         </div>
