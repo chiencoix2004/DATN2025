@@ -7,6 +7,7 @@ use Modules\Admin\App\Http\Controllers\BannerController;
 use Modules\Admin\App\Http\Controllers\CategoryController;
 use Modules\Admin\App\Http\Controllers\InvoiceController;
 use Modules\Admin\App\Http\Controllers\OrderController;
+use Modules\Admin\App\Http\Controllers\PostController;
 use Modules\Admin\App\Http\Controllers\ProductController;
 use Modules\Admin\App\Http\Controllers\CouponController;
 use Modules\Admin\App\Http\Controllers\AdminController;
@@ -130,5 +131,16 @@ Route::prefix('admin')->as('admin.')->group(function () {
             // Route::get('/{id}/edit', 'edit')->name('edit');
             // Route::put('{id}/update', 'update')->name('update');
             // Route::delete('/{id}/destroy', 'destroy')->name('destroy');
+        });
+
+    Route::controller(PostController::class)->prefix('posts')->as('posts.')
+        ->group(function () {
+            Route::get('list', 'listPost')->name('list');
+            Route::get('create', 'create')->name('create');
+            Route::post('store', 'store')->name('store');
+            Route::get('/{id}/show', 'show')->name('show');
+            Route::get('/{id}/edit', 'edit')->name('edit');
+            Route::put('{id}update', 'update')->name('update');
+            Route::delete('/{id}/destroy', 'destroy')->name('destroy');
         });
 });
