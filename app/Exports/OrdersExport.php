@@ -3,7 +3,6 @@
 namespace App\Exports;
 
 use App\Models\Order;
-use App\Models\OrderModel;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 
@@ -26,25 +25,39 @@ class OrdersExport implements FromCollection, WithHeadings
 
     public function collection()
     {
-        $orders = OrderModel::query();
+        $orders = Order::query();
 
         if ($this->status) {
             $orders->where('status_order', $this->status);
         }
 
         if ($this->phone) {
-            $orders->where('user_phone', 'like', '%' . $this->phone . '%');
+            $orders->where('ship_user_phone', 'like', '%' . $this->phone . '%');
         }
 
         if ($this->email) {
-            $orders->where('user_email', 'like', '%' . $this->email . '%');
+            $orders->where('ship_user_email', 'like', '%' . $this->email . '%');
         }
 
         if ($this->startDate && $this->endDate) {
             $orders->whereBetween('date_create_order', [$this->startDate, $this->endDate]);
         }
 
-        return $orders->get();
+        return $orders->get()->map(function ($order) {
+            return [
+                'ID' => $order->id,
+                'Tên khách hàng' => $order->ship_user_name,
+                'Số điện thoại' => $order->ship_user_phone,
+                'Email' => $order->ship_user_email,
+                'Địa chỉ' => $order->ship_user_address,
+                'Trạng thái đơn hàng' => $order->status_order, 
+                'Tổng tiền' => $order->total_price,
+                'Ngày đặt hàng' => $order->date_create_order,
+                'Trạng thái thanh toán' => $order->payment_method == 1 ? 'Đã thanh toán' : 'Chưa thanh toán',
+                'Ghi chú' => $order->ship_user_note,
+                'Phương thức vận chuyển' => $order->shipping_method, 
+            ];
+        });
     }
 
     public function headings(): array
@@ -55,9 +68,12 @@ class OrdersExport implements FromCollection, WithHeadings
             'Số điện thoại',
             'Email',
             'Địa chỉ',
-            'Trạng thái',
+            'Trạng thái đơn hàng',
             'Tổng tiền',
             'Ngày đặt hàng',
+            'Trạng thái thanh toán',
+            'Ghi chú', 
+            'Phương thức vận chuyển', 
         ];
     }
 }
