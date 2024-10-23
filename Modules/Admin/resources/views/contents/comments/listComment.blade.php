@@ -129,11 +129,11 @@
                                     <th class="text-900 sort">STT</th>
                                     <th class="text-900 sort">Tên Người Dùng</th>
                                     <th class="text-900 sort">Tên Sản Phẩm</th>
-                                    <th class="text-900 sort">Comment</th>
-                                    <th class="text-900 sort">Rate</th>
-                                    <th class="text-900 sort">Comment Date</th>
+                                    <th class="text-900 sort">Bình Luận</th>
+                                    <th class="text-900 sort">Sao</th>
+                                    <th class="text-900 sort">Ngày Bình Luận</th>
                                     <th class="text-900 sort">Loại</th>
-                                    <th class="text-900 no-sort">Action</th>
+                                    <th class="text-900 no-sort">Hành Động</th>
                                 </tr>
                             </thead>
     
@@ -150,7 +150,7 @@
                                             {{ $item->comment_date }}
                                             @if ($item->isNewComment)
                                                 <span style="color: red;">
-                                                    <b class="blink">New <span class="fas fa-fire fire-animation"></span></b>
+                                                    <b class="blink">Mới <span  class="fas fa-fire fire-animation"></span></b>
                                                 </span>
                                             @endif
                                         </td>
@@ -174,7 +174,7 @@
                                         </td>
                                         <td class="align-middle white-space-nowrap text-end">
                                             <a class="btn btn-primary" role="button"
-                                                href="{{ route('admin.comment.editComment', ['id' => $item->id]) }}">Edit</a>
+                                                href="{{ route('admin.comment.editComment', ['id' => $item->id]) }}">Sửa</a>
                                         </td>
                                     </tr>
                                 @endforeach
