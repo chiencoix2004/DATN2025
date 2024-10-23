@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class ProductValidation extends FormRequest
+class ProductUpdate extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,7 +24,7 @@ class ProductValidation extends FormRequest
         return [
             // validate tên và slug sản phẩm
             'prd_name' => ['required', 'min:5', 'max:255'],
-            'prd_slug' => ['required', 'min:5', 'max:255', 'unique:products,slug'],
+            'prd_slug' => ['required', 'min:5', 'max:255'],
             // validate giá sản phẩm
             'price_regular' => ['required', 'integer', 'min:1'],
             'price_sale' => ['nullable', 'integer', 'lt:price_regular'],
@@ -37,7 +37,7 @@ class ProductValidation extends FormRequest
             // ảnh sản phẩm
             'prd_images' => ['nullable', 'array'],
             'prd_images.*' => ['image', 'max:5120', 'distinct'],
-            'prd_avatar' => ['required', 'image', 'max:5120'],
+            'prd_avatar' => ['nullable', 'image', 'max:5120'],
         ];
     }
     public function messages(): array
@@ -50,7 +50,6 @@ class ProductValidation extends FormRequest
             'prd_slug.required' => 'Slug sản phẩm không được để trống!',
             'prd_slug.min' => 'Slug sản phẩm không được ngắn hơn 5 ký tự!',
             'prd_slug.max' => 'Slug sản phẩm không được dài hơn 255 ký tự!',
-            'prd_slug.unique' => 'Slug sản phẩm đã tồn tại trong hệ thống!',
             // giá
             'price_regular.required' => 'Giá thông thường là bắt buộc và phải lớn hơn 0!',
             'price_regular.integer' => 'Giá thông thường phải là một số nguyên!',
@@ -71,7 +70,6 @@ class ProductValidation extends FormRequest
             'prd_images.*.image' => 'Mỗi tệp phải là một hình ảnh!',
             'prd_images.*.max' => 'Dung lượng hình ảnh không được vượt quá 5MB!',
             'prd_images.*.distinct' => 'Các hình ảnh không được trùng lặp!',
-            'prd_avatar.required' => 'Sản phẩm phải có 1 ảnh đại diện!',
             'prd_avatar.image' => 'File upload phải là file ảnh!',
             'prd_avatar.max' => 'Dung lượng hình ảnh không được vượt quá 5MB!',
         ];
