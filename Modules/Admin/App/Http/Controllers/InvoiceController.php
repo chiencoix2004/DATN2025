@@ -4,6 +4,7 @@ namespace Modules\Admin\App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\Order;
+use Barryvdh\DomPDF\PDF as DomPDFPDF;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -11,7 +12,13 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Pagination\LengthAwarePaginator;
-use PDF;
+
+use Carbon\Carbon;
+// use Storage;
+use Barryvdh\DomPDF\Facade\Pdf;
+
+// use PDF;
+
 
 class InvoiceController extends Controller
 {
@@ -71,6 +78,9 @@ class InvoiceController extends Controller
     }
     public function listPDF()
     {
+
+        $files = File::files(storage_path('app/public/invoices ')); // Lấy danh sách file từ thư mục invoices
+
         $directoryPath = storage_path('app/public/invoices');
         if (!File::exists($directoryPath)) {
             // return redirect()->back()->with('error', 'Thư mục invoices không tồn tại.');

@@ -1,6 +1,6 @@
 @extends('admin::layout.master')
 @section('title')
-    Admin | Danh sách sản phẩm
+    Admin | Danh sách sản phẩm đã xóa
 @endsection
 @section('contents')
     <div class="card mb-3" id="tableExample3"
@@ -14,7 +14,7 @@
                         @if (session('error'))
                             <h5 class="fs-9 mb-0 text-danger py-2 py-xl-0">{{ session('error') }}</h5>
                         @else
-                            <a href="{{ route('admin.product.addProduct') }}" class="btn btn-primary">Thêm sản phẩm mới</a>
+                            <a href="{{ route('admin.product.restoreAll') }}" class="btn btn-primary">Khôi phục tất cả</a>
                         @endif
                     @endif
                 </div>
