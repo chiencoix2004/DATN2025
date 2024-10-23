@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Modules\Admin\App\Http\Controllers\Api\AccountController;
 use Modules\Admin\App\Http\Controllers\Api\CouponController;
+use Modules\Admin\App\Http\Controllers\Api\UserController;
 
 /*
     |--------------------------------------------------------------------------
@@ -39,4 +40,15 @@ Route::controller(AccountController::class)
         // Route::get('/{id}', 'show')->name('show');
         // Route::put('/{id}', 'update')->name('update');
         Route::delete('/{id}', 'destroy')->name('destroy');
+    });
+
+    Route::controller(UserController::class)
+    ->prefix('users')
+    ->as('api.users.')
+    ->group(function () {
+        Route::get('/', 'index')->name('index');
+        // Route::post('/', 'store')->name('store');
+        // Route::get('/{id}', 'show')->name('show');
+        // Route::put('/{id}', 'update')->name('update');
+        // Route::delete('/{id}', 'destroy')->name('destroy');
     });
