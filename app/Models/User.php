@@ -60,5 +60,12 @@ class User extends Authenticatable
     // public function role(){
     //     return $this->belongsTo(Role::class);
     // }
+    public function listUser(){
+        return $this->select('id','fullname','email','address','user_image')->get();
+    }
+    public function getUser($id){
+        return $this->where('id',$id)->first();
+    }
+
 
 }

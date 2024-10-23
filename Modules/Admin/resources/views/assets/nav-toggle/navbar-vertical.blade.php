@@ -28,11 +28,19 @@
                 </li>
                 <li class="nav-item">
                     <div class="row navbar-vertical-label-wrapper mt-3 mb-2">
-                        <div class="col-auto navbar-vertical-label">E commerce</div>
+                        <div class="col-auto navbar-vertical-label">Quản lý chung</div>
                         <div class="col ps-0">
                             <hr class="mb-0 navbar-vertical-divider" />
                         </div>
                     </div>
+                    <a class="nav-link" href="{{ route('admin.comment.listComment') }}" role="button">
+                        <div class="d-flex align-items-center">
+                            <span class="nav-link-icon">
+                                <span class="fas fa-comment-alt"></span>
+                            </span>
+                            <span class="nav-link-text ps-1">Bình luận</span>
+                        </div>
+                    </a>
                     <a class="nav-link" href="{{ route('admin.coupons.index') }}" role="button">
                         <div class="d-flex align-items-center">
                             <span class="nav-link-icon">
@@ -105,15 +113,15 @@
                             <span class="nav-link-text ps-1">Thẻ</span>
                         </div>
                     </a>
-                    <a class="nav-link dropdown-indicator" href="#orders" role="button" data-bs-toggle="collapse"
-                        aria-expanded="false" aria-controls="orders">
+                    <a class="nav-link dropdown-indicator" href="#orders" role="button" data-bs-toggle="collapse"  aria-expanded="false" aria-controls="orders">
                         <div class="d-flex align-items-center">
                             <span class="nav-link-icon">
                                 <span class="far fa-file-alt"></span>
                             </span>
                             <span class="nav-link-text ps-1">Đơn hàng</span>
                         </div>
-                    </a>
+                    </a >
+                       
                     <ul class="nav collapse" id="orders">
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('admin.orders.list') }}">

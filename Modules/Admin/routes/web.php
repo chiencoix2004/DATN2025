@@ -14,6 +14,7 @@ use Modules\Admin\App\Http\Controllers\CouponController;
 use Modules\Admin\App\Http\Controllers\AdminController;
 use Modules\Admin\App\Http\Controllers\StatisticalController;
 use Modules\Admin\App\Http\Controllers\TagController;
+use Modules\Admin\App\Http\Controllers\CommentController;
 use Modules\Admin\App\Http\Controllers\UserController;
 
 /*
@@ -72,6 +73,15 @@ Route::prefix('admin')->as('admin.')->group(function () {
         // sản phẩm xóa mềm
         Route::get('listTrashed', 'trashed')->name('listTrashed');
         Route::get('restore-all', 'restoreAll')->name('restoreAll');
+    });
+
+      // Route quản lý comment
+    Route::controller(CommentController::class)->prefix('comment')->as('comment.')->group(function () {
+        Route::get('listComment', 'listComment')->name('listComment');
+        Route::get('/{id}/editComment', 'editComment')->name('editComment');
+        Route::put('{id}updateComment', 'updateComment')->name('updateComment');
+        Route::post('bulk-action', 'bulkAction')->name('bulkAction');
+
     });
 
     // Route quản lý attributes
@@ -135,21 +145,70 @@ Route::prefix('admin')->as('admin.')->group(function () {
     });
 
     // Route quản lý users
-    Route::controller(UserController::class)->prefix('users')->as('users.')->group(function () {
-        Route::get('/', 'index')->name('index');
-        Route::get('/{id}/show', 'show')->name('show');
-        Route::put('{id}/updateStatus', 'updateStatus')->name('updateStatus');
-    });
+    // Route::controller(AccountController::class)->prefix('account')->as('account.')->group(function(){
+    //     Route::get('listAcc', 'listAccounts')->name('list');
+    // });
+    Route::controller(CouponController::class)
+        ->prefix('coupons')
+        ->as('coupons.')
+        ->group(function () {
+            Route::get('/', 'index')->name('index');
+            Route::get('create', 'create')->name('create');
+            Route::post('store', 'store')->name('store');
+            Route::get('/{id}/show', 'show')->name('show');
+            Route::get('/{id}/edit', 'edit')->name('edit');
+            Route::put('{id}/update', 'update')->name('update');
+            // Route::delete('/{id}/destroy', 'destroy')->name('destroy');
+        });
 
-    // Route quản lý posts
-    Route::controller(PostController::class)->prefix('posts')->as('posts.')->group(function () {
-        Route::get('list', 'listPost')->name('list');
-        Route::get('create', 'create')->name('create');
-        Route::post('store', 'store')->name('store');
-        Route::get('/{id}/show', 'show')->name('show');
-        Route::get('/{id}/edit', 'edit')->name('edit');
-        Route::put('{id}/update', 'update')->name('update'); // Corrected Route::
-        Route::delete('/{id}/destroy', 'destroy')->name('destroy');
-    });
+
+    Route::controller(AccountController::class)
+        ->prefix('accounts')
+        ->as('accounts.')
+        ->group(function () {
+            Route::get('/', 'index')->name('index');
+            Route::get('create', 'create')->name('create');
+            Route::post('store', 'store')->name('store');
+            Route::get('/{id}/show', 'show')->name('show');
+            Route::get('/{id}/edit', 'edit')->name('edit');
+            Route::put('{id}/update', 'update')->name('update');
+            // Route::delete('/{id}/destroy', 'destroy')->name('destroy');
+        });
+    Route::controller(UserController::class)
+        ->prefix('users')
+        ->as('users.')
+        ->group(function () {
+            Route::get('/', 'index')->name('index');
+            // Route::get('create', 'create')->name('create');
+            // Route::post('store', 'store')->name('store');
+            Route::get('/{id}/show', 'show')->name('show');
+            Route::put('{id}/updateStatus', 'updateStatus')->name('updateStatus');
+            // Route::get('/{id}/edit', 'edit')->name('edit');
+            // Route::put('{id}/update', 'update')->name('update');
+            // Route::delete('/{id}/destroy', 'destroy')->name('destroy');
+        });
+
+    Route::controller(PostController::class)->prefix('posts')->as('posts.')
+        ->group(function () {
+            Route::get('list', 'listPost')->name('list');
+            Route::get('create', 'create')->name('create');
+            Route::post('store', 'store')->name('store');
+            Route::get('/{id}/show', 'show')->name('show');
+            Route::get('/{id}/edit', 'edit')->name('edit');
+            Route::put('{id}update', 'update')->name('update');
+            Route::delete('/{id}/destroy', 'destroy')->name('destroy');
+        });
+        Route::controller(Supportcontroller::class)
+        ->prefix('tickets')
+        ->as('ticket.')
+        ->group(function () {
+            Route::get('/', 'index')->name('index');
+            Route::get('create', 'create')->name('create');
+            Route::post('store', 'store')->name('store');
+            Route::get('/{id}/{user_id}/show', 'show')->name('show');
+            Route::get('/{id}/spam', 'spamticket')->name('spamticket');
+            Route::get('/{id}/close', 'closeticket')->name('closeticket');
+
+        });
 
 });
