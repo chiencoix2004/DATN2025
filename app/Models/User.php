@@ -13,25 +13,31 @@ class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable, SoftDeletes;
 
+    protected $table = 'users';
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array<int, string>
+     */
     protected $fillable = [
-        'user_name',
-        'phone',
-        'email',
-        'password',
-        'address',
+        "user_name",
+        "full_name",
+        "phone",
+        "email",
+        "password",
+        "address",
         'user_image',
-        'roles_id',
-        'fullname',
-        'verify',
+        "roles_id",
         'status',
-        'name',
-        'email_verified_at',
+        'verify',
+
     ];
 
     public function role()
     {
         return $this->belongsTo(RoleModel::class, 'roles_id');
     }
+
 
     public function orders()
     {
@@ -42,4 +48,17 @@ class User extends Authenticatable
     {
         return $this->hasMany(CommentModel::class, 'users_id');
     }
+    /**
+     * The attributes that should be cast.
+     *
+     * @var array<string, string>
+     */
+    protected $casts = [
+        'email_verified_at' => 'datetime',
+    ];
+
+    // public function role(){
+    //     return $this->belongsTo(Role::class);
+    // }
+
 }
