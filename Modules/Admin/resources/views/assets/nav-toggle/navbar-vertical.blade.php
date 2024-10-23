@@ -105,6 +105,22 @@
                             <span class="nav-link-text ps-1">Attributes</span>
                         </div>
                     </a>
+                    <a class="nav-link" href="{{ route('admin.ticket.index') }}">
+                        <div class="d-flex align-items-center">
+                            <span class="nav-link-icon">
+                                <span class="far fa-user"></span>
+                            </span>
+                            <span class="nav-link-text ps-1">Hỗ trợ khách hàng</span>
+                        </div>
+                    </a>
+                    <a class="nav-link" href="{{ route('admin.banner.list') }}">
+                        <div class="d-flex align-items-center">
+                            <span class="nav-link-icon">
+                                <span class="fas fa-file-image"></span>
+                            </span>
+                            <span class="nav-link-text ps-1">Banner</span>
+                        </div>
+                    </a>
                     <a class="nav-link dropdown-indicator" href="#orders" role="button" data-bs-toggle="collapse"  aria-expanded="false" aria-controls="orders">
                         <div class="d-flex align-items-center">
                             <span class="nav-link-icon">
@@ -113,7 +129,7 @@
                             <span class="nav-link-text ps-1">Đơn hàng</span>
                         </div>
                     </a >
-                       
+
                     <ul class="nav collapse" id="orders">
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('admin.orders.list') }}">
@@ -178,6 +194,7 @@
                             <span class="nav-link-text ps-1">Report</span>
                         </div>
                     </a>
+
                 </li>
             </ul>
         </div>
