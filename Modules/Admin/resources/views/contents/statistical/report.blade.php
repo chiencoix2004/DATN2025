@@ -99,7 +99,7 @@
                     <div class="display-4 fs-5 mb-2 fw-normal font-sans-serif text-warning"
                         data-countup='{"endValue":58.386,"decimalPlaces":2,"suffix":"k"}'>{{ number_format($revenue) }}
                     </div><a class="fw-semi-bold fs-10 text-nowrap"
-                        href="{{ route('admin.statistical.saticticalRevenue') }}">Chi tiết<span
+                        href="{{ route('admin.statistical.staticticalRevenue') }}">Chi tiết<span
                             class="fas fa-angle-right ms-1" data-fa-transform="down-1"></span></a>
                 </div>
             </div>
@@ -128,7 +128,7 @@
                     <div class="display-4 fs-5 mb-2 fw-normal font-sans-serif"
                         data-countup='{"endValue":43594,"prefix":"$"}'>{{ $successRate }}%</div><a
                         class="fw-semi-bold fs-10 text-nowrap"
-                        href="{{ route('admin.statistical.saticticalSuccess') }}">Chi tiết<span
+                        href="{{ route('admin.statistical.staticticalSuccess') }}">Chi tiết<span
                             class="fas fa-angle-right ms-1" data-fa-transform="down-1"></span></a>
                 </div>
             </div>

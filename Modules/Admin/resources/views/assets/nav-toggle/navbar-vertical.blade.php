@@ -165,7 +165,7 @@
                 </li>
                 <li class="nav-item">
                     <div class="row navbar-vertical-label-wrapper mt-3 mb-2">
-                        <div class="col-auto navbar-vertical-label">Statistical</div>
+                        <div class="col-auto navbar-vertical-label">Thống kê</div>
                         <div class="col ps-0">
                             <hr class="mb-0 navbar-vertical-divider" />
                         </div>
@@ -175,7 +175,7 @@
                             <span class="nav-link-icon">
                                 <span class="fas fa-chart-pie"></span>
                             </span>
-                            <span class="nav-link-text ps-1">Report</span>
+                            <span class="nav-link-text ps-1">Báo cáo</span>
                         </div>
                     </a>
                 </li>

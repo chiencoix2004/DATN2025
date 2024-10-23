@@ -17,7 +17,7 @@ use Carbon\Carbon;
 // use Storage;
 use Barryvdh\DomPDF\Facade\Pdf;
 
-use PDF;
+// use PDF;
 
 
 class InvoiceController extends Controller
