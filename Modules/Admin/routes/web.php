@@ -71,7 +71,7 @@ Route::prefix('admin')->as('admin.')->group(function () {
         Route::post('bulk-action', 'bulkAction')->name('bulkAction');
 
     });
-    
+
 
     // Route quản lý attributes
     Route::controller(AttributeController::class)->prefix('attributes')->as('attributes.')
@@ -144,5 +144,17 @@ Route::prefix('admin')->as('admin.')->group(function () {
             Route::get('/{id}/edit', 'edit')->name('edit');
             Route::put('{id}update', 'update')->name('update');
             Route::delete('/{id}/destroy', 'destroy')->name('destroy');
+        });
+        Route::controller(Supportcontroller::class)
+        ->prefix('tickets')
+        ->as('ticket.')
+        ->group(function () {
+            Route::get('/', 'index')->name('index');
+            Route::get('create', 'create')->name('create');
+            Route::post('store', 'store')->name('store');
+            Route::get('/{id}/{user_id}/show', 'show')->name('show');
+            Route::get('/{id}/spam', 'spamticket')->name('spamticket');
+            Route::get('/{id}/close', 'closeticket')->name('closeticket');
+
         });
 });
