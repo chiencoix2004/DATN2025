@@ -61,4 +61,10 @@ class Order extends Model
     {
         return $this->hasMany(OrderDetail::class);
     }
+    // app/Models/Order.php
+
+    public function orderDetails()
+    {
+        return $this->hasMany(OrderDetailModel::class); 
+    }
 }

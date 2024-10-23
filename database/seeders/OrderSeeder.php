@@ -21,7 +21,7 @@ class OrderSeeder extends Seeder
         $paymentMethods = Order::METHOD_PAYMENT;
         $shippingMethods = Order::METHOD_SHIPPING;
 
-        for ($i = 1; $i <= 30; $i++) {
+        for ($i = 1; $i <= 300; $i++) {
             DB::table('orders')->insert([
                 'users_id' => rand(2, 10),
                 'user_name' => "uy" . rand(1, 10),
