@@ -8,10 +8,13 @@ use Modules\Admin\App\Http\Controllers\BannerController;
 use Modules\Admin\App\Http\Controllers\CategoryController;
 use Modules\Admin\App\Http\Controllers\InvoiceController;
 use Modules\Admin\App\Http\Controllers\OrderController;
+use Modules\Admin\App\Http\Controllers\PostController;
 use Modules\Admin\App\Http\Controllers\ProductController;
 use Modules\Admin\App\Http\Controllers\CouponController;
 use Modules\Admin\App\Http\Controllers\AdminController;
 use Modules\Admin\App\Http\Controllers\TagController;
+use Modules\Admin\App\Http\Controllers\UserController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -112,7 +115,7 @@ Route::prefix('admin')->as('admin.')->group(function () {
             Route::post('store', 'store')->name('store');
             Route::get('/{id}/show', 'show')->name('show');
             Route::get('/{id}/edit', 'edit')->name('edit');
-            Route::put('{id}update', 'update')->name('update');
+            Route::put('{id}/update', 'update')->name('update');
             // Route::delete('/{id}/destroy', 'destroy')->name('destroy');
         });
 
@@ -126,8 +129,32 @@ Route::prefix('admin')->as('admin.')->group(function () {
             Route::post('store', 'store')->name('store');
             Route::get('/{id}/show', 'show')->name('show');
             Route::get('/{id}/edit', 'edit')->name('edit');
-            Route::put('{id}update', 'update')->name('update');
+            Route::put('{id}/update', 'update')->name('update');
+            // Route::delete('/{id}/destroy', 'destroy')->name('destroy');
+        });
+    Route::controller(UserController::class)
+        ->prefix('users')
+        ->as('users.')
+        ->group(function () {
+            Route::get('/', 'index')->name('index');
+            // Route::get('create', 'create')->name('create');
+            // Route::post('store', 'store')->name('store');
+            Route::get('/{id}/show', 'show')->name('show');
+            Route::put('{id}/updateStatus', 'updateStatus')->name('updateStatus');
+            // Route::get('/{id}/edit', 'edit')->name('edit');
+            // Route::put('{id}/update', 'update')->name('update');
             // Route::delete('/{id}/destroy', 'destroy')->name('destroy');
         });
 
+
+    Route::controller(PostController::class)->prefix('posts')->as('posts.')
+        ->group(function () {
+            Route::get('list', 'listPost')->name('list');
+            Route::get('create', 'create')->name('create');
+            Route::post('store', 'store')->name('store');
+            Route::get('/{id}/show', 'show')->name('show');
+            Route::get('/{id}/edit', 'edit')->name('edit');
+            Route::put('{id}update', 'update')->name('update');
+            Route::delete('/{id}/destroy', 'destroy')->name('destroy');
+        });
 });
