@@ -16,6 +16,7 @@ use Modules\Admin\App\Http\Controllers\StatisticalController;
 use Modules\Admin\App\Http\Controllers\TagController;
 use Modules\Admin\App\Http\Controllers\CommentController;
 use Modules\Admin\App\Http\Controllers\UserController;
+use Modules\Admin\App\Http\Controllers\SupportController;
 
 /*
 |--------------------------------------------------------------------------
@@ -206,9 +207,13 @@ Route::prefix('admin')->as('admin.')->group(function () {
             Route::get('create', 'create')->name('create');
             Route::post('store', 'store')->name('store');
             Route::get('/{id}/{user_id}/show', 'show')->name('show');
-            Route::get('/{id}/spam', 'spamticket')->name('spamticket');
-            Route::get('/{id}/close', 'closeticket')->name('closeticket');
-
+            Route::get('/{id}/spam', 'setSpam')->name('setSpam');
+            Route::get('/{id}/close', 'setComplete')->name('setComplete');
+            Route::post('reply', 'updatemessage')->name('updatemessage');
+            Route::get('open', 'showOpen')->name('open');
+            Route::get('close', 'showClose')->name('close');
+            Route::get('spam', 'showSpam')->name('spam');
+            Route::post('search', 'search')->name('search');
         });
 
 });
