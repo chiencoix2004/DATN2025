@@ -82,9 +82,9 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="">
+                            <a class="nav-link" href="{{ route('admin.product.listTrashed') }}">
                                 <div class="d-flex align-items-center">
-                                    <span class="nav-link-text ps-1">Detail Product</span>
+                                    <span class="nav-link-text ps-1">Sản phẩm đã xóa</span>
                                 </div>
                             </a>
                         </li>
@@ -94,7 +94,15 @@
                             <span class="nav-link-icon">
                                 <span class="fas fa-layer-group"></span>
                             </span>
-                            <span class="nav-link-text ps-1">Attributes</span>
+                            <span class="nav-link-text ps-1">Thuộc tính</span>
+                        </div>
+                    </a>
+                    <a class="nav-link" href="{{ route('admin.tags.list') }}">
+                        <div class="d-flex align-items-center">
+                            <span class="nav-link-icon">
+                                <span class="fas fa-tag"></span>
+                            </span>
+                            <span class="nav-link-text ps-1">Thẻ</span>
                         </div>
                     </a>
                     <a class="nav-link dropdown-indicator" href="#orders" role="button" data-bs-toggle="collapse"

@@ -1,6 +1,6 @@
 @extends('admin::layout.master')
 @section('title')
-    Admin | Thêm mơi sản phẩm
+    Admin | Cập nhật sản phẩm
 @endsection
 @section('contents')
     <div class="card mb-3">
@@ -13,15 +13,16 @@
                         @if (session()->has('success'))
                             <h5 class="mb-2 mb-md-0 text-success">{{ session('success') }}</h5>
                         @else
-                            <h5 class="mb-2 mb-md-0">Thêm mới sản phẩm</h5>
+                            <h5 class="mb-2 mb-md-0">Cập nhật sản phẩm</h5>
                         @endif
                     @endif
                 </div>
             </div>
         </div>
     </div>
-    <form action="{{ route('admin.product.create') }}" method="POST" enctype="multipart/form-data" id="productForm">
+    <form action="{{ route('admin.product.update', $data) }}" method="POST" enctype="multipart/form-data" id="productForm">
         @csrf
+        @method('PUT')
         <div class="row g-0">
             <div class="col-lg-8 pe-lg-2">
                 <div class="card mb-3">
@@ -33,7 +34,7 @@
                             <div class="col-12 mb-3">
                                 <label class="form-label" for="prd_name">Tên sản phẩm:</label>
                                 <input class="form-control" id="prd_name" type="text" name="prd_name"
-                                    value="{{ old('prd_name') }}" />
+                                    value="{{ old('prd_name') ? old('prd_name') : $data->name }}" />
                                 @error('prd_name')
                                     <label class="form-label text-danger">{{ $message }}</label>
                                 @enderror
@@ -41,7 +42,7 @@
                             <div class="col-12 mb-3">
                                 <label class="form-label" for="prd_slug">Slug sản phẩm:</label>
                                 <input class="form-control" id="prd_slug" type="text" name="prd_slug"
-                                    value="{{ old('prd_slug') }}" />
+                                    value="{{ old('prd_slug') ? old('prd_slug') : $data->slug }}" />
                                 @error('prd_slug')
                                     <label class="form-label text-danger">{{ $message }}</label>
                                 @enderror
@@ -116,7 +117,7 @@
                                 </label>
                                 <div class="create-product-description-textarea">
                                     <textarea class="tinymce d-none" data-tinymce="data-tinymce" name="prd_description" id="prd_description">
-                                        {{ old('prd_description') }}
+                                        {{ old('prd_description') ? old('prd_name') : $data->description }}
                                     </textarea>
                                 </div>
                             </div>
@@ -125,7 +126,7 @@
                                     Chất liệu sản phẩm:
                                 </label>
                                 <textarea class="form-control" name="prd_material" id="prd_material">
-                                    {{ old('prd_material') }}
+                                    {{ old('prd_material') ? old('prd_name') : $data->material }}
                                 </textarea>
                             </div>
                         </div>
@@ -178,6 +179,72 @@
                                     value="Tạo biến thể">
                             </div>
                         </div>
+                        @if (count($variantPRD) > 0)
+                            <hr>
+                            <div class="row gy-3 gx-2">
+                                @foreach ($variantPRD as $item)
+                                    @php
+                                        $colorAttr = \App\Models\ColorAttribute::query()->find($item->color_attribute_id);
+                                        $sizeAttr = \App\Models\SizeAttribute::query()->find($item->size_attribute_id);
+                                    @endphp
+                                    <div class="accordion col-lg-6 mb-3 pe-lg-12" id="container-{{ $item->id }}">
+                                        <div class="accordion-item">
+                                            <h2 class="accordion-header" id="heading-{{ $item->id }}">
+                                                <button class="accordion-button collapsed" type="button"
+                                                    data-bs-toggle="collapse"
+                                                    data-bs-target="#collapse-{{ $item->id }}" aria-expanded="true"
+                                                    aria-controls="collapse-{{ $item->id }}">
+                                                    <div
+                                                        style="width: 25px; height: 25px; background-color: {{ $colorAttr->color_value }}; margin: 3px;">
+                                                    </div>
+                                                    <strong> - {{ $sizeAttr->size_value }}</strong>
+                                                </button>
+                                            </h2>
+                                            <div class="accordion-collapse collapse" id="collapse-{{ $item->id }}"
+                                                aria-labelledby="heading-{{ $item->id }}"
+                                                data-bs-parent="#container-{{ $item->id }}">
+                                                <div class="accordion-body row">
+                                                    <div class="col-12 mb-4">
+                                                        <a href="" class="btn btn-danger">Delete Variant</a>
+                                                    </div>
+                                                    <div class="col-6 mb-4">
+                                                        <label class="form-label" for="price_default">Price
+                                                            regular:</label>
+                                                        <input class="form-control" type="number" min="0"
+                                                            name="updateV[{{ $item->id }}]['price_default']"
+                                                            value="{{ $item->price_default }}" />
+                                                    </div>
+                                                    <div class="col-6 mb-4">
+                                                        <label class="form-label" for="price_sale">Price sale:</label>
+                                                        <input class="form-control" type="number" min="0"
+                                                            name="updateV[{{ $item->id }}]['price_sale']"
+                                                            value="{{ $item->price_sale }}" />
+                                                    </div>
+                                                    <div class="col-6 mb-4">
+                                                        <label class="form-label" for="">Start date:</label>
+                                                        <input class="form-control" type="date"
+                                                            name="updateV[{{ $item->id }}]['start_date']"
+                                                            value="{{ $item->start_date }}" />
+                                                    </div>
+                                                    <div class="col-6 mb-4">
+                                                        <label class="form-label" for="">End date:</label>
+                                                        <input class="form-control" type="date"
+                                                            name="updateV[{{ $item->id }}]['end_date']"
+                                                            value="{{ $item->end_date }}" />
+                                                    </div>
+                                                    <div class="col-12 mb-4">
+                                                        <label class="form-label" for="">Quantity:</label>
+                                                        <input class="form-control" type="number"
+                                                            name="updateV[{{ $item->id }}]['quantity']"
+                                                            value="{{ $item->quantity }}" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endforeach
+                            </div>
+                        @endif
                     </div>
                 </div>
             </div>
@@ -195,13 +262,15 @@
                                             class="form-select selectpicker" id="prd_category" name="prd_category">
                                             <option value="" selected>Trống</option>
                                             @foreach ($categories as $item)
-                                                <option value="{{ $item->id }}">{{ $item->name }}</option>
+                                                <option value="{{ $item->id }}"
+                                                    {{ $data->category_id == $item->id ? 'selected' : '' }}>
+                                                    {{ $item->name }}</option>
                                             @endforeach
                                         </select>
                                     </div>
                                 </div>
                                 <hr>
-                                <div class="col-12 mb-3">
+                                <div class="col-12">
                                     <div class="form-group">
                                         <label for="multiple-select">Thẻ:</label>
                                         <select class="form-select selectpicker" id="multiple-select" multiple="multiple"
@@ -212,6 +281,14 @@
                                         </select>
                                     </div>
                                 </div>
+                                <div class="col-12 mb-3">
+                                    @foreach ($data->tags as $item)
+                                        <span class="badge bg-info tagItem-{{ $item->id }}">{{ $item->name }}&ensp;
+                                            <input class="far fa-trash-alt" type="button"
+                                                onclick="removeTag(idTag={{ $item->id }}, urlTag='{{ route('admin.product.delTag', $item->id) }}')">
+                                        </span> &ensp;
+                                    @endforeach
+                                </div>
                                 <hr>
                                 <div class="col-12 mb-3">
                                     <label class="form-label" for="product-subcategory">Chọn ảnh:</label>
@@ -219,6 +296,19 @@
                                     @error('prd_avatar')
                                         <label class="form-label text-danger">{{ $message }}</label>
                                     @enderror
+                                </div>
+                                <div class="col-12 mb-3">
+                                    <img src="{{ \Storage::url($data->image_avatar) }}" alt="....." width="364px">
+                                </div>
+                                <hr>
+                                <div class="col-12 mb-3 row">
+                                    <div class="col-lg-7 pe-lg-12">
+                                        <label class="form-label" for="image_thumbnail">Thư viện ảnh sản phẩm:</label>
+                                    </div>
+                                    <div class="col-lg-5 pe-lg-12">
+                                        <button class="btn btn-success" type="button" data-bs-toggle="modal"
+                                            data-bs-target="#public-images">Kho ảnh</button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -232,7 +322,7 @@
                                 <div class="col-12 mb-3">
                                     <label class="form-label" for="price_regular">Giá mặc định:</label>
                                     <input class="form-control" id="price_regular" type="number" name="price_regular"
-                                        value="{{ old('price_regular') }}" />
+                                        value="{{ old('price_regular') ? old('price_regular') : $data->price_regular }}" />
                                     @error('price_regular')
                                         <label class="form-label text-danger">{{ $message }}</label>
                                     @enderror
@@ -240,7 +330,7 @@
                                 <div class="col-12 mb-3">
                                     <label class="form-label" for="price_sale">Giá khuyến mại:</label>
                                     <input class="form-control" id="price_sale" type="number" name="price_sale"
-                                        value="{{ old('price_sale') }}" />
+                                        value="{{ old('price_sale') ? old('price_sale') : $data->price_sale }}" />
                                     @error('price_sale')
                                         <label class="form-label text-danger">{{ $message }}</label>
                                     @enderror
@@ -248,7 +338,8 @@
                                 <div class="col-12 mb-3">
                                     <label class="form-label" for="discount_percent">Khuyến mại phần trăm (%):</label>
                                     <input class="form-control" id="discount_percent" type="number"
-                                        name="discount_percent" value="{{ old('discount_percent') }}" />
+                                        name="discount_percent"
+                                        value="{{ old('discount_percent') ? old('discount_percent') : $data->discount_percent }}" />
                                     @error('discount_percent')
                                         <label class="form-label text-danger">{{ $message }}</label>
                                     @enderror
@@ -256,15 +347,16 @@
                                 <div class="col-6 mb-3">
                                     <label class="form-label" for="start_date">Ngày bắt đầu:</label>
                                     <input class="form-control" id="start_date" type="date" name="start_date"
-                                        value="{{ old('start_date') }}" />
+                                        value="{{ old('start_date') ? old('start_date') : \Carbon\Carbon::parse($data->start_date)->format('Y-m-d') }}" />
                                     @error('start_date')
                                         <label class="form-label text-danger">{{ $message }}</label>
                                     @enderror
                                 </div>
                                 <div class="col-6">
                                     <label class="form-label" for="end_date">Ngày kết thúc:</label>
-                                    <input class="form-control" id="end_date" type="date" name="end_date"
-                                        value="{{ old('end_date') }}" />
+                                    <input class="form-control mb-3" id="end_date" type="date" name="end_date"
+                                        value="{{ old('end_date') ? old('end_date') : \Carbon\Carbon::parse($data->end_date)->format('Y-m-d') }}" />
+                                    {!! isset($warningDate) ? "<label class='form-label text-warning'>$warningDate</label>" : '' !!}
                                     @error('end_date')
                                         <label class="form-label text-danger">{{ $message }}</label>
                                     @enderror
@@ -279,13 +371,13 @@
                         <div class="card-body">
                             <div class="form-check form-switch">
                                 <input class="form-check-input" id="is_active" type="checkbox" name="is_active"
-                                    value="1" checked />
+                                    value="1" {{ $data->is_active == 1 ? 'checked' : '' }} />
                                 <label class="form-check-label" for="is_active">Xuất bản</label>
                             </div>
                             <div class="form-group">
                                 <label class="form-label" for="prd_quantity">Số lượng sản phẩm:</label>
                                 <input class="form-control" id="prd_quantity" type="number" name="prd_quantity"
-                                    value="{{ old('prd_quantity') }}" />
+                                    value="{{ old('prd_quantity') ? old('prd_quantity') : $data->quantity }}" />
                                 @error('prd_quantity')
                                     <label class="form-label text-danger">{{ $message }}</label>
                                 @enderror
@@ -302,12 +394,46 @@
                         <h5 class="mb-2 mb-md-0">Hoàn tất thiết lập sản phẩm!</h5>
                     </div>
                     <div class="col-auto">
-                        <button class="btn btn-primary" id="submit-button" type="submit">Thêm mới</button>
+                        <button class="btn btn-primary" id="submit-button" type="submit">Cập nhật</button>
                     </div>
                 </div>
             </div>
         </div>
     </form>
+    <div class="modal fade" id="public-images" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document" style="max-width: 1200px">
+            <div class="modal-content position-relative">
+                <div class="position-absolute top-0 end-0 mt-2 me-2 z-1">
+                    <button class="btn-close btn btn-sm btn-circle d-flex flex-center transition-base"
+                        data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-0">
+                    <div class="rounded-top-3 py-3 ps-4 pe-6 bg-body-tertiary">
+                        <h4 class="mb-1" id="modalExampleDemoLabel">Thư viện ảnh sản phẩm</h4>
+                    </div>
+                    <div class="p-4 pb-0">
+                        <div class="mb-3 row">
+                            @foreach ($data->images as $imageG)
+                                <div
+                                    class="position-relative col-auto bg-200 mb-3 image-container imageGallery-{{ $imageG->id }}">
+                                    <img src="{{ \Storage::url($imageG->image_path) }}" alt="....." width="350px"
+                                        class="image">
+                                    <button type="button"
+                                        class="p-3 rounded-1 position-absolute top-0 end-0 btn btn-danger"
+                                        onclick="removeImage(idImageG={{ $imageG->id }}, urlI='{{ route('admin.product.delImg', $imageG->id) }}')">
+                                        <span class="far fa-trash-alt"></span>
+                                    </button>
+                                </div>
+                            @endforeach
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" type="button" data-bs-dismiss="modal">Đóng</button>
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection
 @section('css-libs')
     <link href="{{ asset('theme/admin/vendors/choices/choices.min.css') }}" rel="stylesheet">
@@ -426,6 +552,44 @@
             }
         }
 
+        function removeTag(idTag, urlTag) {
+            if (confirm("Chắc chắn muốn xóa tags này?")) {
+                let elementTag = document.querySelector(
+                    `span.badge.bg-info.tagItem-${idTag}`);
+                $.ajax({
+                    url: urlTag,
+                    method: "GET",
+                    dataType: "JSON",
+                    success: function(res) {
+                        $(elementTag).remove();
+                        alert(res.success);
+                    },
+                    error: function(res) {
+                        alert(res.error);
+                    }
+                });
+            }
+        }
+
+        function removeImage(idImageG, urlI) {
+            if (confirm("Chắc chắn muốn xóa ảnh này?")) {
+                let elementImage = document.querySelector(
+                    `div.position-relative.col-auto.bg-200.mb-3.image-container.imageGallery-${idImageG}`);
+
+                $.ajax({
+                    url: urlI,
+                    method: "GET",
+                    dataType: "JSON",
+                    success: function(res) {
+                        $(elementImage).remove();
+                        alert(res.success);
+                    },
+                    error: function(res) {
+                        alert(res.error);
+                    }
+                });
+            }
+        }
         // xử lý upload file bằng thư biên dropzone
         Dropzone.autoDiscover = false;
         var myDropzone = new Dropzone("#dropzoneMultipleFileUpload", {
