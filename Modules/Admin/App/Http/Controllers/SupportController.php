@@ -23,7 +23,7 @@ class SupportController extends Controller
          $countOpen = $listTicket->where('ticket_status', 1)->count();
          $countClose = $listTicket->where('ticket_status', 2)->count();
         $countSpam = $listTicket->where('ticket_status', 3)->count();
-        return view('admin::ticket.list', compact('listTicket', 'countOpen', 'countClose', 'countSpam'));
+         return view('admin::ticket.list', compact('listTicket', 'countOpen', 'countClose', 'countSpam'));
     }
 
 
@@ -32,16 +32,51 @@ class SupportController extends Controller
      */
     public function create()
     {
-        return view('admin::create');
+        $listuser = new User();
+        $listuser = $listuser->listUser();
+        return view('admin::ticket.new', compact('listuser'));
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request): RedirectResponse
+    public function store(Request $request)
     {
-        //
-    }
+       //validate
+        $request->validate([
+            'ma_kh' => 'required',
+            'title' => 'required',
+            'content' => 'required',
+            'category' => 'required',
+        ]);
+        $user_id = $request->ma_kh;
+        $ticket_title = $request->title;
+        $ticket_content = $request->content;
+        $ticket_category = $request->category;
+        $ticket_ai_analyze = "Vé trợ giúp này được tạo bởi hệ thống, không có phân tích khi tạo bởi hệ thống";
+        $ticket_attachment = NULL;
+        $ticket_reply = "Tạo vé trợ giúp thành công vui lòng chờ khách hàng phản hồi";
+        $ticket_reply_by = "ai";
+
+        $ticket = new CustomerSupport();
+           $ticket->addsystemticket($user_id, $ticket_title, $ticket_content, $ticket_category, $ticket_ai_analyze, $ticket_attachment);
+           if($ticket){
+            //get ticket_id
+            $ticket_id = $ticket->getlastticetid()->ticket_id;
+
+           // add message
+            try{
+                $detailticket = new CustomerSupportDetail();
+                $detailticket->addmessage($ticket_id, $ticket_reply, $ticket_attachment, $ticket_reply_by);
+                return redirect()->route('admin.ticket.index')->with('success', 'Tạo vé trợ giúp thành công');
+            } catch (\Exception $e) {
+               print_r($e->getMessage());
+           }
+
+        } else {
+            return redirect()->back()->with('error', 'Tạo vé trợ giúp thất bại');
+        }
+}
 
     /**
      * Show the specified resource.
@@ -58,7 +93,95 @@ class SupportController extends Controller
         return view('admin::ticket.chat', compact('detailticket', 'account', 'order'));
        }
     }
+    public function showOpen(){
+        $listTicket = new CustomerSupport();
+        $listTicket = $listTicket->listOpenTicket();
+        $countOpen = $listTicket->where('ticket_status', 1)->count();
+        $countClose = $listTicket->where('ticket_status', 2)->count();
+       $countSpam = $listTicket->where('ticket_status', 3)->count();
+        return view('admin::ticket.list', compact('listTicket', 'countOpen', 'countClose', 'countSpam'));
+    }
+    public function showSpam(){
+        $listTicket = new CustomerSupport();
+        $listTicket = $listTicket->listSpamTicket();
+        $countOpen = $listTicket->where('ticket_status', 1)->count();
+        $countClose = $listTicket->where('ticket_status', 2)->count();
+       $countSpam = $listTicket->where('ticket_status', 3)->count();
+        return view('admin::ticket.list', compact('listTicket', 'countOpen', 'countClose', 'countSpam'));
+    }
+    public function showClose(){
+        $listTicket = new CustomerSupport();
+        $listTicket = $listTicket->listCloseTicket();
+        $countOpen = $listTicket->where('ticket_status', 1)->count();
+        $countClose = $listTicket->where('ticket_status', 2)->count();
+       $countSpam = $listTicket->where('ticket_status', 3)->count();
+        return view('admin::ticket.list', compact('listTicket', 'countOpen', 'countClose', 'countSpam'));
+    }
 
+    public function updatemessage(Request $request){
+        $ticket_attachment = NULL;
+        $ticket_reply = $request->response;
+        $ticket_reply_by = $request->reply_by;
+        $ticket_id = $request->ticket_id;
+        $ticket = new CustomerSupportDetail();
+        $ticket = $ticket->addmessage($ticket_id, $ticket_reply, $ticket_attachment, $ticket_reply_by);
+        if($ticket){
+            return redirect()->back();
+        } else {
+            return redirect()->back()->with('error', 'Gửi phản hồi thất bại');
+        }
+    }
+    public function setComplete($id){
+      if($id){
+        $ticket = new CustomerSupport();
+        $ticket = $ticket->setClosedticket($id);
+        if($ticket){
+            return redirect()->back()->with('success', 'Đóng vé trợ giúp thành công');
+        } else {
+            return redirect()->back()->with('error', 'Đóng vé trợ giúp thất bại');
+        }
+      }
+    }
+    public function setSpam($id){
+        if($id){
+            $ticket = new CustomerSupport();
+            $ticket = $ticket->setSpamticket($id);
+            if($ticket){
+                return redirect()->back()->with('success', 'Đánh dấu vé trợ giúp là spam thành công');
+            } else {
+                return redirect()->back()->with('error', 'Đánh dấu vé trợ giúp là spam thất bại');
+            }
+        }
+
+    }
+
+    public function getlastticket(){
+        $ticket = new CustomerSupport();
+        $ticket = $ticket->getlastticetid();
+        return response()->json($ticket);
+    }
+    public function seachcustomer(Request $request){
+        $search = $request->keyword;
+        $listuser = new User();
+        $listuser = $listuser->searchUser($search);
+        return response()->json($listuser);
+    }
+    public function userdetail($id){
+        $account = new User();
+        $account = $account->getUser($id);
+        return response()->json($account);
+    }
+
+    public function search(Request $request){
+        $search = $request->search;
+        $listTicket = new CustomerSupport();
+         $listTicket = $listTicket->searchTicket($search);
+         //dd($listTicket);
+        $countOpen = $listTicket->where('ticket_status', 1)->count();
+        $countClose = $listTicket->where('ticket_status', 2)->count();
+        $countSpam = $listTicket->where('ticket_status', 3)->count();
+        return view('admin::ticket.list', compact('listTicket', 'countOpen', 'countClose', 'countSpam'));
+    }
     /**
      * Show the form for editing the specified resource.
      */
@@ -70,7 +193,7 @@ class SupportController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, $id): RedirectResponse
+    public function update(Request $request, $id)
     {
         //
     }
