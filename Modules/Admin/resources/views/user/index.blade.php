@@ -20,18 +20,16 @@
             <div class="mb-3">
                 <h3 class="fs-7">Danh sách tài khoản</h3>
             </div>
-
-
             <table class="table table-bordered" id="example">
                 <thead>
                     <tr>
-                        <th>Mã</th>
-                        <th>Tên</th>
-                        <th>Tên đăng nhập</th>
-                        <th>Email</th>
-                        <th>Số điện thoại</th>
-                        <th>ảnh</th>
-                        <th>Hành động</th>
+                        <th class="text-900 sort">Mã</th>
+                        <th class="text-900 sort">Tên</th>
+                        <th class="text-900 sort">Tên đăng nhập</th>
+                        <th class="text-900 sort">Email</th>
+                        <th class="text-900 sort">Số điện thoại</th>
+                        <th class="text-900 sort">ảnh</th>
+                        <th class="text-900 sort">Hành động</th>
 
                     </tr>
                 </thead>

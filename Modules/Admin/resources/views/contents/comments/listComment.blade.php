@@ -3,77 +3,6 @@
     Admin | List Comment
 @endsection
 @section('contents')
-    {{-- <div class="card mb-3">
-        <div class="card-body px-0">
-            <div class="tab-content">
-                <div class="tab-pane preview-tab-pane active" role="tabpanel"
-                    aria-labelledby="tab-dom-023429b2-f0b9-4091-bf3c-0936e4daf000"
-                    id="dom-023429b2-f0b9-4091-bf3c-0936e4daf000">
-                    <table class="table mb-0 data-table fs-10" data-datatables="data-datatables">
-                        <thead class="bg-200">
-                            <tr>
-                                <th class="text-900 sort">
-                                    <input type="checkbox" name="" id=""  autocomplete="off">
-                                </th>
-                                <th class="text-900 sort">STT</th>
-                                <th class="text-900 sort">Tên Người Dùng</th>
-                                <th class="text-900 sort">Tên Sản Phẩm</th>
-                                <th class="text-900 sort">Comment</th>
-                                <th class="text-900 sort">Rate</th>
-                                <th class="text-900 sort">Comment Date</th>
-                                <th class="text-900 sort">Loại</th>
-                                <th class="text-900 no-sort">Action</th>
-                            </tr>
-                        </thead>
-
-                        <tbody class="list" id="table-simple-pagination-body">
-                            @foreach ($listComment as $key => $item)
-                                <tr class="btn-reveal-trigger">
-                                    <td><input type="checkbox" name="" id=""  autocomplete="off"></td>
-                                    <td>{{ $key + 1 }}</td>
-                                    <td>{{ $item->user_name }}</td>
-                                    <td>{{ $item->name }}</td>
-                                    <td>{{ $item->comments }}</td>
-                                    <td>{{ $item->rating }}<span class="fas fa-star"></span></td>
-                                    <td>
-                                        {{ $item->comment_date }}
-                                        @if ($item->isNewComment)
-                                            <span style="color: red;">
-                                                <b class="blink">New <span class="fas fa-fire fire-animation"></span></b>
-                                            </span>
-                                        @endif
-                                    </td>
-
-                                    <td>
-                                        @switch($item->status)
-                                            @case(1)
-                                                <span style="color: orange;"><b>Đang duyệt</b></span>
-                                            @break
-
-                                            @case(2)
-                                                <span style="color: green;"><b>Đã duyệt</b></span>
-                                            @break
-
-                                            @case(3)
-                                                <span style="color: gray;"><b>Đã ẩn</b></span>
-                                            @break
-
-                                            @default
-                                                <span style="color: red;"><b>Không xác định</b></span>
-                                        @endswitch
-                                    </td>
-                                    <td class="align-middle white-space-nowrap text-end">
-                                        <a class="btn btn-primary" role="button"
-                                            href="{{ route('admin.comment.editComment', ['id' => $item->id]) }}">Edit</a>
-                                    </td>
-                                </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </div> --}}
     <form id="filter-form" action="{{ route('admin.comment.listComment') }}" method="GET" class="mb-3">
         <div class="row">
             <!-- Lọc theo số sao -->
@@ -92,7 +21,7 @@
             <div class="col-md-3">
                 <select name="status_filter" class="form-control">
                     <option value="">-- Lọc theo trạng thái --</option>
-                    <option value="1" {{ request()->get('status_filter') == 1 ? 'selected' : '' }}>Chưa duyệt</option>
+                    {{-- <option value="1" {{ request()->get('status_filter') == 1 ? 'selected' : '' }}>Chưa duyệt</option> --}}
                     <option value="2" {{ request()->get('status_filter') == 2 ? 'selected' : '' }}>Đã duyệt</option>
                     <option value="3" {{ request()->get('status_filter') == 3 ? 'selected' : '' }}>Đã ẩn</option>
                 </select>

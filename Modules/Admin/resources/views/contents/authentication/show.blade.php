@@ -48,10 +48,12 @@
         <div class="card-header">
             <div class="row align-items-center">
                 <div class="col">
-                    <h5 class="mb-0">Chi tiết </h5>
+                    <h5 class="mb-0">Chi tiết tài khoản</h5>
                 </div>
-                <div class="col-auto"><a class="btn btn-falcon-default btn-sm" href="#!"><span
-                            class="fas fa-pencil-alt fs-11 me-1"></span>Update details</a></div>
+                <div class="col-auto">
+                    {{-- <a class="btn btn-falcon-default btn-sm" href="#!"><span
+                            class="fas fa-pencil-alt fs-11 me-1"></span>Update details</a> --}}
+                        </div>
             </div>
         </div>
         <div class="card-body bg-body-tertiary border-top">
@@ -64,11 +66,23 @@
                         </div>
                         <div class="col">{{ $user->id }}</div>
                     </div>
-                    <div class="row">
+                    {{-- <div class="row">
                         <div class="col-5 col-sm-4">
                             <p class="fw-semi-bold mb-1">Ngày tạo</p>
                         </div>
                         <div class="col">{{ $user->created_at }}</div>
+                    </div> --}}
+                    <div class="row">
+                        <div class="col-5 col-sm-4">
+                            <p class="fw-semi-bold mb-1">UserName</p>
+                        </div>
+                        <div class="col">{{ $user->user_name }}</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-5 col-sm-4">
+                            <p class="fw-semi-bold mb-1">PhoneNumber</p>
+                        </div>
+                        <div class="col">{{ $user->phone }}</div>
                     </div>
                     <div class="row">
                         <div class="col-5 col-sm-4">
@@ -84,51 +98,60 @@
                             <p class="fst-italic text-400 mb-1">No Description</p>
                         </div>
                     </div>
-                    <div class="row">
+                    {{-- <div class="row">
                         <div class="col-5 col-sm-4">
                             <p class="fw-semi-bold mb-0">VAT number</p>
                         </div>
                         <div class="col">
                             <p class="fst-italic text-400 mb-0">No VAT number</p>
                         </div>
-                    </div>
+                    </div> --}}
                 </div>
                 <div class="col-lg col-xxl-5 mt-4 mt-lg-0 offset-xxl-1">
-                    <h6 class="fw-semi-bold ls mb-3 text-uppercase">Billing Information</h6>
+                    <h6 class="fw-semi-bold ls mb-3 text-uppercase"></h6>
                     <div class="row">
                         <div class="col-5 col-sm-4">
-                            <p class="fw-semi-bold mb-1">Send email to</p>
+                            <p class="fw-semi-bold mb-1">FullName</p>
                         </div>
-                        <div class="col"><a href="mailto:tony@gmail.com">tony@gmail.com</a></div>
+                        <div class="col">{{ $user->full_name }}</div>
                     </div>
                     <div class="row">
                         <div class="col-5 col-sm-4">
                             <p class="fw-semi-bold mb-1">Address</p>
                         </div>
+                        <div class="col">{{ $user->address }}</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-5 col-sm-4">
+                            <p class="fw-semi-bold mb-1">Vai Trò</p>
+                        </div>
                         <div class="col">
-                            <p class="mb-1">8962 Lafayette St. <br />Oswego, NY 13126</p>
+                            @if ($user->roles_id == 1)
+                                <p>Admin</p>
+                            @elseif($user->roles_id == 2)
+                                <p>Nhân viên</p>
+                            @elseif($user->roles_id == 3)
+                                <p>Khách hàng</p>
+                            @else
+                                <p>Không xác định</p>
+                            @endif
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-5 col-sm-4">
-                            <p class="fw-semi-bold mb-1">Phone number</p>
-                        </div>
-                        <div class="col"><a href="tel:+12025550110">+1-202-555-0110</a></div>
-                    </div>
-                    <div class="row">
-                        <div class="col-5 col-sm-4">
-                            <p class="fw-semi-bold mb-0">Invoice prefix</p>
+                            <p class="fw-semi-bold mb-0">Trạng Thái </p>
                         </div>
                         <div class="col">
-                            <p class="fw-semi-bold mb-0">7C23435</p>
+                            <p class="fw-semi-bold mb-0">{{ $user->status }}</p>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="card-footer border-top text-end"><a class="btn btn-falcon-default btn-sm" href="#!"><span
+         <div class="card-footer border-top text-end">
+           {{-- <a class="btn btn-falcon-default btn-sm" href="#!"><span
                     class="fas fa-dollar-sign fs-11 me-1"></span>Refund</a><a class="btn btn-falcon-default btn-sm ms-2"
-                href="#!"><span class="fas fa-check fs-11 me-1"></span>Save changes</a></div>
+                href="#!"><span class="fas fa-check fs-11 me-1"></span>Save changes</a></div> --}}
     </div>
     <div class="card">
         <div class="card-header">

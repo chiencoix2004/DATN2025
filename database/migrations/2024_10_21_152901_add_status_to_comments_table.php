@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::table('comments', function (Blueprint $table) {
             // Thêm cột status
-            $table->integer('status')->default(1); // 1: đang đợi duyệt, 2: đã duyệt, 3: đã ẩn
+            $table->integer('status')->default(1); //  2: đã duyệt, 3: đã ẩn
         });
     }
 

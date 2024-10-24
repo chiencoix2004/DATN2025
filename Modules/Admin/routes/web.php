@@ -11,24 +11,11 @@ use Modules\Admin\App\Http\Controllers\PostController;
 use Modules\Admin\App\Http\Controllers\ProductController;
 use Modules\Admin\App\Http\Controllers\CouponController;
 use Modules\Admin\App\Http\Controllers\AdminController;
+use Modules\Admin\App\Http\Controllers\AuthenticateController;
 use Modules\Admin\App\Http\Controllers\CommentController;
 use Modules\Admin\App\Http\Controllers\UserController;
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
-*/
 
-
-// Route::group([], function () {
-//     Route::resource('admin', AdminController::class)->names('admin');
-// });
 
 Route::controller(BannerController::class)
     ->name('admin.banner.')
@@ -41,10 +28,25 @@ Route::controller(BannerController::class)
     });
 
 
-Route::prefix('admin')->as('admin.')->group(function () {
+    Route::get('login', [AuthenticateController::class, 'showLoginForm'])->name('login');
+    Route::post('post-login', [AuthenticateController::class, 'PostLogin'])->name('loginAccount');
+
+    // Route::post('PostLogin', [AuthenticateController::class, 'PostLogin'])->name('PostLogin');
+    // Route::post('/logout', [AuthenticateController::class, 'logout'])->name('logout');
+    
+
+Route::prefix('admin')
+->as('admin.')
+->middleware('checkAdmin')
+->group(function () {
+    // Route::get('/dashboard', function () {
+    //     return view('admin::contents.dashboard');
+    // });
+    // dashboard
     Route::get('/', function () {
         return view('admin::contents.dashboard');
     })->name('dashboard');
+
     // Route quản lý categories
     Route::controller(CategoryController::class)->prefix('categories')->as('categories.')
         ->group(function () {
@@ -63,15 +65,14 @@ Route::prefix('admin')->as('admin.')->group(function () {
         Route::post('createProduct', 'createProduct')->name('create');
     });
 
-      // Route quản lý comment
+    // Route quản lý comment
     Route::controller(CommentController::class)->prefix('comment')->as('comment.')->group(function () {
         Route::get('listComment', 'listComment')->name('listComment');
         Route::get('/{id}/editComment', 'editComment')->name('editComment');
         Route::put('{id}updateComment', 'updateComment')->name('updateComment');
         Route::post('bulk-action', 'bulkAction')->name('bulkAction');
-
     });
-    
+
 
     // Route quản lý attributes
     Route::controller(AttributeController::class)->prefix('attributes')->as('attributes.')
@@ -91,10 +92,8 @@ Route::prefix('admin')->as('admin.')->group(function () {
         Route::get('list', 'listPDF')->name('list');
         Route::post('bulkActions', 'bulkActions')->name('bulkActions');
     });
-    // Route quản lý users
-    // Route::controller(AccountController::class)->prefix('account')->as('account.')->group(function(){
-    //     Route::get('listAcc', 'listAccounts')->name('list');
-    // });
+
+    // Route quản lý coupons
     Route::controller(CouponController::class)
         ->prefix('coupons')
         ->as('coupons.')
@@ -108,7 +107,7 @@ Route::prefix('admin')->as('admin.')->group(function () {
             // Route::delete('/{id}/destroy', 'destroy')->name('destroy');
         });
 
-
+    // Route quản lý tài khoản
     Route::controller(AccountController::class)
         ->prefix('accounts')
         ->as('accounts.')
@@ -121,6 +120,8 @@ Route::prefix('admin')->as('admin.')->group(function () {
             Route::put('{id}/update', 'update')->name('update');
             // Route::delete('/{id}/destroy', 'destroy')->name('destroy');
         });
+
+    // Route quản lý tài khoản khách hàng
     Route::controller(UserController::class)
         ->prefix('users')
         ->as('users.')
@@ -135,6 +136,7 @@ Route::prefix('admin')->as('admin.')->group(function () {
             // Route::delete('/{id}/destroy', 'destroy')->name('destroy');
         });
 
+        // Route quản lý posts
     Route::controller(PostController::class)->prefix('posts')->as('posts.')
         ->group(function () {
             Route::get('list', 'listPost')->name('list');
