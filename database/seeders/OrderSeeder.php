@@ -34,7 +34,7 @@ class OrderSeeder extends Seeder
                 'ship_user_email' => "do1234$i@gmail.com",
                 'ship_user_address' => "Địa chỉ người nhận $i",
                 'ship_user_note' => "lêu lêu $i",
-                'total_price' => rand(100000, 2000000),
+                'total_price' => rand(100000, 5000000),
                 'status_order' => $orderStatuses[array_rand($orderStatuses)],
                 'payment_method' => $paymentMethods[array_rand($paymentMethods)],
                 'status_payment' => $paymentStatus[array_rand($paymentStatus)],

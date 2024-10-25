@@ -49,6 +49,14 @@
                             <span class="nav-link-text ps-1">Danh mục</span>
                         </div>
                     </a>
+                    <a class="nav-link" href="{{ route('admin.posts.list') }}">
+                        <div class="d-flex align-items-center">
+                            <span class="nav-link-icon">
+                                <span class="fas fa-list-alt"></span>
+                            </span>
+                            <span class="nav-link-text ps-1">Bài Viết</span>
+                        </div>
+                    </a>
                     <a class="nav-link dropdown-indicator" href="#product" role="button" data-bs-toggle="collapse"
                         aria-expanded="false" aria-controls="product">
                         <div class="d-flex align-items-center">
@@ -74,9 +82,9 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="">
+                            <a class="nav-link" href="{{ route('admin.product.listTrashed') }}">
                                 <div class="d-flex align-items-center">
-                                    <span class="nav-link-text ps-1">Detail Product</span>
+                                    <span class="nav-link-text ps-1">Sản phẩm đã xóa</span>
                                 </div>
                             </a>
                         </li>
@@ -86,7 +94,15 @@
                             <span class="nav-link-icon">
                                 <span class="fas fa-layer-group"></span>
                             </span>
-                            <span class="nav-link-text ps-1">Attributes</span>
+                            <span class="nav-link-text ps-1">Thuộc tính</span>
+                        </div>
+                    </a>
+                    <a class="nav-link" href="{{ route('admin.tags.list') }}">
+                        <div class="d-flex align-items-center">
+                            <span class="nav-link-icon">
+                                <span class="fas fa-tag"></span>
+                            </span>
+                            <span class="nav-link-text ps-1">Thẻ</span>
                         </div>
                     </a>
                     <a class="nav-link dropdown-indicator" href="#orders" role="button" data-bs-toggle="collapse"
@@ -117,17 +133,33 @@
                 </li>
                 <li class="nav-item">
                     <div class="row navbar-vertical-label-wrapper mt-3 mb-2">
-                        <div class="col-auto navbar-vertical-label">Authentication</div>
+                        <div class="col-auto navbar-vertical-label">Quản lý tài khoản</div>
                         <div class="col ps-0">
                             <hr class="mb-0 navbar-vertical-divider" />
                         </div>
                     </div>
-                    <a class="nav-link" href="{{ route('admin.account.list') }}">
+                    <a class="nav-link" href="{{ route('admin.accounts.index') }}">
                         <div class="d-flex align-items-center">
                             <span class="nav-link-icon">
                                 <span class="fas fa-user-alt"></span>
                             </span>
-                            <span class="nav-link-text ps-1">List Accounts</span>
+                            <span class="nav-link-text ps-1">Danh sách tài khoản</span>
+                        </div>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <div class="row navbar-vertical-label-wrapper mt-3 mb-2">
+                        <div class="col-auto navbar-vertical-label">Quản lý tài khoản khách hàng</div>
+                        <div class="col ps-0">
+                            <hr class="mb-0 navbar-vertical-divider" />
+                        </div>
+                    </div>
+                    <a class="nav-link" href="{{ route('admin.users.index') }}">
+                        <div class="d-flex align-items-center">
+                            <span class="nav-link-icon">
+                                <span class="fas fa-user-alt"></span>
+                            </span>
+                            <span class="nav-link-text ps-1">Danh sách tài khoản khách hàng</span>
                         </div>
                     </a>
                 </li>
