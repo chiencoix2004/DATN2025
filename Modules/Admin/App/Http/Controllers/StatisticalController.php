@@ -178,12 +178,11 @@ class StatisticalController extends Controller
         $successRateValues = $successRateData->map(function ($item) {
             $totalOrders = Order::whereDate('date_create_order', $item->date)->count();
             $successfulOrders = Order::whereDate('date_create_order', $item->date)
-                ->where('status_order', 'Đã nhận hàng')
+                ->where('status_order', 'like','Đã nhận hàng')
                 ->count();
             return $totalOrders > 0 ? ($successfulOrders / $totalOrders) * 100 : 0;
         });
-
-
+        
         return view('admin::contents.statistical.success', compact(
             'successRateLabels',
             'successRateValues'
