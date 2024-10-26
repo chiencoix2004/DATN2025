@@ -17,7 +17,6 @@ use Modules\Admin\App\Http\Controllers\TagController;
 use Modules\Admin\App\Http\Controllers\CommentController;
 use Modules\Admin\App\Http\Controllers\SupportController;
 use Modules\Admin\App\Http\Controllers\UserController;
-use Modules\Admin\App\Http\Controllers\SupportController;
 
 /*
 |--------------------------------------------------------------------------
