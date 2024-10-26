@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use Modules\Admin\App\Http\Controllers\Api\AccountController;
 use Modules\Admin\App\Http\Controllers\Api\CouponController;
 use Modules\Admin\App\Http\Controllers\Api\UserController;
+use Modules\Admin\App\Http\Controllers\SupportController;
 
 /*
     |--------------------------------------------------------------------------
@@ -47,6 +48,19 @@ Route::controller(AccountController::class)
     ->as('api.users.')
     ->group(function () {
         Route::get('/', 'index')->name('index');
+        // Route::post('/', 'store')->name('store');
+        // Route::get('/{id}', 'show')->name('show');
+        // Route::put('/{id}', 'update')->name('update');
+        // Route::delete('/{id}', 'destroy')->name('destroy');
+    });
+
+    Route::controller(SupportController::class)
+    ->prefix('supports')
+    ->as('api.supports.')
+    ->group(function () {
+        Route::post('customer', 'seachcustomer')->name('seachcustomer');
+        Route::get('customer/{id}', 'userdetail')->name('userdetail');
+        route::get('lastid', 'getlastticket')->name('getlastticket');
         // Route::post('/', 'store')->name('store');
         // Route::get('/{id}', 'show')->name('show');
         // Route::put('/{id}', 'update')->name('update');
