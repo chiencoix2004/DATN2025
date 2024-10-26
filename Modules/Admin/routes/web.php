@@ -37,7 +37,7 @@ Route::controller(BannerController::class)
 
 Route::prefix('admin')
 ->as('admin.')
-->middleware('checkAdmin')
+// ->middleware('checkAdmin')
 ->group(function () {
     // Route::get('/dashboard', function () {
     //     return view('admin::contents.dashboard');
