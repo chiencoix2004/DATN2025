@@ -15,6 +15,7 @@ use Modules\Admin\App\Http\Controllers\AdminController;
 use Modules\Admin\App\Http\Controllers\StatisticalController;
 use Modules\Admin\App\Http\Controllers\TagController;
 use Modules\Admin\App\Http\Controllers\CommentController;
+use Modules\Admin\App\Http\Controllers\SupportController;
 use Modules\Admin\App\Http\Controllers\UserController;
 
 /*
@@ -198,7 +199,7 @@ Route::prefix('admin')->as('admin.')->group(function () {
             Route::put('{id}update', 'update')->name('update');
             Route::delete('/{id}/destroy', 'destroy')->name('destroy');
         });
-        Route::controller(Supportcontroller::class)
+        Route::controller(SupportController::class)
         ->prefix('tickets')
         ->as('ticket.')
         ->group(function () {
