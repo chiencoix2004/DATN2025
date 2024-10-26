@@ -90,9 +90,9 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="">
+                            <a class="nav-link" href="{{ route('admin.product.listTrashed') }}">
                                 <div class="d-flex align-items-center">
-                                    <span class="nav-link-text ps-1">Detail Product</span>
+                                    <span class="nav-link-text ps-1">Sản phẩm đã xóa</span>
                                 </div>
                             </a>
                         </li>
@@ -102,7 +102,31 @@
                             <span class="nav-link-icon">
                                 <span class="fas fa-layer-group"></span>
                             </span>
-                            <span class="nav-link-text ps-1">Attributes</span>
+                            <span class="nav-link-text ps-1">Thuộc tính</span>
+                        </div>
+                    </a>
+                    <a class="nav-link" href="{{ route('admin.tags.list') }}">
+                        <div class="d-flex align-items-center">
+                            <span class="nav-link-icon">
+                                <span class="fas fa-tag"></span>
+                            </span>
+                            <span class="nav-link-text ps-1">Thẻ</span>
+                        </div>
+                    </a>
+                    <a class="nav-link" href="{{ route('admin.ticket.index') }}">
+                        <div class="d-flex align-items-center">
+                            <span class="nav-link-icon">
+                                <span class="far fa-user"></span>
+                            </span>
+                            <span class="nav-link-text ps-1">Hỗ trợ khách hàng</span>
+                        </div>
+                    </a>
+                    <a class="nav-link" href="{{ route('admin.banner.list') }}">
+                        <div class="d-flex align-items-center">
+                            <span class="nav-link-icon">
+                                <span class="fas fa-file-image"></span>
+                            </span>
+                            <span class="nav-link-text ps-1">Banner</span>
                         </div>
                     </a>
                     <a class="nav-link dropdown-indicator" href="#orders" role="button" data-bs-toggle="collapse"  aria-expanded="false" aria-controls="orders">
@@ -113,7 +137,7 @@
                             <span class="nav-link-text ps-1">Đơn hàng</span>
                         </div>
                     </a >
-                       
+
                     <ul class="nav collapse" id="orders">
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('admin.orders.list') }}">
@@ -165,19 +189,20 @@
                 </li>
                 <li class="nav-item">
                     <div class="row navbar-vertical-label-wrapper mt-3 mb-2">
-                        <div class="col-auto navbar-vertical-label">Statistical</div>
+                        <div class="col-auto navbar-vertical-label">Thống kê</div>
                         <div class="col ps-0">
                             <hr class="mb-0 navbar-vertical-divider" />
                         </div>
                     </div>
-                    <a class="nav-link" href="" role="button">
+                    <a class="nav-link" href="{{ route('admin.statistical.listStatistical') }}" role="button">
                         <div class="d-flex align-items-center">
                             <span class="nav-link-icon">
                                 <span class="fas fa-chart-pie"></span>
                             </span>
-                            <span class="nav-link-text ps-1">Report</span>
+                            <span class="nav-link-text ps-1">Báo cáo</span>
                         </div>
                     </a>
+
                 </li>
             </ul>
         </div>

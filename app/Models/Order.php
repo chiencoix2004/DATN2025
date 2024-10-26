@@ -61,4 +61,13 @@ class Order extends Model
     {
         return $this->hasMany(OrderDetail::class);
     }
+    // app/Models/Order.php
+    public function orderDetails()
+    {
+        return $this->hasMany(OrderDetailModel::class); 
+    }
+    public function getlast5Orders($users_id)
+    {
+        return $this->where('users_id', $users_id)->orderBy('id', 'desc')->limit(5)->get();
+    }
 }
