@@ -16,36 +16,26 @@ class AuthenticateController extends Controller
 
         return view('admin::authentic.index');
     }
+  
+
     public function PostLogin(Request $req)
     {
-        $dataUserLogin = [
-            'email' => $req->email,
-            'password' => $req->password,
-        ];
-
+        $credentials = $req->only('email', 'password');
         $remember = $req->has('remember');
-
-        if (Auth::attempt($dataUserLogin, $remember)) {
-            $user = Auth::user();
-
-            if ($user->roles_id == '1') { // Kiểm tra role == 1 là admin
-                // Đăng nhập thành công admin
-                return redirect()->route('admin::contents.dashboard')->with([
-                    'message' => 'Đăng nhập thành công'
-                ]);
-            } else {
-                // Đăng nhập thành công user thông thường
-                return redirect()->route('.')->with([
-                    'message' => 'Đăng nhập thành công',
-                    'user' => $user  // Truyền thông tin người dùng
-                ]);
-            }
-        } else {
-            // Đăng nhập thất bại
-            return redirect()->back()->with([
-                'message' => 'Email hoặc mật khẩu không đúng'
-            ]);
+    
+        if (Auth::attempt($credentials, $remember)) {
+            return redirect()->intended('admin/'); 
         }
+    
+        return redirect()->route('login')->withErrors(['message' => 'Đăng nhập thất bại']);
     }
+    
+    public function logout()
+    {
+        Auth::logout(); // Đăng xuất người dùng
+
+        return redirect()->route('login')->withErrors('message', 'Đăng xuất thành công');
+    }
+
 
 }
