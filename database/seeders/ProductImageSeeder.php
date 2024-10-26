@@ -16,8 +16,7 @@ class ProductImageSeeder extends Seeder
     {
         for ($i = 1; $i <= 20; $i++) {
             for ($j = 1; $j <= 3; $j++) { // Mỗi sản phẩm có 3 hình ảnh
-                DB::table('product_image')->insert([
-                    'image_id' => $i,
+                DB::table('product_images')->insert([
                     'product_id' => $i,
                     'image_path' => "https://product.hstatic.net/1000392326/product/fas33679__k__968k_-_fjd31170__b__998k__1__f3577eb828354bdd9dd4dd48d632ea87_master.jpg"
                 ]);

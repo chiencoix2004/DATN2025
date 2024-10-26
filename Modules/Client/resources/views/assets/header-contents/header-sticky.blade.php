@@ -17,7 +17,7 @@
                                 <nav class="main-nav d-flex justify-content-center">
                                     <ul>
                                         <li class="dropdown-holder">
-                                            <a href="javascript:void(0)">Trang chủ</a>
+                                            <a href="{{ route('home') }}">Trang chủ</a>
                                         </li>
                                         <li class="megamenu-holder position-static">
                                             <a href="{{ route('shop.shopIndex') }}">Cửa hàng <i
