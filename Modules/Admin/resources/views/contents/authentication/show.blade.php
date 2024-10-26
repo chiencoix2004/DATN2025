@@ -32,35 +32,38 @@
             </div>
         </div>
     </div>
-    <div class="card mb-3">
-        <div class="card-header">
-            <div class="row align-items-center">
-                <div class="col">
-                    <h5 class="mb-0">Chi tiết </h5>
+    <div class="row g-0">
+        <div class="col-lg-8 pe-lg-2">
+            <div class="card mb-3">
+                <div class="card-header bg-body-tertiary">
+                    <h6 class="mb-0">Thông tin cơ bản</h6>
                 </div>
-                <div class="col-auto"><a class="btn btn-falcon-default btn-sm" href="#!"><span
-                            class="fas fa-pencil-alt fs-11 me-1"></span>Update details</a></div>
-            </div>
-        </div>
-        <div class="card-body bg-body-tertiary border-top">
-            <div class="row">
-                <div class="col-lg col-xxl-5">
-                    <h6 class="fw-semi-bold ls mb-3 text-uppercase">THÔNG TIN TÀI KHOẢN</h6>
-                    <div class="row">
-                        <div class="col-5 col-sm-4">
-                            <p class="fw-semi-bold mb-1">ID</p>
+                <div class="card-body">
+
+                    <div class="row gx-2">
+                        <div class="col-6 mb-3">
+                            <label class="form-label" for="user_name">Tên đăng nhập:</label>
+                            <input class="form-control" name="user_name" id="user_name" disabled type="text"
+                                value="{{ $user->user_name }}" />
+                            @error('user_name')
+                                <label class="form-label text-danger">{{ $message }} </label>
+                            @enderror
                         </div>
-                        <div class="col">{{ $user->id }}</div>
-                    </div>
-                    <div class="row">
-                        <div class="col-5 col-sm-4">
-                            <p class="fw-semi-bold mb-1">Ngày tạo</p>
+                        <div class="col-6 mb-3">
+                            <label class="form-label" for="full_name">Họ và tên:</label>
+                            <input class="form-control" name="full_name" id="full_name" type="text"
+                                value="{{ $user->full_name }}" disabled />
+                            @error('full_name')
+                                <label class="form-label text-danger">{{ $message }} </label>
+                            @enderror
                         </div>
-                        <div class="col">{{ $user->created_at }}</div>
-                    </div>
-                    <div class="row">
-                        <div class="col-5 col-sm-4">
-                            <p class="fw-semi-bold mb-1">Email</p>
+                        <div class="col-6 mb-3">
+                            <label class="form-label" for="phone">Số điện thoại</label>
+                            <input class="form-control" name="phone" id="phone" type="text"
+                                value="{{ $user->phone }}" disabled />
+                            @error('phone')
+                                <label class="form-label text-danger">{{ $message }} </label>
+                            @enderror
                         </div>
                         <div class="col-6 mb-3">
                             <label class="form-label" for="email">Email</label>
@@ -90,43 +93,57 @@
                             @enderror
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col-5 col-sm-4">
-                            <p class="fw-semi-bold mb-0">VAT number</p>
-                        </div>
-                        <div class="col">
-                            <p class="fst-italic text-400 mb-0">No VAT number</p>
-                        </div>
-                    </div> --}}
+
                 </div>
-                <div class="col-lg col-xxl-5 mt-4 mt-lg-0 offset-xxl-1">
-                    <h6 class="fw-semi-bold ls mb-3 text-uppercase">Billing Information</h6>
-                    <div class="row">
-                        <div class="col-5 col-sm-4">
-                            <p class="fw-semi-bold mb-1">Send email to</p>
-                        </div>
-                        <div class="col"><a href="mailto:tony@gmail.com">tony@gmail.com</a></div>
+            </div>
+        </div>
+        <div class="col-lg-4 ps-lg-2">
+            <div class="sticky-sidebar">
+                <div class="card mb-3">
+                    <div class="card-header bg-body-tertiary">
+                        <h6 class="mb-0">Ảnh tài khoản</h6>
                     </div>
-                    <div class="row">
-                        <div class="col-5 col-sm-4">
-                            <p class="fw-semi-bold mb-1">Address</p>
-                        </div>
-                        <div class="col">
-                            <p class="mb-1">8962 Lafayette St. <br />Oswego, NY 13126</p>
+                    <div class="card-body">
+                        <div class="row gx-2">
+                            <div class="col-12 mb-3">
+                                <img class="img-fluid" src="{{ Storage::url($user->user_image) }}" alt="">
+                            </div>
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col-5 col-sm-4">
-                            <p class="fw-semi-bold mb-1">Phone number</p>
-                        </div>
-                        <div class="col"><a href="tel:+12025550110">+1-202-555-0110</a></div>
+                </div>
+                <div class="card mb-3">
+                    <div class="card-header bg-body-tertiary">
+                        <h6 class="mb-0">Loại tài khoản</h6>
                     </div>
-                    <div class="row">
-                        <div class="col-5 col-sm-4">
-                            <p class="fw-semi-bold mb-0">Invoice prefix</p>
+                    <div class="card-body">
+                        <div class="row gx-2">
+                            <div class="col-12 mb-3">
+                                <label class="form-label" for="roles_id">Chọn loại tài khoản:</label>
+                                <input class="form-control" name="role_type" id="role_type" type="text"
+                                    value="{{ $user->role_type }}" disabled />
+                                @error('roles_id')
+                                    <label class="form-label text-danger">{{ $message }} </label>
+                                @enderror
+                            </div>
                         </div>
-                        <div class="col">
-                            <p class="fw-semi-bold mb-0">7C23435</p>
+                    </div>
+                </div>
+                <div class="card mb-3">
+                    <div class="card-header bg-body-tertiary">
+                        <h6 class="mb-0">Trạng thái</h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="row gx-2">
+                            <div class="col-12 mb-3">
+                                <label class="form-label" for="status">Chọn trạng thái:</label>
+                                <input class="form-control" name="status" id="status" type="text"
+                                    value="@if ($user->status == 'active') kích hoạt @else chưa kích hoạt @endif
+                                    "
+                                    disabled />
+                                @error('status')
+                                    <label class="form-label text-danger">{{ $message }} </label>
+                                @enderror
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -142,9 +159,6 @@
                      --}}
             </div>
         </div>
-        <div class="card-footer border-top text-end"><a class="btn btn-falcon-default btn-sm" href="#!"><span
-                    class="fas fa-dollar-sign fs-11 me-1"></span>Refund</a><a class="btn btn-falcon-default btn-sm ms-2"
-                href="#!"><span class="fas fa-check fs-11 me-1"></span>Save changes</a></div>
     </div>
     </div>
     {{-- <div class="card mt-3">
