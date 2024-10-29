@@ -3,7 +3,7 @@
         <div class="container">
             <a href="#" class="btn-close white-close_btn"><i class="ion-android-close"></i></a>
             <div class="offcanvas-inner_logo">
-                <a href="{{ route('home') }}">
+                <a href="{{ route('index') }}">
                     <img src="{{ asset('theme/client/images/menu/logoF.png') }}" alt="Header Logo">
                 </a>
             </div>

@@ -17,9 +17,9 @@ use Modules\Client\App\Http\Controllers\ShopController;
 |
 */
 
-Route::get('/', function () {
-    return view('client::index');
-})->name('home');
+Route::controller(ClientController::class)->group(function () {
+    Route::get('/', 'index')->name('index');
+});
 Route::controller(ShopController::class)->prefix('shop')->as('shop.')->group(function () {
     Route::get('/', 'index')->name('shopIndex');
     Route::get('productDetail', 'show')->name('productDetail');
