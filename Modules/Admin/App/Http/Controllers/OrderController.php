@@ -29,8 +29,15 @@ class OrderController extends Controller
     }
     public function orderUpdate(Request $request, Order $order)
     {
-        $data = $order::query()->findOrFail($order->id);
-        $data->update(['status_order' => Order::STATUS_ORDER[$request->status_order]]);
+        if (array_key_exists($request->status_order, Order::STATUS_ORDER)) {
+            $data = $order::query()->findOrFail($order->id);           
+            if ($data->status_order == Order::STATUS_ORDER['shipping']) {
+                return redirect()->back()->with(['error' => 'Cập nhật trạng thái không hợp lệ!']);
+            }
+            $data->update(['status_order' => Order::STATUS_ORDER[$request->status_order]]);
+        }else {
+            return redirect()->back()->with(['error'=> 'Cập nhật trạng thái thất bại!']);
+        }
         return redirect()->back()->with(['success' => 'Cập nhật trạng thái đơn hàng thành công!']);
     }
 }
