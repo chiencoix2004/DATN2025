@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('posts', function (Blueprint $table) {
             $table->id(); // Tự động tăng, khóa chính
             $table->string('title'); // Tiêu đề bài viết
-            $table->string('slug')->unique(); // Slug, duy nhất cho mỗi bài viết
+            $table->string('slug_post')->unique(); // Slug, duy nhất cho mỗi bài viết
             $table->string('image_post')->nullable();
             $table->text('content'); // Nội dung bài viết
             $table->boolean('published_id')->default(false); // Trạng thái xuất bản, mặc định là false (chưa xuất bản)

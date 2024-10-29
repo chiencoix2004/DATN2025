@@ -48,7 +48,7 @@
                         </div>
                         <div class="col-auto">
                             <label class="form-label" for="created_at">Ngày tạo</label>
-                            <input class="form-control @error('created_at') is-invalid @enderror" id="created_at" type="date" value="{{ now()->format('Y-m-d') }}"
+                            <input class="form-control @error('created_at') is-invalid @enderror" id="created_at" type="date"
                                 name="created_at" value="{{ old('created_at',$listPost->created_at) }}" />
                             @error('created_at')
                                 <div class="invalid-feedback">{{ $message }}</div>
@@ -103,14 +103,14 @@
                         
                 </div>
 
-                <div class="col-auto">
+                {{-- <div class="col-auto">
                     <label class="form-label" for="basic-form-textarea">Bài viết</label>
                     <textarea class="form-control @error('content') is-invalid @enderror" id="basic-form-textarea" rows="2"
                         cols="50" name="content">{{ old('content',$listPost->content) }}</textarea>
                     @error('content')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
-                </div>
+                </div> --}}
         
                 <div class="col-auto">
                     <button class="btn btn-primary" id="submit-button" type="submit">Lưu Bài Viết</button>

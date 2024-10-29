@@ -106,7 +106,7 @@
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
                 </div>
-                <hr>
+                <p></p>
                 <div class="col-auto">
                     <button class="btn btn-primary" id="submit-button" type="submit">Thêm mới</button>
                 </div>
@@ -115,7 +115,7 @@
         </div>
     </div>
     <hr>
-    <div class="card-body px-0">
+    <div class="card mb-3"><div class="card-body px-0">
         <div class="tab-content">
             <div class="tab-pane preview-tab-pane active" role="tabpanel"
                 aria-labelledby="tab-dom-023429b2-f0b9-4091-bf3c-0936e4daf000"
@@ -182,37 +182,9 @@
                 </table>
             </div>
         </div>
-    </div>
-    </div>
-    <script>
-        //Slug name
-        function createSlug(value) {
-            return value
-                .toLowerCase()
-                .replace(/đ/g, 'd')
-                .normalize('NFD')
-                .replace(/[\u0300-\u036f]/g, '')
-                .replace(/[^a-z0-9\s-]/g, '')
-                .trim()
-                .replace(/\s+/g, '-')
-                .replace(/-+/g, '-');
-        }
-        document.getElementById('name').addEventListener('input', function() {
-            const nameInput = this.value;
-            const slug = createSlug(nameInput);
-            document.getElementById('slug').value = slug;
-        });
-
-        function toggleNewCategoryInput(selectElement) {
-            const newCategoryInput = document.getElementById('newCategoryInput');
-
-            if (selectElement.value === 'new') {
-                newCategoryInput.style.display = 'block'; // Hiện ô input
-            } else {
-                newCategoryInput.style.display = 'none'; // Ẩn ô input nếu chọn mục khác
-            }
-        }
-    </script>
+    </div></div>
+    
+ 
 @endsection
 @section('css-libs')
     <link rel="stylesheet" href="{{ asset('theme/admin/vendors/dropzone/dropzone.css') }}">
@@ -268,5 +240,34 @@
                 });
             }
         });
+    </script>
+    <script>
+        //Slug name
+        function createSlug(value) {
+            return value
+                .toLowerCase()
+                .replace(/đ/g, 'd')
+                .normalize('NFD')
+                .replace(/[\u0300-\u036f]/g, '')
+                .replace(/[^a-z0-9\s-]/g, '')
+                .trim()
+                .replace(/\s+/g, '-')
+                .replace(/-+/g, '-');
+        }
+        document.getElementById('name').addEventListener('input', function() {
+            const nameInput = this.value;
+            const slug = createSlug(nameInput);
+            document.getElementById('slug').value = slug;
+        });
+
+        function toggleNewCategoryInput(selectElement) {
+            const newCategoryInput = document.getElementById('newCategoryInput');
+
+            if (selectElement.value === 'new') {
+                newCategoryInput.style.display = 'block'; // Hiện ô input
+            } else {
+                newCategoryInput.style.display = 'none'; // Ẩn ô input nếu chọn mục khác
+            }
+        }
     </script>
 @endsection

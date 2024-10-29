@@ -21,7 +21,7 @@
                         <div class="col-auto">
                             <label class="form-label" for="title">Tiêu đề</label>
                             <input class="form-control @error('title') is-invalid @enderror" id="title" type="text"
-                                name="title" value="{{ old('title') }}" />
+                                name="title" placeholder="Tiêu Đề" value="{{ old('title') }}" />
                             @error('title')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
@@ -30,22 +30,24 @@
                         <div class="col-auto">
                             <label class="form-label" for="slug_post">Slug</label>
                             <input class="form-control @error('slug_post') is-invalid @enderror" id="slug_post" type="text"
-                                name="slug_post" value="{{ old('slug_post') }}" />
+                                name="slug_post" placeholder="Slug" value="{{ old('slug_post') }}" />
                             @error('slug_post')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
                         <div class="col-auto">
                             <label class="form-label" for="autoSizingSelect">Trạng thái</label>
-                            <select class="form-control" id="published_id" name="published_id">
+                            <select class="form-control" id="published_id" name="published_id" placeholder="Trạng thái">
+                                <option value="">Vui lòng chọn trạng thái</option>
                                 <option value="1">Đã xuất bản</option>
                                 <option value="0">Chưa xuất bản</option>
                             </select>
                         </div>
+                        <p></p>
                         <div class="col-auto">
                             <label class="form-label" for="created_at">Ngày tạo</label>
-                            <input class="form-control @error('created_at') is-invalid @enderror" id="created_at" type="date" value="{{ now()->format('Y-m-d') }}"
-                                name="created_at" value="{{ old('created_at') }}" />
+                            <input class="form-control @error('created_at') is-invalid @enderror" id="created_at" type="date"
+                                name="created_at"  placeholder="Ngày Tạo"/>
                             @error('created_at')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
@@ -96,18 +98,23 @@
                             </div>
                             <input type="file" name="image_post" id="hidden-files" style="display: none;">
                         </div>
-                        
+                        <p></p>
                 </div>
-
-                <div class="col-auto">
+                <div class="col-12 mb-3"><label class="form-label" for="product-description">Chi Tiết Bài Viết:</label>
+                <div class="create-product-description-textarea">
+                    <textarea class="tinymce d-none" data-tinymce="data-tinymce" name="product-description" id="product-description"
+                        required="required"></textarea>
+                </div>
+            </div>
+                {{-- <div class="col-auto">
                     <label class="form-label" for="basic-form-textarea">Bài viết</label>
                     <textarea class="form-control @error('content') is-invalid @enderror" id="basic-form-textarea" rows="2"
-                        cols="50" name="content"></textarea>
+                        cols="50" name="content" placeholder="Bài viết"></textarea>
                     @error('content')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
-                </div>
-        
+                </div> --}}
+                <p></p>
                 <div class="col-auto">
                     <button class="btn btn-primary" id="submit-button" type="submit">Lưu Bài Viết</button>
                 </div>
@@ -202,8 +209,12 @@
 @endsection
 @section('css-libs')
     <link rel="stylesheet" href="{{ asset('theme/admin/vendors/dropzone/dropzone.css') }}">
+    <link href="{{ asset('theme/admin/vendors/choices/choices.min.css') }}" rel="stylesheet">
 @endsection
 @section('js-libs')
+
+<script src="{{ asset('theme/admin/vendors/choices/choices.min.js') }}"></script>
+    <script src="{{ asset('theme/admin/vendors/tinymce/tinymce.min.js') }}"></script>
     <script src="{{ asset('theme/admin/vendors/jquery/jquery.min.js') }}"></script>
     <script src="{{ asset('theme/admin/vendors/datatables.net/jquery.dataTables.min.js') }}"></script>
     <script src="{{ asset('theme/admin/vendors/datatables.net-bs5/dataTables.bootstrap5.min.js') }}"></script>
