@@ -22,6 +22,27 @@
     <meta name="theme-color" content="#ffffff">
     <script src="{{ asset('theme/admin/js/config.js') }}"></script>
     <script src="{{ asset('theme/admin/vendors/simplebar/simplebar.min.js') }}"></script>
+    <script src="{{ asset('pusher/pusher.min.js') }}"></script>
+    <script src="{{ asset('sweetalert2/sweetalert2.min.css') }}"></script>
+    <script>
+        // Enable pusher logging - don't include this in production
+        Pusher.logToConsole = true;
+
+        var pusher = new Pusher('6b2509032695e872d989', {
+            cluster: 'ap1'
+        });
+
+        var channel = pusher.subscribe('client-channel');
+        channel.bind('new-order', function(data) {
+            Swal.fire({
+                title: 'Có đơn hàng mới!',
+                text: JSON.stringify(data),
+                icon: 'info',
+                confirmButtonText: 'OK',
+                timer: 5000
+            });
+        });
+    </script>
     @yield('css-libs')
     @include('admin::assets.link-assets.link-css')
     @yield('css-setting')

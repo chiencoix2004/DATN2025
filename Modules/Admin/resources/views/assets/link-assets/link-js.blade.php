@@ -8,3 +8,5 @@
 <script src="{{ asset('theme/admin/js/polyfill.min58be.js?features=window.scroll') }}"></script>
 <script src="{{ asset('theme/admin/vendors/list.js/list.min.js') }}"></script>
 <script src="{{ asset('theme/admin/js/theme.js') }}"></script>
+<script src="{{ asset('sweetalert2/sweetalert2.all.min.js') }}"></script>
+

@@ -22,6 +22,7 @@ class DatabaseSeeder extends Seeder
             CommentSeeder::class,
             OrderSeeder::class,
             OrderDetailSeeder::class,
+            NotificationSeeder::class,
             // ProductImageSeeder::class,
             // ColorAttributesSeeder::class,
             // SizeAttributeSeeder::class,
