@@ -82,7 +82,7 @@
                                         <li><span class="megamenu-title">Tài khoản</span>
                                             <ul>
                                                 <li><a href="{{ route('auth.myAcc') }}">Tài khoản của tôi</a></li>
-                                                <li><a href="{{ route('auth.log-reg') }}">Đăng nhập | Đăng ký</a></li>
+                                                <li><a href="{{ route('showForm') }}">Đăng nhập | Đăng ký</a></li>
                                                 <li><a href="wishlist.html">Yêu thích</a></li>
                                                 <li><a href="{{ route('cart.list') }}">Giỏ hàng</a></li>
                                                 <li><a href="checkout.html">Thanh toán</a></li>
