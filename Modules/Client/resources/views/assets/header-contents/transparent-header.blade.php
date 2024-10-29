@@ -4,7 +4,7 @@
             <div class="col-lg-12">
                 <div class="transparent-header_nav position-relative">
                     <div class="header-logo_area">
-                        <a href="{{ route('home') }}">
+                        <a href="{{ route('index') }}">
                             <img src="{{ asset('theme/client/images/menu/logoF.png') }}" alt="Header Logo" width="200px">
                         </a>
                     </div>
@@ -12,7 +12,7 @@
                         <nav class="main-nav d-flex justify-content-center">
                             <ul>
                                 <li class="dropdown-holder">
-                                    <a href="{{ route('home') }}">Trang chủ</a>
+                                    <a href="{{ route('index') }}">Trang chủ</a>
                                 </li>
                                 <li class="megamenu-holder position-static">
                                     <a href="{{ route('shop.shopIndex') }}">

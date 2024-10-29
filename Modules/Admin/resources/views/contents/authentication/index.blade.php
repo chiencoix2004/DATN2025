@@ -29,7 +29,7 @@
                 <div class="d-flex align-items-center">
                     <select id="role" name="role" class="form-select me-2" aria-label="Lựa chọn bộ lọc">
                         <option value="">Tất cả chức vụ</option>
-                        @foreach ($roles as $role)
+                        @foreach($roles as $role)
                             <option value="{{ $role->id }}">{{ $role->role_type }}</option>
                         @endforeach
                     </select>
@@ -40,18 +40,17 @@
             <table class="table table-bordered" id="example">
                 <thead>
                     <tr>
-                        <th style="text-align: center" class="text-900 sort">Mã</th>
-                        <th style="text-align: center" class="text-900 sort">Tên Khách Hàng</th>
-                        <th style="text-align: center" class="text-900 sort">Email</th>
-                        <th style="text-align: center" class="text-900 sort">Số điện thoại</th>
-                        <th style="text-align: center" class="text-900 sort">Vai Trò</th>
-                        <th style="text-align: center" class="text-900 sort">Hành động</th>
+                        <th>Mã</th>
+                        <th>Tên</th>
+                        <th>Email</th>
+                        <th>Số điện thoại</th>
+                        <th>Hành động</th>
                     </tr>
                 </thead>
             </table>
         </div>
     </div>
-
+    
     <script type="text/javascript">
         $(document).ready(function() {
             var table = $('#example').DataTable({
@@ -64,44 +63,21 @@
                         d.search = $('#dt-search-0').val();
                     }
                 },
-                columns: [{
-                        data: 'id',
-                        name: 'id'
-                    },
-                    {
-                        data: 'full_name',
-                        name: 'full_name'
-                    },
+                columns: [
+                    {data: 'id', name: 'id'},
+                    {data: 'full_name', name: 'full_name'},
                     {
                         data: 'email',
-                        name: 'email'
-                        // render: function(data, type, row) {
-                        //     return `<a href="mailto:${data}">${data}</a>`;
-                        // }
+                        render: function(data, type, row) {
+                            return `<a href="mailto:${data}">${data}</a>`;
+                        }
                     },
                     {
                         data: 'phone',
-                        name: 'phone'
-                        // render: function(data, type, row) {
-                        //     return `<a href="tel:${data}">${data}</a>`;
-                        // }
-                    },
-                    {
-                        data: 'roles_id',
-                        name: 'roles_id',
                         render: function(data, type, row) {
-                            if (data == 1) {
-                                return 'Admin';
-                            } else if (data == 2) {
-                                return 'Khách hàng';
-                            } else if (data == 3) {
-                                return 'Nhân viên';
-                            } else {
-                                return 'Không xác định';
-                            }
+                            return `<a href="tel:${data}">${data}</a>`;
                         }
                     },
-
                     {
                         data: null,
                         render: function(data, type, row) {
@@ -191,5 +167,4 @@
             });
         </script>
     @endif
-
 @endsection

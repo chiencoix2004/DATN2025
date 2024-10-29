@@ -306,10 +306,9 @@
                     <div class="card-body">
                         <div class="row gx-2">
                             <div class="col-12 mb-3">
-                                <label class="form-label" for="roles_id">Loại tài khoản:</label>
+                                <label class="form-label" for="roles_id">Chọn loại tài khoản:</label>
                                 <input class="form-control" name="role_type" id="role_type" type="text"
-                                    value="Khách Hàng" disabled />
-                                    {{-- {{ $user->roles_id }} --}}
+                                    value="{{ $user->roles_id }}" disabled />
                                 @error('roles_id')
                                     <label class="form-label text-danger">{{ $message }} </label>
                                 @enderror
