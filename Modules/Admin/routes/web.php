@@ -54,7 +54,7 @@ Route::get('logout', [AuthenticateController::class, 'logout'])->name('logout');
 
 Route::prefix('admin')
     ->as('admin.')
-    ->middleware('CheckAdmin')
+    // ->middleware('CheckAdmin')
     ->group(function () {
         Route::get('/', function () {
             return view('admin::contents.dashboard');
