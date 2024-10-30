@@ -14,29 +14,19 @@
                 </a>
             </div>
             <div class="short-desc">
-                <p>We are a team of designers and developers that create high quality HTML Template &
-                    Woocommerce,
-                    Shopify Themes.
-                </p>
-            </div>
-            <div class="offcanvas-component">
-                <span class="offcanvas-component_title">Ngôn ngữ</span>
-                <ul class="offcanvas-component_menu">
-                    <li class="active"><a href="javascript:void(0)">Tiếng Anh</a></li>
-                    <li><a href="javascript:void(0)">Tiếng Việt</a></li>
-                </ul>
             </div>
             <div class="offcanvas-component">
                 <span class="offcanvas-component_title">Tài khoản của tôi</span>
                 @if (Auth::user())
                     <ul class="offcanvas-component_menu">
+                        <li><a href="{{ route('showForm') }}">Chi tiết tài khoản ,... Update sau </a></li>
+                        <li><a href="{{ route('password.change') }}">Đổi mật khẩu</a></li>
                         <li>
                             <form action="{{ route('logout') }}" method="POST">
                                 @csrf
                                 <button type="submit">Đăng xuất</button>
                             </form>
                         </li>
-                        <li><a href="{{ route('showForm') }}">Chi tiết tài khoản ,... Update sau </a></li>
                     </ul>
                 @else
                     <ul class="offcanvas-component_menu">

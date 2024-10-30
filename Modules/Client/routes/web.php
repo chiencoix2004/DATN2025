@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use Modules\Client\App\Http\Controllers\AuthController;
 // use Modules\Client\App\Http\Controllers\AuthController;
 use Modules\Client\App\Http\Controllers\CartController;
+use Modules\Client\App\Http\Controllers\ChangePasswordController;
 use Modules\Client\App\Http\Controllers\ClientController;
 use Modules\Client\App\Http\Controllers\RegisterController;
 use Modules\Client\App\Http\Controllers\ShopController;
@@ -50,4 +51,9 @@ Route::get('/email/verify/{id}', [VerificationController::class, 'verify'])->nam
 // Route::get('/login', [LoginController::class, 'showLoginForm'])->name('showLoginForm');
 Route::post('/login', [LoginController::class, 'login'])->name('login');
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
+
+//đổi mật khẩu
+Route::match(['get', 'post'], '/password/change', [ChangePasswordController::class, 'update'])
+    ->middleware('auth')
+    ->name('password.change');
 
