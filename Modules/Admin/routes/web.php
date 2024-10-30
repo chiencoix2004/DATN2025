@@ -1,6 +1,5 @@
 <?php
 
-use App\Models\Tag;
 use Illuminate\Support\Facades\Route;
 use Modules\Admin\App\Http\Controllers\AccountController;
 use Modules\Admin\App\Http\Controllers\AttributeController;
@@ -12,8 +11,8 @@ use Modules\Admin\App\Http\Controllers\OrderController;
 use Modules\Admin\App\Http\Controllers\PostController;
 use Modules\Admin\App\Http\Controllers\ProductController;
 use Modules\Admin\App\Http\Controllers\CouponController;
-use Modules\Admin\App\Http\Controllers\AdminController;
 use Modules\Admin\App\Http\Controllers\StatisticalController;
+use Modules\Admin\App\Http\Controllers\SupportController;
 use Modules\Admin\App\Http\Controllers\TagController;
 use Modules\Admin\App\Http\Controllers\CommentController;
 use Modules\Admin\App\Http\Controllers\UserController;
@@ -71,7 +70,7 @@ Route::prefix('admin')->as('admin.')->group(function () {
         Route::get('{id}/delImg', 'delImg')->name('delImg');
         Route::delete('{product}/delete', 'destroy')->name('delP');
         Route::get('detail/{slug}', 'detail')->name('detailP');
-
+        Route::get('{id}/delVariant', 'delete')->name('deleteVariant');
         // sản phẩm xóa mềm
         Route::get('listTrashed', 'trashed')->name('listTrashed');
         Route::get('restore-all', 'restoreAll')->name('restoreAll');
@@ -199,7 +198,7 @@ Route::prefix('admin')->as('admin.')->group(function () {
             Route::put('{id}update', 'update')->name('update');
             Route::delete('/{id}/destroy', 'destroy')->name('destroy');
         });
-    Route::controller(Supportcontroller::class)
+        Route::controller(SupportController::class)
         ->prefix('tickets')
         ->as('ticket.')
         ->group(function () {

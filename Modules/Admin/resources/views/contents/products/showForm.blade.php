@@ -387,6 +387,10 @@
                                 <div class="accordion-collapse collapse" id="collapse-${key}-${v}" aria-labelledby="heading-${value}-${v}"
                                     data-bs-parent="#container-${key}-${v}">
                                     <div class="accordion-body row">
+                                        <div class="col-12 mb-4">
+                                            <button type="button" onclick="removeVariant(id_color=${key}, size_value='${v}')"
+                                                class="btn btn-danger">Xóa biến thể</button>
+                                        </div>
                                         <div class="col-6 mb-4">
                                             <label class="form-label" for="price_default">Giá mặc định:</label>
                                             <input class="form-control" type="number" min="0"
@@ -426,6 +430,13 @@
             }
         }
 
+        function removeVariant(id_color, size_value) {
+            if (confirm("Chắc chắn muốn xóa biến thể này?")) {
+                let variant_item = document.querySelector(
+                    `div.accordion.col-lg-12.mb-3#container-${id_color}-${size_value}`);
+                $(variant_item).remove();
+            }
+        }
         // xử lý upload file bằng thư biên dropzone
         Dropzone.autoDiscover = false;
         var myDropzone = new Dropzone("#dropzoneMultipleFileUpload", {
