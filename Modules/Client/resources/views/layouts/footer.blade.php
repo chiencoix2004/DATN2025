@@ -5,7 +5,7 @@
                 <div class="col-lg-5">
                     <div class="newsletter-area">
                         <div class="newsletter-logo">
-                            <a href="{{ route('home') }}">
+                            <a href="{{ route('index') }}">
                                 <img src="{{ asset('theme/client/images/menu/logoF.png') }}" alt="Footer Logo"
                                     width="200px">
                             </a>

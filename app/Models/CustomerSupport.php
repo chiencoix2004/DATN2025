@@ -10,17 +10,20 @@ class CustomerSupport extends Model
     use HasFactory;
     protected $table = 'customer_supports';
     protected $fillable = [
-       'user_id',
-       'ticket_title',
-       'ticket_content',
-       'ticket_status',
-       'ticket_priority',
-       'ticket_category',
-       'ticket_attachment',
-       'ticket_ai_analyze',
-       'ticket_date',
+        'user_id',
+        'ticket_title',
+        'ticket_content',
+        'ticket_status',
+        'ticket_priority',
+        'ticket_category',
+        'ticket_attachment',
+        'ticket_ai_analyze',
+        'ticket_date',
     ];
-
+    public function getlastticetid()
+    {
+        return $this->orderBy('ticket_id', 'desc')->first();
+    }
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id', 'id');
@@ -34,8 +37,8 @@ class CustomerSupport extends Model
     public function listTicket()
     {
         return $this->join('users', 'customer_supports.user_id', '=', 'users.id')
-                    ->select('customer_supports.*', 'users.name')
-                    ->get();
+            ->select('customer_supports.*', 'users.name')
+            ->get();
     }
     public function addTicket($user_id, $ticket_title, $ticket_content, $ticket_category, $ticket_attachment)
     {
@@ -48,19 +51,37 @@ class CustomerSupport extends Model
             'ticket_date' => now(),
         ]);
     }
+    public function addsystemticket($user_id, $ticket_title, $ticket_content, $ticket_category, $ticket_ai_analyze, $ticket_attachment)
+    {
+        return $this->insert([
+            'user_id' => $user_id,
+            'ticket_title' => $ticket_title,
+            'ticket_content' => $ticket_content,
+            'ticket_category' => $ticket_category,
+            'ticket_ai_analyze' => $ticket_ai_analyze,
+            'ticket_attachment' => $ticket_attachment,
+            'ticket_date' => now(),
+        ]);
+    }
+    public function listOpenTicket()
+    {
+        return $this
+            ->join('users', 'customer_supports.user_id', '=', 'users.id')
+            ->where('ticket_status', 1)->get();
+    }
+    public function listCloseTicket()
+    {
+        return $this
+            ->join('users', 'customer_supports.user_id', '=', 'users.id')
+            ->where('ticket_status', 2)->get();
+    }
+    public function listSpamTicket()
+    {
+        return $this
+            ->join('users', 'customer_supports.user_id', '=', 'users.id')
+            ->where('ticket_status', 3)->get();
+    }
 
-    public function getOpenticket()
-    {
-        return $this->where('ticket_status', 1)->get();
-    }
-    public function getClosedticket()
-    {
-        return $this->where('ticket_status', 2)->get();
-    }
-    public function getSpamticket()
-    {
-        return $this->where('ticket_status', 3)->get();
-    }
     public function countOpenTicket()
     {
         return $this->where('ticket_status', 1)->count();
@@ -79,19 +100,19 @@ class CustomerSupport extends Model
     }
     public function setOpenticket($id)
     {
-        return $this->where('id', $id)->update([
+        return $this->where('ticket_id', $id)->update([
             'ticket_status' => 1,
         ]);
     }
     public function setClosedticket($id)
     {
-        return $this->where('id', $id)->update([
+        return $this->where('ticket_id', $id)->update([
             'ticket_status' => 2,
         ]);
     }
     public function setSpamticket($id)
     {
-        return $this->where('id', $id)->update([
+        return $this->where('ticket_id', $id)->update([
             'ticket_status' => 3,
         ]);
     }
@@ -147,10 +168,12 @@ class CustomerSupport extends Model
     }
     public function searchTicket($keyword)
     {
-        return $this->where('ticket_id', 'like', '%' . $keyword . '%')
-                    ->orWhere('ticket_title', 'like', '%' . $keyword . '%')
-                    ->orWhere('ticket_content', 'like', '%' . $keyword . '%')
-                    ->get();
+        return $this
+            ->join('users', 'customer_supports.user_id', '=', 'users.id')
+            ->where('ticket_id', 'like', '%' . $keyword . '%')
+            ->orWhere('ticket_title', 'like', '%' . $keyword . '%')
+            ->orWhere('ticket_content', 'like', '%' . $keyword . '%')
+            ->orWhere('ticket_category', 'like', '%' . $keyword . '%')
+            ->get();
     }
-
 }

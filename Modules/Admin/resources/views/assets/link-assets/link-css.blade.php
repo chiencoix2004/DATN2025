@@ -8,6 +8,7 @@
 <link href="{{ asset('theme/admin/css/theme.min.css') }}" rel="stylesheet" id="style-default">
 <link href="{{ asset('theme/admin/css/user-rtl.min.css') }}" rel="stylesheet" id="user-style-rtl">
 <link href="{{ asset('theme/admin/css/user.min.css') }}" rel="stylesheet" id="user-style-default">
+<link href="{{ asset('toastr/toastr.min.css') }}" rel="stylesheet" >
 <script>
     var isRTL = JSON.parse(localStorage.getItem('isRTL'));
     if (isRTL) {

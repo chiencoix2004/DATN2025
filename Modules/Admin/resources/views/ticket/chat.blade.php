@@ -49,11 +49,15 @@
                     </div>
 
                     <!-- Text area for new customer response -->
-                    <form action="#" method="post">
+                    <form action="{{ route('admin.ticket.updatemessage') }}" method="post">
+                        @method('POST')
                         @csrf
                         <div class="mb-3">
                             <label for="customerResponse" class="form-label">Phản hồi:</label>
                             <textarea id="customerResponse" name="response" class="form-control" rows="4" placeholder="Nhập phản hồi..."></textarea>
+                            <input type="text" name="ticket_id" value="{{ $detailticket->first()->ticket_id }}" hidden>
+                            <input type="reply_by" name="reply_by" value="admin" hidden>
+
                         </div>
                         <button type="submit" class="btn btn-primary mt-2">Gửi</button>
                     </form>

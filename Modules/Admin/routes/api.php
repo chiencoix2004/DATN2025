@@ -4,7 +4,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Modules\Admin\App\Http\Controllers\Api\AccountController;
 use Modules\Admin\App\Http\Controllers\Api\CouponController;
+use Modules\Admin\App\Http\Controllers\Api\NotificationController;
 use Modules\Admin\App\Http\Controllers\Api\UserController;
+use Modules\Admin\App\Http\Controllers\SupportController;
 
 /*
     |--------------------------------------------------------------------------
@@ -42,7 +44,7 @@ Route::controller(AccountController::class)
         Route::delete('/{id}', 'destroy')->name('destroy');
     });
 
-    Route::controller(UserController::class)
+Route::controller(UserController::class)
     ->prefix('users')
     ->as('api.users.')
     ->group(function () {
@@ -51,4 +53,26 @@ Route::controller(AccountController::class)
         // Route::get('/{id}', 'show')->name('show');
         // Route::put('/{id}', 'update')->name('update');
         // Route::delete('/{id}', 'destroy')->name('destroy');
+    });
+
+Route::controller(SupportController::class)
+    ->prefix('supports')
+    ->as('api.supports.')
+    ->group(function () {
+        Route::post('customer', 'seachcustomer')->name('seachcustomer');
+        Route::get('customer/{id}', 'userdetail')->name('userdetail');
+        route::get('lastid', 'getlastticket')->name('getlastticket');
+        // Route::post('/', 'store')->name('store');
+        // Route::get('/{id}', 'show')->name('show');
+        // Route::put('/{id}', 'update')->name('update');
+        // Route::delete('/{id}', 'destroy')->name('destroy');
+    });
+
+Route::controller(NotificationController::class)
+    ->prefix('notifications')
+    ->as('api.notifications.')
+    ->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::post('/read', 'read')->name('read');
+        Route::get('/count', 'unreadCount')->name('count.read');
     });
