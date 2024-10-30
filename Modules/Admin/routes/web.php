@@ -14,7 +14,6 @@ use Modules\Admin\App\Http\Controllers\CouponController;
 use Modules\Admin\App\Http\Controllers\AdminController;
 use Modules\Admin\App\Http\Controllers\AuthenticateController;
 use Modules\Admin\App\Http\Controllers\StatisticalController;
-use Modules\Admin\App\Http\Controllers\SupportController;
 use Modules\Admin\App\Http\Controllers\TagController;
 use Modules\Admin\App\Http\Controllers\CommentController;
 use Modules\Admin\App\Http\Controllers\SupportController;
