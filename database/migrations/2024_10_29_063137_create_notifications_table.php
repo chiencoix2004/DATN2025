@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->bigInteger('user_id')->nullable(); 
             $table->string('title'); 
-            $table->text('message'); 
+            $table->longText('message'); 
             $table->boolean('is_read')->default(false); 
             $table->timestamp('read_at')->nullable(); 
             $table->timestamps(); 

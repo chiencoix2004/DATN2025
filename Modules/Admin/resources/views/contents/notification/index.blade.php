@@ -29,7 +29,7 @@
         </div>
         <div class="card-body fs-10 p-0">
             @foreach ($notifications as $notification)
-                <a class="border-bottom-0 
+                <div class="border-bottom-0 
                 @if ($notification->is_read == 0) notification-unread @endif 
                 notification rounded-0 border-x-0 border-300"
                     href="#!">
@@ -54,10 +54,21 @@
                     <div class="notification-body">
                         <p class="mb-1"><strong>{{ $notification->title }}</strong></p>
                         <span class="notification-time">
-                            <span class="me-2" role="img"
-                                aria-label="Emoji">📢</span>{{ $notification->message }}</span>
+                            <span class="me-2" role="img" aria-label="Emoji">📢</span>
+                            @php
+                                $dataMessage = json_decode($notification->message, true);
+                            @endphp
+                            {{-- @dd( $dataMessage)n --}}
+                            {{ $dataMessage['message'] }}
+                            @if ($dataMessage['order_id'] != null)
+                                <a href="{{ route('admin.orders.detail', $dataMessage['order_id']) }}">Đơn hàng {{ $dataMessage['order_id'] }}</a>
+                            @endif
+                            @if ($dataMessage['user_id'] !=null)
+                                tài khoản <a href="{{ route('admin.users.show', ['id'=>$dataMessage['user_id']]) }}"> {{ $dataMessage['full_name'] }}</a>
+                            @endif
+                        </span>
                     </div>
-                </a>
+                </div>
             @endforeach
             <div class="card-footer">
                 <div class="row">

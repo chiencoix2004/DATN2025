@@ -15,7 +15,10 @@ class NotificationController extends Controller
      */
     public function index()
     {
-        $notifications = Notification::query()->where('user_id', '=', null)->paginate(10);
+        $notifications = Notification::query()
+        ->where('user_id', '=', null)
+        ->orderBy('id','desc')
+        ->paginate(10);
         return view('admin::contents.notification.index', compact('notifications'));
     }
 
