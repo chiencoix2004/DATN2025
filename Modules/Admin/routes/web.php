@@ -6,6 +6,7 @@ use Modules\Admin\App\Http\Controllers\AttributeController;
 use Modules\Admin\App\Http\Controllers\BannerController;
 use Modules\Admin\App\Http\Controllers\CategoryController;
 use Modules\Admin\App\Http\Controllers\InvoiceController;
+use Modules\Admin\App\Http\Controllers\NotificationController;
 use Modules\Admin\App\Http\Controllers\OrderController;
 use Modules\Admin\App\Http\Controllers\PostController;
 use Modules\Admin\App\Http\Controllers\ProductController;
@@ -46,7 +47,7 @@ Route::prefix('admin')->as('admin.')->group(function () {
     Route::get('/', function () {
         return view('admin::contents.dashboard');
     })->name('dashboard');
-    
+
     // Route quản lý categories
     Route::controller(CategoryController::class)->prefix('categories')->as('categories.')->group(function () {
         Route::get('list', 'listCategories')->name('list');
@@ -75,13 +76,12 @@ Route::prefix('admin')->as('admin.')->group(function () {
         Route::get('restore-all', 'restoreAll')->name('restoreAll');
     });
 
-      // Route quản lý comment
+    // Route quản lý comment
     Route::controller(CommentController::class)->prefix('comment')->as('comment.')->group(function () {
         Route::get('listComment', 'listComment')->name('listComment');
         Route::get('/{id}/editComment', 'editComment')->name('editComment');
         Route::put('{id}updateComment', 'updateComment')->name('updateComment');
         Route::post('bulk-action', 'bulkAction')->name('bulkAction');
-
     });
 
     // Route quản lý attributes
@@ -215,4 +215,11 @@ Route::prefix('admin')->as('admin.')->group(function () {
             Route::post('search', 'search')->name('search');
         });
 
+    Route::controller(NotificationController::class)
+        ->prefix('notifications')
+        ->as('notifications.')
+        ->group(function () {
+            Route::get('/', 'index')->name('index');
+            Route::get('/read', 'read')->name('read');
+        });
 });
