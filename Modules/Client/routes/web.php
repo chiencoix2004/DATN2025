@@ -21,9 +21,9 @@ use Modules\Client\App\Http\Controllers\LoginController;
 |
 */
 
-Route::get('/', function () {
-    return view('client::index');
-})->name('home');
+Route::controller(ClientController::class)->group(function () {
+    Route::get('/', 'index')->name('index');
+});
 Route::controller(ShopController::class)->prefix('shop')->as('shop.')->group(function () {
     Route::get('/', 'index')->name('shopIndex');
     Route::get('productDetail', 'show')->name('productDetail');
@@ -50,4 +50,5 @@ Route::get('/email/verify/{id}', [VerificationController::class, 'verify'])->nam
 // Route::get('/login', [LoginController::class, 'showLoginForm'])->name('showLoginForm');
 Route::post('/login', [LoginController::class, 'login'])->name('login');
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
+
 

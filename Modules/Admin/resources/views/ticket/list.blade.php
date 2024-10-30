@@ -66,7 +66,7 @@
                         @foreach ($listTicket as $item)
                         <tr>x
                             <td>{{ $item->ticket_id }}</td>
-                            <td>{{ $item->user}}</td> 
+                            <td>{{ $item->user_name}}</td>
                             <td>{{ $item->ticket_title }}</td>
                             <td>{{ \Carbon\Carbon::parse($item->created_at)->format('d-m-Y H:i') }}</td>
                             <td>

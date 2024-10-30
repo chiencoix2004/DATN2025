@@ -31,7 +31,7 @@ class BannerController extends Controller
             if ($data) {
                 try {
                      $data = new Banner();
-                     $banner = $data->updateBanner($request->id_banner, $fileName, $request->lien_ket, $request->vi_tri);
+                     $banner = $data->updateBanner($request->id_banner, $fileName, $request->lien_ket, $request->vi_tri, $request->offer_text, $request->title, $request->description);
                      return redirect()->route('admin.banner.list');
                  } catch (\Exception $e) {
                      dd($e->getMessage());
@@ -39,7 +39,7 @@ class BannerController extends Controller
                 }
         } else {
             $data = new Banner();
-            $banner = $data->updateBannerNoImg($request->id_banner, $request->lien_ket, $request->vi_tri);
+            $banner = $data->updateBannerNoImg($request->id_banner, $request->lien_ket, $request->vi_tri, $request->offer_text, $request->title, $request->description);
             return redirect()->route('admin.banner.list');
         }
 
@@ -62,7 +62,7 @@ class BannerController extends Controller
         if ($data) {
             try {
                 $data = new Banner();
-                $banner = $data->Addbanner( $fileName, $request->lien_ket, $request->vi_tri);
+                $banner = $data->Addbanner( $fileName, $request->lien_ket, $request->vi_tri, $request->offer_text, $request->title, $request->description);
                 return redirect()->route('admin.banner.list')->with('success', 'Thêm banner thành công');
             } catch (\Exception $e) {
                 dd($e->getMessage());
