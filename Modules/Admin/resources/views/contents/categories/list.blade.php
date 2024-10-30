@@ -141,7 +141,13 @@
                                 </td>
                                 <td>
                                     @if ($item->image_cover)
-                                        <img src="{{ Storage::url($item->image_cover) }}" width="100" height="100"
+                                    @php
+                                        $url = $item->image_cover;
+                                        if (!\Str::contains($url, 'http')) {
+                                            $url = \Storage::url($url);
+                                        }
+                                    @endphp
+                                        <img src="{{ $url }}" width="100" height="100"
                                             alt="">
                                     @endif
                                 </td>
