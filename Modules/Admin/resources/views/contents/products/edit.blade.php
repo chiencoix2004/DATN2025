@@ -184,7 +184,9 @@
                             <div class="row gy-3 gx-2">
                                 @foreach ($variantPRD as $item)
                                     @php
-                                        $colorAttr = \App\Models\ColorAttribute::query()->find($item->color_attribute_id);
+                                        $colorAttr = \App\Models\ColorAttribute::query()->find(
+                                            $item->color_attribute_id,
+                                        );
                                         $sizeAttr = \App\Models\SizeAttribute::query()->find($item->size_attribute_id);
                                     @endphp
                                     <div class="accordion col-lg-6 mb-3 pe-lg-12" id="container-{{ $item->id }}">
@@ -205,7 +207,10 @@
                                                 data-bs-parent="#container-{{ $item->id }}">
                                                 <div class="accordion-body row">
                                                     <div class="col-12 mb-4">
-                                                        <a href="" class="btn btn-danger">Delete Variant</a>
+                                                        <a href="{{ route('admin.product.deleteVariant', $item->id) }}"
+                                                            class="btn btn-danger"
+                                                            onclick="return confirm('Chắc chắn muốn xóa?')">Xóa biến
+                                                            thể</a>
                                                     </div>
                                                     <div class="col-6 mb-4">
                                                         <label class="form-label" for="price_default">Price
@@ -224,13 +229,13 @@
                                                         <label class="form-label" for="">Start date:</label>
                                                         <input class="form-control" type="date"
                                                             name="updateV[{{ $item->id }}]['start_date']"
-                                                            value="{{ $item->start_date }}" />
+                                                            value="{{ $item->start_date != null ? date('Y-m-d', strtotime($item->start_date)) : 'null' }}" />
                                                     </div>
                                                     <div class="col-6 mb-4">
                                                         <label class="form-label" for="">End date:</label>
                                                         <input class="form-control" type="date"
                                                             name="updateV[{{ $item->id }}]['end_date']"
-                                                            value="{{ $item->end_date }}" />
+                                                            value="{{ $item->end_date != null ? date('Y-m-d', strtotime($item->end_date)) : 'null' }}" />
                                                     </div>
                                                     <div class="col-12 mb-4">
                                                         <label class="form-label" for="">Quantity:</label>

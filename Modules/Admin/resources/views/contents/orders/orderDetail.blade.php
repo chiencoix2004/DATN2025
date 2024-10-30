@@ -12,6 +12,13 @@
             </div>
         </div>
     @endif
+    @if (session('error'))
+        <div class="card mb-3">
+            <div class="card-header">
+                <h5 class="fs-9 mb-0 text-nowrap py-2 py-xl-0 text-danger">{{ session('error') }}</h5>
+            </div>
+        </div>
+    @endif
     <div class="card mb-3">
         <div class="bg-holder d-none d-lg-block bg-card"
             style="background-image:url({{ asset('theme/admin/img/icons/spot-illustrations/corner-4.png') }});opacity: 0.7;">
@@ -38,15 +45,24 @@
                 <div class="badge rounded-pill badge-subtle-{{ $badgeColors[$data->status_order] }} fs-11">
                     {{ $data->status_order }}
                 </div>
-                <select class="form-control" name="status_order" style="margin: 17px 0px 17px 0px; width: 300px;">
-                    <option value="sltNull" selected>Chọn</option>
-                    @foreach (\App\Models\Order::STATUS_ORDER as $key => $value)
-                        <option value="{{ $key }}" {{ $data->status_order == $value ? 'selected' : '' }}>
-                            {{ $value }}
-                        </option>
-                    @endforeach
-                </select>
-                <button type="submit" class="btn btn-primary">Cập nhật</button>
+                @if (
+                    $data->status_order != \App\Models\Order::STATUS_ORDER['received'] &&
+                        $data->status_order != \App\Models\Order::STATUS_ORDER['shipping'] &&
+                        $data->status_order != \App\Models\Order::STATUS_ORDER['canceled']
+                )
+                    <select class="form-control" name="status_order" style="margin: 17px 0px 17px 0px; width: 300px;">
+                        <option value="sltNull" selected>Chọn</option>
+                        @foreach (\App\Models\Order::STATUS_ORDER as $key => $value)
+                            @if ($key == 'received' || $key == 'canceled')
+                                <?php continue; ?>
+                            @endif
+                            <option value="{{ $key }}" {{ $data->status_order == $value ? 'selected' : '' }}>
+                                {{ $value }}
+                            </option>
+                        @endforeach
+                    </select>
+                    <button type="submit" class="btn btn-primary">Cập nhật</button>
+                @endif
             </div>
         </form>
     </div>

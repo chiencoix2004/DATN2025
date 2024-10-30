@@ -2,9 +2,13 @@
 
 use Illuminate\Support\Facades\Route;
 use Modules\Client\App\Http\Controllers\AuthController;
+// use Modules\Client\App\Http\Controllers\AuthController;
 use Modules\Client\App\Http\Controllers\CartController;
 use Modules\Client\App\Http\Controllers\ClientController;
+use Modules\Client\App\Http\Controllers\RegisterController;
 use Modules\Client\App\Http\Controllers\ShopController;
+use Modules\Client\App\Http\Controllers\VerificationController;
+use Modules\Client\App\Http\Controllers\LoginController;
 
 /*
 |--------------------------------------------------------------------------
@@ -36,7 +40,15 @@ Route::prefix('other')->as('other.')->group(function () {
         return view('client::contents.other-pages.about-us');
     })->name('aboutUs');
 });
-Route::controller(AuthController::class)->prefix('auth')->as('auth.')->group(function () {
-    Route::get('log-reg', 'form')->name('log-reg');
+Route::controller(RegisterController::class)->prefix('auth')->as('auth.')->group(function () {
+    Route::post('log-reg', 'register')->name('log-reg');
     Route::get('myAccount', 'myAccount')->name('myAcc');
 });
+Route::get('/showform', [AuthController::class, 'form'])->name('showForm');
+Route::get('/email/verify/{id}', [VerificationController::class, 'verify'])->name('verification.verify');
+
+// Route::get('/login', [LoginController::class, 'showLoginForm'])->name('showLoginForm');
+Route::post('/login', [LoginController::class, 'login'])->name('login');
+Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
+
+
