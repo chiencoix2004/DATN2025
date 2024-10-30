@@ -56,7 +56,7 @@
                             <div class="body-text">Enter your email & password to login</div>
                         </div>
 
-                        <form action="{{ route('loginAccount') }}" method="POST"
+                        <form action="{{ route('login.admin') }}" method="POST"
                             class="form-login flex flex-column gap24">
                             @csrf
 

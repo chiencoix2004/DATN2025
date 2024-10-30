@@ -48,7 +48,7 @@ class CheckAdminMiddleware
             }
         } else {
             // Nếu chưa đăng nhập, điều hướng về trang login
-            return redirect()->route('login')->with([
+            return redirect()->route('login.admin')->with([
                 'message' => 'Bạn phải đăng nhập trước'
             ]);
         }
