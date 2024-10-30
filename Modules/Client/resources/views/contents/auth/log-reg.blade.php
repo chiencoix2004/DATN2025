@@ -72,6 +72,9 @@
                                 <div class="col-md-12 col-12 mb--20">
                                     <label>Họ Và tên : </label>
                                     <input type="text" name='full_name' placeholder="First Name">
+                                    @error('full_name')
+                                        <span class=text-danger> {{ $message }}</span>
+                                    @enderror
                                 </div>
                                 {{-- <div class="col-md-6 col-12 mb--20">
                                     <label>Last Name</label>
@@ -80,14 +83,23 @@
                                 <div class="col-md-12">
                                     <label>Email : </label>
                                     <input type="email" name='email' placeholder="Email Address">
+                                    @error('email')
+                                    <span class=text-danger> {{ $message }}</span>
+                                @enderror
                                 </div>
-                                <div class="col-md-6">
+                                <div class="col-md-12">
                                     <label>Mật Khẩu : </label>
                                     <input type="password" name='password' placeholder="Password">
+                                    @error('password')
+                                        <span class=text-danger> {{ $message }}</span>
+                                    @enderror
                                 </div>
-                                <div class="col-md-6">
+                                <div class="col-md-12">
                                     <label>Xác Nhận Mật Khẩu : </label>
-                                    <input type="password" name='re_enter_password' placeholder="Confirm Password">
+                                    <input type="password" name='password_confirmation' placeholder="Confirm Password">
+                                    @error('password_confirmation')
+                                        <span class='text-danger'> {{ $message}}</span>
+                                    @enderror
                                 </div>
                                 <div class="col-12">
                                     <button type='submit' class="kenne-register_btn">Đăng Ký</button>
