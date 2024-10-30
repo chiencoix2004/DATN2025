@@ -100,9 +100,9 @@
                         </div>
                         <p></p>
                 </div>
-                <div class="col-12 mb-3"><label class="form-label" for="product-description">Chi Tiết Bài Viết:</label>
-                <div class="create-product-description-textarea">
-                    <textarea class="tinymce d-none" data-tinymce="data-tinymce" name="product-description" id="product-description"
+                <div class="col-12 mb-3"><label class="form-label" for="content">Chi Tiết Bài Viết:</label>
+                <div class="create-content-textarea">
+                    <textarea class="tinymce d-none" data-tinymce="data-tinymce" name="content" id="content"
                         required="required"></textarea>
                 </div>
             </div>
