@@ -18,39 +18,32 @@ class RegisterController extends Controller
     {
         // dd($request->all());
         $message = [
-            'full_name.regex' => 'Họ và tên chỉ được chứa chữ cái và khoảng trắng.',
-            'email.regex' => 'Định dạng email không hợp lệ.',
-            'password' => 'Mật khẩu chứa ít nhất 12 kỹ tự,1 chữ hoa,1 số và 1 ký tự đặc biệt',
-            'password.confirmed' => 'Xác nhận mật khẩu chưa khớp'
+            'full_name.required' => 'Vui lòng nhập họ và tên.',
+            'full_name.string' => 'Họ và tên phải là chuỗi ký tự.',
+            'full_name.max' => 'Họ và tên không được vượt quá 255 ký tự.',
+
+            'email.required' => 'Vui lòng nhập địa chỉ email.',
+            'email.email' => 'Địa chỉ email không hợp lệ.',
+            'email.unique' => 'Email này đã được sử dụng.',
+
+            'password.required' => 'Vui lòng nhập mật khẩu.',
+            'password.string' => 'Mật khẩu phải là chuỗi ký tự.',
+            'password.min' => 'Mật khẩu phải có ít nhất 8 ký tự.',
+            'password.confirmed' => 'Xác nhận mật khẩu không khớp.',
+            'password.regex' => 'Mật khẩu cần chứa ít nhất 1 chữ, 1 số và 1 ký tự đặc biệt',
+
+            'password_confirmation.required_with' => 'Vui lòng xác nhận mật khẩu.',
+            'password_confirmation.same' => 'Mật khẩu xác nhận không khớp với mật khẩu.',
         ];
         $validator = Validator::make($request->all(), [
-            'full_name' => [
-                'required',
-                'string',
-                'max:255',
-                'regex:/^[\pL\s]+$/u'  
-            ],
-            'email' => [
-                'required',
-                'string',
-                'email',
-                'max:255',
-                'unique:users',
-                'regex:/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/'  // Định dạng email cơ bản
-            ],
-            'password' => [
-                'required',
-                'string',
-                'min:12',
-                'confirmed',
-                'regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/'  // Ít nhất một chữ hoa, một chữ thường, một số và một ký tự đặc biệt
-
-               
-            ],
+            'full_name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email',
+            'password' => 'required|string|min:8|confirmed|regex:/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&#])[A-Za-z\d@$!%*?&#]{8,}$/',
+            'password_confirmation' => 'required_with:password|same:password'
         ], $message);
 
         if ($validator->fails()) {
-            return redirect()->route('showForm')->withErrors($validator)->withInput();
+            return redirect()->route('formReg')->withErrors($validator)->withInput();
         }
 
 

@@ -43,8 +43,12 @@
                                     role="tab" aria-controls="account-details" aria-selected="false">Account Details</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" id="account-logout-tab" href="login-register.html" role="tab"
-                                    aria-selected="false">Logout</a>
+                                {{-- <a class="nav-link" id="account-logout-tab" href="login-register.html" role="tab"
+                                    aria-selected="false">Logout</a> --}}
+                                <form action="{{ route('logout') }}" method="POST" >
+                                    @csrf
+                                    <button type="submit" class="kenne-login_btn">Đăng xuất</button>
+                                </form>
                             </li>
                         </ul>
                     </div>

@@ -5,6 +5,7 @@ use Modules\Client\App\Http\Controllers\AuthController;
 // use Modules\Client\App\Http\Controllers\AuthController;
 use Modules\Client\App\Http\Controllers\CartController;
 use Modules\Client\App\Http\Controllers\ClientController;
+use Modules\Client\App\Http\Controllers\MyAccountController;
 use Modules\Client\App\Http\Controllers\RegisterController;
 use Modules\Client\App\Http\Controllers\ShopController;
 use Modules\Client\App\Http\Controllers\VerificationController;
@@ -44,11 +45,16 @@ Route::controller(RegisterController::class)->prefix('auth')->as('auth.')->group
     Route::post('log-reg', 'register')->name('log-reg');
     Route::get('myAccount', 'myAccount')->name('myAcc');
 });
-Route::get('/showform', [AuthController::class, 'form'])->name('showForm');
+// route hiển thịn form đăng nhập, đăng ký
+Route::get('/showform', [AuthController::class, 'form'])->name('showForm');  
+Route::get('/form-reg', [AuthController::class, 'form_reg'])->name('formReg');
 Route::get('/email/verify/{id}', [VerificationController::class, 'verify'])->name('verification.verify');
 
 // Route::get('/login', [LoginController::class, 'showLoginForm'])->name('showLoginForm');
 Route::post('/login', [LoginController::class, 'login'])->name('login');
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
+
+Route::get('/my-account', [MyAccountController::class,'index'])->name('my-account');  
+
 
 
