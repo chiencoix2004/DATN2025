@@ -43,8 +43,12 @@
                                     role="tab" aria-controls="account-details" aria-selected="false">Account Details</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" id="account-logout-tab" href="login-register.html" role="tab"
-                                    aria-selected="false">Logout</a>
+                                {{-- <a class="nav-link" id="account-logout-tab" href="login-register.html" role="tab"
+                                    aria-selected="false">Logout</a> --}}
+                                <form action="{{ route('logout') }}" method="POST">
+                                    @csrf
+                                    <button type="submit" class="kenne-login_btn">Đăng xuất</button>
+                                </form>
                             </li>
                         </ul>
                     </div>
@@ -63,35 +67,30 @@
                             <div class="tab-pane fade" id="account-orders" role="tabpanel"
                                 aria-labelledby="account-orders-tab">
                                 <div class="myaccount-orders">
-                                    <h4 class="small-title">MY ORDERS</h4>
+                                    <h4 class="small-title">Đơn hàng của tôi</h4>
                                     <div class="table-responsive">
                                         <table class="table table-bordered table-hover">
                                             <tbody>
                                                 <tr>
-                                                    <th>ORDER</th>
-                                                    <th>DATE</th>
-                                                    <th>STATUS</th>
-                                                    <th>TOTAL</th>
+                                                    <th>Mã đơn hàng</th>
+                                                    <th>Ngày</th>
+                                                    <th>Trạng thái</th>
+                                                    <th>Tổng</th>
                                                     <th></th>
                                                 </tr>
-                                                <tr>
-                                                    <td><a class="account-order-id" href="javascript:void(0)">#5364</a></td>
-                                                    <td>Mar 27, 2019</td>
-                                                    <td>On Hold</td>
-                                                    <td>£162.00 for 2 items</td>
-                                                    <td><a href="javascript:void(0)"
-                                                            class="kenne-btn kenne-btn_sm"><span>View</span></a>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td><a class="account-order-id" href="javascript:void(0)">#5356</a></td>
-                                                    <td>Mar 27, 2019</td>
-                                                    <td>On Hold</td>
-                                                    <td>£162.00 for 2 items</td>
-                                                    <td><a href="javascript:void(0)"
-                                                            class="kenne-btn kenne-btn_sm"><span>View</span></a>
-                                                    </td>
-                                                </tr>
+                                                @foreach ($myOrder as $order)
+                                                    <tr>
+                                                        <td>
+                                                            <a class="account-order-id" href="javascript:void(0)">#{{ $order->id }}</a>
+                                                        </td>
+                                                        <td>{{ $order->created_at }}</td>
+                                                        <td>{{ $order->status_order}}</td>
+                                                        <td>{{ number_format($order->total_price, 0, ',', '.') }} VND</td>
+                                                        <td><a href="javascript:void(0)"
+                                                                class="kenne-btn kenne-btn_sm"><span>Xem</span></a>
+                                                        </td>
+                                                    </tr>
+                                                @endforeach
                                             </tbody>
                                         </table>
                                     </div>
