@@ -13,13 +13,14 @@
                     <img src="{{ asset('theme/client/images/menu/logoF.png') }}" alt="Munoz's Offcanvas Logo">
                 </a>
             </div>
-            <div class="short-desc">
+            <div class="short-desc"> 
             </div>
             <div class="offcanvas-component">
-                <span class="offcanvas-component_title">Tài khoản của tôi</span>
+                <span class="offcanvas-component_title">Tài khoản của tôi</span>    
                 @if (Auth::user())
                     <ul class="offcanvas-component_menu">
                         <li><a href="{{ route('showForm') }}">Chi tiết tài khoản ,... Update sau </a></li>
+                        <li><a href="{{ route('listVoucher') }}">Danh sách mã giảm giá </a></li>
                         <li><a href="{{ route('password.change') }}">Đổi mật khẩu</a></li>
                         <li>
                             <form action="{{ route('logout') }}" method="POST">

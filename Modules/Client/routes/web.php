@@ -10,6 +10,7 @@ use Modules\Client\App\Http\Controllers\RegisterController;
 use Modules\Client\App\Http\Controllers\ShopController;
 use Modules\Client\App\Http\Controllers\VerificationController;
 use Modules\Client\App\Http\Controllers\LoginController;
+use Modules\Client\App\Http\Controllers\VoucherController;
 
 /*
 |--------------------------------------------------------------------------
@@ -56,4 +57,5 @@ Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 Route::match(['get', 'post'], '/password/change', [ChangePasswordController::class, 'update'])
     ->middleware('auth')
     ->name('password.change');
-
+//danh sách mã giảm giá
+Route::get('/listVoucher', [VoucherController::class, 'listVoucher'])->name('listVoucher');
