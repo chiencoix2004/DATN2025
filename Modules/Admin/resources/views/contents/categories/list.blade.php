@@ -27,7 +27,7 @@
                         </div>
                         <div class="col-auto">
                             <label class="form-label" for="autoSizingSelect">Mục</label>
-                            <select class="form-select @error('parent_id') is-invalid @enderror" id="autoSizingSelect" name="parent_id" onchange="toggleNewCategoryInput(this)">
+                            <select class="form-select @error('parent_id') is-invalid @enderror" id="autoSizingSelect" name="parent_id" >
                                 <option selected>Trống</option>         
                                 @foreach ($listCate as $item)
                                     <option value="{{ $item->id }}"
@@ -203,15 +203,6 @@
             document.getElementById('slug').value = slug;
         });
 
-        function toggleNewCategoryInput(selectElement) {
-            const newCategoryInput = document.getElementById('newCategoryInput');
-
-            if (selectElement.value === 'new') {
-                newCategoryInput.style.display = 'block'; // Hiện ô input
-            } else {
-                newCategoryInput.style.display = 'none'; // Ẩn ô input nếu chọn mục khác
-            }
-        }
     </script>
 @endsection
 @section('css-libs')
