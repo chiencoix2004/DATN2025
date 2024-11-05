@@ -1,9 +1,57 @@
 @extends('client::layouts.master')
 
+
 @section('title')
     Tài khoản | Thời trang Phong cách Việt
 @endsection
 @section('contents')
+    <style>
+        /* Pagination Container */
+        .pagination-controls {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        /* Pagination Buttons */
+        .pagination-controls button {
+            background-color: #000000;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            margin: 0 5px;
+            cursor: pointer;
+            font-size: 14px;
+            border-radius: 4px;
+            transition: background-color 0.3s ease;
+        }
+
+        /* Active Page Button */
+        .pagination-controls .page-number.active {
+            background-color: #a8741a;
+            font-weight: bold;
+        }
+
+        /* Hover Effect */
+        .pagination-controls button:hover:not(.active) {
+            background-color: #a8741a;
+        }
+
+        /* Disabled Button Styling */
+        .pagination-controls button:disabled {
+            background-color: #dcdcdc;
+            cursor: not-allowed;
+        }
+
+        /* Current Page Indicator */
+        .pagination-controls .page-info {
+            font-size: 14px;
+            color: #333;
+            margin: 0 10px;
+        }
+    </style>
     <!-- Begin Kenne's Breadcrumb Area -->
     <div class="breadcrumb-area">
         <div class="container">
@@ -28,19 +76,20 @@
                             <li class="nav-item">
                                 <a class="nav-link active" id="account-dashboard-tab" data-bs-toggle="tab"
                                     href="#account-dashboard" role="tab" aria-controls="account-dashboard"
-                                    aria-selected="true">Dashboard</a>
+                                    aria-selected="true">Bảng điều khiển</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" id="account-orders-tab" data-bs-toggle="tab" href="#account-orders"
-                                    role="tab" aria-controls="account-orders" aria-selected="false">Orders</a>
+                                    role="tab" aria-controls="account-orders" aria-selected="false">Đơn hàng</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" id="account-address-tab" data-bs-toggle="tab" href="#account-address"
-                                    role="tab" aria-controls="account-address" aria-selected="false">Addresses</a>
+                                    role="tab" aria-controls="account-address" aria-selected="false">Địa chỉ</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" id="account-details-tab" data-bs-toggle="tab" href="#account-details"
-                                    role="tab" aria-controls="account-details" aria-selected="false">Account Details</a>
+                                    role="tab" aria-controls="account-details" aria-selected="false">Chi tiết tài
+                                    khoản</a>
                             </li>
                             <li class="nav-item">
                                 {{-- <a class="nav-link" id="account-logout-tab" href="login-register.html" role="tab"
@@ -57,11 +106,11 @@
                             <div class="tab-pane fade show active" id="account-dashboard" role="tabpanel"
                                 aria-labelledby="account-dashboard-tab">
                                 <div class="myaccount-dashboard">
-                                    <p>Hello <b>Edwin Adams</b> (not Edwin Adams? <a href="login-register.html">Sign
-                                            out</a>)</p>
-                                    <p>From your account dashboard you can view your recent orders, manage your shipping and
-                                        billing addresses and <a href="javascript:void(0)">edit your password and account
-                                            details</a>.</p>
+                                    <p>Xin chào <b>Edwin Adams</b> (không phải Edwin Adams? <a
+                                            href="login-register.html">Đăng xuất</a>)</p>
+                                    <p>Từ bảng điều khiển tài khoản của bạn, bạn có thể xem các đơn hàng gần đây, quản lý
+                                        địa chỉ giao hàng và thanh toán của bạn và <a href="javascript:void(0)">chỉnh sửa
+                                            mật khẩu và chi tiết tài khoản</a>.</p>
                                 </div>
                             </div>
                             <div class="tab-pane fade" id="account-orders" role="tabpanel"
@@ -70,7 +119,8 @@
                                     <h4 class="small-title">Đơn hàng của tôi</h4>
                                     <div class="table-responsive">
                                         <table class="table table-bordered table-hover">
-                                            <tbody>
+
+                                            <thead>
                                                 <tr>
                                                     <th>Mã đơn hàng</th>
                                                     <th>Ngày</th>
@@ -78,37 +128,30 @@
                                                     <th>Tổng</th>
                                                     <th></th>
                                                 </tr>
-                                                @foreach ($myOrder as $order)
-                                                    <tr>
-                                                        <td>
-                                                            <a class="account-order-id" href="javascript:void(0)">#{{ $order->id }}</a>
-                                                        </td>
-                                                        <td>{{ $order->created_at }}</td>
-                                                        <td>{{ $order->status_order}}</td>
-                                                        <td>{{ number_format($order->total_price, 0, ',', '.') }} VND</td>
-                                                        <td><a href="javascript:void(0)"
-                                                                class="kenne-btn kenne-btn_sm"><span>Xem</span></a>
-                                                        </td>
-                                                    </tr>
-                                                @endforeach
+
+                                            </thead>
+                                            <tbody>
+
+
                                             </tbody>
                                         </table>
                                     </div>
+                                    <div id="pagination-controls" class="pagination-controls"></div>
                                 </div>
                             </div>
                             <div class="tab-pane fade" id="account-address" role="tabpanel"
                                 aria-labelledby="account-address-tab">
                                 <div class="myaccount-address">
-                                    <p>The following addresses will be used on the checkout page by default.</p>
+                                    <p>Địa chỉ sau sẽ được sử dụng trên trang thanh toán theo mặc định.</p>
                                     <div class="row">
                                         <div class="col">
-                                            <h4 class="small-title">Billing Adress</h4>
+                                            <h4 class="small-title">Địa chỉ thanh toán</h4>
                                             <address>
                                                 1234 Heaven Stress, Beverly Hill OldYork UnitedState of Lorem
                                             </address>
                                         </div>
                                         <div class="col">
-                                            <h4 class="small-title">Shipping Address</h4>
+                                            <h4 class="small-title">Địa chỉ giao hàng</h4>
                                             <address>
                                                 1234 Heaven Stress, Beverly Hill OldYork UnitedState of Lorem
                                             </address>
@@ -238,4 +281,88 @@
         </div>
     </div>
     <!-- Brand Area End Here -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            function loadOrders(pageUrl = '/get-orders') {
+                fetch(pageUrl, {
+                        headers: {
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute(
+                                'content')
+                        }
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        const tableBody = document.querySelector('.myaccount-orders tbody');
+                        tableBody.innerHTML = ''; // Xóa các hàng hiện có
+
+                        if (data.orders && data.orders.length > 0) {
+                            data.orders.forEach(order => {
+                                const row = document.createElement('tr');
+                                row.innerHTML = `
+                        <td><a class="account-order-id" href="javascript:void(0)">#${order.id}</a></td>
+                        <td>${order.date}</td>
+                        <td>${order.status}</td>
+                        <td>${order.total}</td>
+                        <td><a href="javascript:void(0)" class="kenne-btn kenne-btn_sm"><span>Xem</span></a></td>
+                    `;
+                                tableBody.appendChild(row);
+                            });
+                            updatePagination(data.pagination);
+                        } else {
+                            tableBody.innerHTML = '<tr><td colspan="5">Không tìm thấy đơn hàng nào.</td></tr>';
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Lỗi khi lấy đơn hàng:', error);
+                    });
+            }
+
+            // Cập nhật các nút phân trang dựa trên dữ liệu phản hồi
+            function updatePagination(pagination) {
+                const paginationContainer = document.querySelector('#pagination-controls');
+                paginationContainer.innerHTML = ''; // Xóa các điều khiển phân trang hiện có
+
+                // Tạo nút "Trước"
+                const prevButton = document.createElement('button');
+                prevButton.textContent = 'Trước';
+                prevButton.disabled = !pagination.prev_page_url;
+                prevButton.onclick = () => loadOrders(pagination.prev_page_url ||
+                    `/get-orders?page=${pagination.current_page - 1}`);
+                paginationContainer.appendChild(prevButton);
+
+                // Thêm các nút trang được đánh số
+                for (let i = 1; i <= pagination.last_page; i++) {
+                    const pageButton = document.createElement('button');
+                    pageButton.textContent = i;
+                    pageButton.className = 'page-number';
+
+                    // Làm nổi bật nút trang hiện tại
+                    if (i === pagination.current_page) {
+                        pageButton.classList.add('active');
+                    }
+
+                    // Đặt sự kiện click để tải trang cụ thể
+                    pageButton.onclick = () => loadOrders(`/get-orders?page=${i}`);
+                    paginationContainer.appendChild(pageButton);
+                }
+
+                // Tạo nút "Tiếp"
+                const nextButton = document.createElement('button');
+                nextButton.textContent = 'Tiếp';
+                nextButton.disabled = !pagination.next_page_url;
+                nextButton.onclick = () => loadOrders(pagination.next_page_url ||
+                    `/get-orders?page=${pagination.current_page + 1}`);
+                paginationContainer.appendChild(nextButton);
+
+                // Hiển thị thông tin trang hiện tại
+                const pageInfo = document.createElement('span');
+                pageInfo.className = 'page-info';
+                pageInfo.textContent = `Trang ${pagination.current_page} của ${pagination.last_page}`;
+                paginationContainer.appendChild(pageInfo);
+            }
+
+            // Tải đơn hàng ban đầu
+            loadOrders();
+        });
+    </script>
 @endsection
