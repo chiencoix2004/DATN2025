@@ -50,6 +50,62 @@ class MyAccountController extends Controller
             ]
         ]);
     }
+
+    public function getOrderDetails($id)
+    {
+        $order = Order::with('orderItems')->findOrFail($id);
+
+        return response()->json([
+            'id' => $order->id,
+            'user_note' => $order->user_note,
+            'status' => $order->status_order,
+            'items' => $order->orderItems->map(function ($item) {
+                return [
+                    'name' => $item->product_name,
+                    'image' => $item->product_avatar,
+                    'quantity' => $item->product_quantity,
+                    'price' => number_format($item->product_price_final, 2),
+                    'total' => number_format($item->product_quantity * $item->product_price_final, 2)
+                ];
+            }),
+            'grand_total'  => number_format($order->orderItems->sum(function ($item) {
+                return $item->product_quantity * $item->product_price_final;
+            }), 0, ',', '.') . ' VND',
+            'discount' => number_format($order->discount, 0, ',', '.') . ' VND',
+            'total' => number_format($order->total_price, 0, ',', '.') . ' VND',
+            'shipping' => [
+                'name' => $order->ship_user_name,
+                'address' => $order->ship_user_address,
+                'email' => $order->ship_user_email,
+                'phone' => $order->ship_user_phone,
+            ],
+            'billing' => [
+                'status_payment' => $order->status_payment,
+                'payment_method' => $order->payment_method,
+            ],
+            'delivery' => [
+                'shipping_method' => $order->shipping_method,
+                'order_id' => $order->id,
+            ],
+        ]);
+    }
+
+    public function savePDF($id)
+    {
+        $data = Order::query()->with('orderItems')->findOrFail($id);
+        $pdf = PDF::loadView('admin::contents.orders.invoices.view', compact('data'))->setOptions(
+            [
+                'isRemoteEnabled' => true,
+                'chroot' => public_path(),
+            ]
+        );
+        $date = Carbon::parse($data->date_create_order)->format('Y-m-d');
+        $fileName = 'invoice-' . $data->id . '-' . Str::slug($data->user_name) . "-$date" . '.pdf';
+        $filePath = 'invoices/' . $fileName;
+        Storage::disk('public')->put($filePath, $pdf->output());
+        return redirect()->back()->with(['success' => 'In và lưu hóa đơn thành công!']);
+        // return view('admin::contents.orders.invoices.view', compact('data'));
+    }
     /**
      * Show the form for creating a new resource.
      */

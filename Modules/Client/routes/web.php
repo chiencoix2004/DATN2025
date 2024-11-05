@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Modules\Admin\App\Http\Controllers\InvoiceController;
 use Modules\Client\App\Http\Controllers\AuthController;
 // use Modules\Client\App\Http\Controllers\AuthController;
 use Modules\Client\App\Http\Controllers\CartController;
@@ -56,3 +57,6 @@ Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
 Route::get('/my-account', [MyAccountController::class, 'index'])->name('my-account');
 Route::get('/get-orders', [MyAccountController::class, 'getOrders'])->name('orders.get.list');
+Route::get('/get-order-details/{id}', [MyAccountController::class, 'getOrderDetails'])->name('order.details');
+// Route::get('/get-order-details-pdf/{id}', [InvoiceController::class, 'savePDF'])->name('order.details.pdf');
+

@@ -4,9 +4,8 @@
 @section('title')
     Tài khoản | Thời trang Phong cách Việt
 @endsection
-@section('contents')
+@section('css-setting')
     <style>
-        /* Pagination Container */
         .pagination-controls {
             display: flex;
             justify-content: center;
@@ -15,7 +14,7 @@
             flex-wrap: wrap;
         }
 
-        /* Pagination Buttons */
+
         .pagination-controls button {
             background-color: #000000;
             color: white;
@@ -28,30 +27,59 @@
             transition: background-color 0.3s ease;
         }
 
-        /* Active Page Button */
+
         .pagination-controls .page-number.active {
             background-color: #a8741a;
             font-weight: bold;
         }
 
-        /* Hover Effect */
+
         .pagination-controls button:hover:not(.active) {
             background-color: #a8741a;
         }
 
-        /* Disabled Button Styling */
+
         .pagination-controls button:disabled {
             background-color: #dcdcdc;
             cursor: not-allowed;
         }
 
-        /* Current Page Indicator */
         .pagination-controls .page-info {
             font-size: 14px;
             color: #333;
             margin: 0 10px;
         }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+
+        .modal-content {
+            background-color: #fff;
+            margin: 5% auto;
+            padding: 20px;
+            border-radius: 5px;
+            width: 80%;
+            position: relative;
+        }
+
+        .close-button {
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            font-size: 24px;
+            cursor: pointer;
+        }
     </style>
+@endsection
+@section('contents')
     <!-- Begin Kenne's Breadcrumb Area -->
     <div class="breadcrumb-area">
         <div class="container">
@@ -138,7 +166,78 @@
                                     </div>
                                     <div id="pagination-controls" class="pagination-controls"></div>
                                 </div>
+                                <div id="orderDetailsModal" class="modal" style="display: none;">
+                                    <div class="modal-content">
+                                        <span class="close-button" onclick="closeModal()">&times;</span>
+
+                                        <!-- Container Chi tiết Đơn hàng -->
+                                        <div id="order-details-content">
+                                            <h4 class="header-title mb-3">Sản phẩm từ Đơn hàng #<span id="order-id"></span>
+                                            </h4>
+                                            <h5 class="header-title mb-3">Trạng thái : <span id="order-status"></span>
+                                            </h5>
+
+                                            <div class="row mb-4">
+                                                <!-- Bảng Sản phẩm Đơn hàng -->
+                                                <div class="table-responsive">
+                                                    <table class="table mb-0">
+                                                        <thead class="table-light">
+                                                            <tr>
+                                                                <th>Sản phẩm</th>
+                                                                <th>Số lượng</th>
+                                                                <th>Giá</th>
+                                                                <th>Tổng</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody id="order-items">
+                                                            <!-- Sản phẩm đơn hàng sẽ được chèn vào đây -->
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                            <div class="row mb-4">
+
+                                                <div class="col-sm-12 col-md-6 col-lg-3">
+                                                    <!-- Thông tin Giao hàng -->
+                                                    <h4 class="header-title mb-3">Thông tin người nhận</h4>
+                                                    <address id="shipping-info">
+                                                        <!-- Chi tiết giao hàng sẽ được chèn vào đây -->
+                                                    </address>
+                                                </div>
+                                                <div class="col-sm-12 col-md-6 col-lg-3">
+                                                    <!-- Thông tin Thanh toán -->
+                                                    <h4 class="header-title mb-3">Thông tin Thanh toán</h4>
+                                                    <ul id="billing-info" class="list-unstyled mb-0">
+                                                        <!-- Chi tiết thanh toán sẽ được chèn vào đây -->
+                                                    </ul>
+                                                </div>
+                                                <div class="col-sm-12 col-md-6 col-lg-3">
+                                                    <!-- Thông tin Giao hàng -->
+                                                    <h4 class="header-title mb-3">Thông tin Giao hàng</h4>
+                                                    <div id="delivery-info">
+                                                        <!-- Chi tiết giao hàng sẽ được chèn vào đây -->
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-12 col-md-6 col-lg-3">
+                                                    <!-- Tóm tắt Đơn hàng -->
+                                                    <h4 class="header-title mb-3">Tóm tắt Đơn hàng</h4>
+                                                    <div class="table-responsive">
+                                                        <table class="table mb-0">
+                                                            <tbody id="order-summary">
+                                                                <!-- Tóm tắt đơn hàng sẽ được chèn vào đây -->
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+
                             </div>
+
                             <div class="tab-pane fade" id="account-address" role="tabpanel"
                                 aria-labelledby="account-address-tab">
                                 <div class="myaccount-address">
@@ -299,14 +398,23 @@
                             data.orders.forEach(order => {
                                 const row = document.createElement('tr');
                                 row.innerHTML = `
-                        <td><a class="account-order-id" href="javascript:void(0)">#${order.id}</a></td>
-                        <td>${order.date}</td>
-                        <td>${order.status}</td>
-                        <td>${order.total}</td>
-                        <td><a href="javascript:void(0)" class="kenne-btn kenne-btn_sm"><span>Xem</span></a></td>
-                    `;
+                                        <td><a class="account-order-id" href="javascript:void(0)">#${order.id}</a></td>
+                                        <td>${order.date}</td>
+                                        <td>${order.status}</td>
+                                        <td>${order.total}</td>
+                                        <td><a href="javascript:void(0)" class="kenne-btn kenne-btn_sm view-order-btn" data-order-id="${order.id}"><span>View</span></a></td>
+                                    `;
                                 tableBody.appendChild(row);
                             });
+
+                            // Thêm sự kiện click vào mỗi nút "Xem"
+                            document.querySelectorAll('.view-order-btn').forEach(button => {
+                                button.addEventListener('click', function() {
+                                    const orderId = this.getAttribute('data-order-id');
+                                    openOrderDetails(orderId);
+                                });
+                            });
+
                             updatePagination(data.pagination);
                         } else {
                             tableBody.innerHTML = '<tr><td colspan="5">Không tìm thấy đơn hàng nào.</td></tr>';
@@ -363,6 +471,80 @@
 
             // Tải đơn hàng ban đầu
             loadOrders();
+        });
+
+        function openOrderDetails(orderId) {
+            // Hiển thị modal
+            document.getElementById('orderDetailsModal').style.display = 'block';
+
+            // Lấy chi tiết đơn hàng qua AJAX
+            fetch(`/get-order-details/${orderId}`)
+                .then(response => response.json())
+                .then(data => {
+                    // Đặt ID Đơn hàng
+                    document.getElementById('order-id').textContent = data.id;
+                    document.getElementById('order-status').textContent = data.status;
+
+                    // Điền thông tin sản phẩm đơn hàng
+                    const itemsContainer = document.getElementById('order-items');
+                    itemsContainer.innerHTML = data.items.map(item => `
+            <tr>
+                <td><img src="{{ Storage::url('${item.image}') }}" alt="Hình ảnh sản phẩm" style="width: 50px; height: 50px;"> ${item.name}</td>
+                <td>${item.quantity}</td>
+                <td>${item.price} VND</td>
+                <td>${item.total} VND</td>
+            </tr>
+            `).join('');
+
+                    // Điền thông tin tóm tắt đơn hàng
+                    const summaryContainer = document.getElementById('order-summary');
+                    summaryContainer.innerHTML = `
+            <tr><td>Tổng cộng :</td><td>${data.grand_total}</td></tr>
+            <tr><td>Giảm giá :</td><td>${data.discount}</td></tr>
+            <tr><th>Tổng :</th><th>${data.total}</th></tr>
+            `;
+
+                    // Điền thông tin giao hàng
+                    document.getElementById('shipping-info').innerHTML = `
+            <strong>Tên người nhận :</strong> ${data.shipping.name}<br>
+            <strong>Địa chỉ :</strong> ${data.shipping.address}<br>
+            <strong>Email :</strong> ${data.shipping.email}<br>
+            <strong>Số điện thoại :</strong> ${data.shipping.phone}
+            `;
+
+                    // Điền thông tin thanh toán
+                    const billingInfo = document.getElementById('billing-info');
+                    billingInfo.innerHTML = `
+            <li><p><strong>Loại thanh toán:</strong> ${data.billing.payment_method}</p></li>
+            <li><p><strong>Trạng thái thanh toán:</strong> ${data.billing.status_payment}</p></li>
+            `;
+
+                    // Điền thông tin giao hàng
+                    document.getElementById('delivery-info').innerHTML = `
+            <i class="mdi mdi-truck-fast h2 text-muted"></i>
+            <p><strong>ID Đơn hàng :</strong> ${data.delivery.order_id}</p>
+            <p><strong>Phương thức vận chuyển :</strong> ${data.delivery.shipping_method}</p>
+            `;
+                })
+                .catch(error => {
+                    console.error('Lỗi khi lấy chi tiết đơn hàng:', error);
+                });
+        }
+
+        // Hàm đóng modal
+        function closeModal() {
+            document.getElementById('orderDetailsModal').style.display = 'none';
+        }
+
+
+        // Thêm sự kiện click vào mỗi nút "Xem"
+        document.addEventListener("DOMContentLoaded", function() {
+            document.querySelectorAll('.view-order-btn').forEach(button => {
+                button.addEventListener('click', function() {
+                    const orderId = this.getAttribute('data-order-id');
+                    openOrderDetails(orderId);
+                });
+            });
         });
     </script>
 @endsection
