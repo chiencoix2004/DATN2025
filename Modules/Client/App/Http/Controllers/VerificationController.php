@@ -20,13 +20,13 @@ class VerificationController extends Controller
         $user = User::findOrFail($id);
         
         if ($user->hasVerifiedEmail()) {
-            return redirect()->route('home')->with('status', 'Email đã được xác nhận.');
+            return redirect()->route('index')->with('status', 'Email đã được xác nhận.');
         }
 
         $user->markEmailAsVerified();
         $user->status = 'active';
         $user->save();
 
-        return redirect()->route('home')->with('status', 'Xác nhận email thành công.');
+        return redirect()->route('index')->with('status', 'Xác nhận email thành công.');
     }
 }

@@ -47,9 +47,9 @@ Route::controller(BannerController::class)
 
 
 
-Route::get('login', [AuthenticateController::class, 'showLoginForm'])->name('login');
-Route::post('post-login', [AuthenticateController::class, 'PostLogin'])->name('loginAccount');
-Route::get('logout', [AuthenticateController::class, 'logout'])->name('logout');
+Route::get('login-admin', [AuthenticateController::class, 'showLoginForm'])->name('login.admin');
+Route::post('post-login-admin', [AuthenticateController::class, 'PostLogin'])->name('post.login.admin');
+Route::get('logout-admin', [AuthenticateController::class, 'logout'])->name('logout.admin');
 
 
 Route::prefix('admin')
@@ -58,35 +58,38 @@ Route::prefix('admin')
     ->group(function () {
         Route::get('/', function () {
             return view('admin::contents.dashboard');
+        })->name('home');
+        Route::get('/dashboard', function () {
+            return view('admin::contents.dashboard');
         })->name('dashboard');
 
-    // Route quản lý categories
-    Route::controller(CategoryController::class)->prefix('categories')->as('categories.')->group(function () {
-        Route::get('list', 'listCategories')->name('list');
-        Route::get('create', 'create')->name('create');
-        Route::post('store', 'store')->name('store');
-        Route::get('/{id}/show', 'show')->name('show');
-        Route::get('/{id}/edit', 'edit')->name('edit');
-        Route::put('{id}/update', 'update')->name('update'); // Corrected Route::
-        Route::delete('/{id}/destroy', 'destroy')->name('destroy');
-    });
+        // Route quản lý categories
+        Route::controller(CategoryController::class)->prefix('categories')->as('categories.')->group(function () {
+            Route::get('list', 'listCategories')->name('list');
+            Route::get('create', 'create')->name('create');
+            Route::post('store', 'store')->name('store');
+            Route::get('/{id}/show', 'show')->name('show');
+            Route::get('/{id}/edit', 'edit')->name('edit');
+            Route::put('{id}/update', 'update')->name('update'); // Corrected Route::
+            Route::delete('/{id}/destroy', 'destroy')->name('destroy');
+        });
 
-    // Route quản lý products
-    Route::controller(ProductController::class)->prefix('product')->as('product.')->group(function () {
-        Route::get('listProduct', 'listProduct')->name('list');
-        Route::get('addProduct', 'showFormAdd')->name('addProduct');
-        Route::post('createProduct', 'createProduct')->name('create');
-        Route::get('edit/{slug}', 'showFormEdit')->name('edit');
-        Route::put('update/{product}', 'updatePrd')->name('update');
-        Route::get('{id}/delTag', 'delTag')->name('delTag');
-        Route::get('{id}/delImg', 'delImg')->name('delImg');
-        Route::delete('{product}/delete', 'destroy')->name('delP');
-        Route::get('detail/{slug}', 'detail')->name('detailP');
-        Route::get('{id}/delVariant', 'delete')->name('deleteVariant');
-        // sản phẩm xóa mềm
-        Route::get('listTrashed', 'trashed')->name('listTrashed');
-        Route::get('restore-all', 'restoreAll')->name('restoreAll');
-    });
+        // Route quản lý products
+        Route::controller(ProductController::class)->prefix('product')->as('product.')->group(function () {
+            Route::get('listProduct', 'listProduct')->name('list');
+            Route::get('addProduct', 'showFormAdd')->name('addProduct');
+            Route::post('createProduct', 'createProduct')->name('create');
+            Route::get('edit/{slug}', 'showFormEdit')->name('edit');
+            Route::put('update/{product}', 'updatePrd')->name('update');
+            Route::get('{id}/delTag', 'delTag')->name('delTag');
+            Route::get('{id}/delImg', 'delImg')->name('delImg');
+            Route::delete('{product}/delete', 'destroy')->name('delP');
+            Route::get('detail/{slug}', 'detail')->name('detailP');
+            Route::get('{id}/delVariant', 'delete')->name('deleteVariant');
+            // sản phẩm xóa mềm
+            Route::get('listTrashed', 'trashed')->name('listTrashed');
+            Route::get('restore-all', 'restoreAll')->name('restoreAll');
+        });
 
 
         // Route quản lý comment
@@ -150,7 +153,7 @@ Route::prefix('admin')
             Route::get('export', 'export')->name('export');
         });
 
-  
+
         Route::controller(CouponController::class)
             ->prefix('coupons')
             ->as('coupons.')
@@ -220,11 +223,11 @@ Route::prefix('admin')
                 Route::get('spam', 'showSpam')->name('spam');
                 Route::post('search', 'search')->name('search');
             });
-           Route::controller(NotificationController::class)
-        ->prefix('notifications')
-        ->as('notifications.')
-        ->group(function () {
-            Route::get('/', 'index')->name('index');
-            Route::get('/read', 'read')->name('read');
-        });
+        Route::controller(NotificationController::class)
+            ->prefix('notifications')
+            ->as('notifications.')
+            ->group(function () {
+                Route::get('/', 'index')->name('index');
+                Route::get('/read', 'read')->name('read');
+            });
     });

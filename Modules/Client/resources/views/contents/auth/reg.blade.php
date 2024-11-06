@@ -1,7 +1,7 @@
 @extends('client::layouts.master')
 
 @section('title')
-    Đăng nhập tài khoản
+    Đăng ký tài khoản
 @endsection
 @section('contents')
     <!-- Begin Kenne's Breadcrumb Area -->
@@ -11,7 +11,7 @@
                 <h2 style="margin-top: 30px;">Thời trang Phong cách Việt</h2>
                 <ul>
                     <li><a href="{{ route('home') }}">Trang chủ</a></li>
-                    <li class="active">Đăng nhập</li>
+                    <li class="active">Đăng ký</li>
                 </ul>
             </div>
         </div>
@@ -22,44 +22,46 @@
     <div class="kenne-login-register_area">
         <div class="container">
             <div class="row d-flex justify-content-center">
-                <div class="col-sm-12 col-md-12 col-xs-12 col-lg-6">
-                    <!-- Login Form s-->
-                    <form action="{{ route('login') }}" method="POST">
+                <div class="col-sm-12 col-md-12 col-lg-6 col-xs-12">
+                    <form action="{{route('auth.log-reg')}}" method="POST">
+                        
                         @csrf
-                        <div class="login-form">
-                            <h4 class="login-title">Đăng nhập</h4>
-
+                        <div class="login-form">-
+                            <h4 class="login-title">Đăng Ký</h4>
                             <div class="row">
-                                <div class="col-md-12 col-12">
-                                    <label>Email : </label>
-                                    <input type="email" name='email' placeholder="Email Address">
-                                </div>
-                                <div class="col-12 mb--20">
-                                    <label>Mật Khẩu</label>
-                                    <input type="password" name='password' placeholder="Password">
-                                    <span class="toggle-password" onclick="togglePassword('login-password')">👁️</span>  
-                                </div>
-                                <div style="color: red">
-                                    @error('Error')
-                                        {{ $message }}
+                                <div class="col-md-12 col-12 mb--20">
+                                    <label>Họ Và tên : </label>
+                                    <input type="text" name='full_name' placeholder="First Name">
+                                    @error('full_name')
+                                        <span class=text-danger> {{ $message }}</span>
                                     @enderror
                                 </div>
-                                <div class="col-md-8">
-                                    <div class="check-box">
-                                        <input type="checkbox" id="remember_me">
-                                        <label for="remember_me">Lưu mật khẩu</label>
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="forgotton-password_info">
-                                        <a href="#"> Quên mật khẩu ? </a>
-                                    </div>
-                                </div>
-
                                 <div class="col-md-12">
-                                    <button class="kenne-login_btn">Đăng nhập</button>
+                                    <label>Email : </label>
+                                    <input type="email" name='email' placeholder="Email Address">
+                                    @error('email')
+                                    <span class=text-danger> {{ $message }}</span>
+                                @enderror
                                 </div>
+                                <div class="col-md-12">
+                                    <label>Mật Khẩu : </label>
+                                    <input type="password" name='password' placeholder="Password">
+                                    
+                                    @error('password')
+                                        <span class=text-danger> {{ $message }}</span>
+                                    @enderror
+                                </div>
+                                <div class="col-md-12">
+                                    <label>Xác Nhận Mật Khẩu : </label>
+                                    <input type="password" name='password_confirmation' placeholder="Confirm Password">
 
+                                    @error('password_confirmation')
+                                        <span class='text-danger'> {{ $message}}</span>
+                                    @enderror
+                                </div>
+                                <div class="col-12">
+                                    <button type='submit' class="kenne-register_btn">Đăng Ký</button>
+                                </div>
                             </div>
                         </div>
                     </form>
@@ -136,6 +138,7 @@
                                     <img src="{{ asset('theme/client/images/brand/2.png') }}" alt="Brand Images">
                                 </a>
                             </div>
+
 
                         </div>
                     </div>
