@@ -169,7 +169,6 @@
                                 <div id="orderDetailsModal" class="modal" style="display: none;">
                                     <div class="modal-content">
                                         <span class="close-button" onclick="closeModal()">&times;</span>
-
                                         <!-- Container Chi tiết Đơn hàng -->
                                         <div id="order-details-content">
                                             <h4 class="header-title mb-3">Sản phẩm từ Đơn hàng #<span id="order-id"></span>
@@ -233,6 +232,15 @@
                                             </div>
 
                                         </div>
+                                        <div class="row">
+                                            <div class="col-sm-4 col-md-4 col-lg-2 col-sx-6">
+                                                <button onclick="printInvoice()"
+                                                    class="kenne-btn kenne-btn_sm print-button"
+                                                   >In hóa đơn</button>
+
+                                            </div>
+                                        </div>
+
                                     </div>
                                 </div>
 
@@ -402,7 +410,7 @@
                                         <td>${order.date}</td>
                                         <td>${order.status}</td>
                                         <td>${order.total}</td>
-                                        <td><a href="javascript:void(0)" class="kenne-btn kenne-btn_sm view-order-btn" data-order-id="${order.id}"><span>View</span></a></td>
+                                        <td><a href="javascript:void(0)" class="kenne-btn kenne-btn_sm view-order-btn" data-order-id="${order.id}"><span>Xem</span></a></td>
                                     `;
                                 tableBody.appendChild(row);
                             });
@@ -546,5 +554,11 @@
                 });
             });
         });
+
+        function printInvoice() {
+            const orderId = document.getElementById('order-id').textContent;
+            // Mở một cửa sổ mới để tải xuống PDF
+            window.location.href = `/orders/${orderId}/download-pdf`;
+        }
     </script>
 @endsection

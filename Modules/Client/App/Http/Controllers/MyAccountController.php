@@ -2,12 +2,17 @@
 
 namespace Modules\Client\App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use App\Models\Order;
-use App\Models\OrderDetailModel;
-use Illuminate\Http\RedirectResponse;
+use Barryvdh\DomPDF\PDF;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Carbon;
+use App\Models\OrderDetailModel;
+use App\Http\Controllers\Controller;
+use Barryvdh\DomPDF\Facade\Pdf as FacadePdf;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Storage;
 
 class MyAccountController extends Controller
 {
@@ -90,21 +95,23 @@ class MyAccountController extends Controller
         ]);
     }
 
-    public function savePDF($id)
+    public function downloadPDF($id)
     {
+        // Fetch the order data with related order items
         $data = Order::query()->with('orderItems')->findOrFail($id);
-        $pdf = PDF::loadView('admin::contents.orders.invoices.view', compact('data'))->setOptions(
-            [
-                'isRemoteEnabled' => true,
-                'chroot' => public_path(),
-            ]
-        );
-        $date = Carbon::parse($data->date_create_order)->format('Y-m-d');
-        $fileName = 'invoice-' . $data->id . '-' . Str::slug($data->user_name) . "-$date" . '.pdf';
-        $filePath = 'invoices/' . $fileName;
-        Storage::disk('public')->put($filePath, $pdf->output());
-        return redirect()->back()->with(['success' => 'In và lưu hóa đơn thành công!']);
-        // return view('admin::contents.orders.invoices.view', compact('data'));
+
+        // Generate the PDF using the view and data
+        $pdf = app(PDF::class)->loadView('admin::contents.orders.invoices.view', compact('data'))->setOptions([
+            'isRemoteEnabled' => true,
+            'chroot' => public_path(),
+        ]);
+
+        // Set a custom file name
+        $date = Carbon::parse($data->date_create_order)->format('d-m-Y');
+        $fileName = 'hóa đơn -' . $data->id . '-' . Str::slug($data->user_name) . "-$date" . '.pdf';
+
+        // Return the PDF as a downloadable response
+        return $pdf->download($fileName);
     }
     /**
      * Show the form for creating a new resource.
