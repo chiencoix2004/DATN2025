@@ -2,14 +2,17 @@
 
 namespace Modules\Client\App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use App\Models\User;
-use App\Notifications\VerifyEmail;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use App\Notifications\VerifyEmail;
+use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Validator;
+use Carbon\Carbon;
+use Modules\Client\App\Events\NewUserNotificationEvent;
 
 class RegisterController extends Controller
 {
@@ -62,10 +65,27 @@ class RegisterController extends Controller
 
         // dd($user);
         if ($user) {
+            $notification = " - ID: {$user->id}, Họ và Tên: {$user->full_name}";
+            event(new NewUserNotificationEvent($notification));
+
+            $message = [
+                'order_id' => null,
+                'user_id' => $user->id,
+                'full_name' => $request->input('full_name'),
+                'message' => 'Thông báo tài khoản khách hàng mới',
+            ];
+
+            DB::table('notifications')->insert([
+                'user_id' => null,
+                'title' => 'Thông báo tài khoản khách hàng mới',
+                'message' =>  json_encode($message),
+            ]);
+        }
+        if ($user) {
 
             // Gửi email xác nhận
             $user->notify(new VerifyEmail());
-
+            
             // return redirect()->route('verification.verify',$user->id);
         }
 
