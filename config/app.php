@@ -182,6 +182,7 @@ return [
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
 
+
         /*
          * Package Service Providers...
          */
@@ -211,5 +212,8 @@ return [
     'aliases' => Facade::defaultAliases()->merge([
         // 'ExampleClass' => App\Example\ExampleClass::class,
     ])->toArray(),
+    'SEOTools' => Artesaos\SEOTools\Facades\SEOTools::class,
+    'SEOMeta' => Artesaos\SEOTools\Facades\SEOMeta::class,
+
 
 ];
