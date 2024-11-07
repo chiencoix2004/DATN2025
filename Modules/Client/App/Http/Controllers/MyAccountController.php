@@ -114,6 +114,66 @@ class MyAccountController extends Controller
         return $pdf->download($fileName);
     }
 
+    public function cancelOrder($id)
+    {
+        $order = Order::findOrFail($id);
+
+        // dd($order);
+
+        if ($order->status_order !== 'Chờ xác nhận' && $order->status_order !== 'Đã xác nhận') {
+            return response()->json([
+                'message' => 'Chỉ có thể hủy đơn hàng ở trạng thái Chờ xác nhận hoặc Đã xác nhận.',
+            ], 400);
+        };
+
+
+        $order->status_order = 'Đơn hàng bị hủy';
+        $order->save();
+
+        return response()->json(['message' => 'Đơn hàng được hủy thành công.'], 200);
+    }
+
+    public function resetOrder($id)
+    {
+        $order = Order::findOrFail($id);
+
+        // dd($order);
+
+        if ($order->status_order !== 'Đơn hàng bị hủy') {
+            return response()->json([
+                'message' => 'Chỉ có thể đặt lại đơn hàng ở trạng thái hủy.',
+            ], 400);
+        }
+
+        $order->status_order = 'Chờ xác nhận';
+        $order->save();
+
+        return response()->json(['message' => 'Đơn hàng đã được đặt lại thành công.'], 200);
+    }
+
+
+    // Phương thức đánh dấu đơn hàng là đã nhận
+    public function markAsReceived($id)
+    {
+        $order = Order::find($id);
+
+        if (!$order) {
+            return response()->json(['message' => 'Đơn hàng không tồn tại'], 404);
+        }
+
+        // Kiểm tra trạng thái của đơn hàng có phải 'đang giao'
+        if ($order->status_order != 'Đang giao hàng') {
+            return response()->json(['message' => 'Đơn hàng không thể được đánh dấu là đã nhận'], 400);
+        }
+
+        // Cập nhật trạng thái của đơn hàng
+        $order->status_order = 'Đã nhận hàng'; // Hoặc trạng thái bạn muốn
+        $order->save();
+
+        return response()->json(['message' => 'Đơn hàng đã được đánh dấu là đã nhận'], 200);
+    }
+
+
     /**
      * Show the form for creating a new resource.
      */

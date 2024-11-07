@@ -78,6 +78,8 @@
             cursor: pointer;
         }
     </style>
+    <script src="{{ asset('sweetalert2/sweetalert2.all.min.js') }}"></script>
+    <link rel="stylesheet" href="{{ asset('sweetalert2/sweetalert2.min.css') }}">
 @endsection
 @section('contents')
     <!-- Begin Kenne's Breadcrumb Area -->
@@ -235,8 +237,7 @@
                                         <div class="row">
                                             <div class="col-sm-4 col-md-4 col-lg-2 col-sx-6">
                                                 <button onclick="printInvoice()"
-                                                    class="kenne-btn kenne-btn_sm print-button"
-                                                   >In hóa đơn</button>
+                                                    class="kenne-btn kenne-btn_sm print-button">In hóa đơn</button>
 
                                             </div>
                                         </div>
@@ -405,13 +406,31 @@
                         if (data.orders && data.orders.length > 0) {
                             data.orders.forEach(order => {
                                 const row = document.createElement('tr');
+
+                                // Tạo các nút "Hủy" và "Đặt lại" tùy thuộc vào trạng thái đơn hàng
+                                let actionButtons = '';
+                                if (order.status === 'Chờ xác nhận' || order.status === 'Đã xác nhận') {
+                                    actionButtons =
+                                        `<button class="kenne-btn kenne-btn_sm cancel-order-btn" data-order-id="${order.id}">Hủy</button>`;
+                                } else if (order.status === 'Đơn hàng bị hủy') {
+                                    actionButtons =
+                                        `<button class="kenne-btn kenne-btn_sm reset-order-btn" data-order-id="${order.id}">Đặt lại</button>`;
+                                } else if (order.status === 'Đang giao hàng') {
+                                    actionButtons =
+                                        `<button class="kenne-btn kenne-btn_sm received-order-btn" data-order-id="${order.id}">Đã nhận hàng</button>`;
+                                }
+
+
                                 row.innerHTML = `
-                                        <td><a class="account-order-id" href="javascript:void(0)">#${order.id}</a></td>
-                                        <td>${order.date}</td>
-                                        <td>${order.status}</td>
-                                        <td>${order.total}</td>
-                                        <td><a href="javascript:void(0)" class="kenne-btn kenne-btn_sm view-order-btn" data-order-id="${order.id}"><span>Xem</span></a></td>
-                                    `;
+                        <td><a class="account-order-id" href="javascript:void(0)">#${order.id}</a></td>
+                        <td>${order.date}</td>
+                        <td>${order.status}</td>
+                        <td>${order.total}</td>
+                        <td>
+                            <a href="javascript:void(0)" class="kenne-btn kenne-btn_sm view-order-btn" data-order-id="${order.id}"><span>Xem</span></a>
+                            ${actionButtons}
+                        </td>
+                    `;
                                 tableBody.appendChild(row);
                             });
 
@@ -423,6 +442,30 @@
                                 });
                             });
 
+                            // Thêm sự kiện click cho các nút "Hủy"
+                            document.querySelectorAll('.cancel-order-btn').forEach(button => {
+                                button.addEventListener('click', function() {
+                                    const orderId = this.getAttribute('data-order-id');
+                                    cancelOrder(orderId);
+                                });
+                            });
+
+                            // Thêm sự kiện click cho các nút "Đặt lại"
+                            document.querySelectorAll('.reset-order-btn').forEach(button => {
+                                button.addEventListener('click', function() {
+                                    const orderId = this.getAttribute('data-order-id');
+                                    resetOrder(orderId);
+                                });
+                            });
+
+                            // Thêm sự kiện click cho các nút "Đã nhận hàng"
+                            document.querySelectorAll('.received-order-btn').forEach(button => {
+                                button.addEventListener('click', function() {
+                                    const orderId = this.getAttribute('data-order-id');
+                                    markOrderAsReceived(orderId);
+                                });
+                            });
+
                             updatePagination(data.pagination);
                         } else {
                             tableBody.innerHTML = '<tr><td colspan="5">Không tìm thấy đơn hàng nào.</td></tr>';
@@ -431,6 +474,92 @@
                     .catch(error => {
                         console.error('Lỗi khi lấy đơn hàng:', error);
                     });
+            }
+
+            function markOrderAsReceived(orderId) {
+                Swal.fire({
+                    title: 'Bạn có chắc chắn đã nhận hàng?',
+                    icon: 'question',
+                    showCancelButton: true,
+                    confirmButtonText: 'Đã nhận',
+                    cancelButtonText: 'Hủy bỏ'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: '/orders/' + orderId + '/received',
+                            type: 'POST',
+                            data: {
+                                _token: '{{ csrf_token() }}'
+                            },
+                            success: function(response) {
+                                Swal.fire('Thành công!', response.message, 'success');
+                                // location.reload(); // Tải lại trang để cập nhật trạng thái
+                                loadOrders();
+                            },
+                            error: function(xhr) {
+                                Swal.fire('Lỗi!', xhr.responseJSON.message, 'error');
+                            }
+                        });
+                    }
+                });
+            }
+
+            function cancelOrder(orderId) {
+                Swal.fire({
+                    title: 'Bạn có chắc chắn muốn hủy đơn hàng?',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Hủy đơn hàng',
+                    cancelButtonText: 'Hủy bỏ',
+                    reverseButtons: true
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: '/orders/' + orderId + '/cancel',
+                            type: 'POST',
+                            data: {
+                                _token: '{{ csrf_token() }}'
+                            },
+                            success: function(response) {
+                                Swal.fire('Thành công!', response.message, 'success');
+                                // location.reload(); // Tải lại trang để cập nhật trạng thái
+                                loadOrders();
+                            },
+                            error: function(xhr) {
+                                Swal.fire('Lỗi!', xhr.responseJSON.message, 'error');
+                            }
+                        });
+                    }
+                });
+            }
+
+            function resetOrder(orderId) {
+                Swal.fire({
+                    title: 'Bạn có chắc chắn muốn đặt lại đơn hàng?',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Đặt lại đơn hàng',
+                    cancelButtonText: 'Hủy bỏ',
+                    reverseButtons: true
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: '/orders/' + orderId + '/reset',
+                            type: 'POST',
+                            data: {
+                                _token: '{{ csrf_token() }}'
+                            },
+                            success: function(response) {
+                                Swal.fire('Thành công!', response.message, 'success');
+                                // location.reload(); // Tải lại trang để cập nhật trạng thái
+                                loadOrders();
+                            },
+                            error: function(xhr) {
+                                Swal.fire('Lỗi!', xhr.responseJSON.message, 'error');
+                            }
+                        });
+                    }
+                });
             }
 
             // Cập nhật các nút phân trang dựa trên dữ liệu phản hồi

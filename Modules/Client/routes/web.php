@@ -59,4 +59,10 @@ Route::get('/my-account', [MyAccountController::class, 'index'])->name('my-accou
 Route::get('/get-orders', [MyAccountController::class, 'getOrders'])->name('orders.get.list');
 Route::get('/get-order-details/{id}', [MyAccountController::class, 'getOrderDetails'])->name('order.details');
 Route::get('/orders/{id}/download-pdf', [MyAccountController::class, 'downloadPDF'])->name('orders.downloadPDF');
+Route::post('/orders/{id}/cancel', [MyAccountController::class, 'cancelOrder'])->name('orders.cancel');
+Route::post('/orders/{id}/reset', [MyAccountController::class, 'resetOrder'])->name('orders.reset');
+Route::post('/orders/{id}/received', [MyAccountController::class, 'markAsReceived'])->name('orders.received');
+
+
+
 
