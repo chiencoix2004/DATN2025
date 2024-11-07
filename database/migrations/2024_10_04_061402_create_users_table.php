@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('user_name',255)->nullable();
             $table->string('phone',15)->nullable();
             $table->string('email',255);
+            $table->string('google_id', 255)->nullable();
             $table->string('password',255);
             $table->string('address',255)->nullable();
             $table->text('user_image')->nullable();

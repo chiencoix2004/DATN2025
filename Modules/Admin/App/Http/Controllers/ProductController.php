@@ -308,6 +308,23 @@ class ProductController extends Controller
                     ]);
                 }
             }
+            if ($productV) {
+                foreach ($productV as $idColor => $v) {
+                    foreach ($v as $idSize => $itemV) {
+                        $prdVariant = $product->product_variants()->create(
+                            [
+                                'size_attribute_id' => $idSize,
+                                'color_attribute_id' => $idColor,
+                                'price_default' => $itemV["'price_default'"],
+                                'price_sale' => $itemV["'price_sale'"],
+                                'start_date' => $itemV["'start_date'"],
+                                'end_date' => $itemV["'end_date'"],
+                                'quantity' => $itemV["'quantity'"],
+                            ]
+                        );
+                    }
+                }
+            }
             if ($updateVariants) {
                 foreach ($updateVariants as $key => $value) {
                     $modelVariant = ProductVariant::query()->find($key);

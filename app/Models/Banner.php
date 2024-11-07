@@ -25,34 +25,59 @@ class Banner extends Model
     }
     public function getBanner()
     {
-        return $this->select('id', 'img_banner', 'link','banner_position')->get();
+        return $this->all();
     }
 
-    public function Addbanner( $image, $link, $banner_position)
+    public function Addbanner( $image, $link, $banner_position, $offer_text, $title, $description)
     {
         return $this->insert([
             'img_banner' => $image,
             'link' => $link,
             'banner_position' => $banner_position,
+            'offer_text' => $offer_text,
+            'title' => $title,
+            'description' => $description,
         ]);
     }
-    public function updateBanner($id, $image, $link, $banner_position)
+    public function updateBanner($id, $image, $link, $banner_position, $offer_text, $title, $description)
     {
         return $this->where('id', $id)->update([
             'img_banner' => $image,
             'link' => $link,
             'banner_position' => $banner_position,
+            'offer_text' => $offer_text,
+            'title' => $title,
+            'description' => $description,
         ]);
     }
-    public function updateBannerNoImg($id, $link, $banner_position)
+    public function updateBannerNoImg($id, $link, $banner_position, $offer_text, $title, $description)
     {
         return $this->where('id', $id)->update([
             'link' => $link,
             'banner_position' => $banner_position,
+            'offer_text' => $offer_text,
+            'title' => $title,
+            'description' => $description,
         ]);
     }
     public function deleteBanner($id)
     {
         return $this->where('id', $id)->delete();
+    }
+    public function getSliderPosition()
+    {
+        return $this->where('banner_position', 1)->get();
+    }
+    public function getTopPosition()
+    {
+        return $this->where('banner_position', 2)->get();
+    }
+    public function getCenterPosition()
+    {
+        return $this->where('banner_position', 3)->get();
+    }
+    public function getBottomPosition()
+    {
+        return $this->where('banner_position', 4)->get();
     }
 }

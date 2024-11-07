@@ -7,6 +7,7 @@ use Modules\Client\App\Http\Controllers\CartController;
 use Modules\Client\App\Http\Controllers\ShopController;
 use Modules\Client\App\Http\Controllers\LoginController;
 use Modules\Client\App\Http\Controllers\ClientController;
+use Modules\Client\App\Http\Controllers\MyAccountController;
 use Modules\Client\App\Http\Controllers\RegisterController;
 use Modules\Client\App\Http\Controllers\VerificationController;
 use Modules\Client\App\Http\Controllers\ResetPasswordController;
@@ -23,9 +24,9 @@ use Modules\Client\App\Http\Controllers\ForgotPasswordController;
 |
 */
 
-Route::get('/', function () {
-    return view('client::index');
-})->name('home');
+Route::controller(ClientController::class)->group(function () {
+    Route::get('/', 'index')->name('index');
+});
 Route::controller(ShopController::class)->prefix('shop')->as('shop.')->group(function () {
     Route::get('/', 'index')->name('shopIndex');
     Route::get('productDetail', 'show')->name('productDetail');
@@ -46,7 +47,9 @@ Route::controller(RegisterController::class)->prefix('auth')->as('auth.')->group
     Route::post('log-reg', 'register')->name('log-reg');
     Route::get('myAccount', 'myAccount')->name('myAcc');
 });
+// route hiển thịn form đăng nhập, đăng ký
 Route::get('/showform', [AuthController::class, 'form'])->name('showForm');
+Route::get('/form-reg', [AuthController::class, 'form_reg'])->name('formReg');
 Route::get('/email/verify/{id}', [VerificationController::class, 'verify'])->name('verification.verify');
 
 // Route::get('/login', [LoginController::class, 'showLoginForm'])->name('showLoginForm');
@@ -60,3 +63,9 @@ Route::post('/forgot-password', [ForgotPasswordController::class, 'sendResetLink
 // Route cho trang đặt lại mật khẩu
 Route::get('/reset-password/{token}', [ResetPasswordController::class, 'showResetForm'])->name('password.reset');
 Route::post('/reset-password', [ResetPasswordController::class, 'reset'])->name('password.update');
+
+Route::get('/my-account', [MyAccountController::class, 'index'])->name('my-account');
+// đăng nhập với google
+Route::get('auth/google', [LoginController::class, 'redirectToGoogle'])->name('auth.google');
+Route::get('auth/google/callback', [LoginController::class, 'handleGoogleCallback']);
+

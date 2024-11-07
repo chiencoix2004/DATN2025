@@ -24,6 +24,7 @@ class User extends Authenticatable implements MustVerifyEmail
         "full_name",
         "phone",
         "email",
+        "google_id",
         "password",
         "address",
         'user_image',
@@ -55,6 +56,7 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'password' => 'hashed',
     ];
 
     // public function role(){

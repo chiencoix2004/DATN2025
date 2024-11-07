@@ -385,7 +385,7 @@
         <div class="col-lg-6 col-xl-5 col-xxl-4 mb-3 ps-lg-2">
             <div class="card h-lg-100">
                 <div class="bg-holder bg-card"
-                    style="background-image:url(assets/img/icons/spot-illustrations/corner-1.png);"></div>
+                    style="background-image:url({{('theme/admin/img/icons/spot-illustrations/corner-1.png')}});"></div>
                 <!--/.bg-holder-->
                 <div class="card-body position-relative">
                     <h5 class="text-warning">Running out of your space?</h5>

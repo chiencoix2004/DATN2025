@@ -46,9 +46,18 @@
 
                                             <!-- Image Preview -->
                                             <div class="mb-3">
-                                                <img src="{{ asset('uploads/' . $items->img_banner) }}" alt="Banner Image"
+                                                @php
+                                                    $url = $items->img_banner;
+                                                    if (!\Str::contains($url, 'http')) {
+                                                        $url = \Storage::url($url);
+                                                    }
+                                                @endphp
+                                                <img src="{{ $url }}" alt="Banner Image"
                                                     style="width: 100%; height: 300px; object-fit: cover;"
                                                     id="image_preview_container_{{ $items->id }}">
+                                                {{-- <img src="{{ asset('uploads/' . $items->img_banner) }}" alt="Banner Image"
+                                                    style="width: 100%; height: 300px; object-fit: cover;"
+                                                    id="image_preview_container_{{ $items->id }}"> --}}
                                             </div>
 
                                             <div class="mb-3">
@@ -64,13 +73,29 @@
                                                 <input id="link_{{ $items->id }}" name="lien_ket" type="text"
                                                     class="form-control" value="{{ $items->link }}">
                                             </div>
+                                            <div class="mb-3">
+                                                <label for="link_{{ $items->id }}" class="form-label">Tiêu đề Giảm giá</label>
+                                                <input id="link_{{ $items->id }}" name="offer_text" type="text"
+                                                    class="form-control" value="{{ $items->offer_text}}">
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="link_{{ $items->id }}" class="form-label">Tiêu đề</label>
+                                                <input id="link_{{ $items->id }}" name="title" type="text"
+                                                    class="form-control" value="{{ $items->title}}">
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="link_{{ $items->id }}" class="form-label">Mô tả</label>
+                                                <input id="link_{{ $items->id }}" name="description" type="text"
+                                                    class="form-control" value="{{ $items->description}}">
+                                            </div>
 
                                             <div class="mb-3">
                                                 <label for="banner_place_{{ $items->id }}" class="form-label">Vị trí</label>
                                                 <select class="form-select" name="vi_tri" id="banner_place_{{ $items->id }}">
-                                                    <option value="1" @if ($items->banner_position == 1) selected @endif>Trên cùng</option>
-                                                    <option value="2" @if ($items->banner_position == 2) selected @endif>Giữa</option>
-                                                    <option value="3" @if ($items->banner_position == 3) selected @endif>Dưới cùng</option>
+                                                    <option value="1" @if ($items->banner_position == 1) selected @endif>Slider</option>
+                                                    <option value="2" @if ($items->banner_position == 2) selected @endif>Trên</option>
+                                                    <option value="3" @if ($items->banner_position == 3) selected @endif>Giữa</option>
+                                                    <option value="4" @if ($items->banner_position == 4) selected @endif>Dưới cùng</option>
                                                 </select>
                                             </div>
 
@@ -108,13 +133,30 @@
                                             <label for="new_banner_link" class="form-label">Liên kết sản phẩm</label>
                                             <input id="new_banner_link" name="lien_ket" type="text" class="form-control">
                                         </div>
+                                        <div class="mb-3">
+                                            <label for="new_offer_text" class="form-label">Tiêu đề Giảm giá</label>
+                                            <input id="link_{{ $items->id }}" name="offer_text" type="text"
+                                                class="form-control">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="new_title" class="form-label">Tiêu đề</label>
+                                            <input id="link_{{ $items->id }}" name="title" type="text"
+                                                class="form-control">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="new_description" class="form-label">Mô tả</label>
+                                            <input id="link_{{ $items->id }}" name="description" type="text"
+                                                class="form-control">
+                                        </div>
+
 
                                         <div class="mb-3">
                                             <label for="new_banner_position" class="form-label">Vị trí</label>
                                             <select class="form-select" name="vi_tri" id="new_banner_position">
-                                                <option value="1">Trên cùng</option>
-                                                <option value="2">Giữa</option>
-                                                <option value="3">Dưới cùng</option>
+                                                <option value="1">Slider</option>
+                                                <option value="2">Trên</option>
+                                                <option value="3">Giữa</option>
+                                                <option value="4">Dưới cùng</option>
                                             </select>
                                         </div>
 
