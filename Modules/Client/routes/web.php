@@ -2,14 +2,16 @@
 
 use Illuminate\Support\Facades\Route;
 use Modules\Client\App\Http\Controllers\AuthController;
-// use Modules\Client\App\Http\Controllers\AuthController;
+//use Modules\Client\App\Http\Controllers\AuthController;
 use Modules\Client\App\Http\Controllers\CartController;
+use Modules\Client\App\Http\Controllers\ShopController;
+use Modules\Client\App\Http\Controllers\LoginController;
 use Modules\Client\App\Http\Controllers\ClientController;
 use Modules\Client\App\Http\Controllers\MyAccountController;
 use Modules\Client\App\Http\Controllers\RegisterController;
-use Modules\Client\App\Http\Controllers\ShopController;
 use Modules\Client\App\Http\Controllers\VerificationController;
-use Modules\Client\App\Http\Controllers\LoginController;
+use Modules\Client\App\Http\Controllers\ResetPasswordController;
+use Modules\Client\App\Http\Controllers\ForgotPasswordController;
 
 /*
 |--------------------------------------------------------------------------
@@ -54,9 +56,16 @@ Route::get('/email/verify/{id}', [VerificationController::class, 'verify'])->nam
 Route::post('/login', [LoginController::class, 'login'])->name('login');
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
+// Route cho trang yêu cầu đặt lại mật khẩu
+Route::get('/forgot-password', [ForgotPasswordController::class, 'forgotPasswordForm'])->name('forgot-password');
+Route::post('/forgot-password', [ForgotPasswordController::class, 'sendResetLinkEmail'])->name('email-password');
+
+// Route cho trang đặt lại mật khẩu
+Route::get('/reset-password/{token}', [ResetPasswordController::class, 'showResetForm'])->name('password.reset');
+Route::post('/reset-password', [ResetPasswordController::class, 'reset'])->name('password.update');
+
 Route::get('/my-account', [MyAccountController::class, 'index'])->name('my-account');
 // đăng nhập với google
 Route::get('auth/google', [LoginController::class, 'redirectToGoogle'])->name('auth.google');
 Route::get('auth/google/callback', [LoginController::class, 'handleGoogleCallback']);
-
 
