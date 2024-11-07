@@ -104,57 +104,78 @@
                             <div class="tab-pane fade" id="account-address" role="tabpanel"
                                 aria-labelledby="account-address-tab">
                                 <div class="myaccount-address">
-                                    <p>The following addresses will be used on the checkout page by default.</p>
+                                    <p>Các địa chỉ sau sẽ được sử dụng trên trang thanh toán theo mặc định</p>
                                     <div class="row">
                                         <div class="col">
-                                            <h4 class="small-title">Billing Adress</h4>
+                                            <h4 class="small-title">Địa chỉ</h4>
                                             <address>
-                                                1234 Heaven Stress, Beverly Hill OldYork UnitedState of Lorem
+                                                {{ $user ->address }}
                                             </address>
                                         </div>
-                                        <div class="col">
+                                        {{-- <div class="col">
                                             <h4 class="small-title">Shipping Address</h4>
                                             <address>
                                                 1234 Heaven Stress, Beverly Hill OldYork UnitedState of Lorem
                                             </address>
-                                        </div>
+                                        </div> --}}
                                     </div>
                                 </div>
                             </div>
                             <div class="tab-pane fade" id="account-details" role="tabpanel"
                                 aria-labelledby="account-details-tab">
                                 <div class="myaccount-details">
-                                    <form action="#" class="kenne-form">
+                                    <form action="{{ route('change.password') }}" method="POST" class="kenne-form">
+                                        @csrf
                                         <div class="kenne-form-inner">
-                                            <div class="single-input single-input-half">
-                                                <label for="account-details-firstname">First Name*</label>
-                                                <input type="text" id="account-details-firstname">
+                                            <div class="single-input">
+                                                <label for="account-details-firstname">Họ và tên*</label>
+                                                <input type="text" name="full_name" id="account-details-firstname" value="{{ $user->full_name }}">
+                                                @error('full_name')
+                                                    <div class="error-message">{{ $message }}</div>
+                                                @enderror
                                             </div>
-                                            <div class="single-input single-input-half">
-                                                <label for="account-details-lastname">Last Name*</label>
-                                                <input type="text" id="account-details-lastname">
+                                            <div class="single-input">
+                                                <label for="account-details-firstname">Địa Chỉ*</label>
+                                                <input type="text" name="address" id="account-details-firstname" value="{{ $user->address }}">
+                                                @error('address')
+                                                    <div class="error-message">{{ $message }}</div>
+                                                @enderror
                                             </div>
+                                            
                                             <div class="single-input">
                                                 <label for="account-details-email">Email*</label>
-                                                <input type="email" id="account-details-email">
+                                                <input type="email" name="email" id="account-details-email" value="{{ $user->email }}">
+                                                @error('email')
+                                                    <div class="error-message">{{ $message }}</div>
+                                                @enderror
                                             </div>
+                                    
                                             <div class="single-input">
-                                                <label for="account-details-oldpass">Current Password(leave blank to leave
-                                                    unchanged)</label>
-                                                <input type="password" id="account-details-oldpass">
+                                                <label for="account-details-oldpass">Mật khẩu cũ*</label>
+                                                <input type="password" name="current_password" id="account-details-oldpass">
+                                                @error('current_password')
+                                                    <div class="error-message">{{ $message }}</div>
+                                                @enderror
                                             </div>
+                                    
                                             <div class="single-input">
-                                                <label for="account-details-newpass">New Password (leave blank to leave
-                                                    unchanged)</label>
-                                                <input type="password" id="account-details-newpass">
+                                                <label for="account-details-newpass">Mật khẩu mới*</label>
+                                                <input type="password" name="new_password" id="account-details-newpass">
+                                                @error('new_password')
+                                                    <div class="error-message">{{ $message }}</div>
+                                                @enderror
                                             </div>
+                                    
                                             <div class="single-input">
-                                                <label for="account-details-confpass">Confirm New Password</label>
-                                                <input type="password" id="account-details-confpass">
+                                                <label for="account-details-confpass">Xác nhận mật khẩu mới</label>
+                                                <input type="password" name="new_password_confirmation" id="account-details-confpass">
+                                                @error('new_password_confirmation')
+                                                    <div class="error-message">{{ $message }}</div>
+                                                @enderror
                                             </div>
+                                    
                                             <div class="single-input">
-                                                <button class="kenne-btn kenne-btn_dark" type="submit"><span>SAVE
-                                                        CHANGES</span></button>
+                                                <button class="kenne-btn kenne-btn_dark" type="submit"><span>Đổi mật khẩu</span></button>
                                             </div>
                                         </div>
                                     </form>

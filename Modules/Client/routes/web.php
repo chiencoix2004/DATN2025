@@ -56,5 +56,7 @@ Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
 Route::get('/my-account', [MyAccountController::class,'index'])->name('my-account');  
 
+Route::post('/update-password', [MyAccountController::class, 'changePassword'])->name('change.password');
+
 
 
