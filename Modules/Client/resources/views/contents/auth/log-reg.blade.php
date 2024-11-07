@@ -37,7 +37,7 @@
                                 <div class="col-12 mb--20">
                                     <label>Mật Khẩu</label>
                                     <input type="password" name='password' placeholder="Password">
-                                    <span class="toggle-password" onclick="togglePassword('login-password')">👁️</span>  
+                                    <span class="toggle-password" onclick="togglePassword('login-password')">👁️</span>
                                 </div>
                                 <div style="color: red">
                                     @error('Error')
@@ -56,8 +56,10 @@
                                     </div>
                                 </div>
 
-                                <div class="col-md-12">
+                                <div class="col-md-12 d-flex justify-content-between align-items-center">
                                     <button class="kenne-login_btn">Đăng nhập</button>
+                                    <h6 style="margin-top: 20px;">- hoặc đăng nhập với -</h6>
+                                    <a href="{{ route('auth.google') }}" class="a-register_btn">Google</a>
                                 </div>
 
                             </div>
@@ -144,4 +146,26 @@
         </div>
     </div>
     <!-- Brand Area End Here -->
+@endsection
+@section('css-setting')
+    <style>
+        a.a-register_btn {
+            text-align: center;
+            background-color: #242424;
+            color: #ffffff;
+            display: block;
+            margin-top: 15px;
+            width: 140px;
+            border-radius: 0;
+            height: 40px;
+            line-height: 40px;
+            border: 0;
+            text-transform: uppercase;
+        }
+
+        a.a-register_btn:hover {
+            background-color: #a8741a;
+            color: #ffffff;
+        }
+    </style>
 @endsection

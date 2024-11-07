@@ -46,9 +46,18 @@
 
                                             <!-- Image Preview -->
                                             <div class="mb-3">
-                                                <img src="{{ asset('uploads/' . $items->img_banner) }}" alt="Banner Image"
+                                                @php
+                                                    $url = $items->img_banner;
+                                                    if (!\Str::contains($url, 'http')) {
+                                                        $url = \Storage::url($url);
+                                                    }
+                                                @endphp
+                                                <img src="{{ $url }}" alt="Banner Image"
                                                     style="width: 100%; height: 300px; object-fit: cover;"
                                                     id="image_preview_container_{{ $items->id }}">
+                                                {{-- <img src="{{ asset('uploads/' . $items->img_banner) }}" alt="Banner Image"
+                                                    style="width: 100%; height: 300px; object-fit: cover;"
+                                                    id="image_preview_container_{{ $items->id }}"> --}}
                                             </div>
 
                                             <div class="mb-3">

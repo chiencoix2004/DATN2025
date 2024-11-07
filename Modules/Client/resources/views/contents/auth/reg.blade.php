@@ -23,10 +23,9 @@
         <div class="container">
             <div class="row d-flex justify-content-center">
                 <div class="col-sm-12 col-md-12 col-lg-6 col-xs-12">
-                    <form action="{{route('auth.log-reg')}}" method="POST">
-                        
+                    <form action="{{ route('auth.log-reg') }}" method="POST">
                         @csrf
-                        <div class="login-form">-
+                        <div class="login-form">
                             <h4 class="login-title">Đăng Ký</h4>
                             <div class="row">
                                 <div class="col-md-12 col-12 mb--20">
@@ -40,13 +39,13 @@
                                     <label>Email : </label>
                                     <input type="email" name='email' placeholder="Email Address">
                                     @error('email')
-                                    <span class=text-danger> {{ $message }}</span>
-                                @enderror
+                                        <span class=text-danger> {{ $message }}</span>
+                                    @enderror
                                 </div>
                                 <div class="col-md-12">
                                     <label>Mật Khẩu : </label>
                                     <input type="password" name='password' placeholder="Password">
-                                    
+
                                     @error('password')
                                         <span class=text-danger> {{ $message }}</span>
                                     @enderror
@@ -56,11 +55,13 @@
                                     <input type="password" name='password_confirmation' placeholder="Confirm Password">
 
                                     @error('password_confirmation')
-                                        <span class='text-danger'> {{ $message}}</span>
+                                        <span class='text-danger'> {{ $message }}</span>
                                     @enderror
                                 </div>
-                                <div class="col-12">
+                                <div class="col-12 d-flex justify-content-between align-items-center">
                                     <button type='submit' class="kenne-register_btn">Đăng Ký</button>
+                                    <h6 style="margin-top: 20px;">- hoặc đăng ký với -</h6>
+                                    <a href="{{ route('auth.google') }}" class="a-register_btn">Google</a>
                                 </div>
                             </div>
                         </div>
@@ -147,4 +148,26 @@
         </div>
     </div>
     <!-- Brand Area End Here -->
+@endsection
+@section('css-setting')
+    <style>
+        a.a-register_btn {
+            text-align: center;
+            background-color: #242424;
+            color: #ffffff;
+            display: block;
+            margin-top: 15px;
+            width: 140px;
+            border-radius: 0;
+            height: 40px;
+            line-height: 40px;
+            border: 0;
+            text-transform: uppercase;
+        }
+
+        a.a-register_btn:hover {
+            background-color: #a8741a;
+            color: #ffffff;
+        }
+    </style>
 @endsection
