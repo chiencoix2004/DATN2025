@@ -72,7 +72,7 @@ class RegisterController extends Controller
                 'order_id' => null,
                 'user_id' => $user->id,
                 'full_name' => $request->input('full_name'),
-                'message' => 'Thông báo tài khoản khách hàng mới',
+                'message' => 'Tài khoản khách hàng mới ',
             ];
 
             DB::table('notifications')->insert([

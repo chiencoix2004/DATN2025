@@ -97,22 +97,23 @@ class MyAccountController extends Controller
 
     public function downloadPDF($id)
     {
-        // Fetch the order data with related order items
+        // Lấy dữ liệu đơn hàng cùng với các sản phẩm liên quan
         $data = Order::query()->with('orderItems')->findOrFail($id);
 
-        // Generate the PDF using the view and data
+        // Tạo PDF sử dụng view và dữ liệu
         $pdf = app(PDF::class)->loadView('admin::contents.orders.invoices.view', compact('data'))->setOptions([
             'isRemoteEnabled' => true,
             'chroot' => public_path(),
         ]);
 
-        // Set a custom file name
+        // Đặt tên file tùy chỉnh
         $date = Carbon::parse($data->date_create_order)->format('d-m-Y');
         $fileName = 'hóa đơn -' . $data->id . '-' . Str::slug($data->user_name) . "-$date" . '.pdf';
 
-        // Return the PDF as a downloadable response
+        // Trả về PDF dưới dạng file tải về
         return $pdf->download($fileName);
     }
+
     /**
      * Show the form for creating a new resource.
      */
