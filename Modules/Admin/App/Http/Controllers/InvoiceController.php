@@ -12,11 +12,9 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Pagination\LengthAwarePaginator;
-
 use Carbon\Carbon;
 // use Storage;
 use Barryvdh\DomPDF\Facade\Pdf;
-
 // use PDF;
 
 
@@ -38,7 +36,7 @@ class InvoiceController extends Controller
                             'chroot' => public_path(),
                         ]
                     );
-                    $date = \Carbon\Carbon::parse($data->date_create_order)->format('Y-m-d');
+                    $date = Carbon::parse($data->date_create_order)->format('Y-m-d');
                     $fileName = 'invoice-' . $data->id . '-' . Str::slug($data->user_name) . "-$date" . '.pdf';
                     $pdf->save($savePath . $fileName);
                 }
@@ -69,7 +67,7 @@ class InvoiceController extends Controller
                 'chroot' => public_path(),
             ]
         );
-        $date = \Carbon\Carbon::parse($data->date_create_order)->format('Y-m-d');
+        $date = Carbon::parse($data->date_create_order)->format('Y-m-d');
         $fileName = 'invoice-' . $data->id . '-' . Str::slug($data->user_name) . "-$date" . '.pdf';
         $filePath = 'invoices/' . $fileName;
         Storage::disk('public')->put($filePath, $pdf->output());
@@ -78,12 +76,8 @@ class InvoiceController extends Controller
     }
     public function listPDF()
     {
-
-        $files = File::files(storage_path('app/public/invoices ')); // Lấy danh sách file từ thư mục invoices
-
         $directoryPath = storage_path('app/public/invoices');
         if (!File::exists($directoryPath)) {
-            // return redirect()->back()->with('error', 'Thư mục invoices không tồn tại.');
             return view('admin::contents.error-404', ['error' => 'Thư mục tìm kiếm không tồn tại!']);
         }
         $files = File::files($directoryPath);

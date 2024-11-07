@@ -1,3 +1,4 @@
+{{-- @dd(Auth::user()) --}}
 <header class="main-header_area">
     @include('client::assets.header-contents.transparent-header')
     @include('client::assets.header-contents.header-sticky')
@@ -46,10 +47,22 @@
             </div>
             <div class="offcanvas-component">
                 <span class="offcanvas-component_title">Tài khoản của tôi</span>
-                <ul class="offcanvas-component_menu">
-                    <li><a href="{{ route('auth.log-reg') }}">Đăng ký</a></li>
-                    <li><a href="{{ route('auth.log-reg') }}">Đăng nhập</a></li>
-                </ul>
+                @if (Auth::user())
+                    <ul class="offcanvas-component_menu">
+                        <li>
+                            <form action="{{ route('logout') }}" method="POST">
+                                @csrf
+                                <button type="submit">Đăng xuất</button>
+                            </form>
+                        </li>
+                        <li><a href="{{ route('showForm') }}">Chi tiết tài khoản ,... Update sau </a></li>
+                    </ul>
+                @else
+                    <ul class="offcanvas-component_menu">
+                        <li><a href="{{ route('showForm') }}">Đăng ký</a></li>
+                        <li><a href="{{ route('showForm') }}">Đăng nhập</a></li>
+                    </ul>
+                @endif
             </div>
             <div class="offcanvas-inner-social_link">
                 <div class="kenne-social_link">

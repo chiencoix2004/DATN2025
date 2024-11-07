@@ -24,7 +24,7 @@ class ProductController extends Controller
 {
     public function listProduct()
     {
-        $data = Product::query()->with('tags')->latest('id')->paginate(10);
+        $data = Product::query()->with(['tags', 'product_variants'])->latest('id')->paginate(10);
         return view('admin::contents.products.listProduct', compact('data'));
     }
     public function trashed()
@@ -357,6 +357,15 @@ class ProductController extends Controller
             return response()->json(['success' => 'Xóa tag thành công!']);
         } else {
             return response()->json(['error' => 'Không thể kết nối đến server!'], 500);
+        }
+    }
+    public function delete(string $id)
+    {
+        $data = ProductVariant::query()->findOrFail($id);
+        if ($data->delete()) {
+            return redirect()->back()->with(['success' => 'Xóa 1 biến thể thành công!']);
+        } else {
+            return redirect()->back()->with(['error' => 'Xóa biến thể thất bại!']);
         }
     }
     public function detail(string $slug)

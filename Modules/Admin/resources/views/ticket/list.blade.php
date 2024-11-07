@@ -64,7 +64,7 @@
                     </thead>
                     <tbody>
                         @foreach ($listTicket as $item)
-                        <tr>
+                        <tr>x
                             <td>{{ $item->ticket_id }}</td>
                             <td>{{ $item->user_name}}</td>
                             <td>{{ $item->ticket_title }}</td>

@@ -3,7 +3,12 @@
     Admin | Chi tiết sản phẩm
 @endsection
 @section('contents')
-    <div class="card">
+    <div class="card mb-3">
+        <div class="card-header">
+            <a href="{{ route('admin.product.edit', $data->slug) }}" class="btn btn-primary">Cập nhật sản phẩm</a>
+        </div>
+    </div>
+    <div class="card mb-3">
         <div class="card-body">
             <div class="row">
                 <div class="col-lg-6 mb-4 mb-lg-0">
@@ -32,9 +37,9 @@
                     </div>
                 </div>
                 <div class="col-lg-6">
-                    <h5>{{ $data->name }}</h5>
-                    {{-- <a class="fs-10 mb-2 d-block" href="#!">Computer &amp; Accessories</a> --}}
+                    <h5>Tên: {{ $data->name }}</h5>
                     <div class="fs-11 mb-3 d-inline-block text-decoration-none">
+                        Đánh giá:
                         <span class="fa fa-star text-warning"></span>
                         <span class="fa fa-star text-warning"></span>
                         <span class="fa fa-star text-warning"></span>
@@ -43,10 +48,12 @@
                         <span class="ms-1 text-600">(8)</span>
                     </div>
                     <p class="fs-10">
+                        <strong>Mô tả:</strong>
                         {!! $data->description !!}
                     </p>
                     <h4 class="d-flex align-items-center">
-                        <span class="text-warning me-2">
+                        Giá:
+                        <span class="text-warning me-2" style="padding-left: 3px;">
                             {{ number_format(
                                 (int) ($data->discount_percent > 0
                                     ? $data->price_regular * (1 - $data->discount_percent / 100)
@@ -67,10 +74,6 @@
                             </span>
                         @endif
                     </h4>
-                    {{-- <p class="fs-10 mb-1">
-                        <span>Chi phí vận chuyển: </span>
-                        <strong>$50</strong>
-                    </p> --}}
                     <p class="fs-10">Trạng thái: {!! $data->is_active == 1
                         ? '<strong class="text-success">Hoạt động</strong>'
                         : '<strong class="text-danger">Không hoạt động</strong>' !!}</p>
@@ -78,30 +81,6 @@
                         @foreach ($data->tags as $item)
                             <a class="ms-2 badge bg-info" href="#!">Computer</a>
                         @endforeach
-                        {{-- <div class="row">
-                        <div class="col-auto pe-0">
-                            <div class="input-group input-group-sm" data-quantity="data-quantity">
-                                <button class="btn btn-sm btn-outline-secondary border border-300"
-                                    data-field="input-quantity" data-type="minus">-</button>
-                                <input class="form-control text-center input-quantity input-spin-none" type="number"
-                                    min="0" value="0" aria-label="Amount (to the nearest dollar)"
-                                    style="max-width: 50px" />
-                                <button class="btn btn-sm btn-outline-secondary border border-300"
-                                    data-field="input-quantity" data-type="plus">+</button>
-                            </div>
-                        </div>
-                        <div class="col-auto px-2 px-md-3">
-                            <a class="btn btn-sm btn-primary" href="#!">
-                                <span class="fas fa-cart-plus me-sm-2"></span>
-                                <span class="d-none d-sm-inline-block">Add To Cart</span>
-                            </a>
-                        </div>
-                        <div class="col-auto px-0">
-                            <a class="btn btn-sm btn-outline-danger border border-300" href="#!"
-                                data-bs-toggle="tooltip" data-bs-placement="top" title="Add to Wish List">
-                                <span class="far fa-heart me-1"></span>282</a>
-                        </div>
-                    </div> --}}
                 </div>
             </div>
             <div class="row">
@@ -118,10 +97,10 @@
                                     href="#tab-specifications" role="tab" aria-controls="tab-specifications"
                                     aria-selected="false">Chất liệu sản phẩm</a>
                             </li>
-                            {{-- <li class="nav-item">
-                                <a class="nav-link px-2 px-md-3" id="reviews-tab" data-bs-toggle="tab" href="#tab-reviews"
-                                    role="tab" aria-controls="tab-reviews" aria-selected="false">Reviews</a>
-                            </li> --}}
+                            <li class="nav-item">
+                                <a class="nav-link px-2 px-md-3" id="variants-tab" data-bs-toggle="tab" href="#tab-variants"
+                                    role="tab" aria-controls="tab-variants" aria-selected="false">Biến thể sản phẩm</a>
+                            </li>
                         </ul>
                         <div class="tab-content" id="myTabContent">
                             <div class="tab-pane fade show active" id="tab-description" role="tabpanel"
@@ -134,55 +113,57 @@
                                 aria-labelledby="specifications-tab">
                                 {!! $data->material !!}
                             </div>
-                            {{-- <div class="tab-pane fade" id="tab-reviews" role="tabpanel" aria-labelledby="reviews-tab">
-                                <div class="row mt-3">
-                                    <div class="col-lg-6 mb-4 mb-lg-0">
-                                        <div class="mb-1"><span class="fa fa-star text-warning fs-10"></span><span
-                                                class="fa fa-star text-warning fs-10"></span><span
-                                                class="fa fa-star text-warning fs-10"></span><span
-                                                class="fa fa-star text-warning fs-10"></span><span
-                                                class="fa fa-star text-warning fs-10"></span><span
-                                                class="ms-3 text-1100 fw-semi-bold">Awesome support, great code 😍</span>
-                                        </div>
-                                        <p class="fs-10 mb-2 text-600">By Drik Smith • October 14, 2019</p>
-                                        <p class="mb-0">You shouldn't need to read a review to see how nice and polished
-                                            this theme is. So I'll tell you something you won't find in the demo. After the
-                                            download I had a technical question, emailed the team and got a response right
-                                            from the team CEO with helpful advice.</p>
-                                        <hr class="my-4" />
-                                        <div class="mb-1"><span class="fa fa-star text-warning fs-10"></span><span
-                                                class="fa fa-star text-warning fs-10"></span><span
-                                                class="fa fa-star text-warning fs-10"></span><span
-                                                class="fa fa-star text-warning fs-10"></span><span
-                                                class="fa fa-star-half-alt text-warning star-icon fs-10"></span><span
-                                                class="ms-3 text-1100 fw-semi-bold">Outstanding Design, Awesome
-                                                Support</span></div>
-                                        <p class="fs-10 mb-2 text-600">By Liane • December 14, 2019</p>
-                                        <p class="mb-0">This really is an amazing template - from the style to the font -
-                                            clean layout. SO worth the money! The demo pages show off what Bootstrap 4 can
-                                            impressively do. Great template!! Support response is FAST and the team is
-                                            amazing - communication is important.</p>
-                                    </div>
-                                    <div class="col-lg-6 ps-lg-5">
-                                        <form>
-                                            <h5 class="mb-3">Write your Review</h5>
-                                            <div class="mb-3"><label class="form-label">Ratting: </label>
-                                                <div class="d-block" data-rater='{"starSize":32,"step":0.5}'></div>
-                                            </div>
-                                            <div class="mb-3"><label class="form-label"
-                                                    for="formGroupNameInput">Name:</label><input class="form-control"
-                                                    id="formGroupNameInput" type="text" /></div>
-                                            <div class="mb-3"><label class="form-label"
-                                                    for="formGroupEmailInput">Email:</label><input class="form-control"
-                                                    id="formGroupEmailInput" type="email" /></div>
-                                            <div class="mb-3"><label class="form-label"
-                                                    for="formGrouptextareaInput">Review:</label>
-                                                <textarea class="form-control" id="formGrouptextareaInput" rows="3"></textarea>
-                                            </div><button class="btn btn-primary" type="submit">Submit</button>
-                                        </form>
-                                    </div>
+                            <div class="tab-pane fade" id="tab-variants" role="tabpanel" aria-labelledby="variants-tab">
+                                <div class="row">
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th>#</th>
+                                                <th>Biến thể</th>
+                                                <th>Giá mặc định (VNĐ)</th>
+                                                <th>Giá khuyến mại (VNĐ)</th>
+                                                <th>Ngày bắt đầu (KM)</th>
+                                                <th>Ngày bắt thúc (KM)</th>
+                                                <th>Số lượng</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach ($data->product_variants as $itemV)
+                                                <tr>
+                                                    <td>{{ $itemV->id }}</td>
+                                                    <td>
+                                                        <div class="mb-3">
+                                                            <strong>Màu sắc:</strong>
+                                                            <span class="badge bg"
+                                                                style="background-color: {{ $itemV->color['color_value'] }};">{{ $itemV->color['color_value'] }}</span>
+                                                        </div>
+                                                        <strong>Kích thước: {{ $itemV->size['size_value'] }}</strong>
+                                                    </td>
+                                                    <td>
+                                                        {{ number_format((int) $itemV->price_default, 0, ',', '.') }}
+                                                    </td>
+                                                    <td>
+                                                        {{ number_format((int) $itemV->price_sale, 0, ',', '.') }}
+                                                    </td>
+                                                    <td>
+                                                        {!! $itemV->start_date != null
+                                                            ? $itemV->start_date
+                                                            : '<strong class="text-warning">Không thiết lập cho mục này!</strong>' !!}
+                                                    </td>
+                                                    <td>
+                                                        {!! $itemV->end_date != null
+                                                            ? $itemV->end_date
+                                                            : '<strong class="text-warning">Không thiết lập cho mục này!</strong>' !!}
+                                                    </td>
+                                                    <td>
+                                                        {!! $itemV->quantity > 0 ? $itemV->quantity : '<strong class="text-warning">Không có số lượng cụ thể cho sản phẩm!</strong>' !!}
+                                                    </td>
+                                                </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
                                 </div>
-                            </div> --}}
+                            </div>
                         </div>
                     </div>
                 </div>
