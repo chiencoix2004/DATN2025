@@ -13,9 +13,9 @@ use Laravel\Socialite\Facades\Socialite;
 
 class LoginController extends Controller
 {
-    public function showLoginForm()
-    {
-        return view('auth.log-reg');
+
+    public function showLoginForm() {
+        return view('client::contents.auth.log-reg');
     }
     public function login(Request $request)
     {

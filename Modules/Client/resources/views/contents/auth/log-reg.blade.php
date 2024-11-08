@@ -37,7 +37,7 @@
                                 <div class="col-12 mb--20">
                                     <label>Mật Khẩu</label>
                                     <input type="password" name='password' placeholder="Password">
-                                    <span class="toggle-password" onclick="togglePassword('login-password')">👁️</span>
+                                    <span class="toggle-password" onclick="togglePassword('login-password')">👁️</span>  
                                 </div>
                                 <div style="color: red">
                                     @error('Error')

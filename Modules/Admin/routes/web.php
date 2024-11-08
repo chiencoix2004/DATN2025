@@ -135,16 +135,6 @@ Route::prefix('admin')
 
         // Route quản lý coupons
 
-        // Route quản lý coupons
-        Route::controller(CouponController::class)->prefix('coupons')->as('coupons.')->group(function () {
-            Route::get('/', 'index')->name('index');
-            Route::get('create', 'create')->name('create');
-            Route::post('store', 'store')->name('store');
-            Route::get('/{id}/show', 'show')->name('show');
-            Route::get('/{id}/edit', 'edit')->name('edit');
-            Route::put('{id}/update', 'update')->name('update');
-        });
-
         // thống kê
         Route::controller(StatisticalController::class)->prefix('statistical')->as('statistical.')->group(function () {
             Route::get('listStatistical', 'index')->name('listStatistical');

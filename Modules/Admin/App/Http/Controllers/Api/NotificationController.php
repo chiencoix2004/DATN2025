@@ -31,22 +31,22 @@ class NotificationController extends Controller
             if ($updated > 0) {
                 return response()->json([
                     'success' => true,
-                    'message' => 'All notifications marked as read successfully.',
+                    'message' => 'Đã đánh dấu tất cả thông báo là đã đọc thành công.',
                     'updated_count' => $updated
                 ], 200);
             } else {
                 return response()->json([
                     'success' => false,
-                    'message' => 'No unread notifications found.'
+                    'message' => 'Không tìm thấy thông báo chưa đọc.'
                 ], 404);
             }
         } catch (\Exception $e) {
             // Ghi lại lỗi vào log
-            Log::error('Error marking notifications as read: ' . $e->getMessage());
+            Log::error('Lỗi khi đánh dấu thông báo là đã đọc: ' . $e->getMessage());
 
             return response()->json([
                 'success' => false,
-                'message' => 'An error occurred. Please try again later.'
+                'message' => 'Đã xảy ra lỗi. Vui lòng thử lại sau.'
             ], 500);
         }
     }

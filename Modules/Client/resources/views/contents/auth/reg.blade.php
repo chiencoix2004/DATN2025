@@ -23,9 +23,9 @@
         <div class="container">
             <div class="row d-flex justify-content-center">
                 <div class="col-sm-12 col-md-12 col-lg-6 col-xs-12">
-                    <form action="{{ route('auth.log-reg') }}" method="POST">
+                    <form action="{{route('auth.log-reg')}}" method="POST">
                         @csrf
-                        <div class="login-form">
+                        <div class="login-form">-
                             <h4 class="login-title">Đăng Ký</h4>
                             <div class="row">
                                 <div class="col-md-12 col-12 mb--20">
@@ -39,13 +39,13 @@
                                     <label>Email : </label>
                                     <input type="email" name='email' placeholder="Email Address">
                                     @error('email')
-                                        <span class=text-danger> {{ $message }}</span>
-                                    @enderror
+                                    <span class=text-danger> {{ $message }}</span>
+                                @enderror
+
                                 </div>
                                 <div class="col-md-12">
                                     <label>Mật Khẩu : </label>
                                     <input type="password" name='password' placeholder="Password">
-
                                     @error('password')
                                         <span class=text-danger> {{ $message }}</span>
                                     @enderror
@@ -53,7 +53,6 @@
                                 <div class="col-md-12">
                                     <label>Xác Nhận Mật Khẩu : </label>
                                     <input type="password" name='password_confirmation' placeholder="Confirm Password">
-
                                     @error('password_confirmation')
                                         <span class='text-danger'> {{ $message }}</span>
                                     @enderror
@@ -171,3 +170,4 @@
         }
     </style>
 @endsection
+
