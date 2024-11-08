@@ -3,14 +3,16 @@
 use Illuminate\Support\Facades\Route;
 use Modules\Admin\App\Http\Controllers\InvoiceController;
 use Modules\Client\App\Http\Controllers\AuthController;
-// use Modules\Client\App\Http\Controllers\AuthController;
+//use Modules\Client\App\Http\Controllers\AuthController;
 use Modules\Client\App\Http\Controllers\CartController;
+use Modules\Client\App\Http\Controllers\ShopController;
+use Modules\Client\App\Http\Controllers\LoginController;
 use Modules\Client\App\Http\Controllers\ClientController;
 use Modules\Client\App\Http\Controllers\MyAccountController;
 use Modules\Client\App\Http\Controllers\RegisterController;
-use Modules\Client\App\Http\Controllers\ShopController;
 use Modules\Client\App\Http\Controllers\VerificationController;
-use Modules\Client\App\Http\Controllers\LoginController;
+use Modules\Client\App\Http\Controllers\ResetPasswordController;
+use Modules\Client\App\Http\Controllers\ForgotPasswordController;
 
 /*
 |--------------------------------------------------------------------------
@@ -63,6 +65,16 @@ Route::post('/orders/{id}/cancel', [MyAccountController::class, 'cancelOrder'])-
 Route::post('/orders/{id}/reset', [MyAccountController::class, 'resetOrder'])->name('orders.reset');
 Route::post('/orders/{id}/received', [MyAccountController::class, 'markAsReceived'])->name('orders.received');
 
+// Route cho trang yêu cầu đặt lại mật khẩu
+Route::get('/forgot-password', [ForgotPasswordController::class, 'forgotPasswordForm'])->name('forgot-password');
+Route::post('/forgot-password', [ForgotPasswordController::class, 'sendResetLinkEmail'])->name('email-password');
 
+// Route cho trang đặt lại mật khẩu
+Route::get('/reset-password/{token}', [ResetPasswordController::class, 'showResetForm'])->name('password.reset');
+Route::post('/reset-password', [ResetPasswordController::class, 'reset'])->name('password.update');
+
+// đăng nhập với google
+Route::get('auth/google', [LoginController::class, 'redirectToGoogle'])->name('auth.google');
+Route::get('auth/google/callback', [LoginController::class, 'handleGoogleCallback']);
 
 

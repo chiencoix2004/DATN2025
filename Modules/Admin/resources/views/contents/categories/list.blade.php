@@ -27,7 +27,7 @@
                         </div>
                         <div class="col-auto">
                             <label class="form-label" for="autoSizingSelect">Mục</label>
-                            <select class="form-select @error('parent_id') is-invalid @enderror" id="autoSizingSelect" name="parent_id" onchange="toggleNewCategoryInput(this)">
+                            <select class="form-select @error('parent_id') is-invalid @enderror" id="autoSizingSelect" name="parent_id" >
                                 <option selected>Trống</option>         
                                 @foreach ($listCate as $item)
                                     <option value="{{ $item->id }}"
@@ -141,7 +141,13 @@
                                 </td>
                                 <td>
                                     @if ($item->image_cover)
-                                        <img src="{{ Storage::url($item->image_cover) }}" width="100" height="100"
+                                    @php
+                                        $url = $item->image_cover;
+                                        if (!\Str::contains($url, 'http')) {
+                                            $url = \Storage::url($url);
+                                        }
+                                    @endphp
+                                        <img src="{{ $url }}" width="100" height="100"
                                             alt="">
                                     @endif
                                 </td>
@@ -203,15 +209,6 @@
             document.getElementById('slug').value = slug;
         });
 
-        function toggleNewCategoryInput(selectElement) {
-            const newCategoryInput = document.getElementById('newCategoryInput');
-
-            if (selectElement.value === 'new') {
-                newCategoryInput.style.display = 'block'; // Hiện ô input
-            } else {
-                newCategoryInput.style.display = 'none'; // Ẩn ô input nếu chọn mục khác
-            }
-        }
     </script>
 @endsection
 @section('css-libs')

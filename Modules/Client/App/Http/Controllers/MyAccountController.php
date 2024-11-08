@@ -2,6 +2,7 @@
 
 namespace Modules\Client\App\Http\Controllers;
 
+
 use App\Models\Order;
 use Barryvdh\DomPDF\PDF;
 use Illuminate\Support\Str;
@@ -13,6 +14,7 @@ use App\Http\Controllers\Controller;
 use Barryvdh\DomPDF\Facade\Pdf as FacadePdf;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Storage;
+
 
 class MyAccountController extends Controller
 {
@@ -173,7 +175,6 @@ class MyAccountController extends Controller
         return response()->json(['message' => 'Đơn hàng đã được đánh dấu là đã nhận'], 200);
     }
 
-
     /**
      * Show the form for creating a new resource.
      */
@@ -218,11 +219,6 @@ class MyAccountController extends Controller
      * Remove the specified resource from storage.
      */
     public function destroy($id)
-    {
-        //
-    }
-
-    public function myOrder($id)
     {
         //
     }
