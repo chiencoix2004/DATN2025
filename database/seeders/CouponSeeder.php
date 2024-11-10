@@ -14,7 +14,7 @@ class CouponSeeder extends Seeder
      */
     public function run(): void
     {
-        for ($i = 1; $i <= 5; $i++) {
+        for ($i = 1; $i <= 100; $i++) {
             DB::table('coupons')->insert([
                 'name' => "Coupon $i",
                 'date_start' => now(),

@@ -4,12 +4,14 @@ use Illuminate\Support\Facades\Route;
 use Modules\Client\App\Http\Controllers\AuthController;
 // use Modules\Client\App\Http\Controllers\AuthController;
 use Modules\Client\App\Http\Controllers\CartController;
+use Modules\Client\App\Http\Controllers\ChangePasswordController;
 use Modules\Client\App\Http\Controllers\ClientController;
 use Modules\Client\App\Http\Controllers\MyAccountController;
 use Modules\Client\App\Http\Controllers\RegisterController;
 use Modules\Client\App\Http\Controllers\ShopController;
 use Modules\Client\App\Http\Controllers\VerificationController;
 use Modules\Client\App\Http\Controllers\LoginController;
+use Modules\Client\App\Http\Controllers\VoucherController;
 
 /*
 |--------------------------------------------------------------------------
@@ -55,6 +57,14 @@ Route::post('/login', [LoginController::class, 'login'])->name('login');
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
 Route::get('/my-account', [MyAccountController::class,'index'])->name('my-account');  
+//đổi mật khẩu
+Route::match(['get', 'post'], '/password/change', [ChangePasswordController::class, 'update'])
+    ->middleware('auth')
+    ->name('password.change');
 
+//danh sách mã giảm giá
+Route::get('/listVoucher', [VoucherController::class, 'listVoucher'])->name('listVoucher');
+//giỏ hàng
+Route::get('/cart',[CartController::class, 'destroy'])->name('cart.destroy');
 
 

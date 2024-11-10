@@ -16,7 +16,7 @@ class MyAccountController extends Controller
     {
         return view('client::contents.auth.my-account');
     }
-
+    
     /**
      * Show the form for creating a new resource.
      */
@@ -30,7 +30,7 @@ class MyAccountController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
-        //
+        return redirect()->route('home');
     }
 
     /**
@@ -54,7 +54,7 @@ class MyAccountController extends Controller
      */
     public function update(Request $request, $id): RedirectResponse
     {
-        //
+        return redirect()->route('home');
     }
 
     /**

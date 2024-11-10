@@ -33,6 +33,12 @@
                         <li>
                             <a href="{{ route('my-account') }}">Chi tiết tài khoản</a>
                         </li>
+                        <li>
+                            <a href="{{ route('password.change') }}">Đổi mật khẩu</a>
+                        </li>
+                        <li>
+                            <a href="{{ route('listVoucher') }}">Danh sách voucher</a>
+                        </li>
                         <br>
                         <hr>
                         <li>
