@@ -177,7 +177,23 @@
                                         @foreach ($roles as $role)
                                             <option value="{{ $role->id }}"
                                                 {{ $user->roles_id == $role->id ? 'selected' : '' }}>
-                                                {{ $role->role_type }}</option>
+                                                @switch($role->role_type)
+                                                    @case('employee')
+                                                        Nhân viên
+                                                        @break
+                                                    @case('affiliate')
+                                                        Cộng tác viên
+                                                        @break
+                                                    @case('employee_support')
+                                                        Nhân viên hỗ trợ
+                                                        @break
+                                                    @case('employee_stock_controller')
+                                                        Nhân viên quản lý kho
+                                                        @break
+                                                    @default
+                                                        {{ $role->role_type }}
+                                                @endswitch
+                                            </option>
                                         @endforeach
                                     </select>
                                     @error('roles_id')

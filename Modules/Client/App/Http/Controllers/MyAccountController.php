@@ -32,7 +32,7 @@ class MyAccountController extends Controller
 
         $perPage = 5;
 
-        $orders = Order::where('users_id', auth()->id())->orderBy('created_at', 'desc')->paginate($perPage);
+        $orders = Order::where('users_id', auth()->id())->orderBy('date_create_order', 'desc')->paginate($perPage);
 
         $formattedOrders = $orders->getCollection()->map(function ($order) {
 
@@ -40,7 +40,7 @@ class MyAccountController extends Controller
             $total_price = OrderDetailModel::where('order_id', $order->id)->sum('product_price_final');
             return [
                 'id' => $order->id,
-                'date' => $order->created_at ? $order->created_at->format('d-m-Y') : null,
+                'date' => $order->date_create_order ? Carbon::parse($order->date_create_order)->format('d-m-Y') : null,
                 'status' => $order->status_order,
                 'total' => number_format($total_price, 0, ',', '.') . " VND cho {$items_count} sản phẩm"
             ];
@@ -60,8 +60,7 @@ class MyAccountController extends Controller
 
     public function getOrderDetails($id)
     {
-        $order = Order::with('orderItems')->findOrFail($id);
-
+        $order = Order::with('orderItems')->where('users_id',auth()->id())->findOrFail($id);
         return response()->json([
             'id' => $order->id,
             'user_note' => $order->user_note,

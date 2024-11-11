@@ -17,7 +17,7 @@
 @section('css-setting')
 @endsection
 @section('contents')
-    <form id="create" action="{{ route('admin.accounts.store') }}"  method="POST" enctype="multipart/form-data">
+    <form id="create" action="{{ route('admin.accounts.store') }}" method="POST" enctype="multipart/form-data">
         @csrf
         <div class="card mb-3">
             <div class="card-body">
@@ -45,38 +45,52 @@
                             <div class="col-6 mb-3">
                                 <label class="form-label" for="user_name">Tên đăng nhập:</label>
                                 <input class="form-control" name="user_name" id="user_name" type="text" />
-                                @error('user_name')<label class="form-label text-danger">{{ $message }} </label>@enderror
+                                @error('user_name')
+                                    <label class="form-label text-danger">{{ $message }} </label>
+                                @enderror
                             </div>
                             <div class="col-6 mb-3">
                                 <label class="form-label" for="full_name">Họ và tên:</label>
                                 <input class="form-control" name="full_name" id="full_name" type="text" />
-                                @error('full_name')<label class="form-label text-danger">{{ $message }} </label>@enderror
+                                @error('full_name')
+                                    <label class="form-label text-danger">{{ $message }} </label>
+                                @enderror
                             </div>
                             <div class="col-6 mb-3">
                                 <label class="form-label" for="phone">Số điện thoại</label>
                                 <input class="form-control" name="phone" id="phone" type="text" />
-                                @error('phone')<label class="form-label text-danger">{{ $message }} </label>@enderror
+                                @error('phone')
+                                    <label class="form-label text-danger">{{ $message }} </label>
+                                @enderror
                             </div>
                             <div class="col-6 mb-3">
                                 <label class="form-label" for="email">Email</label>
                                 <input class="form-control" name="email" id="email" type="text" />
-                                @error('email')<label class="form-label text-danger">{{ $message }} </label>@enderror
+                                @error('email')
+                                    <label class="form-label text-danger">{{ $message }} </label>
+                                @enderror
                             </div>
                             <div class="col-6 mb-3">
                                 <label class="form-label" for="password">Mật khẩu</label>
                                 <input class="form-control" name="password" id="password" type="password" />
-                                @error('password')<label class="form-label text-danger">{{ $message }} </label>@enderror
+                                @error('password')
+                                    <label class="form-label text-danger">{{ $message }} </label>
+                                @enderror
                             </div>
                             <div class="col-6 mb-3">
                                 <label class="form-label" for="re_enter_password">Nhập lại mật khẩu</label>
                                 <input class="form-control" name="re_enter_password" id="re_enter_password"
                                     type="password" />
-                                    @error('re_enter_password')<label class="form-label text-danger">{{ $message }} </label>@enderror
+                                @error('re_enter_password')
+                                    <label class="form-label text-danger">{{ $message }} </label>
+                                @enderror
                             </div>
                             <div class="col-12 mb-3">
                                 <label class="form-label" for="address">Địa chỉ:</label>
                                 <input class="form-control" name="address" id="address" type="text" />
-                                @error('address')<label class="form-label text-danger">{{ $message }} </label>@enderror
+                                @error('address')
+                                    <label class="form-label text-danger">{{ $message }} </label>
+                                @enderror
                             </div>
                         </div>
 
@@ -85,7 +99,9 @@
                 <div class="card mb-3">
                     <div class="card-header bg-body-tertiary">
                         <h6 class="mb-0">Thêm ảnh</h6>
-                        @error('img')<label class="form-label text-danger">{{ $message }} </label>@enderror
+                        @error('img')
+                            <label class="form-label text-danger">{{ $message }} </label>
+                        @enderror
                     </div>
                     <div class="card-body">
                         <div class="dropzone dropzone-multiple p-0" id="dropzoneMultipleFileUpload"
@@ -127,11 +143,10 @@
                                 </div>
                             </div>
                         </div>
-                        <input type="file" name="img" id="hidden-files" 
-                            style="display: none;">
-                           
+                        <input type="file" name="img" id="hidden-files" style="display: none;">
+
                     </div>
-                   
+
                 </div>
 
             </div>
@@ -148,10 +163,33 @@
                                     <select class="form-select" id="roles_id" name="roles_id">
                                         <option value="">chọn chức vụ</option>
                                         @foreach ($roles as $role)
-                                            <option value="{{ $role->id }}">{{ $role->role_type }}</option>
+                                            <option value="{{ $role->id }}">
+                                                @switch($role->role_type)
+                                                    @case('employee')
+                                                        Nhân viên
+                                                    @break
+
+                                                    @case('affiliate')
+                                                        Cộng tác viên
+                                                    @break
+
+                                                    @case('employee_support')
+                                                        Nhân viên hỗ trợ
+                                                    @break
+
+                                                    @case('employee_stock_controller')
+                                                        Nhân viên quản lý kho
+                                                    @break
+
+                                                    @default
+                                                        {{ $role->role_type }}
+                                                @endswitch
+                                            </option>
                                         @endforeach
                                     </select>
-                                    @error('roles_id')<label class="form-label text-danger">{{ $message }} </label>@enderror
+                                    @error('roles_id')
+                                        <label class="form-label text-danger">{{ $message }} </label>
+                                    @enderror
                                 </div>
                             </div>
                         </div>

@@ -71,7 +71,10 @@
                     },
                     {
                         data: 'discount_type',
-                        name: 'discount_type'
+                        name: 'discount_type',
+                        render: function(data, type, row) {
+                            return data === 'percent' ? 'Phần trăm' : 'Cố định';
+                        }
                     },
                     {
                         data: 'quantity',
