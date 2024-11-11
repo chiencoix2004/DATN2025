@@ -77,6 +77,92 @@
             font-size: 24px;
             cursor: pointer;
         }
+
+        /* Style cho dropdown */
+        .dropdown-menu {
+            min-width: 120px;
+            padding: 0.5rem 0;
+            margin: 0;
+            border-radius: 4px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .dropdown-item {
+            padding: 0.5rem 1rem;
+            font-size: 14px;
+            color: #333;
+            transition: background-color 0.2s;
+        }
+
+        .dropdown-item:hover {
+            background-color: #f8f9fa;
+            color: #222;
+        }
+
+        /* Giữ style của nút Kenne */
+        .kenne-btn.dropdown-toggle {
+            padding-right: 1.5rem;
+        }
+
+        .kenne-btn.dropdown-toggle::after {
+            margin-left: 0.5rem;
+        }
+
+        /* Đảm bảo dropdown không bị overflow */
+        .table td {
+            position: relative;
+        }
+
+        /* Style cho dropdown button */
+        .kenne-btn.dropdown-toggle {
+            padding: 0.375rem 1.5rem;
+            min-width: 100px;
+            /* Đảm bảo nút có chiều rộng cố định */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        /* Căn chỉnh mũi tên dropdown */
+        .kenne-btn.dropdown-toggle::after {
+            position: absolute;
+            right: 8px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        /* Style cho văn bản trong nút */
+        .kenne-btn.dropdown-toggle span {
+            margin-right: 8px;
+            /* Tạo khoảng cách giữa chữ và mũi tên */
+        }
+
+        /* Các style khác giữ nguyên */
+        .dropdown-menu {
+            min-width: 120px;
+            padding: 0.5rem 0;
+            margin: 0;
+            border-radius: 4px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .dropdown-item {
+            padding: 0.5rem 1rem;
+            font-size: 14px;
+            color: #333;
+            transition: background-color 0.2s;
+        }
+
+        .dropdown-item:hover {
+            background-color: #f8f9fa;
+            color: #222;
+        }
+
+        /* Đảm bảo dropdown không bị overflow */
+        .table td {
+            position: relative;
+        }
     </style>
     <script src="{{ asset('sweetalert2/sweetalert2.all.min.js') }}"></script>
     <link rel="stylesheet" href="{{ asset('sweetalert2/sweetalert2.min.css') }}">
@@ -401,40 +487,69 @@
                     .then(response => response.json())
                     .then(data => {
                         const tableBody = document.querySelector('.myaccount-orders tbody');
-                        tableBody.innerHTML = ''; // Xóa các hàng hiện có
+                        tableBody.innerHTML = '';
 
                         if (data.orders && data.orders.length > 0) {
                             data.orders.forEach(order => {
                                 const row = document.createElement('tr');
 
-                                // Tạo các nút "Hủy" và "Đặt lại" tùy thuộc vào trạng thái đơn hàng
-                                let actionButtons = '';
+                                // Tạo dropdown menu với các action tùy theo trạng thái
+                                let actionButtons = `
+                    <div class="dropdown d-inline-block">
+                        <button class="kenne-btn kenne-btn_sm dropdown-toggle d-flex align-items-center justify-content-center" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <span>Tác vụ</span>
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a class="dropdown-item view-order-btn" href="javascript:void(0)" data-order-id="${order.id}">
+                                    Xem chi tiết
+                                </a>
+                            </li>
+                `;
+
+                                // Thêm các action tùy theo trạng thái
                                 if (order.status === 'Chờ xác nhận' || order.status === 'Đã xác nhận') {
-                                    actionButtons =
-                                        `<button class="kenne-btn kenne-btn_sm cancel-order-btn" data-order-id="${order.id}">Hủy</button>`;
+                                    actionButtons += `
+                        <li>
+                            <a class="dropdown-item cancel-order-btn" href="javascript:void(0)" data-order-id="${order.id}">
+                                Hủy
+                            </a>
+                        </li>
+                    `;
                                 } else if (order.status === 'Đơn hàng bị hủy') {
-                                    actionButtons =
-                                        `<button class="kenne-btn kenne-btn_sm reset-order-btn" data-order-id="${order.id}">Đặt lại</button>`;
+                                    actionButtons += `
+                        <li>
+                            <a class="dropdown-item reset-order-btn" href="javascript:void(0)" data-order-id="${order.id}">
+                                Đặt lại
+                            </a>
+                        </li>
+                    `;
                                 } else if (order.status === 'Đang giao hàng') {
-                                    actionButtons =
-                                        `<button class="kenne-btn kenne-btn_sm received-order-btn" data-order-id="${order.id}">Đã nhận hàng</button>`;
+                                    actionButtons += `
+                        <li>
+                            <a class="dropdown-item received-order-btn" href="javascript:void(0)" data-order-id="${order.id}">
+                                Đã nhận hàng
+                            </a>
+                        </li>
+                    `;
                                 }
 
+                                actionButtons += `
+                        </ul>
+                    </div>
+                `;
 
                                 row.innerHTML = `
-                        <td><a class="account-order-id" href="javascript:void(0)">#${order.id}</a></td>
-                        <td>${order.date}</td>
-                        <td>${order.status}</td>
-                        <td>${order.total}</td>
-                        <td>
-                            <a href="javascript:void(0)" class="kenne-btn kenne-btn_sm view-order-btn" data-order-id="${order.id}"><span>Xem</span></a>
-                            ${actionButtons}
-                        </td>
-                    `;
+                    <td><a class="account-order-id" href="javascript:void(0)">#${order.id}</a></td>
+                    <td>${order.date}</td>
+                    <td>${order.status}</td>
+                    <td>${order.total}</td>
+                    <td>${actionButtons}</td>
+                `;
                                 tableBody.appendChild(row);
                             });
 
-                            // Thêm sự kiện click vào mỗi nút "Xem"
+                            // Thêm sự kiện click cho các action
                             document.querySelectorAll('.view-order-btn').forEach(button => {
                                 button.addEventListener('click', function() {
                                     const orderId = this.getAttribute('data-order-id');
@@ -442,7 +557,6 @@
                                 });
                             });
 
-                            // Thêm sự kiện click cho các nút "Hủy"
                             document.querySelectorAll('.cancel-order-btn').forEach(button => {
                                 button.addEventListener('click', function() {
                                     const orderId = this.getAttribute('data-order-id');
@@ -450,7 +564,6 @@
                                 });
                             });
 
-                            // Thêm sự kiện click cho các nút "Đặt lại"
                             document.querySelectorAll('.reset-order-btn').forEach(button => {
                                 button.addEventListener('click', function() {
                                     const orderId = this.getAttribute('data-order-id');
@@ -458,7 +571,6 @@
                                 });
                             });
 
-                            // Thêm sự kiện click cho các nút "Đã nhận hàng"
                             document.querySelectorAll('.received-order-btn').forEach(button => {
                                 button.addEventListener('click', function() {
                                     const orderId = this.getAttribute('data-order-id');

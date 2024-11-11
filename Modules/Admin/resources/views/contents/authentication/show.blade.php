@@ -118,9 +118,27 @@
                     <div class="card-body">
                         <div class="row gx-2">
                             <div class="col-12 mb-3">
-                                <label class="form-label" for="roles_id">Chọn loại tài khoản:</label>
-                                <input class="form-control" name="role_type" id="role_type" type="text"
-                                    value="{{ $user->role_type }}" disabled />
+                                <label class="form-label" for="roles_id">loại tài khoản:</label>
+                                <select class="form-control" name="roles_id" id="roles_id" disabled>
+                                    <option value="{{ $user->roles_id }}">
+                                        @switch($user->role_type)
+                                            @case('employee')
+                                                Nhân viên
+                                                @break
+                                            @case('affiliate')
+                                                Cộng tác viên
+                                                @break
+                                            @case('employee_support')
+                                                Nhân viên hỗ trợ
+                                                @break
+                                            @case('employee_stock_controller')
+                                                Nhân viên quản lý kho
+                                                @break
+                                            @default
+                                                {{ $user->role_type }}
+                                        @endswitch
+                                    </option>
+                                </select>
                                 @error('roles_id')
                                     <label class="form-label text-danger">{{ $message }} </label>
                                 @enderror

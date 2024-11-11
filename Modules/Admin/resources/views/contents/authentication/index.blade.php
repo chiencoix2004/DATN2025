@@ -30,7 +30,24 @@
                     <select id="role" name="role" class="form-select me-2" aria-label="Lựa chọn bộ lọc">
                         <option value="">Tất cả chức vụ</option>
                         @foreach($roles as $role)
-                            <option value="{{ $role->id }}">{{ $role->role_type }}</option>
+                            <option value="{{ $role->id }}">
+                                @switch($role->role_type)
+                                    @case('employee')
+                                        Nhân viên
+                                        @break
+                                    @case('affiliate')
+                                        Cộng tác viên
+                                        @break
+                                    @case('employee_support')
+                                        Nhân viên hỗ trợ
+                                        @break
+                                    @case('employee_stock_controller')
+                                        Nhân viên quản lý kho
+                                        @break
+                                    @default
+                                        {{ $role->role_type }}
+                                @endswitch
+                            </option>
                         @endforeach
                     </select>
                     <button type="button" id="filter" class="btn btn-secondary">Lọc</button>
@@ -41,9 +58,11 @@
                 <thead>
                     <tr>
                         <th>Mã</th>
+                        <th>Ảnh</th>
                         <th>Tên</th>
                         <th>Email</th>
                         <th>Số điện thoại</th>
+                        <th>chức vụ</th>
                         <th>Hành động</th>
                     </tr>
                 </thead>
@@ -65,6 +84,14 @@
                 },
                 columns: [
                     {data: 'id', name: 'id'},
+                    {
+                        data: 'user_image',
+                        render: function(data, type, row) {
+                            return `<img src="{{ Storage::url('${data}') }}" alt="ảnh" class="img-thumbnail" width="50" height="50">`;
+                        },
+                        orderable: false,
+                        searchable: false
+                    },
                     {data: 'full_name', name: 'full_name'},
                     {
                         data: 'email',
@@ -77,6 +104,25 @@
                         render: function(data, type, row) {
                             return `<a href="tel:${data}">${data}</a>`;
                         }
+                    },
+                    {
+                        data: 'roles_id',
+                        render: function(data, type, row) {
+                            switch(data) {
+                                case 3:
+                                    return 'Nhân viên';
+                                case 4:
+                                    return 'Cộng tác viên';
+                                case 5:
+                                    return 'Nhân viên hỗ trợ';
+                                case 6:
+                                    return 'Nhân viên quản lý kho';
+                                default:
+                                    return data;
+                            }
+                        },
+                        orderable: false,
+                        searchable: false
                     },
                     {
                         data: null,
