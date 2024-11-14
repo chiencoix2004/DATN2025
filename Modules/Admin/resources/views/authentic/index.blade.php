@@ -52,11 +52,11 @@
                     </a>
                     <div class="login-box">
                         <div>
-                            <h3>Login to account</h3>
-                            <div class="body-text">Enter your email & password to login</div>
+                            <h3>Đăng nhập vào tài khoản Quản trị viên</h3>
+                            <div class="body-text">Nhập Email của bạn và Mật khẩu để đăng nhập</div>
                         </div>
 
-                        <form action="{{ route('login.admin') }}" method="POST"
+                        <form action="{{ route('loginAdmin') }}" method="POST"
                             class="form-login flex flex-column gap24">
                             @csrf
 
@@ -72,15 +72,15 @@
 
 
                             <div class="email">
-                                <div class="body-title mb-10">Email address <span class="tf-color-1">*</span></div>
+                                <div class="body-title mb-10">Địa chỉ Email <span class="tf-color-1">*</span></div>
                                 <input class="flex-grow" id="email" type="email"
-                                    placeholder="Enter your email address" name="email" tabindex="0" value=""
+                                    placeholder="Nhập Email" name="email" tabindex="0" value=""
                                     required="">
                             </div>
                             <div class="password">
-                                <div class="body-title mb-10">Password <span class="tf-color-1">*</span></div>
+                                <div class="body-title mb-10">Mật khẩu <span class="tf-color-1">*</span></div>
                                 <input class="password-input" id="password" type="password"
-                                    placeholder="Enter your password" name="password" tabindex="0" value=""
+                                    placeholder="Nhập mật khẩu" name="password" tabindex="0" value=""
                                     required="">
                                 <span class="show-pass">
                                     <i class="icon-eye view"></i>
@@ -91,15 +91,14 @@
                                 <div class="flex gap10">
                                     <input class="" type="checkbox" id="signed" name="remember">
 
-                                    <label class="body-text" for="signed">Keep me signed in</label>
+                                    <label class="body-text" for="signed">Ghi nhớ tôi</label>
                                 </div>
-                                <a href="#" class="body-text tf-color">Forgot password?</a>
+                                <a href="#" class="body-text tf-color">Quên mật khẩu?</a>
                             </div>
-                            <button class="tf-button w-full" type="submit">Login</button>
+                            <button class="tf-button w-full" type="submit">Đăng nhập</button>
                         </form>
 
-
-                        <div>
+                        {{-- <div>
                             <div class="text-tiny mb-16 text-center">Or continue with social account</div>
                             <div class="flex gap16 mobile-wrap">
                                 <a href="index.html" class="tf-button style-2 w-full">
@@ -159,7 +158,7 @@
                         <div class="body-text text-center">
                             You don't have an account yet?
                             <a href="sign-up.html" class="body-text tf-color">Register Now</a>
-                        </div>
+                        </div> --}}
                     </div>
                 </div>
                 <div class="text-tiny">Copyright © 2024 Remos, All rights reserved.</div>

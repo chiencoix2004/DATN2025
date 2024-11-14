@@ -3,6 +3,7 @@
 namespace Modules\Client\App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Models\Product;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -20,7 +21,9 @@ class ClientController extends Controller
         $bannertop = $banner->getTopPosition();
         $bannercenter = $banner->getCenterPosition();
         $bannerbottom = $banner->getBottomPosition();
-        return view('client::index', compact('bannertop', 'bannercenter', 'bannerbottom', 'slider'));
+        // dd($bannerbottom);
+        $products_new = Product::query()->latest('id')->where('is_active', 1)->limit(10)->get();
+        return view('client::index', compact('bannertop', 'bannercenter', 'bannerbottom', 'slider', 'products_new'));
     }
 
     /**

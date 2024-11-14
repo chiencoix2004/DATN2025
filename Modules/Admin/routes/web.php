@@ -48,7 +48,7 @@ Route::controller(BannerController::class)
 
 
 Route::get('login-admin', [AuthenticateController::class, 'showLoginForm'])->name('login.admin');
-Route::post('post-login-admin', [AuthenticateController::class, 'PostLogin'])->name('post.login.admin');
+Route::post('post-login-admin', [AuthenticateController::class, 'PostLogin'])->name('loginAdmin');
 Route::get('logout-admin', [AuthenticateController::class, 'logout'])->name('logout.admin');
 
 
