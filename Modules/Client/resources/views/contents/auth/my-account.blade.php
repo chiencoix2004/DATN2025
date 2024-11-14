@@ -197,7 +197,7 @@
                             <li class="nav-item">
                                 <a class="nav-link" id="account-orders-tab" data-bs-toggle="tab" href="#account-orders"
                                     role="tab" aria-controls="account-orders" aria-selected="false">Đơn hàng</a>
-                            </li>
+                            </li> 
                             <li class="nav-item">
                                 <a class="nav-link" id="account-address-tab" data-bs-toggle="tab" href="#account-address"
                                     role="tab" aria-controls="account-address" aria-selected="false">Địa chỉ</a>
@@ -222,11 +222,70 @@
                             <div class="tab-pane fade show active" id="account-dashboard" role="tabpanel"
                                 aria-labelledby="account-dashboard-tab">
                                 <div class="myaccount-dashboard">
-                                    <p>Xin chào <b>Edwin Adams</b> (không phải Edwin Adams? <a
-                                            href="login-register.html">Đăng xuất</a>)</p>
-                                    <p>Từ bảng điều khiển tài khoản của bạn, bạn có thể xem các đơn hàng gần đây, quản lý
-                                        địa chỉ giao hàng và thanh toán của bạn và <a href="javascript:void(0)">chỉnh sửa
-                                            mật khẩu và chi tiết tài khoản</a>.</p>
+                                                    <div class="rounded-top text-white d-flex flex-row" style="background-color: #000; height:200px;">
+                                                      <div class="ms-4 mt-5 d-flex flex-column" style="width: 150px;">
+                                                        <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-profiles/avatar-1.webp"
+                                                          alt="Generic placeholder image" class="img-fluid img-thumbnail mt-4 mb-2"
+                                                          style="width: 150px; z-index: 1">
+                                                        <button  type="button" data-mdb-button-init data-mdb-ripple-init class="btn btn-outline-dark text-body" data-mdb-ripple-color="dark" style="z-index: 1;">
+                                                          Edit profile
+                                                        </button>
+                                                      </div>
+                                                      <div class="ms-3" style="margin-top: 130px;">
+                                                        <h5>{{ Auth::user()->full_name }}</h5>
+                                                        <p>{{ Auth::user()->address }}</p>
+                                                      </div>
+                                                    </div>
+                                                    <div class="p-4 text-black bg-body-tertiary">
+                                                      <div class="d-flex justify-content-end text-center py-1 text-body">
+                                                        <div>
+                                                          <p class="mb-1 h5">253</p>
+                                                          <p class="small text-muted mb-0">Photos</p>
+                                                        </div>
+                                                        <div class="px-3">
+                                                          <p class="mb-1 h5">1026</p>
+                                                          <p class="small text-muted mb-0">Followers</p>
+                                                        </div>
+                                                        <div>
+                                                          <p class="mb-1 h5">478</p>
+                                                          <p class="small text-muted mb-0">Following</p>
+                                                        </div>
+                                                      </div>
+                                                    </div>
+                                                    <div class="card-body p-4 text-black">
+                                                      <div class="mb-5  text-body">
+                                                        <p class="lead fw-normal mb-1">About</p>
+                                                        <div class="p-4 bg-body-tertiary">
+                                                          <p class="font-italic mb-1">Web Developer</p>
+                                                          <p class="font-italic mb-1">Lives in New York</p>
+                                                          <p class="font-italic mb-0">Photographer</p>
+                                                        </div>
+                                                      </div>
+                                                      <div class="d-flex justify-content-between align-items-center mb-4 text-body">
+                                                        <p class="lead fw-normal mb-0">Recent photos</p>
+                                                        <p class="mb-0"><a href="#!" class="text-muted">Show all</a></p>
+                                                      </div>
+                                                      <div class="row g-2">
+                                                        <div class="col mb-2">
+                                                          <img src="https://mdbcdn.b-cdn.net/img/Photos/Lightbox/Original/img%20(112).webp" alt="image 1"
+                                                            class="w-100 rounded-3">
+                                                        </div>
+                                                        <div class="col mb-2">
+                                                          <img src="https://mdbcdn.b-cdn.net/img/Photos/Lightbox/Original/img%20(107).webp" alt="image 1"
+                                                            class="w-100 rounded-3">
+                                                        </div>
+                                                      </div>
+                                                      <div class="row g-2">
+                                                        <div class="col">
+                                                          <img src="https://mdbcdn.b-cdn.net/img/Photos/Lightbox/Original/img%20(108).webp" alt="image 1"
+                                                            class="w-100 rounded-3">
+                                                        </div>
+                                                        <div class="col">
+                                                          <img src="https://mdbcdn.b-cdn.net/img/Photos/Lightbox/Original/img%20(114).webp" alt="image 1"
+                                                            class="w-100 rounded-3">
+                                                        </div>
+                                                      </div>
+                                                    </div>
                                 </div>
                             </div>
                             <div class="tab-pane fade" id="account-orders" role="tabpanel"
@@ -353,45 +412,57 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="tab-pane fade" id="account-details" role="tabpanel"
-                                aria-labelledby="account-details-tab">
+                            <div class="tab-pane fade" id="account-details" role="tabpanel" aria-labelledby="account-details-tab">
                                 <div class="myaccount-details">
-                                    <form action="#" class="kenne-form">
+                                    <form id="changePasswordForm" class="kenne-form">
+                                        @csrf
                                         <div class="kenne-form-inner">
-                                            <div class="single-input single-input-half">
-                                                <label for="account-details-firstname">First Name*</label>
-                                                <input type="text" id="account-details-firstname">
+                                            <div class="single-input">
+                                                <label for="account-details-firstname">Họ và tên*</label>
+                                                <input type="text" name="full_name" id="account-details-firstname" value="{{ $user->full_name }}">
+                                                <div class="error-message" id="error-full_name"></div>
                                             </div>
-                                            <div class="single-input single-input-half">
-                                                <label for="account-details-lastname">Last Name*</label>
-                                                <input type="text" id="account-details-lastname">
+                                            <div class="single-input">
+                                                <label for="account-details-address">Địa Chỉ*</label>
+                                                <input type="text" name="address" id="account-details-address" value="{{ $user->address }}">
+                                                <div class="error-message" id="error-address"></div>
                                             </div>
+                                            <div class="single-input">
+                                                <label for="account-details-phone">Số điện thoại*</label>
+                                                <input type="text" name="phone" id="account-details-phone" value="{{ $user->phone }}">
+                                                <div class="error-message" id="error-phone"></div>
+                                            </div>                                            
                                             <div class="single-input">
                                                 <label for="account-details-email">Email*</label>
-                                                <input type="email" id="account-details-email">
+                                                <input type="email" name="email" id="account-details-email" value="{{ $user->email }}" readonly>
                                             </div>
+                                    
                                             <div class="single-input">
-                                                <label for="account-details-oldpass">Current Password(leave blank to leave
-                                                    unchanged)</label>
-                                                <input type="password" id="account-details-oldpass">
+                                                <label for="account-details-oldpass">Mật khẩu cũ*</label>
+                                                <input type="password" name="current_password" id="account-details-oldpass">
+                                                <div class="error-message" id="error-current_password"></div>
                                             </div>
+                                    
                                             <div class="single-input">
-                                                <label for="account-details-newpass">New Password (leave blank to leave
-                                                    unchanged)</label>
-                                                <input type="password" id="account-details-newpass">
+                                                <label for="account-details-newpass">Mật khẩu mới*</label>
+                                                <input type="password" name="new_password" id="account-details-newpass">
+                                                <div class="error-message" id="error-new_password"></div>
                                             </div>
+                                    
                                             <div class="single-input">
-                                                <label for="account-details-confpass">Confirm New Password</label>
-                                                <input type="password" id="account-details-confpass">
+                                                <label for="account-details-confpass">Xác nhận mật khẩu mới</label>
+                                                <input type="password" name="new_password_confirmation" id="account-details-confpass">
+                                                <div class="error-message" id="error-new_password_confirmation"></div>
                                             </div>
+                                    
                                             <div class="single-input">
-                                                <button class="kenne-btn kenne-btn_dark" type="submit"><span>SAVE
-                                                        CHANGES</span></button>
+                                                <button class="kenne-btn kenne-btn_dark" type="submit"><span>Đổi mật khẩu</span></button>
                                             </div>
                                         </div>
                                     </form>
                                 </div>
                             </div>
+                            
                         </div>
                     </div>
                 </div>
@@ -801,5 +872,53 @@
             // Mở một cửa sổ mới để tải xuống PDF
             window.location.href = `/orders/${orderId}/download-pdf`;
         }
+
+        document.addEventListener("DOMContentLoaded", function () {
+        const changePasswordForm = document.getElementById("changePasswordForm");
+
+        changePasswordForm.addEventListener("submit", function (e) {
+            e.preventDefault();
+
+            let formData = new FormData(changePasswordForm);
+
+            fetch("{{ route('change.password') }}", {
+                method: "POST",
+                headers: {
+                    "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').content,
+                    "Accept": "application/json"
+                },
+                body: formData
+            })
+            .then(response => {
+                if (!response.ok) {
+                    return response.json().then(errorData => {
+                        throw errorData;
+                    });
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.success) {
+                   // alert(data.message);
+                    Swal.fire('Thành công!', data.message, 'success');
+                    changePasswordForm.reset();
+                }
+            })
+            .catch(errorData => {
+                const errors = errorData.errors;
+                document.getElementById("error-full_name").innerText = errors.full_name || "";
+                document.getElementById("error-address").innerText = errors.address || "";
+                document.getElementById("error-current_password").innerText = errors.current_password || "";
+                document.getElementById("error-new_password").innerText = errors.new_password || "";
+                document.getElementById("error-new_password_confirmation").innerText = errors.new_password_confirmation || "";
+                document.getElementById("error-phone").innerText = errors.phone || ""; // Phone field error
+                if (errorData.error) {
+                    alert(errorData.error);
+                }
+            });
+        });
+    });
+
+
     </script>
 @endsection
