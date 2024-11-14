@@ -30,7 +30,9 @@ Route::controller(ClientController::class)->group(function () {
 });
 Route::controller(ShopController::class)->prefix('shop')->as('shop.')->group(function () {
     Route::get('/', 'index')->name('shopIndex');
-    Route::get('productDetail', 'show')->name('productDetail');
+    Route::get('product-detail/{slug}', 'show')->name('productDetail');
+    Route::post('rend-variant', 'rendAjax')->name('rend_variant');
+    Route::post('rend-product-variant', 'rendPrdV')->name('rendPrdV');
 });
 Route::controller(CartController::class)->prefix('cart')->as('cart.')->group(function () {
     Route::get('listCart', 'index')->name('list');

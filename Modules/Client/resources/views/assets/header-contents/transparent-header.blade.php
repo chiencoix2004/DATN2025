@@ -16,9 +16,10 @@
                                 </li>
                                 <li class="megamenu-holder position-static">
                                     <a href="{{ route('shop.shopIndex') }}">
-                                        Cửa hàng <i class="ion-chevron-down"></i>
+                                        Cửa hàng 
+                                        {{-- <i class="ion-chevron-down"></i> --}}
                                     </a>
-                                    <ul class="kenne-megamenu">
+                                    {{-- <ul class="kenne-megamenu">
                                         <li>
                                             <span class="megamenu-title">Shop Page Layout</span>
                                             <ul>
@@ -89,7 +90,7 @@
                                                 <li><a href="compare.html">So sánh</a></li>
                                             </ul>
                                         </li>
-                                    </ul>
+                                    </ul> --}}
                                 </li>
                                 <li>
                                     <a href="javascript:void(0)">Blog <i class="ion-chevron-down"></i></a>

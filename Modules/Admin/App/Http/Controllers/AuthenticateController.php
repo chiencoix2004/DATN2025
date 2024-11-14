@@ -24,7 +24,7 @@ class AuthenticateController extends Controller
         $remember = $req->has('remember');
     
         if (Auth::attempt($credentials, $remember)) {
-            return redirect()->route('home'); 
+            return redirect()->route('admin.home'); 
         }
     
         return redirect()->route('login.admin')->withErrors(['message' => 'Đăng nhập thất bại']);
