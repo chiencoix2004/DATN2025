@@ -95,9 +95,7 @@
                                 <li>
                                     <a href="javascript:void(0)">Blog <i class="ion-chevron-down"></i></a>
                                     <ul class="kenne-dropdown">
-                                        <li><a href="blog-grid_view.html">Grid View</a></li>
-                                        <li><a href="blog-list_view.html">List View</a></li>
-                                        <li><a href="blog-details.html">Blog Details</a></li>
+                                        <li><a href="{{ route('other.posts.index') }}">Bài Viết</a></li>
                                     </ul>
                                 </li>
                                 <li><a href="{{ route('other.contactUs') }}">Liên hệ</a></li>

@@ -96,16 +96,14 @@
                             </div>
                             <input type="file" name="image_post" id="hidden-files" style="display: none;">
                         </div>
-                        
+                        <p></p>
                 </div>
 
-                <div class="col-auto">
-                    <label class="form-label" for="basic-form-textarea">Bài viết</label>
-                    <textarea class="form-control @error('content') is-invalid @enderror" id="basic-form-textarea" rows="2"
-                        cols="50" name="content"></textarea>
-                    @error('content')
-                        <div class="invalid-feedback">{{ $message }}</div>
-                    @enderror
+                <div class="col-12 mb-3"><label class="form-label" for="content">Chi Tiết Bài Viết:</label>
+                    <div class="create-content-textarea">
+                        <textarea class="tinymce d-none" data-tinymce="data-tinymce" name="content" id="content"
+                            required="required"></textarea>
+                    </div>
                 </div>
         
                 <div class="col-auto">
@@ -202,8 +200,11 @@
 @endsection
 @section('css-libs')
     <link rel="stylesheet" href="{{ asset('theme/admin/vendors/dropzone/dropzone.css') }}">
+    <link href="{{ asset('theme/admin/vendors/choices/choices.min.css') }}" rel="stylesheet">
 @endsection
 @section('js-libs')
+<script src="{{ asset('theme/admin/vendors/choices/choices.min.js') }}"></script>
+<script src="{{ asset('theme/admin/vendors/tinymce/tinymce.min.js') }}"></script>
     <script src="{{ asset('theme/admin/vendors/jquery/jquery.min.js') }}"></script>
     <script src="{{ asset('theme/admin/vendors/datatables.net/jquery.dataTables.min.js') }}"></script>
     <script src="{{ asset('theme/admin/vendors/datatables.net-bs5/dataTables.bootstrap5.min.js') }}"></script>
