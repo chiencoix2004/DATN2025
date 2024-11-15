@@ -5,6 +5,7 @@ use Modules\Admin\App\Http\Controllers\AccountController;
 use Modules\Admin\App\Http\Controllers\AttributeController;
 use Modules\Admin\App\Http\Controllers\BannerController;
 use Modules\Admin\App\Http\Controllers\CategoryController;
+use Modules\Admin\App\Http\Controllers\ForgotPasswordController;
 use Modules\Admin\App\Http\Controllers\InvoiceController;
 use Modules\Admin\App\Http\Controllers\NotificationController;
 use Modules\Admin\App\Http\Controllers\OrderController;
@@ -35,21 +36,24 @@ use Modules\Admin\App\Http\Controllers\SupportController;
 //     Route::resource('admin', AdminController::class)->names('admin');
 // });
 
-Route::controller(BannerController::class)
-    ->name('admin.banner.')
-    ->prefix('admin/banner')
-    ->group(function () {
-        Route::get('list', 'index')->name('list');
-        Route::put('update', 'update')->name('update'); // Corrected Route::
-        Route::get('delete/{id}', 'delete')->name('delete');
-        Route::post('add', 'add')->name('add');
-    });
+
 
 
 
 Route::get('login-admin', [AuthenticateController::class, 'showLoginForm'])->name('login.admin');
 Route::post('post-login-admin', [AuthenticateController::class, 'PostLogin'])->name('loginAdmin');
 Route::get('logout-admin', [AuthenticateController::class, 'logout'])->name('logout.admin');
+
+
+Route::get('admin-forgot-password', [ForgotPasswordController::class, 'forgotPassword'])->name('admin.forgot.password');
+Route::post('admin-forgot-password', [ForgotPasswordController::class, 'postForgotPassword'])->name('admin.post.forgot.password');
+
+Route::get('admin-reset-password/{token}', [ForgotPasswordController::class, 'resetPassword'])->name('admin.reset.password');
+Route::post('admin-reset-password', [ForgotPasswordController::class, 'postResetPassword'])->name('admin.post.reset.password');
+
+Route::get('admin-confirm-mail', [ForgotPasswordController::class, 'confirmMail'])->name('admin.confirm.mail');
+
+
 
 
 Route::prefix('admin')
@@ -62,6 +66,15 @@ Route::prefix('admin')
         Route::get('/dashboard', function () {
             return view('admin::contents.dashboard');
         })->name('dashboard');
+
+        Route::controller(BannerController::class)
+            ->prefix('banner')->as('banner.')
+            ->group(function () {
+                Route::get('list', 'index')->name('list');
+                Route::put('update', 'update')->name('update'); // Corrected Route::
+                Route::get('delete/{id}', 'delete')->name('delete');
+                Route::post('add', 'add')->name('add');
+            });
 
         // Route quản lý categories
         Route::controller(CategoryController::class)->prefix('categories')->as('categories.')->group(function () {

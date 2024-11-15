@@ -21,6 +21,7 @@ class AccountController extends Controller
     public function index()
     {
         $roles = Role::whereNotIn('id', ['1', '2'])->get();
+        
         return view('admin::contents.authentication.index', compact('roles'));
     }
 

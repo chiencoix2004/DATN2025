@@ -66,6 +66,7 @@ Route::get('/orders/{id}/download-pdf', [MyAccountController::class, 'downloadPD
 Route::post('/orders/{id}/cancel', [MyAccountController::class, 'cancelOrder'])->name('orders.cancel');
 Route::post('/orders/{id}/reset', [MyAccountController::class, 'resetOrder'])->name('orders.reset');
 Route::post('/orders/{id}/received', [MyAccountController::class, 'markAsReceived'])->name('orders.received');
+Route::post('/update-password', [MyAccountController::class, 'changePassword'])->name('change.password');
 
 // Route cho trang yêu cầu đặt lại mật khẩu
 Route::get('/forgot-password', [ForgotPasswordController::class, 'forgotPasswordForm'])->name('forgot-password');

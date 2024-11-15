@@ -14,6 +14,8 @@ class CartController extends Controller
      */
     public function index()
     {
+        // $cart = session()->get('cart', []);
+        // $user = auth()->user(); // Lấy thông tin người dùng đã đăng nhập
         return view('client::contents.shops.cart');
     }
     public function checkout()

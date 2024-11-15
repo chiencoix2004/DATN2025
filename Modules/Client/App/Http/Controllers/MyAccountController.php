@@ -13,8 +13,10 @@ use App\Models\OrderDetailModel;
 use App\Http\Controllers\Controller;
 use Barryvdh\DomPDF\Facade\Pdf as FacadePdf;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
-
+use Illuminate\Support\Facades\Validator;
 
 class MyAccountController extends Controller
 {
@@ -22,9 +24,9 @@ class MyAccountController extends Controller
      * Display a listing of the resource.
      */
     public function index()
-    {
-        // dd($myOrder);
-        return view('client::contents.auth.my-account');
+    {           
+        $user = Auth::user();
+        return view('client::contents.auth.my-account', compact('user'));
     }
 
     public function getOrders(Request $request)
@@ -32,7 +34,7 @@ class MyAccountController extends Controller
 
         $perPage = 5;
 
-        $orders = Order::where('users_id', auth()->id())->orderBy('created_at', 'desc')->paginate($perPage);
+        $orders = Order::where('users_id', auth()->id())->orderBy('date_create_order', 'desc')->paginate($perPage);
 
         $formattedOrders = $orders->getCollection()->map(function ($order) {
 
@@ -40,7 +42,7 @@ class MyAccountController extends Controller
             $total_price = OrderDetailModel::where('order_id', $order->id)->sum('product_price_final');
             return [
                 'id' => $order->id,
-                'date' => $order->created_at ? $order->created_at->format('d-m-Y') : null,
+                'date' => $order->date_create_order ? Carbon::parse($order->date_create_order)->format('d-m-Y') : null,
                 'status' => $order->status_order,
                 'total' => number_format($total_price, 0, ',', '.') . " VND cho {$items_count} sản phẩm"
             ];
@@ -60,8 +62,7 @@ class MyAccountController extends Controller
 
     public function getOrderDetails($id)
     {
-        $order = Order::with('orderItems')->findOrFail($id);
-
+        $order = Order::with('orderItems')->where('users_id',auth()->id())->findOrFail($id);
         return response()->json([
             'id' => $order->id,
             'user_note' => $order->user_note,
@@ -175,6 +176,11 @@ class MyAccountController extends Controller
         return response()->json(['message' => 'Đơn hàng đã được đánh dấu là đã nhận'], 200);
     }
 
+    //chi tiết tài khoản
+    // public function accountDetail(){
+    //     $user = auth()->user();
+    //     return view('client::contents.auth.my-account', compact('user'));
+    // }
     /**
      * Show the form for creating a new resource.
      */
@@ -210,10 +216,66 @@ class MyAccountController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, $id): RedirectResponse
+    public function changePassword(Request $request)
     {
-        //
+        $messages = [
+            'full_name.required' => 'Trường họ và tên là bắt buộc.',
+            'full_name.string' => 'Trường họ và tên phải là một chuỗi ký tự.',
+            'full_name.max' => 'Trường họ và tên không được vượt quá 255 ký tự.',
+            'current_password.required' => 'Trường mật khẩu hiện tại là bắt buộc.',
+            'new_password.required' => 'Trường mật khẩu mới là bắt buộc.',
+            'new_password.string' => 'Mật khẩu mới phải là một chuỗi ký tự.',
+            'new_password.min' => 'Mật khẩu mới phải có ít nhất 8 ký tự.',
+            'new_password.confirmed' => 'Mật khẩu mới và xác nhận mật khẩu không khớp.',
+            'new_password.regex' => 'Mật khẩu mới phải có ít nhất một chữ cái, một chữ số và một ký tự đặc biệt.',
+            'new_password_confirmation.required_with' => 'Trường xác nhận mật khẩu mới là bắt buộc khi có mật khẩu mới.',
+            'new_password_confirmation.same' => 'Xác nhận mật khẩu mới phải giống với mật khẩu mới.',
+            'address.string' => 'Địa chỉ phải là một chuỗi ký tự.',
+            'address.max' => 'Địa chỉ không được vượt quá 255 ký tự.',
+            'phone.required' => 'Trường số điện thoại là bắt buộc.',
+            'phone.regex' => 'Số điện thoại phải là dãy số hợp lệ.',
+            'phone.max' => 'Số điện thoại không được vượt quá 15 ký tự.',
+        ];
+    
+        $rules = [
+            'full_name' => 'required|string|max:255',
+            'address' => 'nullable|string|max:255',
+            'phone' => 'required|regex:/^\d{10,15}$/|max:15',
+        ];
+    
+        if ($request->new_password != null || $request->current_password != null) {
+            $rules['current_password'] = 'required';
+            $rules['new_password'] = 'required|string|min:8|confirmed|regex:/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&#])[A-Za-z\d@$!%*?&#]{8,}$/';
+            $rules['new_password_confirmation'] = 'required_with:new_password|same:new_password';
+        }
+    
+        $validator = Validator::make($request->all(), $rules, $messages);
+    
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
+        }
+    
+        $user = Auth::user();
+    
+        if ($request->new_password != null && !Hash::check($request->current_password, $user->password)) {
+            return response()->json(['error' => 'Mật khẩu cũ không đúng.'], 400);
+        }
+    
+        if ($request->new_password != null) {
+            $user->password = Hash::make($request->new_password);
+        }
+        $user->full_name = $request->full_name;
+        $user->phone = $request->phone;
+    
+        if ($request->filled('address')) {
+            $user->address = $request->address;
+        }
+    
+        $user->save();
+    
+        return response()->json(['success' => true, 'message' => 'Thông tin đã được cập nhật thành công.']);
     }
+    
 
     /**
      * Remove the specified resource from storage.
