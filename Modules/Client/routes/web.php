@@ -1,15 +1,16 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use Modules\Admin\App\Http\Controllers\InvoiceController;
 use Modules\Client\App\Http\Controllers\AuthController;
 //use Modules\Client\App\Http\Controllers\AuthController;
 use Modules\Client\App\Http\Controllers\CartController;
+use Modules\Client\App\Http\Controllers\PostController;
 use Modules\Client\App\Http\Controllers\ShopController;
 use Modules\Client\App\Http\Controllers\LoginController;
+use Modules\Admin\App\Http\Controllers\InvoiceController;
 use Modules\Client\App\Http\Controllers\ClientController;
-use Modules\Client\App\Http\Controllers\MyAccountController;
 use Modules\Client\App\Http\Controllers\RegisterController;
+use Modules\Client\App\Http\Controllers\MyAccountController;
 use Modules\Client\App\Http\Controllers\VerificationController;
 use Modules\Client\App\Http\Controllers\ResetPasswordController;
 use Modules\Client\App\Http\Controllers\ForgotPasswordController;
@@ -45,6 +46,10 @@ Route::prefix('other')->as('other.')->group(function () {
     Route::get('aboutUs', function () {
         return view('client::contents.other-pages.about-us');
     })->name('aboutUs');
+    //Bài viết
+    Route::get('/posts', [PostController::class, 'index'])->name('posts.index');
+    
+    Route::get('/postDetail/{id}', [PostController::class, 'show'])->name('postDetail');
 });
 Route::controller(RegisterController::class)->prefix('auth')->as('auth.')->group(function () {
     Route::post('log-reg', 'register')->name('log-reg');
