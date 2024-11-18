@@ -5,6 +5,7 @@ namespace Modules\Client\App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\ColorAttribute;
+use App\Models\Comment;
 use App\Models\Product;
 use App\Models\ProductVariant;
 use App\Models\SizeAttribute;
@@ -88,15 +89,40 @@ class ShopController extends Controller
     /**
      * Show the specified resource.
      */
+    // public function show(string $slug)
+    // {
+
+    //     $data = Product::query()->where(['slug' => $slug])->first();
+    //     if ($data) {
+    //         return view('client::contents.shops.productDetail', compact('data'));
+    //     } else {
+    //         return abort(404);
+    //     }
+    // }
     public function show(string $slug)
     {
-        $data = Product::query()->where(['slug' => $slug])->first();
+        // Tìm sản phẩm theo slug
+        $data = Product::query()->where('slug', $slug)->first();
+
         if ($data) {
-            return view('client::contents.shops.productDetail', compact('data'));
+            // Lấy danh sách bình luận và thông tin người dùng liên quan
+            $comments = Comment::with('user') // Eager load quan hệ 'user'
+                ->where('products_id', $data->id)
+                ->where('status', 2)
+                ->orderBy('comment_date', 'desc')
+                ->get();
+
+            // Trả về view cùng dữ liệu sản phẩm và comment
+            return view('client::contents.shops.productDetail', compact('data', 'comments'));
         } else {
             return abort(404);
         }
     }
+
+
+
+
+
 
     /**
      * Show the form for editing the specified resource.

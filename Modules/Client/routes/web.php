@@ -13,6 +13,8 @@ use Modules\Client\App\Http\Controllers\RegisterController;
 use Modules\Client\App\Http\Controllers\VerificationController;
 use Modules\Client\App\Http\Controllers\ResetPasswordController;
 use Modules\Client\App\Http\Controllers\ForgotPasswordController;
+use Modules\Client\App\Http\Controllers\ReviewController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -58,6 +60,9 @@ Route::get('/email/verify/{id}', [VerificationController::class, 'verify'])->nam
 // Route::get('/login', [LoginController::class, 'showLoginForm'])->name('showLoginForm');
 Route::post('/login', [LoginController::class, 'login'])->name('login');
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
+
+//////////////////////////////
+Route::post('/submit-review', [ReviewController::class, 'submitReview'])->name('submit-review');
 
 Route::controller(MyAccountController::class)->middleware('auth.checkLog')->group(function () {
     Route::get('/my-account', 'index')->name('my-account');
