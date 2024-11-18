@@ -102,11 +102,12 @@
                         </div>
                     </div>
                     <div class="col-lg-8">
-                        <div class="sp-content">
+                        <form action="" class="sp-content" method="POST">
+                            @csrf
                             <div class="sp-heading">
-                                <h5><a href="#">Aliquid rerum ipsam maxime</a></h5>
+                                <h5><a href="{{ route('shop.productDetail', $data->slug) }}">{{ $data->name }}</a></h5>
                             </div>
-                            <span class="reference">Mã sản phẩm: demo_1</span>
+                            <span class="reference">Mã sản phẩm: {{ $data->sku }}</span>
                             <div class="rating-box">
                                 <ul>
                                     <li><i class="ion-android-star"></i></li>
@@ -117,15 +118,6 @@
                                 </ul>
                             </div>
                             <div class="sp-essential_stuff">
-<<<<<<< Updated upstream
-                                <ul>
-                                    <li>Hãng: <a href="javascript:void(0)">Buxton</a></li>
-                                    <li>Product Code: <a href="javascript:void(0)">Product 16</a></li>
-                                    <li>Reward Points: <a href="javascript:void(0)">100</a></li>
-                                    <li>Availability: <a href="javascript:void(0)">In Stock</a></li>
-                                    <li>EX Tax: <a href="javascript:void(0)"><span>$453.35</span></a></li>
-                                    <li>Price in reward points: <a href="javascript:void(0)">400</a></li>
-=======
                                 <ul class="load-infor" id="load-infor">
                                     <li>Số lượng: <a
                                             href="javascript:void(0)">{{ $data->quantity != null ? $data->quantity : 0 }}</a>
@@ -142,7 +134,7 @@
                                         <li>Giá mặc định: <a href="javascript:void(0)">
                                                 <strike>
                                                     {{ number_format((int) $data->price_regular, 0, ',', '.') }} (VNĐ)
-                                                </strike> 
+                                                </strike>
                                             </a>
                                         </li>
                                         <li>Giá khuyến mại: <a href="javascript:void(0)">
@@ -169,80 +161,69 @@
                                             </a>
                                         </li>
                                     @endif
->>>>>>> Stashed changes
                                 </ul>
                             </div>
-                            <div class="product-size_box">
-                                <span>Size</span>
-                                <select class="myniceselect nice-select">
-                                    <option value="1">S</option>
-                                    <option value="2">M</option>
-                                    <option value="3">L</option>
-                                    <option value="4">XL</option>
-                                </select>
-                            </div>
-                            <div class="color-list_area">
+                            <div class="color-list_area row">
                                 <div class="color-list_heading">
                                     <h4>Tùy chọn biến thể</h4>
                                 </div>
-                                <span class="sub-title">Màu</span>
-                                <div class="color-list">
-                                    <a href="javascript:void(0)" class="single-color active" data-swatch-color="red">
-                                        <span class="bg-red_color"></span>
-                                        <span class="color-text">Red (+$150)</span>
-                                    </a>
-                                    <a href="javascript:void(0)" class="single-color" data-swatch-color="orange">
-                                        <span class="burnt-orange_color"></span>
-                                        <span class="color-text">Orange (+$170)</span>
-                                    </a>
-                                    <a href="javascript:void(0)" class="single-color" data-swatch-color="brown">
-                                        <span class="brown_color"></span>
-                                        <span class="color-text">Brown (+$120)</span>
-                                    </a>
-                                    <a href="javascript:void(0)" class="single-color" data-swatch-color="umber">
-                                        <span class="raw-umber_color"></span>
-                                        <span class="color-text">Umber (+$125)</span>
-                                    </a>
-                                    <a href="javascript:void(0)" class="single-color" data-swatch-color="black">
-                                        <span class="black_color"></span>
-                                        <span class="color-text">Black (+$125)</span>
-                                    </a>
+                                <div class="col-lg-6 pe-lg-2">
+                                    <label class="form-label">Kích thước</label>
+                                    <div class="product-size_box">
+                                        @php
+                                            $size = $data->product_variants
+                                                ->pluck('size')
+                                                ->flatten(1)
+                                                ->unique('id')
+                                                ->values();
+                                        @endphp
+                                        <select class="myniceselect nice-select" name="id_size" id="id_size">
+                                            <option value="" selected>
+                                                Chọn size
+                                            </option>
+                                            @foreach ($size as $item)
+                                                <option value="{{ $item->id }}">
+                                                    {{ $item->size_value }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 pe-lg-2">
+                                    <span class="sub-title">Màu</span>
+                                    <div class="color-list" id="color-list">
+                                        <strong class="text-warning border" style="padding: 5px;">
+                                            Vui lòng chọn kích thước!
+                                        </strong>
+                                    </div>
                                 </div>
                             </div>
                             <div class="quantity">
                                 <label>Số lượng</label>
                                 <div class="cart-plus-minus">
-                                    <input class="cart-plus-minus-box" value="1" type="text">
+                                    <input class="cart-plus-minus-box" id="quantity-input" value="1" min="1" type="text">
                                     <div class="dec qtybutton"><i class="fa fa-angle-down"></i></div>
                                     <div class="inc qtybutton"><i class="fa fa-angle-up"></i></div>
                                 </div>
                             </div>
                             <div class="qty-btn_area">
                                 <ul>
-<<<<<<< Updated upstream
-                                    <li><a class="qty-cart_btn" href="cart.html">Thêm vào giỏ hàng</a></li>
-                                    <li><a class="qty-wishlist_btn" href="wishlist.html" data-bs-toggle="tooltip"
-                                            title="Thêm vào yêu thích"><i class="ion-android-favorite-outline"></i></a>
-=======
                                     <li>
-                                        <button type="submit" class="add-to-cart" data-product-id="{{ $data->id }}" >Thêm vào giỏ hàng</button>  
+                                        <button type="submit" class="add-to-cart kenne-register_btn"
+                                            data-product-id="{{ $data->id }}">Thêm vào giỏ hàng</button>
                                     </li>
                                     <li>
                                         <a class="qty-wishlist_btn" href="wishlist.html" data-bs-toggle="tooltip"
                                             title="Thêm vào yêu thích">
                                             <i class="ion-android-favorite-outline"></i>
                                         </a>
->>>>>>> Stashed changes
                                     </li>
-                                    <li><a class="qty-compare_btn" href="compare.html" data-bs-toggle="tooltip"
-                                            title="So sánh sản phẩm này"><i class="ion-ios-shuffle-strong"></i></a></li>
                                 </ul>
                             </div>
                             <div class="kenne-tag-line">
-                                <h6>Thẻ:</h6>
-                                <a href="javascript:void(0)">scarf</a>,
-                                <a href="javascript:void(0)">jacket</a>,
-                                <a href="javascript:void(0)">shirt</a>
+                                <h6>Thẻ: &nbsp;</h6>
+                                @foreach ($data->tags as $tag)
+                                    <span class="badge bg-info">{{ $tag->name }}</span> &nbsp; &nbsp;
+                                @endforeach
                             </div>
                             <div class="kenne-social_link">
                                 <ul>
@@ -278,11 +259,11 @@
                                     </li>
                                 </ul>
                             </div>
-                        </div>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
     </div>
     <!-- Kenne's Single Product Variable Area End Here -->
 
@@ -976,8 +957,6 @@
     </div>
     <!-- Brand Area End Here -->
 @endsection
-<<<<<<< Updated upstream
-=======
 @section('css-setting')
     <style>
         .single-line {
@@ -1085,34 +1064,36 @@
     </style>
 @endsection
 @section('js-setting')
-<script>
-    $('.add-to-cart').click(function(e) {
-    e.preventDefault(); // Ngăn form submit mặc định
+    <script>
+        $('.add-to-cart').click(function(e) {
+            e.preventDefault(); // Ngăn form submit mặc định
 
-    let productId = $(this).data('product-id');
-    let productSize =  $('#id_size').val();
-    let productColor =  $('input[name="product-color"]:checked').val();
-    let quantity = 1;
+            let productId = $(this).data('product-id');
+            let productSize = $('#id_size').val();
+            let productColor = $('input[name="product-color"]:checked').val();
+            let price = $('#price').val();
+            let quantity = $('#quantity-input').val();
 
-        $.ajax({
-            url: '{{ route("cart.add") }}',
-            method: 'POST',
-            data: {
-            product_id: productId,
-            size_attribute_id: productSize,
-            color_attribute_id: productColor,
-            quantity: quantity,
-            _token: '{{ csrf_token() }}'
-        },
-        success: function(response) {
-            alert(response.message);
-        },
-        error: function(error) {
-            console.error(error);
-        }
+            $.ajax({
+                url: '{{ route('cart.add') }}',
+                method: 'POST',
+                data: {
+                    product_id: productId,
+                    size_attribute_id: productSize,
+                    color_attribute_id: productColor,
+                    quantity: quantity,
+                    _token: '{{ csrf_token() }}'
+                },
+                success: function(response) {
+                    alert(response.message);
+                },
+                error: function(error) {
+                    // alert(response.error);
+                    console.error(error);
+                }
+            });
         });
-    });
-</script>
+    </script>
     <script>
         // ajax rend color
         $(document).ready(function() {
@@ -1251,4 +1232,3 @@
         });
     </script>
 @endsection
->>>>>>> Stashed changes
