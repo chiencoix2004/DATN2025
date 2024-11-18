@@ -326,6 +326,7 @@
                                     </div>
                                 </div>
                             </div>
+                            
                             <div class="tab-pane fade" id="account-details" role="tabpanel" aria-labelledby="account-details-tab">
                                 <div class="myaccount-details">
                                     <form id="changePasswordForm" class="kenne-form">

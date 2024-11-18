@@ -117,6 +117,7 @@
                                 </ul>
                             </div>
                             <div class="sp-essential_stuff">
+<<<<<<< Updated upstream
                                 <ul>
                                     <li>Hãng: <a href="javascript:void(0)">Buxton</a></li>
                                     <li>Product Code: <a href="javascript:void(0)">Product 16</a></li>
@@ -124,6 +125,51 @@
                                     <li>Availability: <a href="javascript:void(0)">In Stock</a></li>
                                     <li>EX Tax: <a href="javascript:void(0)"><span>$453.35</span></a></li>
                                     <li>Price in reward points: <a href="javascript:void(0)">400</a></li>
+=======
+                                <ul class="load-infor" id="load-infor">
+                                    <li>Số lượng: <a
+                                            href="javascript:void(0)">{{ $data->quantity != null ? $data->quantity : 0 }}</a>
+                                    </li>
+                                    <li>Tình trạng: <a href="javascript:void(0)">
+                                            {{ $data->quantity < 5 && $data->quantity > 0
+                                                ? 'Sắp hết hàng'
+                                                : ($data->quantity == 0
+                                                    ? 'Hết hàng'
+                                                    : 'Còn hàng') }}
+                                        </a>
+                                    </li>
+                                    @if ($data->discount_percent > 0 || $data->price_sale > 0)
+                                        <li>Giá mặc định: <a href="javascript:void(0)">
+                                                <strike>
+                                                    {{ number_format((int) $data->price_regular, 0, ',', '.') }} (VNĐ)
+                                                </strike> 
+                                            </a>
+                                        </li>
+                                        <li>Giá khuyến mại: <a href="javascript:void(0)">
+                                                <strong>
+                                                    {{ number_format(
+                                                        (int) ($data->discount_percent > 0
+                                                            ? $data->price_regular * (1 - $data->discount_percent / 100)
+                                                            : ($data->price_sale > 0
+                                                                ? $data->price_sale
+                                                                : $data->price_regular)),
+                                                        0,
+                                                        ',',
+                                                        '.',
+                                                    ) }}
+                                                    (VNĐ)
+                                                </strong>
+                                            </a>
+                                        </li>
+                                    @else
+                                        <li>Giá mặc định: <a href="javascript:void(0)">
+                                                <strong>
+                                                    {{ number_format((int) $data->price_regular, 0, ',', '.') }} (VNĐ)
+                                                </strong>
+                                            </a>
+                                        </li>
+                                    @endif
+>>>>>>> Stashed changes
                                 </ul>
                             </div>
                             <div class="product-size_box">
@@ -173,9 +219,20 @@
                             </div>
                             <div class="qty-btn_area">
                                 <ul>
+<<<<<<< Updated upstream
                                     <li><a class="qty-cart_btn" href="cart.html">Thêm vào giỏ hàng</a></li>
                                     <li><a class="qty-wishlist_btn" href="wishlist.html" data-bs-toggle="tooltip"
                                             title="Thêm vào yêu thích"><i class="ion-android-favorite-outline"></i></a>
+=======
+                                    <li>
+                                        <button type="submit" class="add-to-cart" data-product-id="{{ $data->id }}" >Thêm vào giỏ hàng</button>  
+                                    </li>
+                                    <li>
+                                        <a class="qty-wishlist_btn" href="wishlist.html" data-bs-toggle="tooltip"
+                                            title="Thêm vào yêu thích">
+                                            <i class="ion-android-favorite-outline"></i>
+                                        </a>
+>>>>>>> Stashed changes
                                     </li>
                                     <li><a class="qty-compare_btn" href="compare.html" data-bs-toggle="tooltip"
                                             title="So sánh sản phẩm này"><i class="ion-ios-shuffle-strong"></i></a></li>
@@ -353,7 +410,7 @@
                                                 </tbody>
                                             </table>
                                         </div>
-                                        <h2>Write a review</h2>
+                                        {{-- <h2>Write a review</h2>
                                         <div class="form-group required">
                                             <div class="col-sm-12 p-0">
                                                 <label>Your Email <span class="required">*</span></label>
@@ -388,7 +445,7 @@
                                             <div class="kenne-btn-ps_right">
                                                 <button class="kenne-btn">Continue</button>
                                             </div>
-                                        </div>
+                                        </div> --}}
                                     </form>
                                 </div>
                             </div>
@@ -919,3 +976,279 @@
     </div>
     <!-- Brand Area End Here -->
 @endsection
+<<<<<<< Updated upstream
+=======
+@section('css-setting')
+    <style>
+        .single-line {
+            white-space: nowrap;
+            /* Không cho phép xuống dòng */
+            overflow: hidden;
+            /* Ẩn phần văn bản tràn ra ngoài */
+            text-overflow: ellipsis;
+            /* Hiển thị dấu ba chấm (...) */
+        }
+
+        .pagination {
+            --bs-pagination-active-bg: #a8741a;
+            --bs-pagination-active-border-color: #a8741a;
+        }
+
+        .modal-backdrop.show {
+            opacity: 0;
+        }
+
+        .modal-backdrop {
+            position: unset;
+        }
+
+        button.add-to_cart {
+            background-color: #a8741a;
+            border: 2px solid #a8741a;
+            color: #ffffff;
+            width: 140px;
+            height: 50px;
+            line-height: 47px;
+        }
+
+        button.add-to_cart:hover {
+            background-color: #242424;
+            border: none;
+        }
+
+        /* style input radio */
+        .color-list {
+            display: flex;
+            gap: 5px;
+        }
+
+        .single-color-input {
+            display: none;
+        }
+
+        .single-color {
+            display: inline-flex;
+            align-items: center;
+            border: 2px solid transparent;
+            padding: 5px;
+            cursor: pointer;
+        }
+
+        .single-color-input:checked+.single-color {
+            border-color: gold;
+            /* Màu viền khi chọn */
+        }
+
+        /* Thêm các lớp màu cho từng màu sắc */
+        .bg-red_color {
+            width: 20px;
+            height: 20px;
+            background-color: red;
+            display: inline-block;
+        }
+
+        .burnt-orange_color {
+            width: 20px;
+            height: 20px;
+            background-color: orange;
+            display: inline-block;
+        }
+
+        .brown_color {
+            width: 20px;
+            height: 20px;
+            background-color: brown;
+            display: inline-block;
+        }
+
+        .raw-umber_color {
+            width: 20px;
+            height: 20px;
+            background-color: #8B4513;
+            /* màu umber */
+            display: inline-block;
+        }
+
+        .black_color {
+            width: 20px;
+            height: 20px;
+            background-color: black;
+            display: inline-block;
+        }
+
+        .golden_color {
+            width: 20px;
+            height: 20px;
+            background-color: goldenrod;
+            display: inline-block;
+        }
+    </style>
+@endsection
+@section('js-setting')
+<script>
+    $('.add-to-cart').click(function(e) {
+    e.preventDefault(); // Ngăn form submit mặc định
+
+    let productId = $(this).data('product-id');
+    let productSize =  $('#id_size').val();
+    let productColor =  $('input[name="product-color"]:checked').val();
+    let quantity = 1;
+
+        $.ajax({
+            url: '{{ route("cart.add") }}',
+            method: 'POST',
+            data: {
+            product_id: productId,
+            size_attribute_id: productSize,
+            color_attribute_id: productColor,
+            quantity: quantity,
+            _token: '{{ csrf_token() }}'
+        },
+        success: function(response) {
+            alert(response.message);
+        },
+        error: function(error) {
+            console.error(error);
+        }
+        });
+    });
+</script>
+    <script>
+        // ajax rend color
+        $(document).ready(function() {
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+            // rend màu biến thể sản phẩm ========================================================
+            function handleSelectionChange() {
+                var selectedSize = $('select[name="id_size"]#id_size').val();
+                var selectedPrdID = {{ $data->id }};
+
+                if (selectedSize > 0 && selectedPrdID > 0) {
+                    sendAjaxRequest(selectedPrdID, selectedSize);
+                }
+            }
+            $('select[name="id_size"]#id_size').change(handleSelectionChange);
+
+            function sendAjaxRequest(selectedPrdID, selectedSize) {
+                $.ajax({
+                    url: '{{ route('shop.rend_variant') }}',
+                    type: 'POST',
+                    data: {
+                        prd_id: selectedPrdID,
+                        idSize: selectedSize
+                    },
+                    success: function(res) {
+                        if (res.error) {
+                            alert(res.error);
+                        } else {
+                            var rendColor = document.querySelector('div#color-list.color-list');
+                            if (rendColor) {
+                                $(rendColor).empty();
+                                res.data.forEach(item => {
+                                    $(rendColor).append(`
+                                    <input type="radio" id="color-${item.id}" name="product-color"
+                                        value="${item.id}" class="single-color-input">
+                                    <label for="color-${item.id}" class="single-color">
+                                        <span class=""
+                                            style="background-color: ${item.color_value}; width: 20px; height: 20px; display: inline-block;"></span>
+                                        <span class="color-text">${item.color_value}</span>
+                                    </label>
+                                    `);
+                                });
+                            }
+                        }
+                    },
+                    error: function(xhr) {
+                        console.error(xhr.responseText);
+                        alert('Vui lòng chọn giá trị hợp lệ!');
+                    }
+                });
+            }
+            // ren thông tin sản phẩm biến thể ======================================================
+            $(document).on('change', 'input[name="product-color"]', function() {
+                var selectedSize = $('select[name="id_size"]#id_size').val();
+                var selectedColor = $(this).val();
+                var selectedPrdID = {{ $data->id }};
+
+                console.log(selectedSize, selectedColor, selectedPrdID);
+                // Bạn có thể xử lý giá trị selectedColorValue ở đây
+                if (selectedColor > 0 && selectedSize > 0 && selectedPrdID > 0) {
+                    sendRequestVariant(selectedPrdID, selectedSize, selectedColor);
+                }
+            });
+
+            function sendRequestVariant(selectedPrdID, selectedSize, selectedColor) {
+                $.ajax({
+                    url: '{{ route('shop.rendPrdV') }}',
+                    type: 'POST',
+                    data: {
+                        prd_id: selectedPrdID,
+                        idSize: selectedSize,
+                        idColor: selectedColor
+                    },
+                    success: function(response) {
+                        updateHiddenInput('idVariant', response.id);
+                        updateHiddenInput('colorValue', response.color_value);
+                        updateHiddenInput('sizeValue', response.size_value);
+
+                        var formatPrice = price => price.toString().replace(/\B(?=(\d{3})+(?!\d))/g,
+                            ".");
+                        var price_default = formatPrice(response.price_default != null ? response
+                            .price_default : {{ $data->price_regular }});
+                        var price_sale = formatPrice(response.price_sale != null ? response
+                            .price_sale :
+                            {{ $data->price_sale > 0 ? $data->price_sale : 0 }});
+                        var quantity = response.quantity != null ? response.quantity : 0;
+                        var htmlPD = '';
+                        var htmlPS = '';
+                        var htmlPQ = `<li>Số lượng: <a href="javascript:void(0)">${quantity}</a></li>`;
+                        var htmlPST =
+                            `<li>Tình trạng: <a href="javascript:void(0)">${quantity < 5 && quantity > 0 ? 'Sắp hết hàng' : (quantity == 0 ? 'Hết hàng' : 'Còn hàng')}</a></li>`;
+                        if (response.price_sale > 0) {
+                            htmlPS =
+                                `<li>Giá mặc định: <a href="javascript:void(0)"><strike>${price_default} (VNĐ)</strike></a></li>`;
+                            htmlPD =
+                                `<li>Giá mặc định: <a href="javascript:void(0)"><strike>${price_default} (VNĐ)</strike></a></li>`;
+                        } else {
+                            htmlPD =
+                                `<li>Giá mặc định: <a href="javascript:void(0)"><strong>${price_default} (VNĐ)</strong></a></li>`;
+                        }
+                        $('ul.load-infor#load-infor').empty().append(htmlPQ, htmlPST, htmlPD, htmlPS);
+
+                        $('div.mt-3.loadQuantity').empty().append(
+                            `<h6>Số lượng tồn kho: ${quantity}</h6>`);
+                    },
+                    error: function(xhr) {
+                        console.error(xhr.responseText);
+                        alert('Vui lòng chọn giá trị hợp lệ!');
+                    }
+                });
+            }
+
+            function updateHiddenInput(name, value) {
+                var input = document.querySelector(`input[type="hidden"][name="${name}"]`);
+                if (input) {
+                    input.value = value; // Nếu input đã tồn tại, cập nhật giá trị
+                } else {
+                    input = document.createElement('input'); // Tạo thẻ input mới
+                    input.type = 'hidden';
+                    input.name = name;
+                    input.value = value;
+                    document.querySelector('form.sp-content').appendChild(input); // Thêm vào form
+                }
+            }
+        });
+        document.querySelectorAll('.single-color-input').forEach(input => {
+            input.addEventListener('change', function() {
+                document.querySelectorAll('.single-color').forEach(label => {
+                    label.classList.remove('active');
+                });
+                this.nextElementSibling.classList.add('active');
+            });
+        });
+    </script>
+@endsection
+>>>>>>> Stashed changes

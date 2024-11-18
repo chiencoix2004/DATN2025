@@ -3,6 +3,10 @@
 namespace Modules\Client\App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Models\Cart;
+use App\Models\CartItem;
+use App\Models\CouponModel;
+use App\Models\ProductVariant;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -12,15 +16,151 @@ class CartController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function add(Request $request)
     {
-        // $cart = session()->get('cart', []);
-        // $user = auth()->user(); // Lấy thông tin người dùng đã đăng nhập
-        return view('client::contents.shops.cart');
+
+        $productId = $request->product_id;
+        $productVariantId = ProductVariant::where('product_id', '=', $productId)
+            ->where('color_attribute_id','=', $request->color_attribute_id)
+            ->where('size_attribute_id','=', $request->size_attribute_id)
+            ->first()->id;
+        $quantity = $request->quantity;
+
+        // dd($productVariantId);
+        if (auth()->check()) {
+            // Người dùng đã đăng nhập
+            $cart = Cart::firstOrCreate(['user_id' => auth()->id()]);
+            $cartItem = $cart->cartItems()->firstOrCreate(['product_id' => $productId, 'product_variant_id' => $productVariantId], ['quantity' => 0]);
+            $cartItem->increment('quantity', $quantity);
+            // dd($cartItem);
+        } else {
+            // Người dùng chưa đăng nhập
+            $cart = $request->session()->get('cart', []);
+            if (isset($cart[$productVariantId])) {
+                $cart[$productVariantId]['quantity'] += $quantity;
+            } else {
+                $cart[$productVariantId] = [
+                    'product_variant_id' => $productVariantId,
+                    'quantity' => $quantity
+                ];
+            }
+            $request->session()->put('cart', $cart);
+        }
+
+        return response()->json(['message' => 'Thêm vào giỏ hàng thành công!'], 200);
     }
-    public function checkout()
+
+    public function index(Request $request)
     {
-        return view('client::contents.shops.checkout');
+        if (auth()->check()) {
+            // Người dùng đã đăng nhập
+            $cart = Cart::firstOrCreate(['user_id' => auth()->id()]);
+            //$cart = Cart::where('user_id', auth()->user()->id)->first();
+        } else {
+            // Người dùng chưa đăng nhập
+            $cartItems = $request->session()->get('cart', []);
+            // Chuyển đổi dữ liệu từ session sang dạng tương tự khi lấy từ database
+            $cart = (object)[
+                'cartItems' => collect($cartItems)->map(function ($item) {
+                    $item['productVariant'] = ProductVariant::find($item['product_variant_id']);
+                    return (object)$item;
+                })
+            ];
+        }
+        // dd($cart);
+        return view('client::contents.shops.cart', compact('cart'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        if (auth()->check()) {
+            // Người dùng đã đăng nhập
+            $cartItem = CartItem::findOrFail($id);
+            $cartItem->quantity = $request->quantity;
+            $cartItem->save();
+        } else {
+            // Người dùng chưa đăng nhập
+            $cart = $request->session()->get('cart', []);
+            if (isset($cart[$id])) {
+                $cart[$id]['quantity'] = $request->quantity;
+                $request->session()->put('cart', $cart);
+            }
+        }
+
+        return response()->json(['message' => 'Cập nhật giỏ hàng thành công!']);
+    }
+
+    public function remove($id)
+    {
+        if (auth()->check()) {
+            // Người dùng đã đăng nhập
+            $cartItem = CartItem::findOrFail($id);
+            $cartItem->delete();
+        } else {
+            // Người dùng chưa đăng nhập
+            $cart = session()->get('cart', []);
+            if (isset($cart[$id])) {
+                unset($cart[$id]);
+                session()->put('cart', $cart);
+            }
+        }
+
+        return response()->json(['message' => 'Xóa sản phẩm khỏi giỏ hàng thành công!']);
+    }
+
+    public function applyCoupon(Request $request)
+    {
+        $couponCode = $request->coupon_code;
+        $userId = auth()->check() ? auth()->user()->id : null;
+        $sessionId = $request->session()->getId();
+
+        $coupon = CouponModel::where('code', $couponCode)->first();
+        if (!$coupon) {
+            return response()->json(['message' => 'Mã voucher không hợp lệ!'], 400);
+        }
+
+        // Kiểm tra điều kiện áp dụng coupon (ví dụ: ngày hết hạn, giá trị đơn hàng tối thiểu)
+        // ...
+
+        if (auth()->check()) {
+            // Người dùng đã đăng nhập
+            $cart = Cart::where('user_id', $userId)->first();
+            $cart->coupon_id = $coupon->id;
+            $cart->save();
+        } else {
+            // Người dùng chưa đăng nhập
+            $cart = $request->session()->get('cart', []);
+            $cart['coupon_id'] = $coupon->id; // Lưu coupon_id vào session
+            $request->session()->put('cart', $cart);
+        }
+
+        return response()->json(['message' => 'Áp dụng voucher thành công!']);
+    }
+
+    public function checkout(Request $request)
+    {
+        $userId = auth()->check() ? auth()->user()->id : null;
+        $sessionId = $request->session()->getId();
+
+        if (auth()->check()) {
+            // Người dùng đã đăng nhập
+            $cart = Cart::where('user_id', $userId)->first();
+        } else {
+            // Người dùng chưa đăng nhập
+            $cartItems = $request->session()->get('cart', []);
+            // Chuyển đổi dữ liệu từ session sang dạng tương tự khi lấy từ database
+            $cart = (object)[
+                'cartItems' => collect($cartItems)->map(function ($item) {
+                    $item['productVariant'] = ProductVariant::find($item['product_variant_id']);
+                    return (object)$item;
+                })
+            ];
+        }
+
+        // Lấy thông tin từ giỏ hàng để tạo đơn hàng
+        // ...
+
+        return view('client::contents.shops.checkout', compact('cart')); // Hoặc redirect đến trang thanh toán
     }
     /**
      * Show the form for creating a new resource.
@@ -35,7 +175,7 @@ class CartController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
-        //
+        return view('client::show');
     }
 
     /**
@@ -52,14 +192,6 @@ class CartController extends Controller
     public function edit($id)
     {
         return view('client::edit');
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, $id): RedirectResponse
-    {
-        //
     }
 
     /**

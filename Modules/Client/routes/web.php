@@ -78,4 +78,12 @@ Route::post('/reset-password', [ResetPasswordController::class, 'reset'])->name(
 Route::get('auth/google', [LoginController::class, 'redirectToGoogle'])->name('auth.google');
 Route::get('auth/google/callback', [LoginController::class, 'handleGoogleCallback']);
 
+//giỏ hàng
+Route::post('/cart/add', [CartController::class, 'add'])->name('cart.add');
+Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
+Route::put('/cart/update/{id}', [CartController::class, 'update'])->name('cart.update');
+Route::delete('/cart/remove/{id}', [CartController::class, 'remove'])->name('cart.remove');
+Route::post('/cart/apply-coupon', [CartController::class, 'applyCoupon'])->name('cart.applyCoupon');
+Route::get('/cart/checkout', [CartController::class, 'checkout'])->name('cart.checkout');
+
 
