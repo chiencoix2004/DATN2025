@@ -25,21 +25,39 @@ class InvoiceController extends Controller
         if ($request->btnApply == 'Áp dụng hàng loạt' && $request->slAction != 'sltNull') {
             if ($request->slAction == 'print_invoices') {
                 $orders = Order::query()->with('orderItems')->whereIn('id', $request->idOrder)->get();
-                $savePath = storage_path('app/public/invoices/');
-                if (!File::exists($savePath)) {
-                    File::makeDirectory($savePath, 0755, true);
-                }
-                foreach ($orders as $data) {
-                    $pdf = PDF::loadView('admin::contents.orders.invoices.view', compact('data'))->setOptions(
-                        [
+                $zipFileName = 'invoices_' . now()->format('Ymd_His') . '.zip';
+                $zipPath = storage_path('app/public/' . $zipFileName);
+                // Tạo file zip
+                $zip = new \ZipArchive;
+                if ($zip->open($zipPath, \ZipArchive::CREATE | \ZipArchive::OVERWRITE) === TRUE) {
+                    foreach ($orders as $data) {
+                        $pdf = PDF::loadView('admin::contents.orders.invoices.view', compact('data'))->setOptions([
                             'isRemoteEnabled' => true,
                             'chroot' => public_path(),
-                        ]
-                    );
+                        ]);
+                        $date = Carbon::parse($data->date_create_order)->format('Y-m-d');
+                        $fileName = 'invoice-' . $data->id . '-' . Str::slug($data->user_name) . "-$date" . '.pdf';
+
+                        // Tạo file PDF tạm thời
+                        $tempPdfPath = storage_path("app/public/temp_$fileName");
+                        $pdf->save($tempPdfPath);
+
+                        // Thêm file PDF vào file zip
+                        $zip->addFile($tempPdfPath, $fileName);
+                    }
+                    $zip->close();
+                }
+                // Xóa các file PDF tạm thời sau khi tạo file zip
+                foreach ($orders as $data) {
                     $date = Carbon::parse($data->date_create_order)->format('Y-m-d');
                     $fileName = 'invoice-' . $data->id . '-' . Str::slug($data->user_name) . "-$date" . '.pdf';
-                    $pdf->save($savePath . $fileName);
+                    $tempPdfPath = storage_path("app/public/temp_$fileName");
+                    if (file_exists($tempPdfPath)) {
+                        unlink($tempPdfPath);
+                    }
                 }
+                // Trả về file zip để tải xuống
+                return response()->download($zipPath)->deleteFileAfterSend(true);
             }
             if ($request->slAction == 'confirmed') {
                 $orders = Order::query()->whereIn('id', $request->idOrder)->get();
@@ -69,9 +87,7 @@ class InvoiceController extends Controller
         );
         $date = Carbon::parse($data->date_create_order)->format('Y-m-d');
         $fileName = 'invoice-' . $data->id . '-' . Str::slug($data->user_name) . "-$date" . '.pdf';
-        $filePath = 'invoices/' . $fileName;
-        Storage::disk('public')->put($filePath, $pdf->output());
-        return redirect()->back()->with(['success' => 'In và lưu hóa đơn thành công!']);
+        return $pdf->download($fileName);
         // return view('admin::contents.orders.invoices.view', compact('data'));
     }
     public function listPDF()

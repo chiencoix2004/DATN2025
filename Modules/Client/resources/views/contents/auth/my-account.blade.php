@@ -568,7 +568,7 @@
                                 let actionButtons = `
                     <div class="dropdown d-inline-block">
                         <button class="kenne-btn kenne-btn_sm dropdown-toggle d-flex align-items-center justify-content-center" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <span>Tác vụ</span>
+                            <span>Thao tác</span>
                         </button>
                         <ul class="dropdown-menu">
                             <li>

@@ -64,15 +64,16 @@ Route::get('/email/verify/{id}', [VerificationController::class, 'verify'])->nam
 Route::post('/login', [LoginController::class, 'login'])->name('login');
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
-Route::get('/my-account', [MyAccountController::class, 'index'])->name('my-account');
-Route::get('/get-orders', [MyAccountController::class, 'getOrders'])->name('orders.get.list');
-Route::get('/get-order-details/{id}', [MyAccountController::class, 'getOrderDetails'])->name('order.details');
-Route::get('/orders/{id}/download-pdf', [MyAccountController::class, 'downloadPDF'])->name('orders.downloadPDF');
-Route::post('/orders/{id}/cancel', [MyAccountController::class, 'cancelOrder'])->name('orders.cancel');
-Route::post('/orders/{id}/reset', [MyAccountController::class, 'resetOrder'])->name('orders.reset');
-Route::post('/orders/{id}/received', [MyAccountController::class, 'markAsReceived'])->name('orders.received');
-Route::post('/update-password', [MyAccountController::class, 'changePassword'])->name('change.password');
-
+Route::controller(MyAccountController::class)->middleware('auth.checkLog')->group(function () {
+    Route::get('/my-account', 'index')->name('my-account');
+    Route::get('/get-orders', 'getOrders')->name('orders.get.list');
+    Route::get('/get-order-details/{id}', 'getOrderDetails')->name('order.details');
+    Route::get('/orders/{id}/download-pdf', 'downloadPDF')->name('orders.downloadPDF');
+    Route::post('/orders/{id}/cancel', 'cancelOrder')->name('orders.cancel');
+    Route::post('/orders/{id}/reset', 'resetOrder')->name('orders.reset');
+    Route::post('/orders/{id}/received', 'markAsReceived')->name('orders.received');
+    Route::post('/update-password', 'changePassword')->name('change.password');
+});
 // Route cho trang yêu cầu đặt lại mật khẩu
 Route::get('/forgot-password', [ForgotPasswordController::class, 'forgotPasswordForm'])->name('forgot-password');
 Route::post('/forgot-password', [ForgotPasswordController::class, 'sendResetLinkEmail'])->name('email-password');

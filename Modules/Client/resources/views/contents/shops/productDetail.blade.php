@@ -34,14 +34,27 @@
                             "swipe": false,
                             "asNavFor": ".sp-img_slider-nav"
                             }'>
+                                @php
+                                    $avt = $data->image_avatar;
+                                    if (!\Str::contains($avt, 'http')) {
+                                        $avt = \Storage::url($avt);
+                                    }
+                                @endphp
                                 <div class="single-slide red zoom">
-                                    <img src="{{ asset('theme/client/images/product/1-1.jpg') }}"
-                                        alt="Kenne's Product Image">
+                                    <img src="{{ $avt }}" alt="Kenne's Product Image">
                                 </div>
-                                <div class="single-slide orange zoom">
-                                    <img src="{{ asset('theme/client/images/product/1-2.jpg') }}"
-                                        alt="Kenne's Product Image">
-                                </div>
+                                @foreach ($data->images as $item)
+                                    @php
+                                        $url = $item->image_path;
+                                        if (!\Str::contains($url, 'http')) {
+                                            $url = \Storage::url($url);
+                                        }
+                                    @endphp
+                                    <div class="single-slide orange zoom">
+                                        <img src="{{ $url }}"
+                                            alt="Kenne's Product Image">
+                                    </div>
+                                @endforeach
                                 <div class="single-slide brown zoom">
                                     <img src="{{ asset('theme/client/images/product/2-1.jpg') }}"
                                         alt="Kenne's Product Image">
@@ -74,30 +87,22 @@
                                     {"breakpoint":768, "settings": {"slidesToShow": 3}},
                                     {"breakpoint":575, "settings": {"slidesToShow": 2}}
                                 ]'>
-                                <div class="single-slide red">
-                                    <img src="{{ asset('theme/client/images/product/1-1.jpg') }}"
+                                <div class="single-slide">
+                                    <img src="{{ $avt }}"
                                         alt="Kenne's Product Thumnail">
                                 </div>
-                                <div class="single-slide orange">
-                                    <img src="{{ asset('theme/client/images/product/1-2.jpg') }}"
-                                        alt="Kenne's Product Thumnail">
-                                </div>
-                                <div class="single-slide brown">
-                                    <img src="{{ asset('theme/client/images/product/2-1.jpg') }}"
-                                        alt="Kenne's Product Thumnail">
-                                </div>
-                                <div class="single-slide umber">
-                                    <img src="{{ asset('theme/client/images/product/2-2.jpg') }}"
-                                        alt="Kenne's Product Thumnail">
-                                </div>
-                                <div class="single-slide red">
-                                    <img src="{{ asset('theme/client/images/product/3-1.jpg') }}"
-                                        alt="Kenne's Product Thumnail">
-                                </div>
-                                <div class="single-slide orange">
-                                    <img src="{{ asset('theme/client/images/product/3-2.jpg') }}"
-                                        alt="Kenne's Product Thumnail">
-                                </div>
+                                @foreach ($data->images as $item)
+                                    @php
+                                        $url = $item->image_path;
+                                        if (!\Str::contains($url, 'http')) {
+                                            $url = \Storage::url($url);
+                                        }
+                                    @endphp
+                                    <div class="single-slide orange">
+                                        <img src="{{ $url }}"
+                                            alt="Kenne's Product Image">
+                                    </div>
+                                @endforeach
                             </div>
                         </div>
                     </div>
@@ -1161,7 +1166,7 @@
                             `<li>Tình trạng: <a href="javascript:void(0)">${quantity < 5 && quantity > 0 ? 'Sắp hết hàng' : (quantity == 0 ? 'Hết hàng' : 'Còn hàng')}</a></li>`;
                         if (response.price_sale > 0) {
                             htmlPS =
-                                `<li>Giá mặc định: <a href="javascript:void(0)"><strike>${price_default} (VNĐ)</strike></a></li>`;
+                                `<li>Giá khuyến mại: <a href="javascript:void(0)"><strong>${price_sale} (VNĐ)</strong></a></li>`;
                             htmlPD =
                                 `<li>Giá mặc định: <a href="javascript:void(0)"><strike>${price_default} (VNĐ)</strike></a></li>`;
                         } else {
