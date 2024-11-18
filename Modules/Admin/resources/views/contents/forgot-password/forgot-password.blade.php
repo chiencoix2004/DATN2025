@@ -92,8 +92,9 @@
                                             <hr class="bg-300" />
                                             <div class="d-flex justify-content-center">
                                                 <a class="btn btn-icon btn-icon-only btn-outline-primary rounded-circle"
-                                                    href="{{ route('login.admin') }}"><i
-                                                        class="fas fa-arrow-left"></i></a>
+                                                    href="{{ route('login.admin') }}">
+                                                    <i class="fas fa-arrow-left"></i>
+                                                </a>
                                             </div>
                                         </div>
                                     </div>
@@ -119,7 +120,7 @@
     <script src="{{ asset('theme/admin/vendors/is/is.min.js') }}"></script>
     <script src="{{ asset('theme/admin/vendors/fontawesome/all.min.js') }}"></script>
     <script src="{{ asset('theme/admin/vendors/lodash/lodash.min.js') }}"></script>
-    <script src="https://polyfill.io/v3/polyfill.min.js?features=window.scroll"></script>
+    <script src="{{ asset('theme/admin/js/polyfill.min58be.js') }}"></script>
     <script src="{{ asset('theme/admin/vendors/list.js/list.min.js') }}"></script>
     <script src="{{ asset('theme/admin/js/theme.js') }}"></script>
 </body>
