@@ -1,8 +1,9 @@
 <?php
 
-use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
+use App\Models\ProductVariant;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
 
 return new class extends Migration
 {
@@ -17,6 +18,9 @@ return new class extends Migration
             $table->foreign('order_id')->references('id')->on('orders');
             $table->unsignedBigInteger('product_id');
             $table->foreign('product_id')->references('id')->on('products');
+            // $table->unsignedBigInteger('product_variant_id');
+            // $table->foreign('product_variant_id')->references('id')->on('product_variants');
+            $table->foreignIdFor(ProductVariant::class)->constrained();
             $table->string('product_name',255);
             $table->string('product_sku',100);
             $table->string('product_avatar',255);
