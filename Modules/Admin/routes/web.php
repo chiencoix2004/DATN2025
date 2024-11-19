@@ -1,23 +1,24 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use Modules\Admin\App\Http\Controllers\AccountController;
-use Modules\Admin\App\Http\Controllers\AttributeController;
-use Modules\Admin\App\Http\Controllers\BannerController;
-use Modules\Admin\App\Http\Controllers\CategoryController;
-use Modules\Admin\App\Http\Controllers\ForgotPasswordController;
-use Modules\Admin\App\Http\Controllers\InvoiceController;
-use Modules\Admin\App\Http\Controllers\NotificationController;
-use Modules\Admin\App\Http\Controllers\OrderController;
-use Modules\Admin\App\Http\Controllers\PostController;
-use Modules\Admin\App\Http\Controllers\ProductController;
-use Modules\Admin\App\Http\Controllers\CouponController;
-use Modules\Admin\App\Http\Controllers\AdminController;
-use Modules\Admin\App\Http\Controllers\StatisticalController;
 use Modules\Admin\App\Http\Controllers\TagController;
-use Modules\Admin\App\Http\Controllers\CommentController;
+use Modules\Admin\App\Http\Controllers\PostController;
 use Modules\Admin\App\Http\Controllers\UserController;
+use Modules\Admin\App\Http\Controllers\AdminController;
+use Modules\Admin\App\Http\Controllers\OrderController;
+use Modules\Admin\App\Http\Controllers\BannerController;
+use Modules\Admin\App\Http\Controllers\CouponController;
+use Modules\Admin\App\Http\Controllers\AccountController;
+use Modules\Admin\App\Http\Controllers\CommentController;
+use Modules\Admin\App\Http\Controllers\InvoiceController;
+use Modules\Admin\App\Http\Controllers\ProductController;
 use Modules\Admin\App\Http\Controllers\SupportController;
+use Modules\Admin\App\Http\Controllers\CategoryController;
+use Modules\Admin\App\Http\Controllers\AttributeController;
+use Modules\Admin\App\Http\Controllers\StatisticalController;
+use Modules\Admin\App\Http\Controllers\AuthenticateController;
+use Modules\Admin\App\Http\Controllers\NotificationController;
+use Modules\Admin\App\Http\Controllers\ForgotPasswordController;
 
 /*
 |--------------------------------------------------------------------------
