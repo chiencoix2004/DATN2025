@@ -24,6 +24,7 @@ class OrderDetailSeeder extends Seeder
                 DB::table('order_details')->insert([
                     'order_id' => $i,
                     'product_id' => $productIds[$randomKey],
+                    'product_variant_id' => rand(1, 20),
                     'product_name' => $productNames[$randomKey],
                     'product_sku' => $productSkus[$randomKey],
                     'product_avatar' => "https://product.hstatic.net/1000392326/product/fas33679__k__968k_-_fjd31170__b__998k__1__f3577eb828354bdd9dd4dd48d632ea87_master.jpg",
