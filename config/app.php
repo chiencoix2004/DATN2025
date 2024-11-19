@@ -183,6 +183,7 @@ return [
         Illuminate\View\ViewServiceProvider::class,
         Nwidart\Modules\LaravelModulesServiceProvider::class,
 
+
         /*
          * Package Service Providers...
          */
@@ -212,6 +213,9 @@ return [
     'aliases' => Facade::defaultAliases()->merge([
         // 'ExampleClass' => App\Example\ExampleClass::class,
     ])->toArray(),
+    'SEOTools' => Artesaos\SEOTools\Facades\SEOTools::class,
+    'SEOMeta' => Artesaos\SEOTools\Facades\SEOMeta::class,
+
 
 
 ];

@@ -19,14 +19,16 @@ class CommentSeeder extends Seeder
         // Lấy danh sách products_id từ bảng products
         $productIds = DB::table('products')->pluck('id')->toArray();
 
-        for ($i = 1; $i <= 50; $i++) {
-            DB::table('comments')->insert([
-                'users_id' => $userIds[array_rand($userIds)], // Chọn ngẫu nhiên users_id
-                'products_id' => $productIds[array_rand($productIds)], // Chọn ngẫu nhiên products_id
-                'comments' => "Sản phẩm chất vãi ò $i",
-                'rating' => rand(1, 5),
-                'comment_date' => now(),
-            ]);
+        if (!empty($userIds) && !empty($productIds)) {
+            for ($i = 1; $i <= 50; $i++) {
+                DB::table('comments')->insert([
+                    'users_id' => $userIds[array_rand($userIds)], // Chọn ngẫu nhiên users_id
+                    'products_id' => $productIds[array_rand($productIds)], // Chọn ngẫu nhiên products_id
+                    'comments' => "Sản phẩm chất vãi ò $i",
+                    'rating' => rand(1, 5),
+                    'comment_date' => now(),
+                ]);
+            }
         }
     }
 }

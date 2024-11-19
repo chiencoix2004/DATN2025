@@ -20,9 +20,10 @@
                                             <a href="{{ route('index') }}">Trang chủ</a>
                                         </li>
                                         <li class="megamenu-holder position-static">
-                                            <a href="{{ route('shop.shopIndex') }}">Cửa hàng <i
-                                                    class="ion-chevron-down"></i></a>
-                                            <ul class="kenne-megamenu">
+                                            <a href="{{ route('shop.shopIndex') }}">Cửa hàng
+                                                {{-- <i class="ion-chevron-down"></i> --}}
+                                            </a>
+                                            {{-- <ul class="kenne-megamenu">
                                                 <li>
                                                     <span class="megamenu-title">Shop Page Layout</span>
                                                     <ul>
@@ -95,16 +96,9 @@
                                                         <li><a href="compare.html">So sánh</a></li>
                                                     </ul>
                                                 </li>
-                                            </ul>
+                                            </ul> --}}
                                         </li>
-                                        <li>
-                                            <a href="javascript:void(0)">Blog <i class="ion-chevron-down"></i></a>
-                                            <ul class="kenne-dropdown">
-                                                <li><a href="blog-grid_view.html">Grid View</a></li>
-                                                <li><a href="blog-list_view.html">List View</a></li>
-                                                <li><a href="blog-details.html">Blog Details</a></li>
-                                            </ul>
-                                        </li>
+                                        <li><a href="{{ route('other.posts.index') }}">Tin tức</a></li>
                                         <li><a href="{{ route('other.contactUs') }}">Liên hệ</a></li>
                                         <li><a href="{{ route('other.aboutUs') }}">Giới thiệu</a></li>
                                     </ul>

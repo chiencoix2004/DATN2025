@@ -21,12 +21,12 @@ class DatabaseSeeder extends Seeder
             ProductSeeder::class,
             CommentSeeder::class,
             OrderSeeder::class,
+            ColorAttributesSeeder::class,
+            SizeAttributeSeeder::class,
+            ProductVariantSeeder::class,
             OrderDetailSeeder::class,
             NotificationSeeder::class,
             // ProductImageSeeder::class,
-            // ColorAttributesSeeder::class,
-            // SizeAttributeSeeder::class,
-            // ProductVariantSeeder::class,
             // VariantValueSeeder::class
         ]);
     }
