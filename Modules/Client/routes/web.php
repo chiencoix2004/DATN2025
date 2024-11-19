@@ -11,9 +11,12 @@ use Modules\Admin\App\Http\Controllers\InvoiceController;
 use Modules\Client\App\Http\Controllers\ClientController;
 use Modules\Client\App\Http\Controllers\RegisterController;
 use Modules\Client\App\Http\Controllers\MyAccountController;
+use Modules\Client\App\Http\Controllers\ShopController;
+use Artesaos\SEOTools\Contracts\SEOTools;
 use Modules\Client\App\Http\Controllers\VerificationController;
 use Modules\Client\App\Http\Controllers\ResetPasswordController;
 use Modules\Client\App\Http\Controllers\ForgotPasswordController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -28,6 +31,12 @@ use Modules\Client\App\Http\Controllers\ForgotPasswordController;
 
 Route::controller(ClientController::class)->group(function () {
     Route::get('/', 'index')->name('index');
+    Route::post('search', 'search')->name('search');
+    Route::post('shortingseach', 'shortingseach')->name('shortingseach');
+    Route::post('searchprice', 'searchprice')->name('searchprice');
+    route::get('seach/category/{id}/{keywd}','seachcategory')->name('seachcategory');
+    route::get(('search/{keywd}'), 'searchget')->name('searchget');
+   // Route::get('querybuilder')
 });
 Route::controller(ShopController::class)->prefix('shop')->as('shop.')->group(function () {
     Route::get('/', 'index')->name('shopIndex');

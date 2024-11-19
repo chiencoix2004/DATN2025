@@ -21,4 +21,9 @@ class Category extends Model
 
     public $timestamp = false;
     protected $dates = ['deleted_at'];
+
+    function listcategory10(){
+        return $this->where('parent_id',0)->get();
+
+    }
 }
