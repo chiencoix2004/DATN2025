@@ -17,4 +17,11 @@ class AuthController extends Controller
     {
         return view('client::contents.auth.log-reg');
     }
+
+    public function form_reg(Request $request)
+    {
+        return view('client::contents.auth.reg');
+    }
+
+
 }

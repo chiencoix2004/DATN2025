@@ -37,7 +37,7 @@ class CustomerSupport extends Model
     public function listTicket()
     {
         return $this->join('users', 'customer_supports.user_id', '=', 'users.id')
-            ->select('customer_supports.*', 'users.user_name')
+            ->select('customer_supports.*', 'users.full_name')
             ->get();
     }
     public function addTicket($user_id, $ticket_title, $ticket_content, $ticket_category, $ticket_attachment)

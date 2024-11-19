@@ -19,4 +19,20 @@
 @yield('css-libs')
 <!-- Main Style CSS -->
 <link rel="stylesheet" href="{{ asset('theme/client/css/style.css') }}">
+<script>
+    window.addEventListener('beforeunload', function(event) {
+        // Kiểm tra URL hiện tại và URL đích
+        if (window.location.pathname !== '/cart/checkout' && !event.target.activeElement.href.includes(
+                '/cart/checkout')) {
+            // Gửi yêu cầu AJAX
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', '/cart/remove-discount-code', true);
+            xhr.setRequestHeader('Content-Type', 'application/json');
+            xhr.setRequestHeader('X-CSRF-TOKEN', '{{ csrf_token() }}'); // Thêm CSRF token
+            xhr.send(JSON.stringify({
+                '_token': '{{ csrf_token() }}' // Thêm CSRF token vào dữ liệu gửi đi
+            }));
+        }
+    });
+</script>
 @yield('css-setting')

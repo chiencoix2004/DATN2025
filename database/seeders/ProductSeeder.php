@@ -28,7 +28,7 @@ class ProductSeeder extends Seeder
                 'discount_percent' => rand(10, 50),
                 'description' => "Sản phẩm chất lắm thề $i",
                 'material' => "Chất liệu: vải thô $i",
-                'views' => rand(0,100),
+                'views' => rand(0, 100),
                 'quantity' => rand(10, 100),
                 'start_date' => now(),
                 'end_date' => now()->addDays(30),

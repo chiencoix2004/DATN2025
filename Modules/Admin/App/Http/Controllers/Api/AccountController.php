@@ -18,6 +18,7 @@ class AccountController extends Controller
     {
         // Create the base query
         $query = User::query();
+        $query->whereNotIn('roles_id', ['1', '2']);
         $query->select(
             'id',
             'full_name',

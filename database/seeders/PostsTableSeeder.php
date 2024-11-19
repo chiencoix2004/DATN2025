@@ -16,6 +16,7 @@ class PostsTableSeeder extends Seeder
         DB::table('posts')->insert([
             [
                 'title' => 'Laravel Tutorial for Beginners',
+                'short_description' => 'Laravel Tutorial for Beginners',
                 'slug_post' => Str::slug('Laravel Tutorial for Beginners'),
                 'content' => 'This is a beginner tutorial for Laravel...',
                 'image_post'=>'',
@@ -25,6 +26,7 @@ class PostsTableSeeder extends Seeder
             ],
             [
                 'title' => 'Advanced Laravel Tips',
+                'short_title' => 'Advanced Laravel Tips',
                 'slug_post' => Str::slug('Advanced Laravel Tips'),
                 'content' => 'Here are some advanced tips for Laravel...',
                 'image_post'=>'',
@@ -34,6 +36,7 @@ class PostsTableSeeder extends Seeder
             ],
             [
                 'title' => 'Building a REST API with Laravel',
+                'short_title' => 'Building a REST API with Laravel',
                 'slug_post' => Str::slug('Building a REST API with Laravel'),
                 'content' => 'This guide will help you build a REST API using Laravel...',
                 'image_post'=>'',

@@ -50,16 +50,22 @@
                 @if (Auth::user())
                     <ul class="offcanvas-component_menu">
                         <li>
+                            <a href="{{ route('my-account') }}">Chi tiết tài khoản</a>
+                        </li>
+                        <br>
+                        <hr>
+                        <li>
                             <form action="{{ route('logout') }}" method="POST">
                                 @csrf
                                 <button type="submit">Đăng xuất</button>
                             </form>
                         </li>
-                        <li><a href="{{ route('showForm') }}">Chi tiết tài khoản ,... Update sau </a></li>
+                        <br>
+                        
                     </ul>
                 @else
                     <ul class="offcanvas-component_menu">
-                        <li><a href="{{ route('showForm') }}">Đăng ký</a></li>
+                        <li><a href="{{ route('formReg') }}">Đăng ký</a></li>
                         <li><a href="{{ route('showForm') }}">Đăng nhập</a></li>
                     </ul>
                 @endif

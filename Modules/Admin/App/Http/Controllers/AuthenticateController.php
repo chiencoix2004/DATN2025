@@ -24,17 +24,17 @@ class AuthenticateController extends Controller
         $remember = $req->has('remember');
     
         if (Auth::attempt($credentials, $remember)) {
-            return redirect()->intended('admin/'); 
+            return redirect()->route('admin.home'); 
         }
     
-        return redirect()->route('login')->withErrors(['message' => 'Đăng nhập thất bại']);
+        return redirect()->route('login.admin')->withErrors(['message' => 'Đăng nhập thất bại']);
     }
     
     public function logout()
     {
         Auth::logout(); // Đăng xuất người dùng
 
-        return redirect()->route('login')->withErrors('message', 'Đăng xuất thành công');
+        return redirect()->route('login.admin')->withErrors('message', 'Đăng xuất thành công');
     }
 
 
