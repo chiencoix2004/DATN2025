@@ -41,10 +41,11 @@ class PostController extends Controller
      * Show the specified resource.
      */
     public function show($slug)
-    {
-        $post = Post::where(['slug_post' => $slug, 'published_id' => 1])->first();
-        return view('client::contents.other-pages.post-detail', compact('post'));
-    }
+{
+    $post = Post::where(['slug_post' => $slug, 'published_id' => 1])->first();
+    $posts = Post::where('published_id', 1)->latest('created_at')->get(); // Lấy tất cả bài viết
+    return view('client::contents.other-pages.post-detail', compact('post', 'posts'));
+}
 
     /**
      * Show the form for editing the specified resource.

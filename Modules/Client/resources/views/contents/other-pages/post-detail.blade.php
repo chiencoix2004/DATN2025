@@ -22,34 +22,43 @@
         <div class="row">
             <div class="col-lg-3 order-lg-1 order-2">
                 <div class="kenne-blog-sidebar-wrapper">
+                    <!-- Search Form -->
                     <div class="kenne-blog-sidebar">
                         <h4 class="kenne-blog-sidebar-title">Tìm kiếm</h4>
                         <div class="search-form_area">
                             <form class="search-form" action="{{ route('other.posts.search') }}" method="POST">
                                 @csrf
-                                <input type="text" name="search_input" class="search-field"
-                                    placeholder="Tìm kiếm ở đây">
+                                <input type="text" name="search_input" class="search-field" placeholder="Tìm kiếm ở đây">
                                 <button type="submit" class="search-btn"><i class="ion-ios-search"></i></button>
                             </form>
                         </div>
-                    </div>
+                    </div> 
+                    <!-- All Posts -->
                     <div class="kenne-blog-sidebar">
-                        <h4 class="kenne-blog-sidebar-title">Recent Posts</h4>
-                        <div class="recent-post">
-                            <div class="recent-post_thumb">
-                                <a href="blog-details.html">
-                                    <img class="img-full" src="assets/images/blog/1.jpg" alt="Kenne's Blog Image">
-                                </a>
-                            </div>
-                            <div class="recent-post_desc">
-                                <span><a href="blog-details.html">Ut eum laborum</a></span>
-                                <span class="post-date">October 25,2019</span>
-                            </div>
-                        </div>
+                        <h4 class="kenne-blog-sidebar-title">Tất cả bài viết</h4>
+                        @if ($posts->count() > 0)
+                            @foreach ($posts as $item)
+                                <div class="recent-post">
+                                    <div class="recent-post_thumb">
+                                        <a href="{{ route('other.postDetail', $item->slug_post) }}">
+                                            <img class="img-full" src="{{ Storage::url($item->image_post) }}" alt="{{ $item->title }}">
+                                        </a>
+                                    </div>
+                                    <div class="recent-post_desc">
+                                        <span>
+                                            <a href="{{ route('other.postDetail', $item->slug_post) }}">{{ $item->title }}</a>
+                                        </span>
+                                        <span class="post-date">{{ $item->created_at->format('d/m/Y') }}</span>
+                                    </div>
+                                </div>
+                            @endforeach
+                        @else
+                            <p>Không có bài viết nào để hiển thị.</p>
+                        @endif
                     </div>
-
                 </div>
             </div>
+            
             <div class="col-lg-9 order-lg-2 order-1">
                 <div class="blog-item">
                     <div class="blog-img">

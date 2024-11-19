@@ -51,7 +51,6 @@ Route::prefix('other')->as('other.')->group(function () {
     Route::get('/posts', [PostController::class, 'index'])->name('posts.index');   
     Route::get('/postDetail/{slug}', [PostController::class, 'show'])->name('postDetail');
     Route::post('search', [PostController::class, 'search'])->name('posts.search');
-    Route::get('/latest-blog', [PostController::class, 'latestBlog'])->name('latest.blog');   
 });
 Route::controller(RegisterController::class)->prefix('auth')->as('auth.')->group(function () {
     Route::post('log-reg', 'register')->name('log-reg');
