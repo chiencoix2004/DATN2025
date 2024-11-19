@@ -200,7 +200,7 @@
                             <div class="quantity">
                                 <label>Số lượng</label>
                                 <div class="cart-plus-minus">
-                                    <input class="cart-plus-minus-box" value="1" type="text">
+                                    <input class="cart-plus-minus-box" id="quantity-input" value="1" min="1" type="text">
                                     <div class="dec qtybutton"><i class="fa fa-angle-down"></i></div>
                                     <div class="inc qtybutton"><i class="fa fa-angle-up"></i></div>
                                 </div>
@@ -208,9 +208,8 @@
                             <div class="qty-btn_area">
                                 <ul>
                                     <li>
-                                        <button class="add-to_cart" type="submit">
-                                            Thêm vào giỏ hàng
-                                        </button>
+                                        <button type="submit" class="add-to-cart kenne-register_btn"
+                                            data-product-id="{{ $data->id }}">Thêm vào giỏ hàng</button>
                                     </li>
                                     <li>
                                         <a class="qty-wishlist_btn" href="wishlist.html" data-bs-toggle="tooltip"
@@ -392,7 +391,7 @@
                                                 </tbody>
                                             </table>
                                         </div>
-                                        <h2>Write a review</h2>
+                                        {{-- <h2>Write a review</h2>
                                         <div class="form-group required">
                                             <div class="col-sm-12 p-0">
                                                 <label>Your Email <span class="required">*</span></label>
@@ -427,7 +426,7 @@
                                             <div class="kenne-btn-ps_right">
                                                 <button class="kenne-btn">Continue</button>
                                             </div>
-                                        </div>
+                                        </div> --}}
                                     </form>
                                 </div>
                             </div>
@@ -1066,6 +1065,36 @@
 @endsection
 @section('js-setting')
     <script>
+        $('.add-to-cart').click(function(e) {
+            e.preventDefault(); // Ngăn form submit mặc định
+
+            let productId = $(this).data('product-id');
+            let productSize = $('#id_size').val();
+            let productColor = $('input[name="product-color"]:checked').val();
+            let price = $('#price').val();
+            let quantity = $('#quantity-input').val();
+
+            $.ajax({
+                url: '{{ route('cart.add') }}',
+                method: 'POST',
+                data: {
+                    product_id: productId,
+                    size_attribute_id: productSize,
+                    color_attribute_id: productColor,
+                    quantity: quantity,
+                    _token: '{{ csrf_token() }}'
+                },
+                success: function(response) {
+                    alert(response.message);
+                },
+                error: function(error) {
+                    // alert(response.error);
+                    console.error(error);
+                }
+            });
+        });
+    </script>
+    <script>
         // ajax rend color
         $(document).ready(function() {
             $.ajaxSetup({
@@ -1161,7 +1190,7 @@
                             `<li>Tình trạng: <a href="javascript:void(0)">${quantity < 5 && quantity > 0 ? 'Sắp hết hàng' : (quantity == 0 ? 'Hết hàng' : 'Còn hàng')}</a></li>`;
                         if (response.price_sale > 0) {
                             htmlPS =
-                                `<li>Giá mặc định: <a href="javascript:void(0)"><strike>${price_default} (VNĐ)</strike></a></li>`;
+                                `<li>Giá khuyến mại: <a href="javascript:void(0)"><strong>${price_sale} (VNĐ)</strong></a></li>`;
                             htmlPD =
                                 `<li>Giá mặc định: <a href="javascript:void(0)"><strike>${price_default} (VNĐ)</strike></a></li>`;
                         } else {
