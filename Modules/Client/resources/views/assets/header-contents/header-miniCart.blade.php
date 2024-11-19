@@ -45,7 +45,7 @@
             <span class="ammount">$462.4‬0</span>
         </div>
         <div class="minicart-btn_area">
-            <a href="{{ route('cart.list') }}" class="kenne-btn kenne-btn_fullwidth">Giỏ hàng</a>
+            <a href="{{ route('cart.index') }}" class="kenne-btn kenne-btn_fullwidth">Giỏ hàng</a>
         </div>
         <div class="minicart-btn_area">
             <a href="checkout.html" class="kenne-btn kenne-btn_fullwidth">Thanh toán</a>
