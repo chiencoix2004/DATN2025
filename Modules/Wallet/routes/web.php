@@ -25,6 +25,7 @@ Route::controller(WalletController::class)
     Route::post("charge", [WalletController::class,"charge"])->name("charge");
     Route::get('transaction-detail/{id}', [WalletController::class, 'transaction'])->name('transaction');
     Route::get('res/vnpay', [WalletController::class, 'callbackvnpaydata'])->name('callbackvnpaydata');
+    Route::get('withdraw', [WalletController::class, 'withdraw'])->name('withdraw');
 });
 
 Route::controller(EkycController::class)
