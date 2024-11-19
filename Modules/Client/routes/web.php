@@ -11,7 +11,6 @@ use Modules\Admin\App\Http\Controllers\InvoiceController;
 use Modules\Client\App\Http\Controllers\ClientController;
 use Modules\Client\App\Http\Controllers\RegisterController;
 use Modules\Client\App\Http\Controllers\MyAccountController;
-use Modules\Client\App\Http\Controllers\ShopController;
 use Artesaos\SEOTools\Contracts\SEOTools;
 use Modules\Client\App\Http\Controllers\VerificationController;
 use Modules\Client\App\Http\Controllers\ResetPasswordController;
