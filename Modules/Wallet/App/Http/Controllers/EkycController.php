@@ -5,6 +5,7 @@ namespace Modules\Wallet\App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Models\UserEkyc;
+use App\Models\Wallet;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -49,7 +50,6 @@ class EkycController extends Controller
             'frist_name' => $request->frist_name,
             'last_name' => $request->last_name,
             'date_of_birth' => $request->date_of_birth,
-            'adress' => $request->adress,
             'phone_number' => $request->phone_number,
             'place_of_residence' => $request->place_of_residence,
             'gender' => $request->gender,
@@ -60,6 +60,7 @@ class EkycController extends Controller
         $datauser = $userkyc->getUserKycInfo(Auth::user()->id);
         if ($datauser) {
             $userkyc->updateuserinfo(Auth::user()->id, $data);
+            return redirect()->route('ekyc.verifykyc');
         } else{
             try {
                 $userkyc->adduserinfo($data);
@@ -70,6 +71,7 @@ class EkycController extends Controller
                 return dd($e->getMessage());
             }
         }
+
     }
 
     public function verifykyc()
@@ -84,8 +86,8 @@ class EkycController extends Controller
             return redirect()->back()->withErrors(['id_number' => 'Vui lòng nhập số CMND/CCCD']);
         }
     }
-    public function step2skip(Request $request){
-        $user = new User();
+    public function step2skip(){
+        $user = new UserEkyc();
         $user->setfilltos(Auth::user()->id);
         return redirect()->route('ekyc.verifytos');
 
@@ -96,5 +98,32 @@ class EkycController extends Controller
         $user = new User();
         $info = $user->getUser(Auth::user()->id);
         return view('wallet::ekyc.tos', compact('info'));
+    }
+
+
+    public function registerwallet(Request $request){
+       $tos = $request->TOS;
+      if($tos == 'on'){
+          $user = new UserEkyc();
+          $user->setfillCompleted(Auth::user()->id);
+          $user->setStasusCompletedBasic(Auth::user()->id);
+          $walletdata = [
+            'user_id' => Auth::user()->id,
+            'wallet_account_id' => random_int(100000,999999),
+            'wallet_balance_available' => 0,
+            'wallet_status' => 1,
+            'wallet_user_level' => 1,
+
+          ];
+          try{
+            $wallet = new Wallet();
+            $wallet->createWallet($walletdata);
+            return redirect()->route('wallet.index');
+          } catch(Exception $e){
+            return dd($e->getMessage());
+          }
+        }else{
+            return redirect()->back()->withErrors('Vui lòng chấp nhận điều khoản sử dụng');
+         }
     }
 }

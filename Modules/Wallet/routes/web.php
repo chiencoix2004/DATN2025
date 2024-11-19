@@ -23,6 +23,8 @@ Route::controller(WalletController::class)
     Route::get("/", [WalletController::class,"index"])->name("index");
     Route::get("topup", [WalletController::class,"topup"])->name("topup");
     Route::post("charge", [WalletController::class,"charge"])->name("charge");
+    Route::get('transaction-detail/{id}', [WalletController::class, 'transaction'])->name('transaction');
+    Route::get('res/vnpay', [WalletController::class, 'callbackvnpaydata'])->name('callbackvnpaydata');
 });
 
 Route::controller(EkycController::class)
@@ -35,7 +37,7 @@ Route::controller(EkycController::class)
     Route::post("step1update", [EkycController::class,"uploadadress"])->name("uploadadress");
     Route::get("step2", [EkycController::class,"verifykyc"])->name("verifykyc");
     Route::post("step2update", [EkycController::class,"uploadkyc"])->name("uploadkyc");
-    Route::post("step2skip", [EkycController::class,"step2skip"])->name("step2skip");
+    Route::get("step2skip", [EkycController::class,"step2skip"])->name("step2skip");
     Route::get("step3", [EkycController::class,"verifytos"])->name("verifytos");
     Route::post("submit", [EkycController::class,"registerwallet"])->name("registerwallet");
 

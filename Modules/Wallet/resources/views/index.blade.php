@@ -12,7 +12,7 @@
                     </div>
                     <div class="card-body">
                         <h5 class="card-title">Số dư tài khoản</h5>
-                        <p class="card-text">1.000.000 VND</p>
+                        <p class="card-text">{{ number_format(round($data->wallet_balance_available)) }} VND</p>
                     </div>
                 </div>
             </div><!-- end col -->
@@ -24,7 +24,7 @@
                     </div>
                     <div class="card-body">
                         <h5 class="card-title">Số tiền chờ duyệt</h5>
-                        <p class="card-text">213.000 VND</p>
+                        <p class="card-text">{{ number_format(round($withdraw_toal)) }} VND</p>
                     </div>
                 </div>
             </div><!-- end col -->
@@ -36,7 +36,7 @@
             <div class="col-lg-12">
                 <div class="card">
                     <div class="card-header">
-                        <h4 class="card-title mb-0">Search</h4>
+                        <h4 class="card-title mb-0">Lịch sử giao dịch</h4>
                     </div><!-- end card header -->
                     <div class="card-body">
                         <div id="table-search"></div>
@@ -61,23 +61,18 @@ new gridjs.Grid({
     },
     {
         name: "Hành động",
-        formatter: (cell) => gridjs.html(`<button class="btn btn-primary btn-sm">${cell}</button>`)
+        formatter: (cell, row) => {
+            const url = `{{ route('wallet.transaction', ['id' => ':id']) }}`.replace(':id', row.cells[0].data);
+            return gridjs.html(`<a href="${url}" class="btn btn-primary btn-sm">${cell}</a>`);
+        }
     }],
     pagination: { limit: 5 },
     search: true,
     data: [
-        ["1", "100000", "Nạp tiền", "2021-09-01", "Thành công","Xem"],
-        ["2", "200000", "Rút tiền", "2021-09-02", "Thất bại","Xem"],
-        ["3", "300000", "Nạp tiền", "2021-09-03", "Thành công","Xem"],
-        ["4", "400000", "Rút tiền", "2021-09-04", "Thất bại","Xem"],
-        ["5", "500000", "Nạp tiền", "2021-09-05", "Thành công","Xem"],
-        ["6", "600000", "Rút tiền", "2021-09-06", "Thành công","Xem"],
-        ["7", "700000", "Nạp tiền", "2021-09-07", "Thất bại","Xem"],
-        ["8", "800000", "Rút tiền", "2021-09-08", "Thành công","Xem"],
-        ["9", "900000", "Nạp tiền", "2021-09-09", "Thành công","Xem"],
-        ["10", "1000000", "Rút tiền", "2021-09-10", "Thất bại","Xem"]
+        @foreach ($trx_data as $items)
+        ["{{ $items->trx_id }}", "{{ number_format(round($items->trx_amount)) }} VND", "{{ $items->trx_type }}", "{{ $items->created_at }}", "@if($items->trx_status == 0) Chờ duyệt @elseif($items->trx_status == 1) Thành công @elseif($items->trx_status == 2) Thất bại @endif", "Chi tiết"],
+        @endforeach
     ]
 }).render(document.getElementById("table-search"));
-
     </script>
 @endsection

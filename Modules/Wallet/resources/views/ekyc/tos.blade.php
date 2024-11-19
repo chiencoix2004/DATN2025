@@ -45,7 +45,27 @@
         <div class="card">
             <a href="{{ route('ekyc.verifyadress') }}"> <i class="bx bx-arrow-back"></i> Quay lại từ đầu</a>
             <div class="card-body">
-                <form class="needs-validation" method="POST" action="#" novalidate>
+                <div class="container-fluid">
+                    @if ($errors->any())
+                    <div class="alert alert-danger">
+                        <ul>
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
+                @if(session('success'))
+                    <div class="alert alert-success">
+                        {{session('success')}}
+                    </div>
+                @endif
+                @if(session('error'))
+                    <div class="alert alert-danger">
+                        {{session('error')}}
+                    </div>
+                @endif
+                <form class="needs-validation" method="POST" action="{{ route('ekyc.registerwallet') }}" novalidate>
                     @csrf
                     <div class="mb-3">
                         <div class="card">
@@ -55,7 +75,28 @@
                                     Vui lòng đọc kỹ và đồng ý với điều khoản sử dụng dịch vụ ví tiền của chúng tôi
                                 </p>
                                 <p>
-                                    I don't gyatt a lot for Chrizzmas... <!-- Nội dung bài hát -->
+                                    I don't gyatt a lot for Chrizzmas
+                                    There is just one skibidi
+                                    Someone fanum tax the toilet
+                                    Cause Kai Cenat has to pee
+                                    I'm more a sigma than you know
+                                    I only edge in Ohio
+                                    I saw Speed there too
+                                    All I gyatt for Chrizzmas
+                                    Is you
+                                    I don't gyatt a lot for Chrizzmas
+                                    There is just one skibidi
+                                    Someone fanum tax the toilet
+                                    Cause Kai Cenat has to pee
+                                    I don't need to mew and lock in
+                                    Just for chat to see I'm based
+                                    Mr Beast won't give me Lunchly
+                                    With the prime on Chrizzmas Day
+                                    I'm more sigma than you know
+                                    I only edge in Ohio
+                                    I saw Speed there too
+                                    All I gyatt for Chrizzmas
+                                    Is you... you chat
                                 </p>
                             </div>
                         </div>
@@ -63,7 +104,7 @@
                     <div class="row">
                         <div class="col-lg-12">
                             <div class="form-check mb-3">
-                                <input type="checkbox" class="form-check-input" id="invalidCheck" required>
+                                <input type="checkbox" class="form-check-input" name="TOS" id="invalidCheck" required>
                                 <label class="form-check-label" for="invalidCheck">Đồng ý sử dụng điều khoản dịch vụ ví tiền</label>
                                 <div class="invalid-feedback">Bạn cần đồng ý với điều khoản sử dụng dịch vụ</div>
                             </div>

@@ -41,8 +41,28 @@
 
         <!-- Card -->
         <div class="card">
+            <div class="container-fluid">
+                @if ($errors->any())
+                <div class="alert alert-danger">
+                    <ul>
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
+            @if(session('success'))
+                <div class="alert alert-success">
+                    {{session('success')}}
+                </div>
+            @endif
+            @if(session('error'))
+                <div class="alert alert-danger">
+                    {{session('error')}}
+                </div>
+            @endif
             <div class="card-body">
-                <form class="needs-validation" method="POST" action="#" novalidate>
+                <form class="needs-validation" method="POST" action="{{ route('ekyc.uploadkyc')  }}" novalidate>
                     @csrf
                     <div class="mb-3">
                         <label for="id_number" class="form-label">Số CCCD</label>
@@ -153,7 +173,8 @@
                                             </ul>
                                         </div>
                                         <div class="modal-footer">
-                                            <button type="button" class="btn btn-light">Bỏ qua xác thực thông tin</button>
+
+                                                <a  href="{{ route('ekyc.step2skip') }}" class="btn btn-danger">Bỏ qua xác thực thông tin</a>
                                             <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Quay lại xác thực</button>
 
                                         </div>
