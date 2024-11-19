@@ -15,7 +15,7 @@ class PostController extends Controller
      */
     public function index()
     {
-        $posts = Post::all();
+        $posts = Post::where('published_id', 1)->latest('created_at')->paginate(5);
         //dd($posts);
         // Trả về view với danh sách bài viết
         return view('client::contents.other-pages.post', compact('posts'));
@@ -34,17 +34,18 @@ class PostController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
-        
+
     }
 
     /**
      * Show the specified resource.
      */
-    public function show($id)
-    {
-        $post = Post::findOrFail($id);
-        return view('client::contents.other-pages.post-detail', ['post' => $post]);
-    }
+    public function show($slug)
+{
+    $post = Post::where(['slug_post' => $slug, 'published_id' => 1])->first();
+    $posts = Post::where('published_id', 1)->latest('created_at')->get(); // Lấy tất cả bài viết
+    return view('client::contents.other-pages.post-detail', compact('post', 'posts'));
+}
 
     /**
      * Show the form for editing the specified resource.
@@ -68,5 +69,14 @@ class PostController extends Controller
     public function destroy($id)
     {
         //
+    }
+    // Tìm kiếm bài viết theo tiêu đề (Title)
+    public function search(Request $request)
+    {
+        // dd($request->all());
+        $query = $request->search_input; // Lấy từ khóa tìm kiếm từ request
+        // Tìm kiếm bài viết theo tiêu đề
+        $data = Post::where('title', 'like', '%' . $query . '%')->first();
+        return view('client::contents.other-pages.post', compact('data'));
     }
 }

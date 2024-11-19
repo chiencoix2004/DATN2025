@@ -92,12 +92,7 @@
                                         </li>
                                     </ul> --}}
                                 </li>
-                                <li>
-                                    <a href="javascript:void(0)">Blog <i class="ion-chevron-down"></i></a>
-                                    <ul class="kenne-dropdown">
-                                        <li><a href="{{ route('other.posts.index') }}">Bài Viết</a></li>
-                                    </ul>
-                                </li>
+                                <li><a href="{{ route('other.posts.index') }}">Tin tức</a></li>
                                 <li><a href="{{ route('other.contactUs') }}">Liên hệ</a></li>
                                 <li><a href="{{ route('other.aboutUs') }}">Giới thiệu</a></li>
                             </ul>

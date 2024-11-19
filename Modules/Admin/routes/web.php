@@ -202,11 +202,12 @@ Route::prefix('admin')
         // Route quản lý posts
         Route::controller(PostController::class)->prefix('posts')->as('posts.')
             ->group(function () {
-                Route::get('list', 'listPost')->name('list');
+                // Route::get('formPost', 'showForm')->name('show_form');
+                Route::get('list', 'index')->name('list');
                 Route::get('create', 'create')->name('create');
                 Route::post('store', 'store')->name('store');
-                Route::get('/{id}/show', 'show')->name('show');
-                Route::get('/{id}/edit', 'edit')->name('edit');
+                Route::get('/show/{slug}', 'show')->name('showPost');
+                Route::get('/edit/{slug}', 'edit')->name('editPost');
                 Route::put('{id}update', 'update')->name('update');
                 Route::delete('/{id}/destroy', 'destroy')->name('destroy');
             });
