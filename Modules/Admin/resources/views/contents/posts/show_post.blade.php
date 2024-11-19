@@ -1,20 +1,23 @@
 @extends('admin::layout.master')
 @section('title')
-    Admin | DANH SÁCH BÀI VIẾT
+    Admin | DANH SÁCH BÀI VIẾT-TIN TỨC
 @endsection
 @section('contents')
-    <div class="card mb-3">
-        <div class="card-body">
-            <div class="row flex-between-center">
-                <div class="col-md">
-                    <h5 class="mb-2 mb-md-0">Thêm mới bài viết</h5>
-                </div>
-            </div>
-        </div>
-    </div>
     <form action="" method="POST" enctype="multipart/form-data">
         @csrf
         @method('PUT')
+        <div class="card mb-3">
+            <div class="card-body">
+                <div class="row flex-between-center">
+                    <div class="col-md">
+                        <h5 class="mb-2 mb-md-0">Chi tiết Bài viết-Tin tức</h5>
+                    </div>
+                    <div class="col-md-auto text-end">
+                        <a class="btn btn-danger" href="{{route('admin.posts.list')}}">Quay lại</a>
+                    </div>
+                </div>
+            </div>
+        </div>
         <div class="row g-0">
             <div class="col-lg-9 pe-lg-2">
                 <div class="card mb-3">
@@ -96,9 +99,6 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="card mb-3">
-                        <button class="btn btn-primary" id="submit-button" type="submit">Cập nhật</button>
                     </div>
                 </div>
             </div>

@@ -1,6 +1,6 @@
 @extends('admin::layout.master')
 @section('title')
-    Admin | DANH SÁCH BÀI VIẾT
+    Admin | DANH SÁCH BÀI VIẾT-TIN TỨC
 @endsection
 @section('contents')
     <form action="{{ route('admin.posts.update', ['id' => $listPost->id]) }}" method="POST" enctype="multipart/form-data">

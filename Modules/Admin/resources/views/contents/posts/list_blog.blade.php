@@ -1,6 +1,6 @@
 @extends('admin::layout.master')
 @section('title')
-    Admin | Danh sách bài viết
+    Admin | DANH SÁCH BÀI VIẾT-TIN TỨC
 @endsection
 @section('contents')
     <div class="card mb-3" id="tableExample3"
@@ -14,7 +14,7 @@
                         @if (session('error'))
                             <h5 class="fs-9 mb-0 text-danger py-2 py-xl-0">{{ session('error') }}</h5>
                         @else
-                            <a href="{{ route('admin.posts.create') }}" class="btn btn-primary">Thêm tin tức mới</a>
+                            <a href="{{ route('admin.posts.create') }}" class="btn btn-primary">Thêm mới</a>
                         @endif
                     @endif
                 </div>
@@ -100,12 +100,12 @@
             </div>
         </div>
         {{-- PAGINATE PAGES --}}
-        {{-- <div class="card-footer">
+        <div class="card-footer">
             <div class="row">
                 <div class="col-lg-12">
-                    {{ $data->links('pagination::bootstrap-5') }}
+                    {{ $posts->links('pagination::bootstrap-5') }}
                 </div>
             </div>
-        </div> --}}
+        </div>
     </div>
 @endsection

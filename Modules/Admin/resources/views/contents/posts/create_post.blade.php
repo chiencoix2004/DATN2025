@@ -1,6 +1,6 @@
 @extends('admin::layout.master')
 @section('title')
-    Admin | DANH SÁCH BÀI VIẾT
+    Admin | DANH SÁCH BÀI VIẾT-TIN TỨC
 @endsection
 @section('contents')
     
@@ -15,6 +15,9 @@
                     <div class="col-auto">
                         <button class="btn btn-primary" id="submit-button" type="submit">Thêm mới</button>
                     </div>
+                    <div class="col-md-auto text-end">
+                        <a class="btn btn-danger" href="{{route('admin.posts.list')}}">Quay lại</a>
+                    </div>
                 </div>
             </div>
         </div>
@@ -25,8 +28,6 @@
                         <h6 class="mb-0">Mô tả ngắn</h6>
                     </div>
                     <div class="card-body">
-                        {{-- <input class="form-control @error('short_title') is-invalid @enderror" id="short_title"
-                            type="text" name="short_title" value="{{ old('short_title') }}" /> --}}
                         <textarea class="form-control @error('short_description') is-invalid @enderror" name="short_description" id="short_description">
                             {{ old('short_description') }}
                         </textarea>
