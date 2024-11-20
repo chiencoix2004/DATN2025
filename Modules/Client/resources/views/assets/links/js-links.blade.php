@@ -30,4 +30,134 @@
 @yield('js-libs')
 <!-- Main JS -->
 <script src="{{ asset('theme/client/js/main.js') }}"></script>
+
+<script>
+    $(document).ready(function() {
+        $('.add-to-cart').click(function(e) {
+            e.preventDefault(); // Ngăn form submit mặc định
+
+            let productId = $(this).data('product-id');
+            let productSize = $('#id_size').val();
+            let productColor = $('input[name="product-color"]:checked').val();
+            let price = $('#price').val();
+            let quantity = $('#quantity-input').val();
+
+            $.ajax({
+                url: '{{ route('cart.add') }}',
+                method: 'POST',
+                data: {
+                    product_id: productId,
+                    size_attribute_id: productSize,
+                    color_attribute_id: productColor,
+                    quantity: quantity,
+                    _token: '{{ csrf_token() }}'
+                },
+                success: function(response) {
+                    alert(response.message);
+                    loadCartItems();
+                    loadCartItemCount();
+
+                },
+                error: function(error) {
+                    // alert(response.error);
+                    console.error(error);
+                }
+            });
+        });
+
+        function formatVND(amount) {
+            return amount.toLocaleString('vi-VN', {
+                style: 'currency',
+                currency: 'VND'
+            });
+        }
+
+        function loadCartItems() {
+            $.ajax({
+                url: '/cart/list',
+                method: 'GET',
+                dataType: 'json',
+                success: function(response) {
+                    $('#minicart').empty();
+                    response.cartItems.forEach(function(item) {
+                        let product = item.product_variant.product;
+                        let quantity = item.quantity;
+                        let price = item.price;
+
+                        let productHTML = `
+                          <li class="minicart-product">
+                                <a class="product-item_remove" href="javascript:void(0)" onclick="removeFromMiniCart(${item.id})"><i class="ion-android-close"></i></a>
+                                <div class="product-item_img">
+                                     <img src="{{ Storage::url('${product.image_avatar}') }}" alt="${product.name}">
+                                </div>
+                                <div class="product-item_content">
+                                     <a class="product-item_title" href="shop-left-sidebar.html">${product.name}</a>
+                                     <div>
+                                        - Size: ${item.product_variant.size.size_value}
+                                        <br>
+                                        - Màu: <input type="color" value="${item.product_variant.color.color_value}" disabled>
+                                    </div>
+                                     <span class="product-item_quantity">${quantity} x ${formatVND(price)}</span>
+                                </div>
+                          </li>
+                          `;
+                        $('#minicart').append(productHTML);
+                    });
+
+                    $('#totalAmount').text(formatVND(response.totalAmount));
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error fetching cart items:', error);
+                }
+            });
+        }
+
+        window.removeFromMiniCart = function(itemId) {
+            $.ajax({
+                type: 'POST',
+                url: '/cart/remove/' + itemId, // API xóa sản phẩm
+                data: {
+                    '_method': 'DELETE', // Override phương thức HTTP thành DELETE
+                    'id': itemId, // ID sản phẩm
+                    '_token': '{{ csrf_token() }}' // CSRF token
+                },
+                success: function(response) {
+                    if (response.success) {
+                        console.log("Xóa sản phẩm thành công:", response.message);
+                        loadCartItems();
+                        loadCartItemCount();
+
+
+                    } else {
+                        console.error("Lỗi khi xóa sản phẩm:", response.message);
+                    }
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    console.error("Lỗi khi xóa sản phẩm:", textStatus, errorThrown);
+                }
+            });
+        };
+
+        function loadCartItemCount() {
+            $.ajax({
+                url: '/cart/list',
+                method: 'GET',
+                success: function(response) {
+                    var itemCount = response.cartItems.length;
+                    $('.item-count').text(itemCount);
+                }
+            });
+        }
+
+        loadCartItemCount();
+
+
+        setInterval(loadCartItemCount, 60000);
+
+
+        loadCartItems();
+
+
+    });
+</script>
 @yield('js-setting')

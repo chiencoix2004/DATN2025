@@ -81,7 +81,11 @@
                                         @endsession <span class="discount"> 0 VNĐ</span></li>
                                     <li>Tổng cộng <span class="total">0 VNĐ</span></li>
                                 </ul>
-                                <a href="{{ route('cart.checkout') }}">Tiến hành thanh toán</a>
+                                <div class="btn-checkout">
+                                    <a href="{{ route('cart.checkout') }}">Tiến hành thanh toán</a>
+
+                                </div>
+                                {{-- <a href="{{ route('cart.checkout') }}">Tiến hành thanh toán</a> --}}
                             </div>
                         </div>
                     </div>
@@ -310,5 +314,4 @@
 
         });
     </script>
-    
 @endsection

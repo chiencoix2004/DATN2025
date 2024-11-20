@@ -108,7 +108,7 @@
                             <li class="minicart-wrap">
                                 <a href="#miniCart" class="minicart-btn toolbar-btn">
                                     <div class="minicart-count_area">
-                                        <span class="item-count">03</span>
+                                        <span class="item-count">0</span>
                                         <i class="ion-bag"></i>
                                     </div>
                                 </a>
