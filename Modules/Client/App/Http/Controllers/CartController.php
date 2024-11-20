@@ -2,18 +2,19 @@
 
 namespace Modules\Client\App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
+use Exception;
 use App\Models\Cart;
+use App\Models\User;
+use App\Models\Order;
+use App\Models\Product;
 use App\Models\CartItem;
 use App\Models\CouponModel;
-use App\Models\Order;
 use App\Models\OrderDetail;
-use App\Models\Product;
-use App\Models\ProductVariant;
-use Exception;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use App\Models\ProductVariant;
+use App\Http\Controllers\Controller;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Validator;
 
 class CartController extends Controller
@@ -228,8 +229,9 @@ class CartController extends Controller
     }
 
     public function order()
-    {
+    {   
         $userId = auth()->check() ? auth()->user()->id : null;
+
         if (auth()->check()) {
             $cart = Cart::where('user_id', $userId)->first();
             $cartItems = CartItem::where('cart_id', $cart->id)
@@ -238,6 +240,10 @@ class CartController extends Controller
                 ->with("productVariant.color")
                 ->with("productVariant.product")
                 ->get();
+            
+            if ($cartItems->count() == 0) {
+                return redirect()->route('cart.index');
+            }
 
             // dd([$cart,$cartItems]);
         } else {
@@ -247,21 +253,25 @@ class CartController extends Controller
     }
 
     public function checkout(Request $request)
-    {
+    {   
+
+        
         try {
             $userId = $request->input('user_id');
             $first_name = $request->input('first_name');
             $last_name = $request->input('last_name');
-            $user_name = $last_name . ' ' . $first_name;
-            $user_phone = $request->input('user_phone');
-            $user_email = $request->input('user_email');
-            $user_address = $request->input('user_address');
-            $user_note = $request->input('user_note');
-            $user_note = $request->input('user_note');
+            $ship_user_name = $last_name . ' ' . $first_name;
+            $ship_user_phone = $request->input('user_phone');
+            $ship_user_email = $request->input('user_email');
+            $ship_user_address = $request->input('user_address');
+            $ship_user_note = $request->input('user_note');
+            $ship_user_note = $request->input('user_note');
             $discount_code = $request->input('discount_code');
             $payment_method = $request->input('payment_method');
 
             $payment_method = $payment_method == 'cod' ? 'Thanh toán khi nhận hàng' : 'Thanh toán qua thẻ MOMO';
+
+            $user = User::find($userId);
 
             $discount_value = 0;
             $totalAmount = 0;
@@ -323,14 +333,24 @@ class CartController extends Controller
 
 
             $oder_detail = [];
+            
+            $user_full_name = $user->full_name;
+            $user_phone = $user->phone;
+            $user_email = $user->email;
+            $user_address = $user->address;
 
             $order = Order::create([
                 "users_id" => $userId,
-                "user_name" => $user_name,
+                "user_name" => $user_full_name,
                 "user_phone" => $user_phone,
                 "user_email" => $user_email,
                 "user_address" => $user_address,
-                "user_note" => $user_note,
+                "ship_user_name" => $ship_user_name,
+                "ship_user_phone" => $ship_user_phone,
+                "ship_user_email" => $ship_user_email,
+                "ship_user_address" => $ship_user_address,
+                "ship_user_note" => $ship_user_note,
+
                 'discount' => $discount_value,
                 'date_create_order' => now(),
                 "payment_method" => $payment_method,

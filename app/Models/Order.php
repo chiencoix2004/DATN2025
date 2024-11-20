@@ -9,6 +9,10 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Order extends Model
 {
     use HasFactory, SoftDeletes;
+    const TYPE_DISCOUNT = [
+        'percent' => 'Phần trăm',
+        'fixed' => 'Cố định',
+    ];
     const STATUS_ORDER = [
         'reorder' => 'Đặt lại hàng',
         'pending' => 'Chờ xác nhận',
@@ -23,8 +27,9 @@ class Order extends Model
     ];
     const METHOD_PAYMENT = [
         'cod' => 'Thanh toán khi nhận hàng',
-        'momo_card' => 'Thanh toán qua thẻ MOMO',
-        'momo_qr' => 'Thanh toán qua mã MOMO',
+        'card' => 'Thanh toán visa',
+        'wallet' => 'Thanh toán ví tiền',
+        'vnpay' => 'Thanh toán qua VNpay',
     ];
     const METHOD_SHIPPING = [
         'express' => 'Giao hàng nhanh',
@@ -37,7 +42,11 @@ class Order extends Model
         'user_phone',
         'user_email',
         'user_address',
-        'user_note',
+        'ship_user_name',
+        'ship_user_phone',
+        'ship_user_email',
+        'ship_user_address',
+        'ship_user_note',
         'status_order',
         'payment_method',
         'status_payment',
@@ -53,7 +62,7 @@ class Order extends Model
     // app/Models/Order.php
     public function orderDetails()
     {
-        return $this->hasMany(OrderDetailModel::class); 
+        return $this->hasMany(OrderDetailModel::class);
     }
     public function getlast5Orders($users_id)
     {
