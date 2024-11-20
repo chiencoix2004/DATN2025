@@ -229,33 +229,35 @@ class CartController extends Controller
     }
 
     public function order()
-    {   
+    {
         $userId = auth()->check() ? auth()->user()->id : null;
 
-        if (auth()->check()) {
-            $cart = Cart::where('user_id', $userId)->first();
-            $cartItems = CartItem::where('cart_id', $cart->id)
-                ->with("productVariant")
-                ->with("productVariant.size")
-                ->with("productVariant.color")
-                ->with("productVariant.product")
-                ->get();
-            
-            if ($cartItems->count() == 0) {
-                return redirect()->route('cart.index');
-            }
+        $cart = Cart::where('user_id', $userId)->first();
+        if (!$cart) {
+            return redirect()->route('cart.index');
+        }
+        $cartItems = CartItem::where('cart_id', $cart->id)
+            ->with("productVariant")
+            ->with("productVariant.size")
+            ->with("productVariant.color")
+            ->with("productVariant.product")
+            ->get();
 
+        if ($cartItems->count() == 0) {
+            return redirect()->route('cart.index');
+        }
+
+        if (auth()->check()) {
+            return view('client::contents.shops.checkout', compact(['cartItems', 'cart', 'userId'])); 
             // dd([$cart,$cartItems]);
         } else {
             return redirect()->route('showForm');
         }
-        return view('client::contents.shops.checkout', compact(['cartItems', 'cart', 'userId'])); // Hoặc redirect đến trang thanh toán
+        // Hoặc redirect đến trang thanh toán
     }
 
     public function checkout(Request $request)
-    {   
-
-        
+    {
         try {
             $userId = $request->input('user_id');
             $first_name = $request->input('first_name');
@@ -333,7 +335,7 @@ class CartController extends Controller
 
 
             $oder_detail = [];
-            
+
             $user_full_name = $user->full_name;
             $user_phone = $user->phone;
             $user_email = $user->email;

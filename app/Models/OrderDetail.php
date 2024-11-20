@@ -18,4 +18,10 @@ class OrderDetail extends Model
         'product_price_final',
         'product_quantity'
     ];
+
+    public function productVariant()
+    {
+        return $this->belongsTo(ProductVariant::class, 'product_variant_id');
+    }
+    
 }

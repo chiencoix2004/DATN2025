@@ -3,6 +3,10 @@
 @section('title')
     Thanh toán | Thời trang Phong cách Việt
 @endsection
+@section('css-setting')
+    <script src="{{ asset('sweetalert2/sweetalert2.all.min.js') }}"></script>
+    <link rel="stylesheet" href="{{ asset('sweetalert2/sweetalert2.min.css') }}">
+@endsection
 @section('contents')
     <!-- Begin Kenne's Breadcrumb Area -->
     <div class="breadcrumb-area">
@@ -35,14 +39,16 @@
                                     <div class="col-md-6">
                                         <div class="checkout-form-list">
                                             <label> Tên <span class="required">*</span></label>
-                                            <input placeholder="Nhập tên của bạn" type="text" id="first_name" name="first_name">
+                                            <input placeholder="Nhập tên của bạn" type="text" id="first_name"
+                                                name="first_name">
                                             <p></p>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="checkout-form-list">
-                                            <label>Họ  <span class="required">*</span></label>
-                                            <input placeholder="Nhập họ của bạn" type="text" id="last_name" name="last_name">
+                                            <label>Họ <span class="required">*</span></label>
+                                            <input placeholder="Nhập họ của bạn" type="text" id="last_name"
+                                                name="last_name">
                                             <p></p>
                                         </div>
                                     </div>
@@ -57,7 +63,8 @@
                                     <div class="col-md-6">
                                         <div class="checkout-form-list">
                                             <label>Email <span class="required">*</span></label>
-                                            <input placeholder="nhập email" type="email" id="user_email" name="user_email">
+                                            <input placeholder="nhập email" type="email" id="user_email"
+                                                name="user_email">
                                             <p></p>
                                         </div>
                                     </div>
@@ -71,8 +78,7 @@
                                     <div class="order-notes">
                                         <div class="checkout-form-list checkout-form-list-2">
                                             <label>Ghi chú</label>
-                                            <textarea id="checkout-mess" name="user_note" cols="30" rows="10"
-                                                placeholder=""></textarea>
+                                            <textarea id="checkout-mess" name="user_note" cols="30" rows="10" placeholder=""></textarea>
                                             <p></p>
                                         </div>
                                     </div>
@@ -362,12 +368,30 @@
                         data: formData,
                         success: function(response) {
                             if (response.success) {
-                                alert('Thanh toán thành công!');
-                                // window.location.href = '/thank-you';
+                                Swal.fire({
+                                    title: 'Thanh toán thành công!',
+                                    icon: 'success',
+                                    confirmButtonText: 'OK'
+                                }).then(() => {
+                                    window.location.href = '{{ route('my-account') }}';
+                                });
                             } else {
-                                alert(response.message ||
-                                    'Thanh toán thất bại. Vui lòng thử lại.');
+                                Swal.fire({
+                                    title: 'Thanh toán thành công!',
+                                    icon: 'success',
+                                    confirmButtonText: 'OK'
+                                }).then(() => {
+                                    window.location.href = '{{ route('my-account') }}';
+                                });
                             }
+                        },
+                        error: function() {
+                            Swal.fire({
+                                title: 'Lỗi',
+                                text: 'Có lỗi xảy ra. Vui lòng thử lại.',
+                                icon: 'error',
+                                confirmButtonText: 'OK'
+                            });
                         }
                     });
                 }
