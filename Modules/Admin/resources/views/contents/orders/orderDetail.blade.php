@@ -88,7 +88,7 @@
                     </p>
                     <p class="mb-0 fs-10"> <strong>Điện thoại: </strong><a
                             href="tel:{{ $data->ship_user_phone }}">{{ $data->ship_user_phone }}</a></p>
-                    <div class="text-500 fs-10">({{ $data->user_note }})</div>
+                    <div class="text-500 fs-10">({{ $data->ship_user_note }})</div>
                 </div>
                 <div class="col-md-6 col-lg-4 mb-4 mb-lg-0">
                     <h5 class="mb-3 fs-9">Phương thức thanh toán</h5>
