@@ -1,4 +1,5 @@
 {
     "Admin": true,
-    "Client": true
+    "Client": true,
+    "Wallet": true
 }

@@ -26,6 +26,7 @@ class DatabaseSeeder extends Seeder
             ProductVariantSeeder::class,
             OrderDetailSeeder::class,
             NotificationSeeder::class,
+            PostsTableSeeder::class,
             // ProductImageSeeder::class,
             // VariantValueSeeder::class
         ]);
