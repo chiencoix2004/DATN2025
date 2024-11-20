@@ -15,10 +15,10 @@ class ProductSeeder extends Seeder
      */
     public function run(): void
     {
-        $categoryIds = DB::table('categories')->pluck('id')->toArray();
+        $sub = DB::table('sub_categories')->pluck('id')->toArray();
         for ($i = 1; $i <= 200; $i++) {
             DB::table('products')->insert([
-                'category_id' => $categoryIds[array_rand($categoryIds)],
+                'sub_category_id' => $sub[array_rand($sub)],
                 'name' => "Áo Cộc $i",
                 'sku' => "ao-coc-1-xyz$i",
                 'slug' => "ao-coc12323-$i",

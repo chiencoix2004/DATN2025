@@ -32,14 +32,13 @@
                     <div class="row footer-widgets_wrap">
                         <div class="col-lg-4 col-md-4 col-sm-4">
                             <div class="footer-widgets_title">
-                                <h4>Mua sắm</h4>
+                                <h4>Trang khác</h4>
                             </div>
                             <div class="footer-widgets">
                                 <ul>
-                                    <li><a href="javascript:void(0)">Product</a></li>
-                                    <li><a href="javascript:void(0)">My Cart</a></li>
-                                    <li><a href="javascript:void(0)">Wishlist</a></li>
-                                    <li><a href="javascript:void(0)">Cart</a></li>
+                                    <li><a href="{{ route('shop.shopIndex') }}">Cửa hàng</a></li>
+                                    <li><a href="{{ route('other.contactUs') }}">Liên hệ</a></li>
+                                    <li><a href="{{ route('other.aboutUs') }}">Giới thiệu</a></li>
                                 </ul>
                             </div>
                         </div>
@@ -74,10 +73,12 @@
                             </div>
                             <div class="footer-widgets">
                                 <ul>
-                                    <li><a href="javascript:void(0)">Men</a></li>
-                                    <li><a href="javascript:void(0)">Women</a></li>
-                                    <li><a href="javascript:void(0)">Jeans</a></li>
-                                    <li><a href="javascript:void(0)">Shoes</a></li>
+                                    @php
+                                        $ctgFoot = \DB::table('categories')->get();
+                                    @endphp
+                                    @foreach ($ctgFoot as $item)
+                                        <li><a href="javascript:void(0)">{{ $item->name }}</a></li>
+                                    @endforeach
                                 </ul>
                             </div>
                         </div>
