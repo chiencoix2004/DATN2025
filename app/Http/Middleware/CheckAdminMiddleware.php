@@ -42,7 +42,7 @@ class CheckAdminMiddleware
                 return $next($request); // Tiếp tục với request nếu là admin
             } else {
                 // Điều hướng về trang user nếu không phải admin
-                return redirect()->route('homeClient')->with([
+                return redirect()->route('index')->with([
                     'message' => 'Bạn không có quyền truy cập trang này'
                 ]);
             }

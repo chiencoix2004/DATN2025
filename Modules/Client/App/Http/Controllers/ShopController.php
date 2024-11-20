@@ -92,7 +92,9 @@ class ShopController extends Controller
     {
         $data = Product::query()->where(['slug' => $slug])->first();
         if ($data) {
-            return view('client::contents.shops.productDetail', compact('data'));
+            $realedProducts = Product::query()->where(['category_id' => $data->category_id])->where('id', '!=', $data->id)->get();
+            // dd($realedProducts);
+            return view('client::contents.shops.productDetail', compact('data', 'realedProducts'));
         } else {
             return abort(404);
         }

@@ -55,7 +55,7 @@
                                     <img src="{{ \Storage::url($item->image_avatar) }}" alt="Error!" width="100px">
                                 </td>
                                 <td class="align-middle white-space-nowrap fw-semi-bold name">
-                                    <a href="">{{ $item->name }}</a>
+                                    <a href="{{ route('admin.product.detailP', $item->slug) }}">{{ $item->name }}</a>
                                 </td>
                                 <td class="align-middle text-start price">
                                     {{ number_format((int) $item->price_regular, 0, ',', '.') }}

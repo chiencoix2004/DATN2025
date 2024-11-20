@@ -275,13 +275,9 @@ class MyAccountController extends Controller
     
         return response()->json(['success' => true, 'message' => 'Thông tin đã được cập nhật thành công.']);
     }
-    
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy($id)
+    public function logout()
     {
-        //
+        auth()->logout();
+        return redirect()->route('index');
     }
 }

@@ -139,7 +139,6 @@ Route::prefix('admin')
     // Route quản lý in hóa đơn
     Route::controller(InvoiceController::class)->prefix('invoice')->as('invoice.')->group(function () {
         Route::get('{order}/savePDF', 'savePDF')->name('save');
-        Route::get('list', 'listPDF')->name('list');
         Route::post('bulkActions', 'bulkActions')->name('bulkActions');
     });
 

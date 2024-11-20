@@ -120,6 +120,7 @@
                         <tr>
                             <th class="text-900 border-0">Sản phẩm</th>
                             <th class="text-900 border-0 text-center">Ảnh</th>
+                            <th class="text-900 border-0 text-center">Option</th>
                             <th class="text-900 border-0 text-center">Số lượng</th>
                             <th class="text-900 border-0 text-end">Đơn giá (VNĐ)</th>
                             <th class="text-900 border-0 text-end">Tổng</th>
@@ -133,7 +134,24 @@
                                     <p class="mb-0">{{ $itemOrder->product_sku }}</p>
                                 </td>
                                 <td class="align-middle text-center">
-                                    <img src="{{ $itemOrder->product_avatar }}" alt="....." width="50px">
+                                    @php
+                                        $url = $itemOrder->product_avatar;
+                                        if (!\Str::contains($url, 'http')) {
+                                            $url = \Storage::url($url);
+                                        }
+                                    @endphp
+                                    <img src="{{ $url }}" alt="....." width="50px">
+                                </td>
+                                <td class="align-middle text-start">
+                                    @php
+                                        $prdV = \App\Models\ProductVariant::query()->findOrFail(
+                                            $itemOrder->product_variant_id,
+                                        );
+                                    @endphp
+                                    Màu: <span class="badge bg"
+                                        style="background-color: {{ $prdV->color['color_value'] }};">{{ $prdV->color['color_value'] }}</span>
+                                    <br>
+                                    Kích thước: <strong>{{ $prdV->size['size_value'] }}</strong>
                                 </td>
                                 <td class="align-middle text-center">{{ $itemOrder->product_quantity }}</td>
                                 <td class="align-middle text-end">

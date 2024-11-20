@@ -22,7 +22,7 @@ class ProductSeeder extends Seeder
                 'name' => "Áo Cộc $i",
                 'sku' => "ao-coc-1-xyz$i",
                 'slug' => "ao-coc12323-$i",
-                'image_avatar' => "adsdsvdsvsdvd $i",
+                'image_avatar' => fake()->imageUrl(),
                 'price_regular' => rand(100000, 1000000),
                 'price_sale' => rand(80000, 900000),
                 'discount_percent' => rand(10, 50),
