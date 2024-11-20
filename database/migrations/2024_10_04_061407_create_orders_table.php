@@ -19,7 +19,7 @@ return new class extends Migration {
             $table->string('user_phone', 15);
             $table->string('user_email', 100);
             $table->string('user_address', 255);
-            $table->string('user_note', 255);
+            $table->string('user_note', 255)->nullable();
             $table->enum('status_order', [Order::STATUS_ORDER]);
             $table->enum('payment_method', [Order::METHOD_PAYMENT]);
             $table->enum('status_payment', [Order::STATUS_PAYMENT]);

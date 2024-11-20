@@ -264,11 +264,15 @@ class CartController extends Controller
             $payment_method = $payment_method == 'cod' ? 'Thanh toán khi nhận hàng' : 'Thanh toán qua thẻ MOMO';
 
             $discount_value = 0;
+            $totalAmount = 0;
+
+            $cart = Cart::where('user_id', $userId)->first();
+            $totalAmount = $cart->total_amount;
 
             $coupon = CouponModel::where('code', $discount_code)->first();
             if ($coupon) {
                 $current_date = date('Y-m-d');
-                $order_total = Cart::where('user_id', auth()->id())->first()->total_amount;
+                $order_total = $totalAmount;
                 if ($current_date < $coupon->date_start) {
                     return response()->json(['error' => 'Mã giảm giá chưa có hiệu lực.'], 400);
                 } elseif ($current_date > $coupon->date_end) {
@@ -287,12 +291,12 @@ class CartController extends Controller
 
                     // Kiểm tra số lượng mã giảm giá
                     if ($coupon->quantity > 0) {
-
+                        $totalAmount = $totalAmount - $discount_value;
                     }
                 }
-            } 
+            }
 
-            $cart = Cart::where('user_id', $userId)->first();
+
 
             $cartItems = CartItem::where('cart_id', $cart->id)
                 ->with("productVariant")
@@ -318,7 +322,6 @@ class CartController extends Controller
             }
 
 
-            $totalAmount = $cart->total_amount;
             $oder_detail = [];
 
             $order = Order::create([
