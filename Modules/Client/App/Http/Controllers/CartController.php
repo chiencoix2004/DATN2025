@@ -34,6 +34,7 @@ class CartController extends Controller
             'user_name.max' => 'Tên của bạn không được quá 50 kí tự.',
             'user_email.required' => 'Vui lòng nhập email của bạn.',
             'user_email.email' => 'Email không đúng định dạng.',
+            'payment_method.required' => 'Vui lòng chọn phương thức thanh toán.'
         ];
     }
 
@@ -237,12 +238,12 @@ class CartController extends Controller
                 ->with("productVariant.color")
                 ->with("productVariant.product")
                 ->get();
-            
+
             // dd([$cart,$cartItems]);
         } else {
             return redirect()->route('showForm');
         }
-        return view('client::contents.shops.checkout', compact(['cartItems','cart','userId'])); // Hoặc redirect đến trang thanh toán
+        return view('client::contents.shops.checkout', compact(['cartItems', 'cart', 'userId'])); // Hoặc redirect đến trang thanh toán
     }
 
     public function checkout(Request $request)
@@ -256,11 +257,48 @@ class CartController extends Controller
             $user_email = $request->input('user_email');
             $user_address = $request->input('user_address');
             $user_note = $request->input('user_note');
+            $user_note = $request->input('user_note');
+            $discount_code = $request->input('discount_code');
+            $payment_method = $request->input('payment_method');
+
+            $payment_method = $payment_method == 'cod' ? 'Thanh toán khi nhận hàng' : 'Thanh toán qua thẻ MOMO';
+
+            $discount_value = 0;
+
+            $coupon = CouponModel::where('code', $discount_code)->first();
+            if ($coupon) {
+                $current_date = date('Y-m-d');
+                $order_total = Cart::where('user_id', auth()->id())->first()->total_amount;
+                if ($current_date < $coupon->date_start) {
+                    return response()->json(['error' => 'Mã giảm giá chưa có hiệu lực.'], 400);
+                } elseif ($current_date > $coupon->date_end) {
+                    return response()->json(['error' => 'Mã giảm giá đã hết hạn.'], 400);
+                } elseif ($order_total < $coupon->minimum_spend) {
+                    return response()->json(['error' => 'Số tiền chi tiêu phải lớn hơn hoặc bằng ' . $coupon->minimum_spend . '.'], 400);
+                } elseif ($order_total > $coupon->maximum_spend) {
+                    return response()->json(['error' => 'Số tiền chi tiêu phải nhỏ hơn hoặc bằng ' . $coupon->maximum_spend . '.'], 400);
+                } else {
+                    // Tính toán giá trị giảm giá
+                    if ($coupon->discount_type == 'percent') {
+                        $discount_value = ($order_total * $coupon->discount_amount) / 100;
+                    } elseif ($coupon->discount_type == 'fixed') {
+                        $discount_value = $coupon->discount_amount;
+                    };
+
+                    // Kiểm tra số lượng mã giảm giá
+                    if ($coupon->quantity > 0) {
+
+                    }
+                }
+            } 
 
             $cart = Cart::where('user_id', $userId)->first();
 
             $cartItems = CartItem::where('cart_id', $cart->id)
-                ->with("productVariant") // Eager load productVariant
+                ->with("productVariant")
+                ->with("productVariant.size")
+                ->with("productVariant.color")
+                ->with("productVariant.product")
                 ->get();
 
             $validator = Validator::make($request->all(), [
@@ -269,6 +307,7 @@ class CartController extends Controller
                 'first_name' => ['required', 'max:50'],
                 'last_name' => ['required', 'max:50'],
                 'user_email' => 'required|email',
+                'payment_method' => 'required'
             ], messages: $this->messages);
 
             if ($validator->fails()) {
@@ -279,20 +318,8 @@ class CartController extends Controller
             }
 
 
-            $totalAmount = 0;
+            $totalAmount = $cart->total_amount;
             $oder_detail = [];
-
-            foreach ($cartItems as $item) {
-                $productVariant = $item->productVariant;
-
-                if ($productVariant) {
-                    if (isset($productVariant->price_default)) {
-                        $totalAmount += $item->quantity * $productVariant->price_sale;
-                    } else {
-                        $totalAmount += $item->quantity * $productVariant->price_default;
-                    }
-                }
-            }
 
             $order = Order::create([
                 "users_id" => $userId,
@@ -301,8 +328,10 @@ class CartController extends Controller
                 "user_email" => $user_email,
                 "user_address" => $user_address,
                 "user_note" => $user_note,
+                'discount' => $discount_value,
+                'date_create_order' => now(),
+                "payment_method" => $payment_method,
                 "status_order" => "Chờ xác nhận",
-                "payment_method" => "Thanh toán khi nhận hàng",
                 "status_payment" => "Chưa thanh toán",
                 "total_price" => $totalAmount
             ]);
@@ -310,11 +339,12 @@ class CartController extends Controller
             foreach ($cartItems as $item) {
                 $oder_detail = OrderDetail::create([
                     "order_id" => $order->id,
-                    "product_id" => $item->productVariant->product_id,
+                    "product_id" => $item->product_id,
+                    "product_variant_id" => $item->product_variant_id,
                     "product_name" => $item->productVariant->product->name,
                     "product_sku" => $item->productVariant->product->sku,
-                    "product_avatar" => $item->productVariant->product->sku,
-                    "product_price_final" => $totalAmount,
+                    "product_avatar" => $item->productVariant->product->image_avatar,
+                    "product_price_final" => $item->price,
                     "product_quantity" => $item->quantity
                 ]);
             }

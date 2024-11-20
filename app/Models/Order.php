@@ -9,10 +9,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Order extends Model
 {
     use HasFactory, SoftDeletes;
-    const TYPE_DISCOUNT = [
-        'percent' => 'Phần trăm',
-        'fixed' => 'Cố định',
-    ];
     const STATUS_ORDER = [
         'reorder' => 'Đặt lại hàng',
         'pending' => 'Chờ xác nhận',
@@ -42,18 +38,11 @@ class Order extends Model
         'user_email',
         'user_address',
         'user_note',
-        'ship_user_name',
-        'ship_user_phone',
-        'ship_user_email',
-        'ship_user_address',
-        'ship_user_note',
         'status_order',
         'payment_method',
         'status_payment',
         'total_price',
         'date_create_order',
-        'code_coupon',
-        'discount_type',
         'discount',
         'shipping_method',
     ];
