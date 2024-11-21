@@ -11,6 +11,7 @@ use App\Models\Product;
 use App\Models\ProductImage;
 use App\Models\ProductVariant;
 use App\Models\SizeAttribute;
+use App\Models\SubCategory;
 use App\Models\Tag;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -39,7 +40,7 @@ class ProductController extends Controller
     }
     public function showFormEdit(string $slug)
     {
-        $data = Product::query()->with(['tags', 'images', 'category'])->where('slug', $slug)->first();
+        $data = Product::query()->with(['tags', 'images', 'sub_category'])->where('slug', $slug)->first();
         $variantPRD = ProductVariant::query()->where('product_id', $data->id)->get();
         $warningDate = '';
         if ($data->end_date) {
@@ -50,7 +51,7 @@ class ProductController extends Controller
                 $warningDate = 'Thời gian khuyến mại sản phẩm kết thúc';
             }
         }
-        $categories = Category::query()->get();
+        $categories = SubCategory::query()->get();
         $tags = Tag::query()->get();
         $colorAttr = ColorAttribute::query()->get();
         $sizeAttr = SizeAttribute::query()->get();
@@ -69,7 +70,7 @@ class ProductController extends Controller
     }
     public function showFormAdd()
     {
-        $categories = Category::query()->get();
+        $categories = SubCategory::query()->get();
         $tags = Tag::query()->get();
         $colorAttr = ColorAttribute::query()->get();
         $sizeAttr = SizeAttribute::query()->get();

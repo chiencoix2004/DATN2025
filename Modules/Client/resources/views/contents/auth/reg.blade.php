@@ -25,7 +25,7 @@
                 <div class="col-sm-12 col-md-12 col-lg-6 col-xs-12">
                     <form action="{{route('auth.log-reg')}}" method="POST">
                         @csrf
-                        <div class="login-form">-
+                        <div class="login-form">
                             <h4 class="login-title">Đăng Ký</h4>
                             <div class="row">
                                 <div class="col-md-12 col-12 mb--20">

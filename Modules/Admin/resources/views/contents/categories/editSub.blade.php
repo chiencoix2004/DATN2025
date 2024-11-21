@@ -13,7 +13,7 @@
                         @if (session()->has('success'))
                             <h5 class="mb-2 mb-md-0 text-success">{{ session('success') }}</h5>
                         @else
-                            <h5 class="mb-2 mb-md-0">Cập nhật danh mục: {{ $data->name }}</h5>
+                            <h5 class="mb-2 mb-md-0">Cập nhật danh mục phụ: {{ $data->name }}</h5>
                         @endif
                     @endif
                 </div>
@@ -25,19 +25,29 @@
             <h6 class="mb-0">Danh mục</h6>
         </div>
         <div class="card-body">
-            <form action="{{ route('admin.categories.update_pl', $data) }}" method="post" enctype="multipart/form-data">
+            <form action="{{ route('admin.categories.update_dm', $data) }}" method="post">
                 @csrf
                 @method('PUT')
                 <table class="table">
                     <thead>
                         <tr>
+                            <th>Danh mục cha</th>
                             <th style="width: 300px;">Tên danh mục</th>
-                            <th>Ảnh</th>
                             <th style="width: 600px;">Ghi chú</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
+                            <td>
+                                <select name="id_category" class="form-control">
+                                    <option value="">-- Chọn danh mục</option>
+                                    @foreach ($ctg as $item)
+                                        <option value="{{ $item->id }}"
+                                            {{ $data->category_id == $item->id ? 'selected' : '' }}>{{ $item->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </td>
                             <td>
                                 <input type="text" name="name" class="form-control"
                                     value="{{ old('name', $data->name) }}">
@@ -45,21 +55,6 @@
                                     <hr>
                                     <label class="form-label text-danger">{{ $message }}</label>
                                 @enderror
-                            </td>
-                            <td>
-                                <input type="file" name="img_cover_update" class="form-control">
-                                @error('img_cover_update')
-                                    <hr>
-                                    <label class="form-label text-danger">{{ $message }}</label>
-                                @enderror
-                                <hr>
-                                @php
-                                    $url = $data->image_cover;
-                                    if (!\Str::contains($url, 'http')) {
-                                        $url = \Storage::url($url);
-                                    }
-                                @endphp
-                                <img src="{{ $url }}" alt="....." width="100px">
                             </td>
                             <td>
                                 <textarea name="note" class="form-control" rows="3">{{ old('note', $data->note) }}</textarea>

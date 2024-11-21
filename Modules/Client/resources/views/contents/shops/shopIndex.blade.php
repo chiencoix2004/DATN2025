@@ -46,22 +46,18 @@
                             </div>
                             <div class="sidebar-categories_menu">
                                 <ul>
-                                    {{-- <li class="has-sub"><a href="javascript:void(0)">Luggage <i
-                                                class="ion-ios-plus-empty"></i></a>
-                                        <ul>
-                                            <li><a href="javascript:void(0)">Bowls</a></li>
-                                            <li><a href="javascript:void(0)">Cups, Mugs & Saucers</a></li>
-                                            <li><a href="javascript:void(0)">Cutting Boards</a></li>
-                                            <li><a href="javascript:void(0)">Dinnerware Sets</a></li>
-                                            <li><a href="javascript:void(0)">Flatware</a></li>
-                                            <li><a href="javascript:void(0)">Glassware & Drinkware</a></li>
-                                            <li><a href="javascript:void(0)">Knife Sets</a></li>
-                                            <li><a href="javascript:void(0)">Plates</a></li>
-                                            <li><a href="javascript:void(0)">Serveware</a></li>
-                                        </ul>
-                                    </li> --}}
                                     @foreach ($categories as $item)
-                                        <li><a href="javascript:void(0)">{{ $item->name }}</a></li>
+                                        <li class="has-sub">
+                                            <a href="javascript:void(0)">{{ $item->name }} <i
+                                                    class="ion-ios-plus-empty"></i></a>
+                                            @if (count($item->sub_category) > 0)
+                                                <ul>
+                                                    @foreach ($item->sub_category as $sub)
+                                                        <li><a href="javascript:void(0)">{{ $sub->name }}</a></li>
+                                                    @endforeach
+                                                </ul>
+                                            @endif
+                                        </li>
                                     @endforeach
                                 </ul>
                             </div>

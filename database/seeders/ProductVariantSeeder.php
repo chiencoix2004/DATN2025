@@ -14,7 +14,7 @@ class ProductVariantSeeder extends Seeder
      */
     public function run(): void
     {
-        for ($i = 1; $i <= 20; $i++) {
+        for ($i = 1; $i <= 200; $i++) {
             DB::table('product_variants')->insert([
                 'product_id' => $i,
                 'color_attribute_id' => rand(1, 10),

@@ -49,7 +49,7 @@
                                                 @php
                                                     $url = $items->img_banner;
                                                     if (!\Str::contains($url, 'http')) {
-                                                        $url = \Storage::url($url);
+                                                        $url = asset('uploads/' . $url);
                                                     }
                                                 @endphp
                                                 <img src="{{ $url }}" alt="Banner Image"

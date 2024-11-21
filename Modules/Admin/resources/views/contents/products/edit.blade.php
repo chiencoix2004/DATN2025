@@ -303,7 +303,13 @@
                                     @enderror
                                 </div>
                                 <div class="col-12 mb-3">
-                                    <img src="{{ \Storage::url($data->image_avatar) }}" alt="....." width="364px">
+                                    @php
+                                        $avt = $data->image_avatar;
+                                        if (!\Str::contains($avt, 'http')) {
+                                            $avt = \Storage::url($avt);
+                                        }
+                                    @endphp
+                                    <img src="{{ $avt }}" alt="....." width="364px">
                                 </div>
                                 <hr>
                                 <div class="col-12 mb-3 row">
@@ -419,9 +425,15 @@
                     <div class="p-4 pb-0">
                         <div class="mb-3 row">
                             @foreach ($data->images as $imageG)
+                                @php
+                                    $glr = $imageG->image_path;
+                                    if (!\Str::contains($glr, 'http')) {
+                                        $glr = \Storage::url($glr);
+                                    }
+                                @endphp
                                 <div
                                     class="position-relative col-auto bg-200 mb-3 image-container imageGallery-{{ $imageG->id }}">
-                                    <img src="{{ \Storage::url($imageG->image_path) }}" alt="....." width="350px"
+                                    <img src="{{ $glr }}" alt="....." width="350px"
                                         class="image">
                                     <button type="button"
                                         class="p-3 rounded-1 position-absolute top-0 end-0 btn btn-danger"

@@ -10,11 +10,13 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Laravel\Socialite\Facades\Socialite;
+use Str;
 
 class LoginController extends Controller
 {
 
-    public function showLoginForm() {
+    public function showLoginForm()
+    {
         return view('client::contents.auth.log-reg');
     }
     public function login(Request $request)
@@ -25,12 +27,7 @@ class LoginController extends Controller
         }
         return redirect()->back()->withErrors(['Error' => 'Email hoặc mật khẩu không chính xác']);
     }
-    public function logout()
-    {
-        auth()->logout();
-        return redirect()->route('index');
-    }
-    // 
+    // đăng nhập với Google ===================================================
     public function redirectToGoogle()
     {
         return Socialite::driver('google')->redirect();
@@ -49,17 +46,22 @@ class LoginController extends Controller
                     'roles_id' => 2,
                     'verify' => 1,
                     'status' => 'active',
-                    'password' => encrypt('123456dummy')
+                    'password' => encrypt($this->genPassGoogle()),
                 ]);
                 if ($newUser) {
-                    $newUser->notify(new VerifyEmail());
-                }else {
-                    return redirect()->back()->withErrors(['error'=> 'Xảy ra lỗi trong quá trình thực hiện!']);
+                    Auth::login($newUser);
+                } else {
+                    return redirect()->back()->withErrors(['error' => 'Xảy ra lỗi trong quá trình thực hiện!']);
                 }
             }
             return redirect()->route('index');
         } catch (\Exception $e) {
-            return redirect()->back()->withErrors(['error'=> $e->getMessage()]);
+            return redirect()->back()->withErrors(['error' => $e->getMessage()]);
         }
+    }
+    protected function genPassGoogle()
+    {
+        $pass = Str::random(6) . Str::random(6) . Str::random(6);
+        return $pass;
     }
 }

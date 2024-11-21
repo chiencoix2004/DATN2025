@@ -15,14 +15,14 @@ class ProductSeeder extends Seeder
      */
     public function run(): void
     {
-        $categoryIds = DB::table('categories')->pluck('id')->toArray();
-        for ($i = 1; $i <= 20; $i++) {
+        $sub = DB::table('sub_categories')->pluck('id')->toArray();
+        for ($i = 1; $i <= 200; $i++) {
             DB::table('products')->insert([
-                'category_id' => $categoryIds[array_rand($categoryIds)],
+                'sub_category_id' => $sub[array_rand($sub)],
                 'name' => "Áo Cộc $i",
                 'sku' => "ao-coc-1-xyz$i",
                 'slug' => "ao-coc12323-$i",
-                'image_avatar' => "adsdsvdsvsdvd $i",
+                'image_avatar' => fake()->imageUrl(),
                 'price_regular' => rand(100000, 1000000),
                 'price_sale' => rand(80000, 900000),
                 'discount_percent' => rand(10, 50),
