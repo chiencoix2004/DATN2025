@@ -115,7 +115,7 @@ class Vnpay extends Model
         die();
 
     }
-    public function create_payment_url($vnp_Amount, $vnp_Locale, $vnp_BankCode,$return_url){
+    public function create_payment_url($vnp_Amount, $vnp_Locale,$return_url){
         $inputData = array(
             "vnp_Version" => "2.1.0",
             "vnp_TmnCode" => $this->vnp_TmnCode,

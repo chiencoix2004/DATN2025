@@ -78,19 +78,13 @@ class ShopController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request): RedirectResponse
-    {
-        //
-    }
-
-    /**
      * Show the specified resource.
      */
     public function show(string $slug)
     {
         $data = Product::query()->where(['slug' => $slug])->first();
+        $realedProducts = Product::query()->where(['category_id' => $data->category_id])->where('id', '!=', $data->id)->get();
+      //  dd($realedProducts);
         if ($data) {
             return view('client::contents.shops.productDetail', compact('data'));
         } else {
@@ -98,27 +92,5 @@ class ShopController extends Controller
         }
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit($id)
-    {
-        return view('client::edit');
-    }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, $id): RedirectResponse
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy($id)
-    {
-        //
-    }
 }

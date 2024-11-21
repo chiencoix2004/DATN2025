@@ -18,6 +18,8 @@ use Modules\Admin\App\Http\Controllers\TagController;
 use Modules\Admin\App\Http\Controllers\CommentController;
 use Modules\Admin\App\Http\Controllers\UserController;
 use Modules\Admin\App\Http\Controllers\SupportController;
+use Modules\Admin\App\Http\Controllers\AuthenticateController;
+use Modules\Admin\App\Http\Controllers\WalletController;
 
 /*
 |--------------------------------------------------------------------------
@@ -86,6 +88,15 @@ Route::prefix('admin')
             Route::delete('/{id}/destroy', 'destroy')->name('destroy');
         });
 
+
+
+
+        Route::controller(WalletController::class)->prefix('wallet')->as('wallet.')->group(function (){
+            Route::get('list-withdraw', 'index')->name('list');
+        });
+
+
+
         // Route quản lý products
         Route::controller(ProductController::class)->prefix('product')->as('product.')->group(function () {
             Route::get('listProduct', 'listProduct')->name('list');
@@ -110,7 +121,7 @@ Route::prefix('admin')
         Route::post('bulk-action', 'bulkAction')->name('bulkAction');
 
     });
-      
+
     // Route quản lý attributes
     Route::controller(AttributeController::class)->prefix('attributes')->as('attributes.')->group(function () {
         Route::get('list', 'listAttr')->name('listAttr');

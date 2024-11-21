@@ -65,5 +65,57 @@ class Wallet extends Model
             return $wallet;
         });
     }
+    public function setActiveWallet($wallet_account_id){
+        return DB::transaction(function () use ($wallet_account_id){
+            $wallet = $this->where('wallet_account_id', $wallet_account_id)->lockForUpdate()->first();
+            $wallet->wallet_status = 1;
+            $wallet->save();
+            return $wallet;
+        });
+        }
+
+    public function setInActiveWallet($wallet_account_id){
+        return DB::transaction(function () use ($wallet_account_id){
+            $wallet = $this->where('wallet_account_id', $wallet_account_id)->lockForUpdate()->first();
+            $wallet->wallet_status = 2;
+            $wallet->save();
+            return $wallet;
+        });
+    }
+    public function setLockedWallet($wallet_account_id){
+        return DB::transaction(function () use ($wallet_account_id){
+            $wallet = $this->where('wallet_account_id', $wallet_account_id)->lockForUpdate()->first();
+            $wallet->wallet_status = 3;
+            $wallet->save();
+            return $wallet;
+        });
+    }
+    public function setLevelBasicWallet($wallet_account_id){
+        return DB::transaction(function () use ($wallet_account_id){
+            $wallet = $this->where('wallet_account_id', $wallet_account_id)->lockForUpdate()->first();
+            $wallet->wallet_user_level = 1;
+            $wallet->save();
+            return $wallet;
+        });
+    }
+    public function setLevelFullWallet($wallet_account_id){
+        return DB::transaction(function () use ($wallet_account_id){
+            $wallet = $this->where('wallet_account_id', $wallet_account_id)->lockForUpdate()->first();
+            $wallet->wallet_user_level = 2;
+            $wallet->save();
+            return $wallet;
+        });
+    }
+
+    public function getWalletStastus($wallet_account_id){
+        return $this
+        ->select('wallet_status')
+        ->where('wallet_account_id', $wallet_account_id)->first();
+    }
+    public function getWalletLevel($wallet_account_id){
+        return $this
+        ->select('wallet_user_level')
+        ->where('wallet_account_id', $wallet_account_id)->first();
+    }
 }
 

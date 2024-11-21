@@ -59,8 +59,8 @@
                 {{session('error')}}
             </div>
         @endif
-    @yield('content')
         </div>
+        @yield('content')
         <div class="card-body">
             <form class="needs-validation" method="POST" action="{{ route('ekyc.uploadadress') }}" novalidate>
                 @csrf
