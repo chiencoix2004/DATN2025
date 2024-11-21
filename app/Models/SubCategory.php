@@ -15,4 +15,8 @@ class SubCategory extends Model
         'slug',
         'note',
     ];
+    public function products()
+    {
+        return $this->hasMany(Product::class);
+    }
 }
