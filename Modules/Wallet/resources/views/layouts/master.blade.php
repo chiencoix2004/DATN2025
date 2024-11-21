@@ -600,7 +600,7 @@
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="index.html" class="nav-link ms-3">
+                                        <a href="{{ route('wallet.withdraw') }}" class="nav-link ms-3">
                                             <i class="bx bx-money
                                             icon nav-icon"></i>
                                             <span data-key="t-dashboard">Rút Tiền</span>
@@ -694,6 +694,7 @@
             <!-- ============================================================== -->
             <div class="main-content">
                 <div class="page-content">
+
                    <div class="container-fluid">
                         @yield('content')
                     </div>
@@ -705,7 +706,7 @@
                     <div class="container-fluid">
                         <div class="row">
                             <div class="col-sm-6">
-                                <script>document.write(new Date().getFullYear())</script> © webadmin.
+                                <script>document.write(new Date().getFullYear())</script> © Skibidi Toilet.
                             </div>
                             <div class="col-sm-6">
                                 <div class="text-sm-end d-none d-sm-block">

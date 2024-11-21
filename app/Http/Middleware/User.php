@@ -16,6 +16,7 @@ class User
      */
     public function handle(Request $request, Closure $next): Response
     {
+        //dd(Auth::user());
         if (Auth::check()) {
             return $next($request);
         }

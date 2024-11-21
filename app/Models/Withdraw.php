@@ -30,4 +30,14 @@ class Withdraw extends Model
         ->where('status',1)
         ->sum('amount');
     }
+
+    public function createWithdraw($data){
+        $withdraw = new Withdraw();
+        $withdraw->insert($data);
+        return $withdraw;
+    }
+
+    public function getlastwithdrawid(){
+        return $this->orderBy('withdraw_request_id', 'desc')->first();
+    }
 }
