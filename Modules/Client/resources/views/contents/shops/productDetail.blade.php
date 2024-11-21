@@ -856,36 +856,6 @@
 @endsection
 @section('js-setting')
     <script>
-        $('.add-to-cart').click(function(e) {
-            e.preventDefault(); // Ngăn form submit mặc định
-
-            let productId = $(this).data('product-id');
-            let productSize = $('#id_size').val();
-            let productColor = $('input[name="product-color"]:checked').val();
-            let price = $('#price').val();
-            let quantity = $('#quantity-input').val();
-
-            $.ajax({
-                url: '{{ route('cart.add') }}',
-                method: 'POST',
-                data: {
-                    product_id: productId,
-                    size_attribute_id: productSize,
-                    color_attribute_id: productColor,
-                    quantity: quantity,
-                    _token: '{{ csrf_token() }}'
-                },
-                success: function(response) {
-                    alert(response.message);
-                },
-                error: function(error) {
-                    // alert(response.error);
-                    console.error(error);
-                }
-            });
-        });
-    </script>
-    <script>
         // ajax rend color
         $(document).ready(function() {
             $.ajaxSetup({

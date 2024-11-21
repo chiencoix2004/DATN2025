@@ -809,7 +809,10 @@
                     const itemsContainer = document.getElementById('order-items');
                     itemsContainer.innerHTML = data.items.map(item => `
             <tr>
-                <td><img src="{{ Storage::url('${item.image}') }}" alt="Hình ảnh sản phẩm" style="width: 50px; height: 50px;"> ${item.name}</td>
+                <td><img src="{{ Storage::url('${item.image}') }}" alt="Hình ảnh sản phẩm" style="width: 50px; height: 50px;">
+                     ${item.name} - Size: ${item.size} - Màu: <input type="color" value="${item.color}" disabled>
+                        
+                </td>
                 <td>${item.quantity}</td>
                 <td>${item.price} VND</td>
                 <td>${item.total} VND</td>
@@ -921,4 +924,13 @@
 
 
     </script>
+
+    @if (session('status'))
+    <script>
+        // alert('Đặt hàng thành công! vui lòng xem lịch sử đơn hàng');
+        Swal.fire('Thành công!','vui lòng xem lịch sử đơn hàng', 'success');
+    </script>
+        {{-- alert('Thanh toán thành công!'); --}}
+        
+    @endif
 @endsection

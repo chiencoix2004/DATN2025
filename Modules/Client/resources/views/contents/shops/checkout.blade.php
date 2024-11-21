@@ -3,6 +3,10 @@
 @section('title')
     Thanh toán | Thời trang Phong cách Việt
 @endsection
+@section('css-setting')
+    <script src="{{ asset('sweetalert2/sweetalert2.all.min.js') }}"></script>
+    <link rel="stylesheet" href="{{ asset('sweetalert2/sweetalert2.min.css') }}">
+@endsection
 @section('contents')
     <!-- Begin Kenne's Breadcrumb Area -->
     <div class="breadcrumb-area">
@@ -28,35 +32,65 @@
                     <div class="row">
                         <div class="col-lg-6 col-12">
                             <input type="hidden" name="user_id" value="{{ $userId }}">
+                            <input type="hidden" name="discount_code" value="{{ session('discount_code') }}">
                             <div class="checkbox-form">
                                 <h3>Chi tiết thanh toán</h3>
                                 <div class="row">
                                     <div class="col-md-6">
-                                        <label>Họ<span class="required">*</span></label>
-                                        <input placeholder="Nhập họ của bạn" type="text" id="last_name" name="last_name">
-                                        <p></p>
+                                        <div class="checkout-form-list">
+                                            <label> Tên <span class="required">*</span></label>
+                                            <input placeholder="Nhập tên của bạn" type="text" id="first_name"
+                                                name="first_name">
+                                            <p></p>
+                                        </div>
                                     </div>
                                     <div class="col-md-6">
-                                        <label>Tên<span class="required">*</span></label>
-                                        <input placeholder="Nhập tên của bạn" type="text" id="first_name"
-                                            name="first_name">
-                                        <p></p>
+                                        <div class="checkout-form-list">
+                                            <label>Họ <span class="required">*</span></label>
+                                            <input placeholder="Nhập họ của bạn" type="text" id="last_name"
+                                                name="last_name">
+                                            <p></p>
+                                        </div>
                                     </div>
                                     <div class="col-md-12">
-                                        <label>Địa chỉ cụ thể<span class="required">*</span></label>
-                                        <input placeholder="Street address" type="text" id="user_address"
-                                            name="user_address">
-                                        <p></p>
+                                        <div class="checkout-form-list">
+                                            <label>Địa chỉ <span class="required">*</span></label>
+                                            <input placeholder="Nhập địa chỉ" type="text" id="user_address"
+                                                name="user_address">
+                                            <p></p>
+                                        </div>
                                     </div>
                                     <div class="col-md-6">
-                                        <label>Địa chỉ Email<span class="required">*</span></label>
-                                        <input placeholder="abc@test.com" type="email" id="user_email" name="user_email">
-                                        <p></p>
+                                        <div class="checkout-form-list">
+                                            <label>Email <span class="required">*</span></label>
+                                            <input placeholder="nhập email" type="email" id="user_email"
+                                                name="user_email">
+                                            <p></p>
+                                        </div>
                                     </div>
                                     <div class="col-md-6">
-                                        <label>Số điện thoại<span class="required">*</span></label>
-                                        <input type="text" id="user_phone" name="user_phone">
-                                        <p></p>
+                                        <div class="checkout-form-list">
+                                            <label>Số điện thoại <span class="required">*</span></label>
+                                            <input type="text" id="user_phone" name="user_phone">
+                                            <p></p>
+                                        </div>
+                                    </div>
+                                    <div class="order-notes">
+                                        <div class="checkout-form-list checkout-form-list-2">
+                                            <label>Ghi chú</label>
+                                            <textarea id="checkout-mess" name="user_note" cols="30" rows="10" placeholder=""></textarea>
+                                            <p></p>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="checkout-form-list">
+                                            <label>Phương thức thanh toán <span class="required">*</span></label>
+                                            <select name="payment_method" id="payment_method" class="form-control">
+                                                <option value="cod">Thanh toán khi nhận hàng</option>
+                                                <option value="vnpay">Thanh toán qua VNPAY</option>
+                                            </select>
+                                            <p></p>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -121,7 +155,8 @@
                                                 <th>Tổng đơn hàng</th>
                                                 <td>
                                                     <strong>
-                                                     <span class="amount">{{ number_format($totalAmount, 0, ',', '.') }} VNĐ</span>
+                                                        <span class="amount">{{ number_format($totalAmount, 0, ',', '.') }}
+                                                            VNĐ</span>
                                                     </strong>
                                                 </td>
                                             </tr>
@@ -130,68 +165,6 @@
                                 </div>
                                 <div class="payment-method">
                                     <div class="payment-accordion">
-                                        <div id="accordion">
-                                            <div class="card actives">
-                                                <div class="card-header" id="#payment-1">
-                                                    <h5 class="panel-title">
-                                                        <a href="javascript:void(0)" class="collapsed"
-                                                            data-bs-toggle="collapse" data-bs-target="#collapseOne"
-                                                            aria-expanded="false" aria-controls="collapseOne">
-                                                            Chuyển khoản ngân hàng trực tiếp.
-                                                        </a>
-                                                    </h5>
-                                                </div>
-                                                <div id="collapseOne" class="collapse" data-bs-parent="#accordion"
-                                                    style="">
-                                                    <div class="card-body">
-                                                        <p>Thực hiện thanh toán của bạn trực tiếp vào tài khoản ngân hàng
-                                                            của chúng tôi. Vui lòng sử dụng ID đơn hàng của bạn làm tham
-                                                            chiếu thanh toán. Đơn hàng của bạn sẽ không được giao cho đến
-                                                            khi tiền đã được chuyển vào tài khoản của chúng tôi.</p>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="card">
-                                                <div class="card-header" id="#payment-2">
-                                                    <h5 class="panel-title">
-                                                        <a href="javascript:void(0)" class="collapsed"
-                                                            data-bs-toggle="collapse" data-bs-target="#collapseTwo"
-                                                            aria-expanded="false" aria-controls="collapseTwo">
-                                                            Thanh toán bằng séc
-                                                        </a>
-                                                    </h5>
-                                                </div>
-                                                <div id="collapseTwo" class="collapse" data-bs-parent="#accordion"
-                                                    style="">
-                                                    <div class="card-body">
-                                                        <p>Thực hiện thanh toán của bạn trực tiếp vào tài khoản ngân hàng
-                                                            của chúng tôi. Vui lòng sử dụng ID đơn hàng của bạn làm tham
-                                                            chiếu thanh toán. Đơn hàng của bạn sẽ không được giao cho đến
-                                                            khi tiền đã được chuyển vào tài khoản của chúng tôi.</p>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="card">
-                                                <div class="card-header" id="#payment-3">
-                                                    <h5 class="panel-title">
-                                                        <a href="javascript:void(0)" class="collapsed"
-                                                            data-bs-toggle="collapse" data-bs-target="#collapseThree"
-                                                            aria-expanded="false" aria-controls="collapseThree">
-                                                            PayPal
-                                                        </a>
-                                                    </h5>
-                                                </div>
-                                                <div id="collapseThree" class="collapse" data-bs-parent="#accordion"
-                                                    style="">
-                                                    <div class="card-body">
-                                                        <p>Thực hiện thanh toán của bạn trực tiếp vào tài khoản ngân hàng
-                                                            của chúng tôi. Vui lòng sử dụng ID đơn hàng của bạn làm tham
-                                                            chiếu thanh toán. Đơn hàng của bạn sẽ không được giao cho đến
-                                                            khi tiền đã được chuyển vào tài khoản của chúng tôi.</p>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
                                         <div class="order-button-payment">
                                             <input value="Đặt hàng" type="submit">
                                         </div>
@@ -395,12 +368,30 @@
                         data: formData,
                         success: function(response) {
                             if (response.success) {
-                                alert('Thanh toán thành công!');
-                                // window.location.href = '/thank-you';
+                                Swal.fire({
+                                    title: 'Thanh toán thành công!',
+                                    icon: 'success',
+                                    confirmButtonText: 'OK'
+                                }).then(() => {
+                                    window.location.href = '{{ route('my-account') }}';
+                                });
                             } else {
-                                alert(response.message ||
-                                    'Thanh toán thất bại. Vui lòng thử lại.');
+                                Swal.fire({
+                                    title: 'Thanh toán thành công!',
+                                    icon: 'success',
+                                    confirmButtonText: 'OK'
+                                }).then(() => {
+                                    window.location.href = '{{ route('my-account') }}';
+                                });
                             }
+                        },
+                        error: function() {
+                            Swal.fire({
+                                title: 'Lỗi',
+                                text: 'Có lỗi xảy ra. Vui lòng thử lại.',
+                                icon: 'error',
+                                confirmButtonText: 'OK'
+                            });
                         }
                     });
                 }

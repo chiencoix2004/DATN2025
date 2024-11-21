@@ -42,7 +42,6 @@ class Order extends Model
         'user_phone',
         'user_email',
         'user_address',
-        'user_note',
         'ship_user_name',
         'ship_user_phone',
         'ship_user_email',
@@ -53,8 +52,6 @@ class Order extends Model
         'status_payment',
         'total_price',
         'date_create_order',
-        'code_coupon',
-        'discount_type',
         'discount',
         'shipping_method',
     ];
