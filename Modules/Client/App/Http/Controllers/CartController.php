@@ -2,6 +2,7 @@
 
 namespace Modules\Client\App\Http\Controllers;
 
+use App\Models\Vnpay;
 use Exception;
 use App\Models\Cart;
 use App\Models\User;
@@ -16,6 +17,7 @@ use App\Models\ProductVariant;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Auth;
 
 class CartController extends Controller
 {
@@ -231,6 +233,7 @@ class CartController extends Controller
     public function order()
     {
         $userId = auth()->check() ? auth()->user()->id : null;
+        // dd(auth()->user());
 
         $cart = Cart::where('user_id', $userId)->first();
         if (!$cart) {
@@ -248,7 +251,7 @@ class CartController extends Controller
         }
 
         if (auth()->check()) {
-            return view('client::contents.shops.checkout', compact(['cartItems', 'cart', 'userId'])); 
+            return view('client::contents.shops.checkout', compact(['cartItems', 'cart', 'userId']));
             // dd([$cart,$cartItems]);
         } else {
             return redirect()->route('showForm');
@@ -258,57 +261,57 @@ class CartController extends Controller
 
     public function checkout(Request $request)
     {
-        try {
-            $userId = $request->input('user_id');
-            $first_name = $request->input('first_name');
-            $last_name = $request->input('last_name');
-            $ship_user_name = $last_name . ' ' . $first_name;
-            $ship_user_phone = $request->input('user_phone');
-            $ship_user_email = $request->input('user_email');
-            $ship_user_address = $request->input('user_address');
-            $ship_user_note = $request->input('user_note');
-            $ship_user_note = $request->input('user_note');
-            $discount_code = $request->input('discount_code');
-            $payment_method = $request->input('payment_method');
 
-            $payment_method = $payment_method == 'cod' ? 'Thanh toán khi nhận hàng' : 'Thanh toán qua thẻ MOMO';
+        $userId = $request->input('user_id');
+        $first_name = $request->input('first_name');
+        $last_name = $request->input('last_name');
+        $ship_user_name = $last_name . ' ' . $first_name;
+        $ship_user_phone = $request->input('user_phone');
+        $ship_user_email = $request->input('user_email');
+        $ship_user_address = $request->input('user_address');
+        $ship_user_note = $request->input('user_note');
+        $ship_user_note = $request->input('user_note');
+        $discount_code = $request->input('discount_code');
+        $payment_method = $request->input('payment_method');
 
-            $user = User::find($userId);
 
-            $discount_value = 0;
-            $totalAmount = 0;
+        $user = User::find($userId);
 
-            $cart = Cart::where('user_id', $userId)->first();
-            $totalAmount = $cart->total_amount;
+        $discount_value = 0;
+        $totalAmount = 0;
 
-            $coupon = CouponModel::where('code', $discount_code)->first();
-            if ($coupon) {
-                $current_date = date('Y-m-d');
-                $order_total = $totalAmount;
-                if ($current_date < $coupon->date_start) {
-                    return response()->json(['error' => 'Mã giảm giá chưa có hiệu lực.'], 400);
-                } elseif ($current_date > $coupon->date_end) {
-                    return response()->json(['error' => 'Mã giảm giá đã hết hạn.'], 400);
-                } elseif ($order_total < $coupon->minimum_spend) {
-                    return response()->json(['error' => 'Số tiền chi tiêu phải lớn hơn hoặc bằng ' . $coupon->minimum_spend . '.'], 400);
-                } elseif ($order_total > $coupon->maximum_spend) {
-                    return response()->json(['error' => 'Số tiền chi tiêu phải nhỏ hơn hoặc bằng ' . $coupon->maximum_spend . '.'], 400);
-                } else {
-                    // Tính toán giá trị giảm giá
-                    if ($coupon->discount_type == 'percent') {
-                        $discount_value = ($order_total * $coupon->discount_amount) / 100;
-                    } elseif ($coupon->discount_type == 'fixed') {
-                        $discount_value = $coupon->discount_amount;
-                    };
+        $cart = Cart::where('user_id', $userId)->first();
+        $totalAmount = $cart->total_amount;
 
-                    // Kiểm tra số lượng mã giảm giá
-                    if ($coupon->quantity > 0) {
-                        $totalAmount = $totalAmount - $discount_value;
-                    }
+        $coupon = CouponModel::where('code', $discount_code)->first();
+        if ($coupon) {
+            $current_date = date('Y-m-d');
+            $order_total = $totalAmount;
+            if ($current_date < $coupon->date_start) {
+                return response()->json(['error' => 'Mã giảm giá chưa có hiệu lực.'], 400);
+            } elseif ($current_date > $coupon->date_end) {
+                return response()->json(['error' => 'Mã giảm giá đã hết hạn.'], 400);
+            } elseif ($order_total < $coupon->minimum_spend) {
+                return response()->json(['error' => 'Số tiền chi tiêu phải lớn hơn hoặc bằng ' . $coupon->minimum_spend . '.'], 400);
+            } elseif ($order_total > $coupon->maximum_spend) {
+                return response()->json(['error' => 'Số tiền chi tiêu phải nhỏ hơn hoặc bằng ' . $coupon->maximum_spend . '.'], 400);
+            } else {
+                // Tính toán giá trị giảm giá
+                if ($coupon->discount_type == 'percent') {
+                    $discount_value = ($order_total * $coupon->discount_amount) / 100;
+                } elseif ($coupon->discount_type == 'fixed') {
+                    $discount_value = $coupon->discount_amount;
+                };
+
+                // Kiểm tra số lượng mã giảm giá
+                if ($coupon->quantity > 0) {
+                    $totalAmount = $totalAmount - $discount_value;
                 }
             }
+        }
 
-
+        // $payment_method = $payment_method == 'cod' ? 'Thanh toán khi nhận hàng' : 'Thanh toán qua thẻ MOMO';
+        if ($payment_method == 'vnpay') {
 
             $cartItems = CartItem::where('cart_id', $cart->id)
                 ->with("productVariant")
@@ -352,10 +355,9 @@ class CartController extends Controller
                 "ship_user_email" => $ship_user_email,
                 "ship_user_address" => $ship_user_address,
                 "ship_user_note" => $ship_user_note,
-
                 'discount' => $discount_value,
                 'date_create_order' => now(),
-                "payment_method" => $payment_method,
+                "payment_method" => "Thanh toán qua VNpay",
                 "status_order" => "Chờ xác nhận",
                 "status_payment" => "Chưa thanh toán",
                 "total_price" => $totalAmount
@@ -373,32 +375,161 @@ class CartController extends Controller
                     "product_quantity" => $item->quantity
                 ]);
             }
-
-            // sửa lại giá
-            // xóa số lượng sản phẩm ở product và biến thể
-
-            $cart = Cart::where('user_id', $userId)->first();
-
-            CartItem::where('cart_id', $cart->id)->delete();
-
-            $cart->delete();
-
+            $vnpay = new Vnpay();
+            $link =  $vnpay->create_link_payment_url($totalAmount / 10, 'vn', "http://127.0.0.1:8000/api/v1/meanhxuyen?order_id=$order->id&user_id=$userId");
             return response()->json([
                 "type" => "success",
                 "message" => "Đặt hàng thành công!",
-                "order" => $order,
-                "order_detail" => $oder_detail
+                'method' => 'vnpay',
+                "link" => "$link",
             ], 200);
-        } catch (Exception $e) {
+        }
+        //Nếu người dùng chọn thanh toán vnpay
+        // Tạo  một đơn hàng mới set trạng thái là chưa thanh toán
+        // tạo link kèm với mã đơn hàng vừa tạo
+        // trả về link đó cho người dùng
+        // nếu người dùng đó thanh toán thành công thì cập nhật trạng thái đơn hàng thành đã thanh toán -> xóa giỏ hàng
+        // nếu người dùng không thanh toán thì cập nhật trạng thái đơn hàng thành chưa thanh toán -> tiến hành xóa đơn hàng và giữ lại giỏ hàng
+
+
+
+        $cartItems = CartItem::where('cart_id', $cart->id)
+            ->with("productVariant")
+            ->with("productVariant.size")
+            ->with("productVariant.color")
+            ->with("productVariant.product")
+            ->get();
+
+        $validator = Validator::make($request->all(), [
+            'user_address' => 'required',
+            'user_phone' => 'required|regex:/^[0-9]{10}$/',
+            'first_name' => ['required', 'max:50'],
+            'last_name' => ['required', 'max:50'],
+            'user_email' => 'required|email',
+            'payment_method' => 'required'
+        ], messages: $this->messages);
+
+        if ($validator->fails()) {
             return response()->json([
-                "message" => "Booking failed",
-                "error" => [
-                    "message" => $e->getMessage(),
-                    "file" => $e->getFile(),
-                    "line" => $e->getLine(),
-                    "trace" => $e->getTrace()
-                ]
-            ], 500);
+                "type" => "error",
+                "message" => $validator->errors()
+            ], 400);
+        }
+
+
+        $oder_detail = [];
+
+        $user_full_name = $user->full_name;
+        $user_phone = $user->phone;
+        $user_email = $user->email;
+        $user_address = $user->address;
+
+        $order = Order::create([
+            "users_id" => $userId,
+            "user_name" => $user_full_name,
+            "user_phone" => $user_phone,
+            "user_email" => $user_email,
+            "user_address" => $user_address,
+            "ship_user_name" => $ship_user_name,
+            "ship_user_phone" => $ship_user_phone,
+            "ship_user_email" => $ship_user_email,
+            "ship_user_address" => $ship_user_address,
+            "ship_user_note" => $ship_user_note,
+
+            'discount' => $discount_value,
+            'date_create_order' => now(),
+            "payment_method" => $payment_method,
+            "status_order" => "Chờ xác nhận",
+            "status_payment" => "Chưa thanh toán",
+            "total_price" => $totalAmount
+        ]);
+
+        foreach ($cartItems as $item) {
+            $oder_detail = OrderDetail::create([
+                "order_id" => $order->id,
+                "product_id" => $item->product_id,
+                "product_variant_id" => $item->product_variant_id,
+                "product_name" => $item->productVariant->product->name,
+                "product_sku" => $item->productVariant->product->sku,
+                "product_avatar" => $item->productVariant->product->image_avatar,
+                "product_price_final" => $item->price,
+                "product_quantity" => $item->quantity
+            ]);
+        }
+
+        // sửa lại giá
+        // xóa số lượng sản phẩm ở product và biến thể
+
+        $cart = Cart::where('user_id', $userId)->first();
+
+        CartItem::where('cart_id', $cart->id)->delete();
+
+        $cart->delete();
+        // try {
+        //     return response()->json([
+        //         "type" => "success",
+        //         "message" => "Đặt hàng thành công!",
+        //         "order" => $order,
+        //         "order_detail" => $oder_detail
+        //     ], 200);
+        // } catch (Exception $e) {
+        //     return response()->json([
+        //         "message" => "Booking failed",
+        //         "error" => [
+        //             "message" => $e->getMessage(),
+        //             "file" => $e->getFile(),
+        //             "line" => $e->getLine(),
+        //             "trace" => $e->getTrace()
+        //         ]
+        //     ], 500);
+        // }
+    }
+    public function meanhxuyen(){
+        $Ammout = $_GET['vnp_Amount'];
+        $Bankcode = $_GET['vnp_BankCode'];
+        $vnp_BankTranNo = isset($_GET['vnp_BankTranNo']) ? $_GET['vnp_BankTranNo'] : "";
+        $vnp_CardType = $_GET['vnp_CardType'];
+        $vnp_PayDate = $_GET['vnp_PayDate'];
+        $vnp_ResponseCode = $_GET['vnp_ResponseCode'];
+        $vnp_TransactionNo = $_GET['vnp_TransactionNo'];
+        $vnp_TransactionStatus = $_GET['vnp_TransactionStatus'];
+        $vnp_TxnRef = $_GET['vnp_TxnRef'];
+        $vnp_SecureHash = $_GET['vnp_SecureHash'];
+        $order_id = $_GET['order_id'];
+        $user_id = $_GET['user_id'];
+        $returndata = [
+            'Ammout' => $_GET['vnp_Amount'],
+            'Bankcode' => $_GET['vnp_BankCode'],
+            'vnp_BankTranNo' => isset($_GET['vnp_BankTranNo']) ? $_GET['vnp_BankTranNo'] : "",
+            'vnp_CardType' => $_GET['vnp_CardType'],
+            'vnp_PayDate' => $_GET['vnp_PayDate'],
+            'vnp_ResponseCode' => $_GET['vnp_ResponseCode'],
+            'vnp_TransactionNo' => $_GET['vnp_TransactionNo'],
+            'vnp_TransactionStatus' => $_GET['vnp_TransactionStatus'],
+            'vnp_TxnRef' => $_GET['vnp_TxnRef'],
+            'vnp_SecureHash' => $_GET['vnp_SecureHash'],
+            'order_id' => $_GET['order_id'],
+            'user_id' => $_GET['user_id'],
+        ];
+        // dd(auth()->user());
+        if ($vnp_ResponseCode == "00") {
+            
+            //dd( auth::id());
+            $order = Order::find($order_id);
+            $order->status_payment = "Đã thanh toán";
+            $order->status_order = "Đã xác nhận";
+            $order->save();
+            if($order){
+                $cart = Cart::where('user_id',$user_id)->first();
+                CartItem::where('cart_id', $cart->id)->delete();
+                $cart->delete();
+            }
+            return redirect()->route('my-account')->with('success', 'Đặt hàng thành công!');
+        } else {
+            $order = Order::query()->with('orderDetails')->find($order_id);
+            $order->orderDetails()->forceDelete();
+            $order->forceDelete();
+            return redirect()->route('my-account')->with('error', 'Đặt hàng thất bại!');
         }
     }
     /**
