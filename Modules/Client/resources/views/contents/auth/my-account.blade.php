@@ -1,6 +1,4 @@
 @extends('client::layouts.master')
-
-
 @section('title')
     Tài khoản | Thời trang Phong cách Việt
 @endsection
@@ -197,6 +195,10 @@
                                     aria-selected="true">Bảng điều khiển</a>
                             </li>
                             <li class="nav-item">
+                                <a class="nav-link" href="{{ route('wallet.index') }}" target="_blank"
+                                    rel="noopener noreferrer">Quản lý ví điện tử</a>
+                            </li>
+                            <li class="nav-item">
                                 <a class="nav-link" id="account-orders-tab" data-bs-toggle="tab" href="#account-orders"
                                     role="tab" aria-controls="account-orders" aria-selected="false">Đơn hàng</a>
                             </li>
@@ -206,12 +208,10 @@
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" id="account-details-tab" data-bs-toggle="tab" href="#account-details"
-                                    role="tab" aria-controls="account-details" aria-selected="false">Chi tiết tài
-                                    khoản</a>
+                                    role="tab" aria-controls="account-details" aria-selected="false">Cập nhật thông
+                                    tin</a>
                             </li>
                             <li class="nav-item">
-                                {{-- <a class="nav-link" id="account-logout-tab" href="login-register.html" role="tab"
-                                    aria-selected="false">Logout</a> --}}
                                 <form action="{{ route('logout') }}" method="POST">
                                     @csrf
                                     <button type="submit" class="kenne-login_btn">Đăng xuất</button>
@@ -224,70 +224,27 @@
                             <div class="tab-pane fade show active" id="account-dashboard" role="tabpanel"
                                 aria-labelledby="account-dashboard-tab">
                                 <div class="myaccount-dashboard">
-                                    <div class="rounded-top text-white d-flex flex-row"
+                                    <div class="rounded-top text-white d-flex flex-row mb-3"
                                         style="background-color: #000; height:200px;">
                                         <div class="ms-4 mt-5 d-flex flex-column" style="width: 150px;">
-                                            <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-profiles/avatar-1.webp"
-                                                alt="Generic placeholder image" class="img-fluid img-thumbnail mt-4 mb-2"
-                                                style="width: 150px; z-index: 1">
-                                            <button type="button" data-mdb-button-init data-mdb-ripple-init
-                                                class="btn btn-outline-dark text-body" data-mdb-ripple-color="dark"
-                                                style="z-index: 1;">
-                                                Edit profile
-                                            </button>
+                                            <img src="" alt="Bạn chưa cập nhật ảnh đại diện cho hồ sơ cá nhân"
+                                                class="img-fluid img-thumbnail mt-4 mb-2" style="width: 150px; z-index: 1">
                                         </div>
                                         <div class="ms-3" style="margin-top: 130px;">
-                                            <h5>{{ Auth::user()->full_name }}</h5>
-                                            <p>{{ Auth::user()->address }}</p>
-                                        </div>
-                                    </div>
-                                    <div class="p-4 text-black bg-body-tertiary">
-                                        <div class="d-flex justify-content-end text-center py-1 text-body">
-                                            <div>
-                                                <p class="mb-1 h5">253</p>
-                                                <p class="small text-muted mb-0">Photos</p>
-                                            </div>
-                                            <div class="px-3">
-                                                <p class="mb-1 h5">1026</p>
-                                                <p class="small text-muted mb-0">Followers</p>
-                                            </div>
-                                            <div>
-                                                <p class="mb-1 h5">478</p>
-                                                <p class="small text-muted mb-0">Following</p>
-                                            </div>
+                                            <h5 style="color: #dcdcdc;">{{ Auth::user()->full_name }}</h5>
                                         </div>
                                     </div>
                                     <div class="card-body p-4 text-black">
-                                        <div class="mb-5  text-body">
-                                            <p class="lead fw-normal mb-1">About</p>
+                                        <div class="text-body">
+                                            <p class="lead fw-normal mb-1">Thông tin chung</p>
                                             <div class="p-4 bg-body-tertiary">
-                                                <p class="font-italic mb-1">Web Developer</p>
-                                                <p class="font-italic mb-1">Lives in New York</p>
-                                                <p class="font-italic mb-0">Photographer</p>
-                                            </div>
-                                        </div>
-                                        <div class="d-flex justify-content-between align-items-center mb-4 text-body">
-                                            <p class="lead fw-normal mb-0">Recent photos</p>
-                                            <p class="mb-0"><a href="#!" class="text-muted">Show all</a></p>
-                                        </div>
-                                        <div class="row g-2">
-                                            <div class="col mb-2">
-                                                <img src="https://mdbcdn.b-cdn.net/img/Photos/Lightbox/Original/img%20(112).webp"
-                                                    alt="image 1" class="w-100 rounded-3">
-                                            </div>
-                                            <div class="col mb-2">
-                                                <img src="https://mdbcdn.b-cdn.net/img/Photos/Lightbox/Original/img%20(107).webp"
-                                                    alt="image 1" class="w-100 rounded-3">
-                                            </div>
-                                        </div>
-                                        <div class="row g-2">
-                                            <div class="col">
-                                                <img src="https://mdbcdn.b-cdn.net/img/Photos/Lightbox/Original/img%20(108).webp"
-                                                    alt="image 1" class="w-100 rounded-3">
-                                            </div>
-                                            <div class="col">
-                                                <img src="https://mdbcdn.b-cdn.net/img/Photos/Lightbox/Original/img%20(114).webp"
-                                                    alt="image 1" class="w-100 rounded-3">
+                                                <p class="font-italic mb-1">Email: {{ Auth::user()->email }}</p>
+                                                <p class="font-italic mb-1">Số điện thoại:
+                                                    {{ Auth::user()->phone == null ? 'Chưa cập nhật!' : Auth::user()->phone }}
+                                                </p>
+                                                <p class="font-italic mb-0">Địa chỉ:
+                                                    {{ Auth::user()->address == null ? 'Chưa cập nhật!' : Auth::user()->address }}
+                                                </p>
                                             </div>
                                         </div>
                                     </div>
@@ -299,7 +256,6 @@
                                     <h4 class="small-title">Đơn hàng của tôi</h4>
                                     <div class="table-responsive">
                                         <table class="table table-bordered table-hover">
-
                                             <thead>
                                                 <tr>
                                                     <th>Mã đơn hàng</th>
@@ -308,12 +264,8 @@
                                                     <th>Tổng</th>
                                                     <th></th>
                                                 </tr>
-
                                             </thead>
-                                            <tbody>
-
-
-                                            </tbody>
+                                            <tbody></tbody>
                                         </table>
                                     </div>
                                     <div id="pagination-controls" class="pagination-controls"></div>
@@ -469,8 +421,9 @@
                                             </div>
 
                                             <div class="single-input">
-                                                <button class="kenne-btn kenne-btn_dark" type="submit"><span>Đổi mật
-                                                        khẩu</span></button>
+                                                <button class="kenne-btn kenne-btn_dark" type="submit">
+                                                    <span>Cập nhật</span>
+                                                </button>
                                             </div>
                                         </div>
                                     </form>
@@ -560,6 +513,16 @@
         </div>
     </div>
     <!-- Brand Area End Here -->
+
+    @if (session('status'))
+        <script>
+            // alert('Đặt hàng thành công! vui lòng xem lịch sử đơn hàng');
+            Swal.fire('Thành công!', 'vui lòng xem lịch sử đơn hàng', 'success');
+        </script>
+        {{-- alert('Thanh toán thành công!'); --}}
+    @endif
+@endsection
+@section('js-setting')
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             function loadOrders(pageUrl = '/get-orders') {
@@ -580,57 +543,57 @@
 
                                 // Tạo dropdown menu với các action tùy theo trạng thái
                                 let actionButtons = `
-                    <div class="dropdown d-inline-block">
-                        <button class="kenne-btn kenne-btn_sm dropdown-toggle d-flex align-items-center justify-content-center" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <span>Thao tác</span>
-                        </button>
-                        <ul class="dropdown-menu">
-                            <li>
-                                <a class="dropdown-item view-order-btn" href="javascript:void(0)" data-order-id="${order.id}">
-                                    Xem chi tiết
-                                </a>
-                            </li>
-                `;
+                <div class="dropdown d-inline-block">
+                    <button class="kenne-btn kenne-btn_sm dropdown-toggle d-flex align-items-center justify-content-center" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <span>Thao tác</span>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a class="dropdown-item view-order-btn" href="javascript:void(0)" data-order-id="${order.id}">
+                                Xem chi tiết
+                            </a>
+                        </li>
+            `;
 
                                 // Thêm các action tùy theo trạng thái
                                 if (order.status === 'Chờ xác nhận' || order.status === 'Đã xác nhận') {
                                     actionButtons += `
-                        <li>
-                            <a class="dropdown-item cancel-order-btn" href="javascript:void(0)" data-order-id="${order.id}">
-                                Hủy
-                            </a>
-                        </li>
-                    `;
+                    <li>
+                        <a class="dropdown-item cancel-order-btn" href="javascript:void(0)" data-order-id="${order.id}">
+                            Hủy
+                        </a>
+                    </li>
+                `;
                                 } else if (order.status === 'Đơn hàng bị hủy') {
                                     actionButtons += `
-                        <li>
-                            <a class="dropdown-item reset-order-btn" href="javascript:void(0)" data-order-id="${order.id}">
-                                Đặt lại
-                            </a>
-                        </li>
-                    `;
+                    <li>
+                        <a class="dropdown-item reset-order-btn" href="javascript:void(0)" data-order-id="${order.id}">
+                            Đặt lại
+                        </a>
+                    </li>
+                `;
                                 } else if (order.status === 'Đang giao hàng') {
                                     actionButtons += `
-                        <li>
-                            <a class="dropdown-item received-order-btn" href="javascript:void(0)" data-order-id="${order.id}">
-                                Đã nhận hàng
-                            </a>
-                        </li>
-                    `;
+                    <li>
+                        <a class="dropdown-item received-order-btn" href="javascript:void(0)" data-order-id="${order.id}">
+                            Đã nhận hàng
+                        </a>
+                    </li>
+                `;
                                 }
 
                                 actionButtons += `
-                        </ul>
-                    </div>
-                `;
+                    </ul>
+                </div>
+            `;
 
                                 row.innerHTML = `
-                    <td><a class="account-order-id" href="javascript:void(0)">#${order.id}</a></td>
-                    <td>${order.date}</td>
-                    <td>${order.status}</td>
-                    <td>${order.total}</td>
-                    <td>${actionButtons}</td>
-                `;
+                <td><a class="account-order-id" href="javascript:void(0)">#${order.id}</a></td>
+                <td>${order.date}</td>
+                <td>${order.status}</td>
+                <td>${order.total}</td>
+                <td>${actionButtons}</td>
+            `;
                                 tableBody.appendChild(row);
                             });
 
@@ -822,46 +785,46 @@
                     // Điền thông tin sản phẩm đơn hàng
                     const itemsContainer = document.getElementById('order-items');
                     itemsContainer.innerHTML = data.items.map(item => `
-            <tr>
-                <td><img src="{{ Storage::url('${item.image}') }}" alt="Hình ảnh sản phẩm" style="width: 50px; height: 50px;">
-                     ${item.name} - Size: ${item.size} - Màu: <input type="color" value="${item.color}" disabled>
-                        
-                </td>
-                <td>${item.quantity}</td>
-                <td>${item.price} VND</td>
-                <td>${item.total} VND</td>
-            </tr>
-            `).join('');
+        <tr>
+            <td><img src="{{ Storage::url('${item.image}') }}" alt="Hình ảnh sản phẩm" style="width: 50px; height: 50px;">
+                 ${item.name} - Size: ${item.size} - Màu: <input type="color" value="${item.color}" disabled>
+                    
+            </td>
+            <td>${item.quantity}</td>
+            <td>${item.price} VND</td>
+            <td>${item.total} VND</td>
+        </tr>
+        `).join('');
 
                     // Điền thông tin tóm tắt đơn hàng
                     const summaryContainer = document.getElementById('order-summary');
                     summaryContainer.innerHTML = `
-            <tr><td>Tổng cộng :</td><td>${data.grand_total}</td></tr>
-            <tr><td>Giảm giá :</td><td>${data.discount}</td></tr>
-            <tr><th>Tổng :</th><th>${data.total}</th></tr>
-            `;
+        <tr><td>Tổng cộng :</td><td>${data.grand_total}</td></tr>
+        <tr><td>Giảm giá :</td><td>${data.discount}</td></tr>
+        <tr><th>Tổng :</th><th>${data.total}</th></tr>
+        `;
 
                     // Điền thông tin giao hàng
                     document.getElementById('shipping-info').innerHTML = `
-            <strong>Tên người nhận :</strong> ${data.shipping.name}<br>
-            <strong>Địa chỉ :</strong> ${data.shipping.address}<br>
-            <strong>Email :</strong> ${data.shipping.email}<br>
-            <strong>Số điện thoại :</strong> ${data.shipping.phone}
-            `;
+        <strong>Tên người nhận :</strong> ${data.shipping.name}<br>
+        <strong>Địa chỉ :</strong> ${data.shipping.address}<br>
+        <strong>Email :</strong> ${data.shipping.email}<br>
+        <strong>Số điện thoại :</strong> ${data.shipping.phone}
+        `;
 
                     // Điền thông tin thanh toán
                     const billingInfo = document.getElementById('billing-info');
                     billingInfo.innerHTML = `
-            <li><p><strong>Loại thanh toán:</strong> ${data.billing.payment_method}</p></li>
-            <li><p><strong>Trạng thái thanh toán:</strong> ${data.billing.status_payment}</p></li>
-            `;
+        <li><p><strong>Loại thanh toán:</strong> ${data.billing.payment_method}</p></li>
+        <li><p><strong>Trạng thái thanh toán:</strong> ${data.billing.status_payment}</p></li>
+        `;
 
                     // Điền thông tin giao hàng
                     document.getElementById('delivery-info').innerHTML = `
-            <i class="mdi mdi-truck-fast h2 text-muted"></i>
-            <p><strong>ID Đơn hàng :</strong> ${data.delivery.order_id}</p>
-            <p><strong>Phương thức vận chuyển :</strong> ${data.delivery.shipping_method}</p>
-            `;
+        <i class="mdi mdi-truck-fast h2 text-muted"></i>
+        <p><strong>ID Đơn hàng :</strong> ${data.delivery.order_id}</p>
+        <p><strong>Phương thức vận chuyển :</strong> ${data.delivery.shipping_method}</p>
+        `;
                 })
                 .catch(error => {
                     console.error('Lỗi khi lấy chi tiết đơn hàng:', error);
@@ -897,7 +860,6 @@
                 e.preventDefault();
 
                 let formData = new FormData(changePasswordForm);
-
                 fetch("{{ route('change.password') }}", {
                         method: "POST",
                         headers: {
@@ -940,12 +902,4 @@
             });
         });
     </script>
-
-    @if (session('status'))
-        <script>
-            // alert('Đặt hàng thành công! vui lòng xem lịch sử đơn hàng');
-            Swal.fire('Thành công!', 'vui lòng xem lịch sử đơn hàng', 'success');
-        </script>
-        {{-- alert('Thanh toán thành công!'); --}}
-    @endif
 @endsection

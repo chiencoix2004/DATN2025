@@ -70,6 +70,7 @@ Route::prefix('admin')
         Route::controller(BannerController::class)
             ->prefix('banner')->as('banner.')
             ->group(function () {
+                Route::get('slider', 'slider')->name('slider');
                 Route::get('list', 'index')->name('list');
                 Route::put('update', 'update')->name('update'); // Corrected Route::
                 Route::get('delete/{id}', 'delete')->name('delete');
@@ -167,19 +168,7 @@ Route::prefix('admin')
         // Route::controller(AccountController::class)->prefix('account')->as('account.')->group(function(){
         //     Route::get('listAcc', 'listAccounts')->name('list');
         // });
-        Route::controller(CouponController::class)
-            ->prefix('coupons')
-            ->as('coupons.')
-            ->group(function () {
-            Route::get('/', 'index')->name('index');
-            Route::get('create', 'create')->name('create');
-            Route::post('store', 'store')->name('store');
-            Route::get('/{id}/show', 'show')->name('show');
-            Route::get('/{id}/edit', 'edit')->name('edit');
-            Route::put('{id}/update', 'update')->name('update');
-            // Route::delete('/{id}/destroy', 'destroy')->name('destroy');
-        });
-
+    
         // thống kê
         Route::controller(StatisticalController::class)->prefix('statistical')->as('statistical.')->group(function () {
             Route::get('listStatistical', 'index')->name('listStatistical');
@@ -202,20 +191,6 @@ Route::prefix('admin')
                 Route::put('{id}/update', 'update')->name('update');
                 // Route::delete('/{id}/destroy', 'destroy')->name('destroy');
             });
-
-        // Route quản lý tài khoản
-        Route::controller(AccountController::class)
-            ->prefix('accounts')
-            ->as('accounts.')
-            ->group(function () {
-            Route::get('/', 'index')->name('index');
-            Route::get('create', 'create')->name('create');
-            Route::post('store', 'store')->name('store');
-            Route::get('/{id}/show', 'show')->name('show');
-            Route::get('/{id}/edit', 'edit')->name('edit');
-            Route::put('{id}/update', 'update')->name('update');
-            // Route::delete('/{id}/destroy', 'destroy')->name('destroy');
-        });
 
         // Route quản lý tài khoản khách hàng
         Route::controller(UserController::class)

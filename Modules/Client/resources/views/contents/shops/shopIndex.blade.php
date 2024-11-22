@@ -583,7 +583,7 @@
                                                                 <div class="sp-essential_stuff">
                                                                     <ul>
                                                                         <li>Danh mục: <a
-                                                                                href="javascript:void(0)">{{ $product->category['name'] }}</a>
+                                                                                href="javascript:void(0)">{{ $product->sub_category['name'] }}</a>
                                                                         </li>
                                                                         <li>Mã sản phẩm: <a
                                                                                 href="javascript:void(0)">{{ $product->sku }}</a>

@@ -3,7 +3,6 @@
 use Illuminate\Support\Facades\Route;
 use Modules\Client\App\Http\Controllers\AuthController;
 use Modules\Client\App\Http\Controllers\CartController;
-//use Modules\Client\App\Http\Controllers\AuthController;
 use Modules\Client\App\Http\Controllers\PostController;
 use Modules\Client\App\Http\Controllers\ShopController;
 use Modules\Client\App\Http\Controllers\LoginController;
