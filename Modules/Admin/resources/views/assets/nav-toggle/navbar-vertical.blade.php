@@ -146,6 +146,31 @@
                             <span class="nav-link-text ps-1">Banner</span>
                         </div>
                     </a>
+                    <a class="nav-link dropdown-indicator" href="#banner" role="button" data-bs-toggle="collapse"
+                        aria-expanded="false" aria-controls="blogs">
+                        <div class="d-flex align-items-center">
+                            <span class="nav-link-icon">
+                                <span class="fas fa-image"></span>
+                            </span>
+                            <span class="nav-link-text ps-1">Banner - Slider</span>
+                        </div>
+                    </a>
+                    <ul class="nav collapse" id="banner">
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('admin.banner.slider') }}">
+                                <div class="d-flex align-items-center">
+                                    <span class="nav-link-text ps-1">Slider</span>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('admin.posts.create') }}">
+                                <div class="d-flex align-items-center">
+                                    <span class="nav-link-text ps-1">Thêm bài viết</span>
+                                </div>
+                            </a>
+                        </li>
+                    </ul>
                     <a class="nav-link" href="{{ route('admin.orders.list') }}">
                         <div class="d-flex align-items-center">
                             <span class="nav-link-icon">

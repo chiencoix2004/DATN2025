@@ -1,11 +1,27 @@
 @extends('admin::layout.master')
 @section('title')
-    Admin | Banner Manager
+    ADMIN | QUẢN LÝ BANNER - SLIDER
 @endsection
 
 @section('contents')
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
+    <div class="card mb-3">
+        <div class="card-body">
+            <div class="row flex-between-center">
+                <div class="col-md">
+                    @if (session()->has('error'))
+                        <h5 class="mb-2 mb-md-0 text-danger">{{ session('error') }}</h5>
+                    @else
+                        @if (session()->has('success'))
+                            <h5 class="mb-2 mb-md-0 text-success">{{ session('success') }}</h5>
+                        @else
+                            <h5 class="mb-2 mb-md-0">Banner - Slider</h5>
+                        @endif
+                    @endif
+                </div>
+            </div>
+        </div>
+    </div>
+    @yield('banner-contents')
     <div class="container my-4">
         <h2 class="text-center mb-4">Chỉnh sửa Banner</h2>
         <div class="row justify-content-center">
@@ -40,7 +56,8 @@
                                 <div class="card-body">
                                     <div class="mb-4">
                                         <h4 class="font-size-18 mb-3">Banner {{ $loop->iteration }}</h4>
-                                        <form action="{{ route('admin.banner.update') }}" method="POST" enctype="multipart/form-data">
+                                        <form action="{{ route('admin.banner.update') }}" method="POST"
+                                            enctype="multipart/form-data">
                                             @csrf
                                             @method('PUT')
 
@@ -69,40 +86,49 @@
                                             </div>
 
                                             <div class="mb-3">
-                                                <label for="link_{{ $items->id }}" class="form-label">Liên kết sản phẩm</label>
+                                                <label for="link_{{ $items->id }}" class="form-label">Liên kết sản
+                                                    phẩm</label>
                                                 <input id="link_{{ $items->id }}" name="lien_ket" type="text"
                                                     class="form-control" value="{{ $items->link }}">
                                             </div>
                                             <div class="mb-3">
-                                                <label for="link_{{ $items->id }}" class="form-label">Tiêu đề Giảm giá</label>
+                                                <label for="link_{{ $items->id }}" class="form-label">Tiêu đề Giảm
+                                                    giá</label>
                                                 <input id="link_{{ $items->id }}" name="offer_text" type="text"
-                                                    class="form-control" value="{{ $items->offer_text}}">
+                                                    class="form-control" value="{{ $items->offer_text }}">
                                             </div>
                                             <div class="mb-3">
                                                 <label for="link_{{ $items->id }}" class="form-label">Tiêu đề</label>
                                                 <input id="link_{{ $items->id }}" name="title" type="text"
-                                                    class="form-control" value="{{ $items->title}}">
+                                                    class="form-control" value="{{ $items->title }}">
                                             </div>
                                             <div class="mb-3">
                                                 <label for="link_{{ $items->id }}" class="form-label">Mô tả</label>
                                                 <input id="link_{{ $items->id }}" name="description" type="text"
-                                                    class="form-control" value="{{ $items->description}}">
+                                                    class="form-control" value="{{ $items->description }}">
                                             </div>
 
                                             <div class="mb-3">
-                                                <label for="banner_place_{{ $items->id }}" class="form-label">Vị trí</label>
-                                                <select class="form-select" name="vi_tri" id="banner_place_{{ $items->id }}">
-                                                    <option value="1" @if ($items->banner_position == 1) selected @endif>Slider</option>
-                                                    <option value="2" @if ($items->banner_position == 2) selected @endif>Trên</option>
-                                                    <option value="3" @if ($items->banner_position == 3) selected @endif>Giữa</option>
-                                                    <option value="4" @if ($items->banner_position == 4) selected @endif>Dưới cùng</option>
+                                                <label for="banner_place_{{ $items->id }}" class="form-label">Vị
+                                                    trí</label>
+                                                <select class="form-select" name="vi_tri"
+                                                    id="banner_place_{{ $items->id }}">
+                                                    <option value="1"
+                                                        @if ($items->banner_position == 1) selected @endif>Slider</option>
+                                                    <option value="2"
+                                                        @if ($items->banner_position == 2) selected @endif>Trên</option>
+                                                    <option value="3"
+                                                        @if ($items->banner_position == 3) selected @endif>Giữa</option>
+                                                    <option value="4"
+                                                        @if ($items->banner_position == 4) selected @endif>Dưới cùng</option>
                                                 </select>
                                             </div>
 
                                             <div class="d-flex justify-content-between">
                                                 <button type="submit" class="btn btn-primary">Cập nhật</button>
                                                 <a href="{{ route('admin.banner.delete', ['id' => $items->id]) }}"
-                                                    class="btn btn-danger" onclick="return confirm('Bạn có chắc chắn muốn xóa banner này không?')">Xóa</a>
+                                                    class="btn btn-danger"
+                                                    onclick="return confirm('Bạn có chắc chắn muốn xóa banner này không?')">Xóa</a>
                                             </div>
                                         </form>
                                     </div>
@@ -117,21 +143,24 @@
                             <div class="card-body">
                                 <div class="mb-4">
                                     <h4 class="font-size-18 mb-3">Thêm Banner</h4>
-                                    <form action="{{ route('admin.banner.add') }}" method="POST" enctype="multipart/form-data">
+                                    <form action="{{ route('admin.banner.add') }}" method="POST"
+                                        enctype="multipart/form-data">
                                         @csrf
                                         @method('POST')
 
                                         <!-- Image Upload -->
                                         <div class="mb-3">
                                             <label for="new_banner_image" class="form-label">Ảnh</label>
-                                            <input id="new_banner_image" name="hinh_anh" type="file" class="form-control" accept="image/*"
+                                            <input id="new_banner_image" name="hinh_anh" type="file"
+                                                class="form-control" accept="image/*"
                                                 onchange="previewImage(event, 'new_image_preview')">
                                             <div id="new_image_preview" class="mt-3"></div>
                                         </div>
 
                                         <div class="mb-3">
                                             <label for="new_banner_link" class="form-label">Liên kết sản phẩm</label>
-                                            <input id="new_banner_link" name="lien_ket" type="text" class="form-control">
+                                            <input id="new_banner_link" name="lien_ket" type="text"
+                                                class="form-control">
                                         </div>
                                         <div class="mb-3">
                                             <label for="new_offer_text" class="form-label">Tiêu đề Giảm giá</label>
@@ -171,7 +200,11 @@
             </div>
         </div>
     </div>
-
+@endsection
+@section('js-libs')
+    <script src="{{ asset('theme/admin/js/jquery.min.js') }}"></script>
+@endsection
+@section('js-setting')
     <!-- JS for Image Preview -->
     <script>
         function previewImage(event, previewId) {
@@ -181,7 +214,8 @@
             if (file) {
                 const reader = new FileReader();
                 reader.onload = function(e) {
-                    previewContainer.innerHTML = `<img src="${e.target.result}" class="img-fluid" style="max-height: 300px; object-fit: cover;">`;
+                    previewContainer.innerHTML =
+                        `<img src="${e.target.result}" class="img-fluid" style="max-height: 300px; object-fit: cover;">`;
                 }
                 reader.readAsDataURL(file);
             } else {
