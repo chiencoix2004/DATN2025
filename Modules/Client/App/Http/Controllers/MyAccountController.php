@@ -40,7 +40,7 @@ class MyAccountController extends Controller
         $formattedOrders = $orders->getCollection()->map(function ($order) {
 
             $items_count = OrderDetailModel::where('order_id', $order->id)->count();
-            $total_price = OrderDetailModel::where('order_id', $order->id)->sum('product_price_final');
+            $total_price = $order->total_price;
             return [
                 'id' => $order->id,
                 'date' => $order->date_create_order ? Carbon::parse($order->date_create_order)->format('d-m-Y') : null,
@@ -285,9 +285,13 @@ class MyAccountController extends Controller
 
         return response()->json(['success' => true, 'message' => 'Thông tin đã được cập nhật thành công.']);
     }
-    public function logout()
+
+
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy($id)
     {
-        auth()->logout();
-        return redirect()->route('index');
+        //
     }
 }

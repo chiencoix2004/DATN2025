@@ -1,6 +1,4 @@
 @extends('client::layouts.master')
-
-
 @section('title')
     Tài khoản | Thời trang Phong cách Việt
 @endsection
@@ -174,8 +172,10 @@
             <div class="breadcrumb-content">
                 <h2 style="margin-top: 30px;">Thời trang Phong cách Việt</h2>
                 <ul>
-                    <li><a href="{{ route('home') }}">Trang chủ</a></li>
-                    <li class="active">Tài khoản</li>
+                
+                            {{-- <li><a href="{{ route('home') }}">{{ sesssion('success') }}</a></li> --}}
+                            <li class="active">Tài khoản</li>
+                    
                 </ul>
             </div>
         </div>
@@ -860,7 +860,6 @@
                 e.preventDefault();
 
                 let formData = new FormData(changePasswordForm);
-
                 fetch("{{ route('change.password') }}", {
                         method: "POST",
                         headers: {
