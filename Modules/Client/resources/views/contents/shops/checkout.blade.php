@@ -256,7 +256,7 @@
     <script type="module">
         $(document).ready(function() {
             $('#checkOutForm').on('submit', function(e) {
-                e.preventDefault();
+                // e.preventDefault();
 
                 $(".error-message").remove();
 
@@ -367,22 +367,29 @@
                         type: 'POST',
                         data: formData,
                         success: function(response) {
-                            if (response.success) {
-                                Swal.fire({
-                                    title: 'Thanh toán thành công!',
-                                    icon: 'success',
-                                    confirmButtonText: 'OK'
-                                }).then(() => {
-                                    window.location.href = '{{ route('my-account') }}';
-                                });
-                            } else {
-                                Swal.fire({
-                                    title: 'Thanh toán thành công!',
-                                    icon: 'success',
-                                    confirmButtonText: 'OK'
-                                }).then(() => {
-                                    window.location.href = '{{ route('my-account') }}';
-                                });
+                            console.log(response.link);
+                            console.log(response.method);
+
+                            // window.location.href = response.link;
+                            if (response.type) {
+
+                                if (response.method == 'vnpay') {
+                                    window.location.href = response.link;
+                                } else {
+                                    window.location.href = '/my-account';
+                                }
+
+                                // } else {
+                                //     Swal.fire({
+                                //         title: 'Đặt hàng thành công!',
+                                //         icon: 'success',
+                                //         confirmButtonText: 'OK'
+                                //     }).then((response) => {
+                                //         if (response.method == 'vnpay') {
+                                //             window.location.href = response.link;
+                                //         }
+
+                                //     });
                             }
                         },
                         error: function() {

@@ -50,7 +50,7 @@ class WalletController extends Controller
     }
     public function callbackvnpaydata(){
         $user_id = Auth::user();
-        dd($user_id);
+       // dd($user_id);
         $wallet = new Wallet();
         $walletaccount = $wallet->getWallet($user_id);
         $wallet_account_id = $wallet->wallet_account_id;
@@ -96,7 +96,7 @@ class WalletController extends Controller
                 }
             }
         }
-
+        return view('wallet::transhistory.resultvnpay', compact('returndata'));
     }
     public function transaction($id){
         $trans = new Trx_history();
