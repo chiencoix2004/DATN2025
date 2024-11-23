@@ -138,14 +138,6 @@
                             <span class="nav-link-text ps-1">Hỗ trợ khách hàng</span>
                         </div>
                     </a>
-                    <a class="nav-link" href="{{ route('admin.banner.list') }}">
-                        <div class="d-flex align-items-center">
-                            <span class="nav-link-icon">
-                                <span class="fas fa-file-image"></span>
-                            </span>
-                            <span class="nav-link-text ps-1">Banner</span>
-                        </div>
-                    </a>
                     <a class="nav-link dropdown-indicator" href="#banner" role="button" data-bs-toggle="collapse"
                         aria-expanded="false" aria-controls="blogs">
                         <div class="d-flex align-items-center">
@@ -164,9 +156,9 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ route('admin.posts.create') }}">
+                            <a class="nav-link" href="{{ route('admin.banner.list') }}">
                                 <div class="d-flex align-items-center">
-                                    <span class="nav-link-text ps-1">Thêm bài viết</span>
+                                    <span class="nav-link-text ps-1">Banner</span>
                                 </div>
                             </a>
                         </li>

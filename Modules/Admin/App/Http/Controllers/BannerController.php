@@ -3,10 +3,14 @@
 namespace Modules\Admin\App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreSlide;
+use App\Http\Requests\UpdateSlider;
 use App\Models\Banner;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\DB;
+use Storage;
 
 class BannerController extends Controller
 {
@@ -25,30 +29,30 @@ class BannerController extends Controller
         $slider = $data->getSliderPosition();
         return view('admin::contents.banner.slider')->with(compact('slider'));
     }
-    public function update(Request $request)
+    public function update(UpdateSlider $request, Banner $banner)
     {
-        //print_r($request->all());
-
-        $file = $request->file('hinh_anh');
-        if (isset($file)) {
-            $file = $request->file('hinh_anh');
-            $fileName = time() . '_' . $file->getClientOriginalName();
-            $data = $file->move(public_path('uploads'), $fileName);
-            if ($data) {
-                try {
-                    $data = new Banner();
-                    $banner = $data->updateBanner($request->id_banner, $fileName, $request->lien_ket, $request->vi_tri, $request->offer_text, $request->title, $request->description);
-                    return redirect()->route('admin.banner.list');
-                } catch (\Exception $e) {
-                    dd($e->getMessage());
-                }
+        try {
+            DB::beginTransaction();
+            $img = $banner->img_banner;
+            if ($request->hasFile('hinh_anh')) {
+                $img = Storage::put('slider/', $request->file('hinh_anh'));
             }
-        } else {
-            $data = new Banner();
-            $banner = $data->updateBannerNoImg($request->id_banner, $request->lien_ket, $request->vi_tri, $request->offer_text, $request->title, $request->description);
-            return redirect()->route('admin.banner.list');
+            $banner->update(
+                [
+                    'img_banner' => $img,
+                    'link' => $request->lien_ket,
+                    'banner_position' => 1,
+                    'offer_text' => $request->offer_text,
+                    'title' => $request->title,
+                    'description' => $request->description,
+                ]
+            );
+            DB::commit();
+            return redirect()->route('admin.banner.slider')->with('success', 'Cập nhật thành công!');
+        } catch (\Exception $exception) {
+            DB::rollBack();
+            return redirect()->back()->with('error', $exception->getMessage());
         }
-
     }
     public function delete($id)
     {
@@ -60,21 +64,36 @@ class BannerController extends Controller
             return redirect()->route('admin.banner.list')->with('error', 'Xóa banner thất bại');
         }
     }
-    public function add(Request $request)
+    public function add(StoreSlide $request)
     {
-        $file = $request->file('hinh_anh');
-        $fileName = time() . '_' . $file->getClientOriginalName();
-        $data = $file->move(public_path('uploads'), $fileName);
-        if ($data) {
-            try {
-                $data = new Banner();
-                $banner = $data->Addbanner($fileName, $request->lien_ket, $request->vi_tri, $request->offer_text, $request->title, $request->description);
-                return redirect()->route('admin.banner.list')->with('success', 'Thêm banner thành công');
-            } catch (\Exception $e) {
-                dd($e->getMessage());
-            }
+        $position = $request->vi_tri;
+        if ($position ) {
+            # code...
         }
+        try {
+            DB::beginTransaction();
+            if ($position == 1) {
+                $img = Storage::put('slider', $request->hinh_anh);
+                $model = new Banner();
+                $model->Addbanner($img, $request->lien_ket, $position, $request->offer_text, $request->title, $request->description);
+            }
+            DB::commit();
+            return redirect()->back()->with('success', 'Cập nhật thành công!');
+        } catch (\Exception $exception) {
+            DB::rollBack();
+            return redirect()->back()->with('error', $exception->getMessage());
+        }
+        // $file = $request->file('hinh_anh');
+        // $fileName = time() . '_' . $file->getClientOriginalName();
+        // $data = $file->move(public_path('uploads'), $fileName);
+        // if ($data) {
+        //     try {
+        //         $data = new Banner();
+        //         $banner = $data->Addbanner($fileName, $request->lien_ket, $request->vi_tri, $request->offer_text, $request->title, $request->description);
+        //         return redirect()->route('admin.banner.list')->with('success', 'Thêm banner thành công');
+        //     } catch (\Exception $e) {
+        //         dd($e->getMessage());
+        //     }
+        // }
     }
-
-
 }

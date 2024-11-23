@@ -1,5 +1,4 @@
 @extends('client::layouts.master')
-
 @section('title')
     Fashion | Thời trang Phong cách Việt
 @endsection
@@ -7,24 +6,6 @@
     {{-- @include('client::contents.homeWeb.slider-area') --}}
     <!-- Begin Slider Area -->
     <!-- Begin Slider Area -->
-    @php
-        $bannerBT = $bannerbottom->first()->img_banner;
-        if (!\Str::contains($bannerBT, 'http')) {
-            $bannerBT = 'uploads/' . $bannerBT;
-        }
-    @endphp
-    <style>
-        .kenne-banner_area-4 {
-            background-image: url('{{ $bannerBT }}');
-            background-repeat: no-repeat;
-            background-position: center center;
-            background-size: cover;
-            min-height: 565px;
-            position: relative;
-            padding-top: 0;
-            margin-top: 90px;
-        }
-    </style>
     <div class="slider-area">
         <div class="kenne-element-carousel home-slider arrow-style"
             data-slick-options='{
@@ -51,7 +32,7 @@
                 @php
                     $url = $items->img_banner;
                     if (!\Str::contains($url, 'http')) {
-                        $url = 'uploads/' . $url;
+                        $url = \Storage::url($url);
                     }
                 @endphp
                 <div class="slide-item animation-style-01"
@@ -300,4 +281,24 @@
         </div>
     </div> --}}
     <!-- Kenne's Instagram Area End Here -->
+@endsection
+@section('css-setting')
+    @php
+        $bannerBT = $bannerbottom->first()->img_banner;
+        if (!\Str::contains($bannerBT, 'http')) {
+            $bannerBT = \Storage::url($bannerBT);
+        }
+    @endphp
+    <style>
+        .kenne-banner_area-4 {
+            background-image: url('{{ $bannerBT }}');
+            background-repeat: no-repeat;
+            background-position: center center;
+            background-size: cover;
+            min-height: 565px;
+            position: relative;
+            padding-top: 0;
+            margin-top: 90px;
+        }
+    </style>
 @endsection

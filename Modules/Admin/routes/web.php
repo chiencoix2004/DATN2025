@@ -72,9 +72,9 @@ Route::prefix('admin')
             ->group(function () {
                 Route::get('slider', 'slider')->name('slider');
                 Route::get('list', 'index')->name('list');
-                Route::put('update', 'update')->name('update'); // Corrected Route::
+                Route::put('update/{banner}', 'update')->name('update'); // Corrected Route::
                 Route::get('delete/{id}', 'delete')->name('delete');
-                Route::post('add', 'add')->name('add');
+                Route::post('add/{position}', 'add')->name('add');
             });
 
         // Route quản lý categories
