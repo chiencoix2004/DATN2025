@@ -227,7 +227,7 @@
                                     <div class="rounded-top text-white d-flex flex-row mb-3"
                                         style="background-color: #000; height:200px;">
                                         <div class="ms-4 mt-5 d-flex flex-column" style="width: 150px;">
-                                            <img src="" alt="Bạn chưa cập nhật ảnh đại diện cho hồ sơ cá nhân"
+                                            <img src="{{ Auth::user()->user_image }}" alt="Bạn chưa cập nhật ảnh đại diện cho hồ sơ cá nhân"
                                                 class="img-fluid img-thumbnail mt-4 mb-2" style="width: 150px; z-index: 1">
                                         </div>
                                         <div class="ms-3" style="margin-top: 130px;">

@@ -5,12 +5,12 @@ namespace Modules\Client\App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Notifications\VerifyEmail;
-use Auth;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Laravel\Socialite\Facades\Socialite;
-use Str;
+use Illuminate\Support\Facades\Str;
 
 class LoginController extends Controller
 {
@@ -63,5 +63,10 @@ class LoginController extends Controller
     {
         $pass = Str::random(6) . Str::random(6) . Str::random(6);
         return $pass;
+    }
+    public function logout()
+    {
+        auth()->logout();
+        return redirect()->route('index');
     }
 }
