@@ -71,7 +71,7 @@ Route::get('/email/verify/{id}', [VerificationController::class, 'verify'])->nam
 Route::post('/login', [LoginController::class, 'login'])->name('login');
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
-Route::get('/my-account', [MyAccountController::class, 'index'])->name(name: 'my-account');
+Route::get('/my-account', [MyAccountController::class, 'index'])->name('my-account');
 Route::get('/get-orders', [MyAccountController::class, 'getOrders'])->name('orders.get.list');
 Route::get('/get-order-details/{id}', [MyAccountController::class, 'getOrderDetails'])->name('order.details');
 Route::get('/orders/{id}/download-pdf', [MyAccountController::class, 'downloadPDF'])->name('orders.downloadPDF');
