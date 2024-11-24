@@ -484,7 +484,8 @@ class CartController extends Controller
         //     ], 500);
         // }
     }
-    public function meanhxuyen(){
+    public function meanhxuyen()
+    {
         $Ammout = $_GET['vnp_Amount'];
         $Bankcode = $_GET['vnp_BankCode'];
         $vnp_BankTranNo = isset($_GET['vnp_BankTranNo']) ? $_GET['vnp_BankTranNo'] : "";
@@ -513,23 +514,34 @@ class CartController extends Controller
         ];
         // dd(auth()->user());
         if ($vnp_ResponseCode == "00") {
-            
+
             //dd( auth::id());
             $order = Order::find($order_id);
             $order->status_payment = "Đã thanh toán";
             $order->status_order = "Đã xác nhận";
             $order->save();
-            if($order){
-                $cart = Cart::where('user_id',$user_id)->first();
-                CartItem::where('cart_id', $cart->id)->delete();
-                $cart->delete();
-            }
-            return redirect()->route('my-account')->with('success', 'Đặt hàng thành công!');
+
+            $orderItems = OrderDetail::query()
+                ->with('productVariant')
+                ->with("productVariant.size")
+                ->with("productVariant.color")
+                ->with("productVariant.product")
+                ->where('order_id', $order_id)
+                ->get();
+
+            // if ($order) {
+            //     $cart = Cart::where('user_id', $user_id)->first();
+            //     CartItem::where('cart_id', $cart->id)->delete();
+            //     $cart->delete();
+            // }
+            // dd($returndata);
+            return view('client::contents.shops.checkoutOrderDetail', compact('returndata', 'orderItems','order'));
         } else {
             $order = Order::query()->with('orderDetails')->find($order_id);
             $order->orderDetails()->forceDelete();
             $order->forceDelete();
-            return redirect()->route('my-account')->with('error', 'Đặt hàng thất bại!');
+            return view('client::contents.shops.checkoutOrderDetail', compact('returndata'));
+
         }
     }
     /**
@@ -571,4 +583,5 @@ class CartController extends Controller
     {
         //
     }
+
 }
