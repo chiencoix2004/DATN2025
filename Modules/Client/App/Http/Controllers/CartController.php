@@ -529,17 +529,19 @@ class CartController extends Controller
                 ->where('order_id', $order_id)
                 ->get();
 
-            if ($order) {
-                $cart = Cart::where('user_id', $user_id)->first();
-                CartItem::where('cart_id', $cart->id)->delete();
-                $cart->delete();
-            }
+            // if ($order) {
+            //     $cart = Cart::where('user_id', $user_id)->first();
+            //     CartItem::where('cart_id', $cart->id)->delete();
+            //     $cart->delete();
+            // }
+            // dd($returndata);
             return view('client::contents.shops.checkoutOrderDetail', compact('returndata', 'orderItems','order'));
         } else {
             $order = Order::query()->with('orderDetails')->find($order_id);
             $order->orderDetails()->forceDelete();
             $order->forceDelete();
-            return redirect()->route('my-account')->with('error', 'Đặt hàng thất bại!');
+            return view('client::contents.shops.checkoutOrderDetail', compact('returndata'));
+
         }
     }
     /**
