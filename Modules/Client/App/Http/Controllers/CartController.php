@@ -134,15 +134,24 @@ class CartController extends Controller
                 ->with("productVariant.color")
                 ->with("productVariant.product")
                 ->get();
-            return response()->json([
-                'cartItems' => $cartItems,
-                'totalAmount' => $cart->total_amount,
-                'discount' => session('discount') ? session('discount') : 0,
-                'discount_code' => session('discount_code') ? session('discount_code') : '',
-                'message' => 'Lấy danh sách giỏ hàng thành công!'
-            ], 200);
+            
+            // dd($cartItems->count());
+            if ($cartItems->count() == 0) {
+                return response()->json(['message' => 'Giỏ hàng của bạn đang trống!'], 404);
+            }else{
+                return response()->json([
+                    'cartItems' => $cartItems,
+                    'totalAmount' => $cart->total_amount,
+                    'discount' => session('discount') ? session('discount') : 0,
+                    'discount_code' => session('discount_code') ? session('discount_code') : '',
+                    'message' => 'Lấy danh sách giỏ hàng thành công!'
+                ], 200);
+    
+            };
+            
+
         } else {
-            return response()->json(['message' => 'chưa đăng nhập'], 200);
+            return response()->json(['message' => 'chưa đăng nhập'], 404);
         }
     }
 
@@ -197,13 +206,13 @@ class CartController extends Controller
             $current_date = date('Y-m-d');
             $order_total = Cart::where('user_id', auth()->id())->first()->total_amount;
             if ($current_date < $coupon->date_start) {
-                return response()->json(['error' => 'Mã giảm giá chưa có hiệu lực.'], 400);
+                return response()->json(['message' => 'Mã giảm giá chưa có hiệu lực.'], 404);
             } elseif ($current_date > $coupon->date_end) {
-                return response()->json(['error' => 'Mã giảm giá đã hết hạn.'], 400);
+                return response()->json(['message' => 'Mã giảm giá đã hết hạn.'], 404);
             } elseif ($order_total < $coupon->minimum_spend) {
-                return response()->json(['error' => 'Số tiền chi tiêu phải lớn hơn hoặc bằng ' . $coupon->minimum_spend . '.'], 400);
+                return response()->json(['message' => 'Số tiền chi tiêu phải lớn hơn hoặc bằng ' . $coupon->minimum_spend . '.'], 404);
             } elseif ($order_total > $coupon->maximum_spend) {
-                return response()->json(['error' => 'Số tiền chi tiêu phải nhỏ hơn hoặc bằng ' . $coupon->maximum_spend . '.'], 400);
+                return response()->json(['message' => 'Số tiền chi tiêu phải nhỏ hơn hoặc bằng ' . $coupon->maximum_spend . '.'], 404);
             } else {
                 // Tính toán giá trị giảm giá
                 if ($coupon->discount_type == 'percent') {
