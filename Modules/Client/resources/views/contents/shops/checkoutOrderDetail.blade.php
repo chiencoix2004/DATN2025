@@ -78,9 +78,10 @@
                                     thực hiện giao dịch.</p>
                             @endif
                             </p>
-                            <button class="btn btn-primary"
-                                onclick="window.location.href='{{ route('wallet.index') }}'">Quay
-                                lại trang chủ</button>
+                            <button class="btn kenne-login_btn"
+                                onclick="window.location.href='{{ route('cart.checkout') }}'">Quay
+                                lại</button>
+
                         </div>
                     </div>
                 @endif
