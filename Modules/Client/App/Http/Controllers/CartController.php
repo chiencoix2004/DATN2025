@@ -200,7 +200,7 @@ class CartController extends Controller
     {
         $coupon = CouponModel::where('code', $request->coupon_code)->first();
         if ($coupon) {
-            $current_date = date('Y-m-d');
+            $current_date = date('Y-m-d H:i:s');
             $order_total = Cart::where('user_id', auth()->id())->first()->total_amount;
             if ($current_date < $coupon->date_start) {
                 return response()->json([
@@ -232,6 +232,8 @@ class CartController extends Controller
 
                 // Kiểm tra số lượng mã giảm giá
                 if ($coupon->quantity > 0) {
+
+                    $discount_value = round($discount_value);
 
                     session(['discount' => $discount_value]);
                     session(['discount_code' => $request->coupon_code]);
@@ -304,16 +306,28 @@ class CartController extends Controller
 
         $coupon = CouponModel::where('code', $discount_code)->first();
         if ($coupon) {
-            $current_date = date('Y-m-d');
-            $order_total = $totalAmount;
+            $current_date = date('Y-m-d H:i:s');
+            $order_total = Cart::where('user_id', $userId)->first()->total_amount;
             if ($current_date < $coupon->date_start) {
-                return response()->json(['error' => 'Mã giảm giá chưa có hiệu lực.'], 400);
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Mã giảm giá chưa có hiệu lực.'
+                ], 200);
             } elseif ($current_date > $coupon->date_end) {
-                return response()->json(['error' => 'Mã giảm giá đã hết hạn.'], 400);
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Mã giảm giá đã hết hạn.'
+                ], 200);
             } elseif ($order_total < $coupon->minimum_spend) {
-                return response()->json(['error' => 'Số tiền chi tiêu phải lớn hơn hoặc bằng ' . $coupon->minimum_spend . '.'], 400);
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Số tiền chi tiêu phải lớn hơn hoặc bằng ' . $coupon->minimum_spend . '.'
+                ], 200);
             } elseif ($order_total > $coupon->maximum_spend) {
-                return response()->json(['error' => 'Số tiền chi tiêu phải nhỏ hơn hoặc bằng ' . $coupon->maximum_spend . '.'], 400);
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Số tiền chi tiêu phải nhỏ hơn hoặc bằng ' . $coupon->maximum_spend . '.'
+                ], 200);
             } else {
                 // Tính toán giá trị giảm giá
                 if ($coupon->discount_type == 'percent') {
@@ -324,10 +338,14 @@ class CartController extends Controller
 
                 // Kiểm tra số lượng mã giảm giá
                 if ($coupon->quantity > 0) {
-                    $totalAmount = $totalAmount - $discount_value;
+                    $discount_value = round($discount_value);
                 }
             }
         }
+
+        $totalAmount = $totalAmount - $discount_value;
+
+        // dd($totalAmount);
 
         // $payment_method = $payment_method == 'cod' ? 'Thanh toán khi nhận hàng' : 'Thanh toán qua thẻ MOMO';
         if ($payment_method == 'vnpay') {
@@ -443,6 +461,10 @@ class CartController extends Controller
         $user_email = $user->email;
         $user_address = $user->address;
 
+        if ($payment_method == 'cod') {
+            $payment_method = 'Thanh toán khi nhận hàng';
+        }
+
         $order = Order::create([
             "users_id" => $userId,
             "user_name" => $user_full_name,
@@ -502,6 +524,13 @@ class CartController extends Controller
         //         ]
         //     ], 500);
         // }
+        return response()->json([
+            $link = route('my-account'),
+            "type" => "success",
+            "message" => "Đặt hàng thành công!",
+            'method' => 'vnpay',
+            "link" => "$link",
+        ], 200);
     }
     public function meanhxuyen()
     {
