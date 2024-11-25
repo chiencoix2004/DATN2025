@@ -6,7 +6,12 @@
         <div class="alert alert-primary" role="alert">
             <p><i class="mdi mdi-alert-circle-outline me-2"></i> Ví tiền đang trong trạng thái xây dựng, chức năng xác thực người đã được tắt</p>
          </div>
-        @if($data->wallet_user_level == 1)
+        @if($data->wallet_status != 1)
+        <div class="alert alert-danger" role="alert">
+           <p> <i class="mdi mdi-block-helper me-2"></i> Ví tiền của bạn đã bị vô hiệu hóa, vui lòng liên hệ đội ngũ hỗ trợ để biết thêm chi tiết</p>
+           <p> {{ $data->admin_note }}</p>
+        </div>
+        @elseif($data->wallet_user_level == 1)
         <div class="alert alert-warning" role="alert">
            <p> <i class="mdi mdi-alert-outline me-2"></i>  Tài khoản của bạn đang ở mức độ xác thực thông tin cơ bản vui lòng <a href="{{ route('wallet.index') }}">cập nhật thông tin cá nhân</a> để nâng cấp tài khoản</p>
            <p> Một số chức năng sẽ không thể sử dụng sau đây</p>
@@ -15,11 +20,6 @@
                 <li> Chuyển tiền</li>
                 <li> Nạp tiền</li>
             </ul>
-        </div>
-        @endif
-        @if($data->wallet_user_level == 2)
-        <div class="alert alert-danger" role="alert">
-           <p> <i class="mdi mdi-block-helper me-2"></i> Ví tiền của bạn đã bị vô hiệu hóa, vui lòng liên hệ đội ngũ hỗ trợ để biết thêm chi tiết</p>
         </div>
         @endif
 

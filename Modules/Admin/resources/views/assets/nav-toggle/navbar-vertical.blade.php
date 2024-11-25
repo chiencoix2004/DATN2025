@@ -155,6 +155,38 @@
                         </div>
                     </a>
                 </li>
+
+                <li class="nav-item">
+                    <div class="row navbar-vertical-label-wrapper mt-3 mb-2">
+                        <div class="col-auto navbar-vertical-label">Ví Tiền</div>
+                        <div class="col ps-0">
+                            <hr class="mb-0 navbar-vertical-divider" />
+                        </div>
+                    </div>
+                    <a class="nav-link" href="{{ route('admin.wallet.list') }}" role="button">
+                        <div class="d-flex align-items-center">
+                            <span class="nav-link-icon">
+                                <span class="fas fa-chart-pie"></span>
+                            </span>
+                            <span class="nav-link-text ps-1">Danh sách yêu cầu rút tiền</span>
+                        </div>
+                        <div class="d-flex align-items-center">
+                            <span class="nav-link-icon">
+                                <span class="fas fa-chart-pie"></span>
+                            </span>
+                            <span class="nav-link-text ps-1">Quản lý ví tiền</span>
+                        </div>
+                        <div class="d-flex align-items-center">
+                            <span class="nav-link-icon">
+                                <span class="fas fa-chart-pie"></span>
+                            </span>
+                            <span class="nav-link-text ps-1">Giao Dịch VNPAY</span>
+                        </div>
+                    </a>
+
+                </li>
+
+
                 <li class="nav-item">
                     <div class="row navbar-vertical-label-wrapper mt-3 mb-2">
                         <div class="col-auto navbar-vertical-label">Quản lý tài khoản</div>

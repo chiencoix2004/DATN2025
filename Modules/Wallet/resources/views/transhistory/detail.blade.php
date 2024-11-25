@@ -28,7 +28,7 @@
             <p class="card-text">Người thụ hưởng: <strong>*****{{ substr($data->first()->bank_account_number, -4) }}</strong></p>
             <p class="card-text">Người nhận: <strong>{{ $data->first()->bank_account_name }}</strong></p>
             <p class="card-text">Mã Ngân hàng: <strong>{{ $data->first()->bank_name }}</strong></p>
-            <p class="card-text">Trạng thái: <strong>@if($data->first()->status == 1) Chờ duyệt @elseif ($data->first()->trx_status == 2) Hoàn thành @elseif ($data->first()->trx_status == 3) Thất Bại @endif</strong></p>
+            <p class="card-text">Trạng thái: <strong>@if($data->first()->status == 1) Chờ duyệt @elseif ($data->first()->status == 2) Hoàn thành @elseif ($data->first()->status == 3) Thất Bại @elseif ($data->first()->status == 4) Bị Giữ Lại @endif</strong></p>
             <p class="card-text">Phản hồi hệ thống: <strong>{{ $data->first()->admin_note }}</strong></p>
             <p class="card-text">Ngày khởi tạo: <strong>{{ $data->first()->request_date }}</strong></p>
             <p class="card-text">Ngày duyệt yêu cầu: <strong>{{ $data->first()->admin_response_date }}</strong></p>
