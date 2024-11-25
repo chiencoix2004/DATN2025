@@ -335,6 +335,14 @@
                                                 </div>
 
                                             </div>
+                                            <div class="row mb-4">
+                                                <h4 class="header-title mb-3">google map</h4>
+                                                
+                                            </div>
+                                            <div class="row mb-4">
+                                                <h4 class="header-title mb-3">trạng thái vận chuyển</h4>
+                                                
+                                            </div>
 
                                         </div>
                                         <div class="row">

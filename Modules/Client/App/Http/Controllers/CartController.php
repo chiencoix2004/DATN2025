@@ -134,11 +134,11 @@ class CartController extends Controller
                 ->with("productVariant.color")
                 ->with("productVariant.product")
                 ->get();
-            
+
             // dd($cartItems->count());
             if ($cartItems->count() == 0) {
                 return response()->json(['message' => 'Giỏ hàng của bạn đang trống!'], 404);
-            }else{
+            } else {
                 return response()->json([
                     'cartItems' => $cartItems,
                     'totalAmount' => $cart->total_amount,
@@ -146,10 +146,7 @@ class CartController extends Controller
                     'discount_code' => session('discount_code') ? session('discount_code') : '',
                     'message' => 'Lấy danh sách giỏ hàng thành công!'
                 ], 200);
-    
             };
-            
-
         } else {
             return response()->json(['message' => 'chưa đăng nhập'], 404);
         }
@@ -206,13 +203,25 @@ class CartController extends Controller
             $current_date = date('Y-m-d');
             $order_total = Cart::where('user_id', auth()->id())->first()->total_amount;
             if ($current_date < $coupon->date_start) {
-                return response()->json(['message' => 'Mã giảm giá chưa có hiệu lực.'], 404);
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Mã giảm giá chưa có hiệu lực.'
+                ], 200);
             } elseif ($current_date > $coupon->date_end) {
-                return response()->json(['message' => 'Mã giảm giá đã hết hạn.'], 404);
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Mã giảm giá đã hết hạn.'
+                ], 200);
             } elseif ($order_total < $coupon->minimum_spend) {
-                return response()->json(['message' => 'Số tiền chi tiêu phải lớn hơn hoặc bằng ' . $coupon->minimum_spend . '.'], 404);
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Số tiền chi tiêu phải lớn hơn hoặc bằng ' . $coupon->minimum_spend . '.'
+                ], 200);
             } elseif ($order_total > $coupon->maximum_spend) {
-                return response()->json(['message' => 'Số tiền chi tiêu phải nhỏ hơn hoặc bằng ' . $coupon->maximum_spend . '.'], 404);
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Số tiền chi tiêu phải nhỏ hơn hoặc bằng ' . $coupon->maximum_spend . '.'
+                ], 200);
             } else {
                 // Tính toán giá trị giảm giá
                 if ($coupon->discount_type == 'percent') {
@@ -228,10 +237,11 @@ class CartController extends Controller
                     session(['discount_code' => $request->coupon_code]);
 
                     return response()->json([
-                        'success' => 'Áp dụng mã giảm giá thành công!',
+                        'success' => true,
+                        'message' => 'Áp dụng mã giảm giá thành công!',
                     ], 200);
                 } else {
-                    return response()->json(['error' => 'Mã giảm giá đã sử dụng hết.'], 400);
+                    return response()->json(['error' => 'Mã giảm giá đã sử dụng hết.'], 200);
                 }
             }
         } else {
@@ -544,13 +554,12 @@ class CartController extends Controller
             //     $cart->delete();
             // }
             // dd($returndata);
-            return view('client::contents.shops.checkoutOrderDetail', compact('returndata', 'orderItems','order'));
+            return view('client::contents.shops.checkoutOrderDetail', compact('returndata', 'orderItems', 'order'));
         } else {
             $order = Order::query()->with('orderDetails')->find($order_id);
             $order->orderDetails()->forceDelete();
             $order->forceDelete();
             return view('client::contents.shops.checkoutOrderDetail', compact('returndata'));
-
         }
     }
     /**
@@ -592,5 +601,4 @@ class CartController extends Controller
     {
         //
     }
-
 }
