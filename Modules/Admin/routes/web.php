@@ -75,8 +75,7 @@ Route::prefix('admin')
                 Route::put('update', 'update')->name('update'); // Corrected Route::
                 Route::get('delete/{id}', 'delete')->name('delete');
                 Route::post('add', 'add')->name('add');
-            });
-
+        });
         // Route quản lý categories
         Route::controller(CategoryController::class)->prefix('categories')->as('categories.')->group(function () {
             Route::get('list', 'listCategories')->name('list');
@@ -89,10 +88,18 @@ Route::prefix('admin')
         });
 
 
-
+        //walelt
 
         Route::controller(WalletController::class)->prefix('wallet')->as('wallet.')->group(function (){
             Route::get('list-withdraw', 'index')->name('list');
+            Route::get('withdraw/{id}', 'withdraw')->name('withdraw');
+            Route::post('update-withdraw', 'updatepost')->name('updateupdatepost');
+            Route::post('lock-wallet', 'lockwallet')->name('lockwallet');
+            Route::post('holdback', 'holdback')->name('holdback');
+            Route::get('list-wallet', 'listallwallet')->name('listallwallet');
+            Route::get('wallet-info/{id}', 'walletinfo')->name('walletinfo');
+
+
         });
 
 
