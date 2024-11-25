@@ -110,7 +110,7 @@
         <script>
             Swal.fire({
                 title: "Gửi mail thất bại",
-                text: "vui lòng thử lại",
+                text: "{{ session('error') }}",
                 icon: "error"
             });
         </script>

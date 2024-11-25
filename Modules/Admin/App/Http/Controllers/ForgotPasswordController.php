@@ -29,18 +29,26 @@ class ForgotPasswordController extends Controller
     {
         
         $request->validate(['email' => 'required|email']);
+
+        $user = User::where('email', $request->email)->first();
+
+        if ($user->roles_id != 2) {
+            $status = Password::sendResetLink($request->only('email'));
         
-        $status = Password::sendResetLink($request->only('email'));
-        
-        if ($status === Password::RESET_LINK_SENT) {
-            return redirect()->route('admin.confirm.mail')
-                ->with([
-                    'success' => 'Liên kết đặt lại mật khẩu đã được gửi đến email của bạn.',
-                    'email' => $request->email
-                ]);
-        } else {
-            return redirect()->back()->with('error','Đã xảy ra lỗi, vui lòng thử lại sau.');
+            if ($status === Password::RESET_LINK_SENT) {
+                return redirect()->route('admin.confirm.mail')
+                    ->with([
+                        'success' => 'Liên kết đặt lại mật khẩu đã được gửi đến email của bạn.',
+                        'email' => $request->email
+                    ]);
+            } else {
+                return redirect()->back()->with('error','Đã xảy ra lỗi, vui lòng thử lại sau.');
+            }
+        }else{
+            return redirect()->back()->with('error','Email không tồn tại trong hệ thống.');
         }
+        
+       
     }
     public function resetPassword(Request $request, $token)
     {
