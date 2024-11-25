@@ -297,14 +297,15 @@
                         },
                         success: function(response) {
                             if (response.success) {
-                                alert("Áp dụng mã giảm giá thành công!");
+                                // alert("Áp dụng mã giảm giá thành công!");
+                                alert(response.message);
                                 updateCartTotal(); // Cập nhật tổng tiền giỏ hàng
                             } else {
                                 alert(response.message);
                             }
                         },
-                        error: function(jqXHR, textStatus, errorThrown,response) {
-                            alert('Lỗi khi áp dụng mã giảm giá:');
+                        error: function(jqXHR, textStatus, errorThrown) {
+                            console.error("Lỗi khi áp dụng mã giảm giá:", textStatus, errorThrown);
                         }
                     });
                 } else {
