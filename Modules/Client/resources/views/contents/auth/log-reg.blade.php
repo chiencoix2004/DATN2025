@@ -57,10 +57,21 @@
                                 </div>
 
                                 <div class="col-md-12 d-flex justify-content-between align-items-center">
-                                    <button class="kenne-login_btn">Đăng nhập</button>
-                                    <h6 style="margin-top: 20px;">- hoặc đăng nhập với -</h6>
-                                    <a href="{{ route('auth.google') }}" class="a-register_btn">Google</a>
+                                    <div class="col-md-12">
+                                        <div class="d-flex justify-content-center gap-2">
+                                            <button class="btn kenne-register_btn w-100" type="submit">Đăng nhập</button>
+                                            <a href="{{ route('auth.google') }}" class="btn a-register_btn w-100">
+                                                <i class="ri-google-fill me-1"></i> Google
+                                            </a>
+                                        </div>
+                                    
+                                        <div class="mt-4 text-center">
+                                            <p class="mb-0">Bạn chưa có tài khoản rồi <a href="{{ route('formReg') }}"
+                                                    class="fw-semibold text-primary text-decoration-underline"> Đăng ký </a> </p>
+                                        </div>
+                                    </div>
                                 </div>
+                                
 
                             </div>
                         </div>
