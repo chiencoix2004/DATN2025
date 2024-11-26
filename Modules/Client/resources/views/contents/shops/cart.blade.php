@@ -128,11 +128,15 @@
             function displayCartItems(cartItems) {
                 $('#cart-table-body').empty(); // Xóa nội dung cũ của bảng giỏ hàng
                 cartItems.forEach(function(item) {
+                    var imgURL = item.product_image;
+                    if (!imgURL.includes('http')) {
+                        imgURL = `{{ Storage::url('${ item.product_image}') }}`;
+                    }
                     var row = `
                 <tr>
                     <td class="kenne-product-thumbnail">
                         <a href="javascript:void(0)">
-                            <img src="{{ Storage::url('${ item.product_image}') }}" alt="${item.product_id} Thumbnail" width="80" height="160">
+                            <img src="${imgURL}" alt="${item.product_id} Thumbnail" width="160">
                         </a>
                     </td>
                     <td class="kenne-product-name">
