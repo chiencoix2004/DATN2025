@@ -62,6 +62,7 @@ class CartController extends Controller
             if ($cartItem) {
                 $productVariant = ProductVariant::find($productVariantId);
                 if ($productVariant) {
+                    $price = 0;
                     $current_date = now();
                     $price_sale = $productVariant->price_sale;
                     $start_date = $productVariant->start_date;
@@ -79,10 +80,33 @@ class CartController extends Controller
                     } elseif ($price_sale === null && $start_date === null && $end_date === null) {
                         $price = $price_default; // Không có giá khuyến mãi, trả về giá mặc định
                     };
+
+                    if ($price_sale === null && $price_default === null && $start_date === null && $end_date === null) {
+                        $product = Product::find($productId);
+                        $current_date = now();
+                        $product_price_sale = $product->price_sale;
+                        $product_start_date = $product->start_date;
+                        $product_end_date = $product->end_date;
+                        $product_price_default = $product->price_regular;
+
+                        if ($product_price_sale !== null && $product_start_date !== null && $product_end_date !== null) {
+                            // Kiểm tra xem thời gian hiện tại có nằm trong khoảng thời gian khuyến mãi không
+                            if ($current_date >= $product_start_date && $current_date <= $product_end_date) {
+                                $price = $product_price_sale; // Trong khoảng thời gian khuyến mãi
+                            } else {
+                                $price = $product_price_default; // Không trong khoảng thời gian khuyến mãi
+                            }
+                        } elseif ($product_price_sale !== null && $product_start_date === null && $product_end_date === null) {
+                            $price = $product_price_sale; // Không có thời gian, chỉ có giá khuyến mãi
+                        } elseif ($product_price_sale === null && $product_start_date === null && $product_end_date === null) {
+                            $price = $product_price_default; // Không có giá khuyến mãi, trả về giá mặc định
+                        };
+
+                    };
+
                     if ($price !== null) {
                         $cartItem->price = $price;
-                        $cartItem->total_price = $cartItem->quantity * $price;
-                        $cartItem->product_image = $product_image;
+                        $cartItem->price_total = $cartItem->quantity * $price;
                         $cartItem->save();
                     };
                 }
@@ -91,6 +115,7 @@ class CartController extends Controller
             foreach ($listCartItem as $item) {
                 $productVariant = ProductVariant::find($item->product_variant_id);
                 if ($productVariant) {
+                    $price = 0;
                     $current_date = now();
                     $price_sale = $productVariant->price_sale;
                     $start_date = $productVariant->start_date;
@@ -108,6 +133,30 @@ class CartController extends Controller
                     } elseif ($price_sale === null && $start_date === null && $end_date === null) {
                         $price = $price_default; // Không có giá khuyến mãi, trả về giá mặc định
                     };
+
+                    if ($price_sale === null && $price_default === null && $start_date === null && $end_date === null) {
+                        $product = Product::find($item->product_id);
+                        $current_date = now();
+                        $product_price_sale = $product->price_sale;
+                        $product_start_date = $product->start_date;
+                        $product_end_date = $product->end_date;
+                        $product_price_default = $product->price_regular;
+
+                        if ($product_price_sale !== null && $product_start_date !== null && $product_end_date !== null) {
+                            // Kiểm tra xem thời gian hiện tại có nằm trong khoảng thời gian khuyến mãi không
+                            if ($current_date >= $product_start_date && $current_date <= $product_end_date) {
+                                $price = $product_price_sale; // Trong khoảng thời gian khuyến mãi
+                            } else {
+                                $price = $product_price_default; // Không trong khoảng thời gian khuyến mãi
+                            }
+                        } elseif ($product_price_sale !== null && $product_start_date === null && $product_end_date === null) {
+                            $price = $product_price_sale; // Không có thời gian, chỉ có giá khuyến mãi
+                        } elseif ($product_price_sale === null && $product_start_date === null && $product_end_date === null) {
+                            $price = $product_price_default; // Không có giá khuyến mãi, trả về giá mặc định
+                        };
+
+                    };
+
                     if ($price !== null) {
                         $total_amount += $item->quantity * $price;
                     };
@@ -115,8 +164,10 @@ class CartController extends Controller
             }
             $cart->total_amount = $total_amount;
             $cart->save();
+            return response()->json(['message' => 'Thêm vào giỏ hàng thành công!'], 200);
+        } else {
+            return response()->json(['message' => 'bạn chưa đăng nhập!'], 200);
         }
-        return response()->json(['message' => 'Thêm vào giỏ hàng thành công!'], 200);
     }
 
     public function index()
