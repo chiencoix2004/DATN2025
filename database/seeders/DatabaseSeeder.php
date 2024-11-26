@@ -15,18 +15,20 @@ class DatabaseSeeder extends Seeder
         $this->call([
             RoleSeeder::class,
             CategorySeeder::class,
+            SubCategorySeeder::class,
             UserSeeder::class,
             CouponSeeder::class,
             BannerSeeder::class,
             ProductSeeder::class,
             CommentSeeder::class,
             OrderSeeder::class,
+            ColorAttributesSeeder::class,
+            SizeAttributeSeeder::class,
+            ProductVariantSeeder::class,
             OrderDetailSeeder::class,
             NotificationSeeder::class,
+            PostsTableSeeder::class,
             // ProductImageSeeder::class,
-            // ColorAttributesSeeder::class,
-            // SizeAttributeSeeder::class,
-            // ProductVariantSeeder::class,
             // VariantValueSeeder::class
         ]);
     }

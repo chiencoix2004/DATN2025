@@ -2,6 +2,9 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use Modules\Client\App\Http\Controllers\CartController;
+use Modules\Client\App\Http\Controllers\ClientController;
+
 
 /*
     |--------------------------------------------------------------------------
@@ -16,4 +19,15 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware(['auth:sanctum'])->prefix('v1')->name('api.')->group(function () {
     Route::get('client', fn (Request $request) => $request->user())->name('client');
+
 });
+Route::get('v1/meanhxuyen', [CartController::class, 'meanhxuyen'])
+->name('meanhxuyen');
+Route::post('/cart/checkout', [CartController::class, 'checkout'])->name('checkout');
+
+
+Route::controller(ClientController::class)->group(function () {
+    Route::post('v1/hintseach', 'seachhint')->name('seachhint');
+});
+
+

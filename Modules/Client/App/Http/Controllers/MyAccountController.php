@@ -5,18 +5,19 @@ namespace Modules\Client\App\Http\Controllers;
 
 use App\Models\Order;
 use Barryvdh\DomPDF\PDF;
+use App\Models\OrderDetail;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Carbon;
 use App\Models\OrderDetailModel;
 use App\Http\Controllers\Controller;
-use Barryvdh\DomPDF\Facade\Pdf as FacadePdf;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
+use Barryvdh\DomPDF\Facade\Pdf as FacadePdf;
 
 class MyAccountController extends Controller
 {
@@ -24,7 +25,7 @@ class MyAccountController extends Controller
      * Display a listing of the resource.
      */
     public function index()
-    {           
+    {
         $user = Auth::user();
         return view('client::contents.auth.my-account', compact('user'));
     }
@@ -39,7 +40,7 @@ class MyAccountController extends Controller
         $formattedOrders = $orders->getCollection()->map(function ($order) {
 
             $items_count = OrderDetailModel::where('order_id', $order->id)->count();
-            $total_price = OrderDetailModel::where('order_id', $order->id)->sum('product_price_final');
+            $total_price = $order->total_price;
             return [
                 'id' => $order->id,
                 'date' => $order->date_create_order ? Carbon::parse($order->date_create_order)->format('d-m-Y') : null,
@@ -62,15 +63,24 @@ class MyAccountController extends Controller
 
     public function getOrderDetails($id)
     {
-        $order = Order::with('orderItems')->where('users_id',auth()->id())->findOrFail($id);
+        $order = Order::query()->where('users_id', auth()->id())->findOrFail($id);
+        $orderItems = OrderDetail::query()
+            ->with('productVariant')
+            ->with("productVariant.size")
+            ->with("productVariant.color")
+            ->with("productVariant.product")
+            ->where('order_id', $order->id)->get();
+
         return response()->json([
             'id' => $order->id,
             'user_note' => $order->user_note,
             'status' => $order->status_order,
-            'items' => $order->orderItems->map(function ($item) {
+            'items' => $orderItems->map(function ($item) {
                 return [
                     'name' => $item->product_name,
                     'image' => $item->product_avatar,
+                    'size' => $item->productVariant->size->size_value,
+                    'color' => $item->productVariant->color->color_value,
                     'quantity' => $item->product_quantity,
                     'price' => number_format($item->product_price_final, 2),
                     'total' => number_format($item->product_quantity * $item->product_price_final, 2)
@@ -236,52 +246,48 @@ class MyAccountController extends Controller
             'phone.regex' => 'Số điện thoại phải là dãy số hợp lệ.',
             'phone.max' => 'Số điện thoại không được vượt quá 15 ký tự.',
         ];
-    
+
         $rules = [
             'full_name' => 'required|string|max:255',
             'address' => 'nullable|string|max:255',
             'phone' => 'required|regex:/^\d{10,15}$/|max:15',
         ];
-    
+
         if ($request->new_password != null || $request->current_password != null) {
             $rules['current_password'] = 'required';
             $rules['new_password'] = 'required|string|min:8|confirmed|regex:/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&#])[A-Za-z\d@$!%*?&#]{8,}$/';
             $rules['new_password_confirmation'] = 'required_with:new_password|same:new_password';
         }
-    
+
         $validator = Validator::make($request->all(), $rules, $messages);
-    
+
         if ($validator->fails()) {
             return response()->json(['errors' => $validator->errors()], 422);
         }
-    
+
         $user = Auth::user();
-    
+
         if ($request->new_password != null && !Hash::check($request->current_password, $user->password)) {
             return response()->json(['error' => 'Mật khẩu cũ không đúng.'], 400);
         }
-    
+
         if ($request->new_password != null) {
             $user->password = Hash::make($request->new_password);
         }
         $user->full_name = $request->full_name;
         $user->phone = $request->phone;
-    
+
         if ($request->filled('address')) {
             $user->address = $request->address;
         }
-    
+
         $user->save();
-    
+
         return response()->json(['success' => true, 'message' => 'Thông tin đã được cập nhật thành công.']);
     }
-    
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy($id)
+    public function logout()
     {
-        //
+        auth()->logout();
+        return redirect()->route('index');
     }
 }

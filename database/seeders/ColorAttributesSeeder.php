@@ -14,7 +14,18 @@ class ColorAttributesSeeder extends Seeder
      */
     public function run(): void
     {
-        $colors = ['Đỏ', 'Xanh', 'Vàng', 'Trắng', 'Đen', 'Cam', 'Tím', 'Hồng', 'Xám', 'Nâu'];
+        $colors = [
+            '#FF0000', // Đỏ
+            '#0000FF', // Xanh
+            '#FFFF00', // Vàng
+            '#FFFFFF', // Trắng
+            '#000000', // Đen
+            '#FFA500', // Cam
+            '#800080', // Tím
+            '#FFC0CB', // Hồng
+            '#808080', // Xám
+            '#A52A2A'  // Nâu
+        ];
         foreach ($colors as $color) {
             DB::table('color_attributes')->insert([
                 'color_value' => $color

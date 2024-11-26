@@ -112,8 +112,11 @@ class ShopController extends Controller
                 ->orderBy('comment_date', 'desc')
                 ->get();
 
-            // Trả về view cùng dữ liệu sản phẩm và comment
-            return view('client::contents.shops.productDetail', compact('data', 'comments'));
+
+            $realedProducts = Product::query()->where(['sub_category_id' => $data->sub_category_id])->where('id', '!=', $data->id)->get();
+            // dd($realedProducts);
+            return view('client::contents.shops.productDetail', compact('data', 'realedProducts','comments'));
+
         } else {
             return abort(404);
         }

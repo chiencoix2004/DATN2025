@@ -1,25 +1,24 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use Modules\Admin\App\Http\Controllers\AccountController;
-use Modules\Admin\App\Http\Controllers\AttributeController;
-use Modules\Admin\App\Http\Controllers\BannerController;
-use Modules\Admin\App\Http\Controllers\CategoryController;
-use Modules\Admin\App\Http\Controllers\ForgotPasswordController;
-use Modules\Admin\App\Http\Controllers\InvoiceController;
-use Modules\Admin\App\Http\Controllers\NotificationController;
-use Modules\Admin\App\Http\Controllers\OrderController;
-use Modules\Admin\App\Http\Controllers\PostController;
-use Modules\Admin\App\Http\Controllers\ProductController;
-use Modules\Admin\App\Http\Controllers\CouponController;
-use Modules\Admin\App\Http\Controllers\AdminController;
-use Modules\Admin\App\Http\Controllers\AuthenticateController;
-use Modules\Admin\App\Http\Controllers\StatisticalController;
 use Modules\Admin\App\Http\Controllers\TagController;
-use Modules\Admin\App\Http\Controllers\CommentController;
+use Modules\Admin\App\Http\Controllers\PostController;
 use Modules\Admin\App\Http\Controllers\UserController;
-//use Modules\Admin\App\Http\Controllers\SupportController;
+use Modules\Admin\App\Http\Controllers\AdminController;
+use Modules\Admin\App\Http\Controllers\OrderController;
+use Modules\Admin\App\Http\Controllers\BannerController;
+use Modules\Admin\App\Http\Controllers\CouponController;
+use Modules\Admin\App\Http\Controllers\AccountController;
+use Modules\Admin\App\Http\Controllers\CommentController;
+use Modules\Admin\App\Http\Controllers\InvoiceController;
+use Modules\Admin\App\Http\Controllers\ProductController;
 use Modules\Admin\App\Http\Controllers\SupportController;
+use Modules\Admin\App\Http\Controllers\CategoryController;
+use Modules\Admin\App\Http\Controllers\AttributeController;
+use Modules\Admin\App\Http\Controllers\StatisticalController;
+use Modules\Admin\App\Http\Controllers\AuthenticateController;
+use Modules\Admin\App\Http\Controllers\NotificationController;
+use Modules\Admin\App\Http\Controllers\ForgotPasswordController;
 
 /*
 |--------------------------------------------------------------------------
@@ -35,6 +34,7 @@ use Modules\Admin\App\Http\Controllers\SupportController;
 // Route::group([], function () {
 //     Route::resource('admin', AdminController::class)->names('admin');
 // });
+
 
 
 
@@ -58,7 +58,7 @@ Route::get('admin-confirm-mail', [ForgotPasswordController::class, 'confirmMail'
 
 Route::prefix('admin')
     ->as('admin.')
-    // ->middleware('CheckAdmin')
+    ->middleware('CheckAdmin')
     ->group(function () {
         Route::get('/', function () {
             return view('admin::contents.dashboard');
@@ -70,21 +70,24 @@ Route::prefix('admin')
         Route::controller(BannerController::class)
             ->prefix('banner')->as('banner.')
             ->group(function () {
+                Route::get('slider', 'slider')->name('slider');
                 Route::get('list', 'index')->name('list');
-                Route::put('update', 'update')->name('update'); // Corrected Route::
+                Route::put('update/{banner}', 'update')->name('update'); // Corrected Route::
                 Route::get('delete/{id}', 'delete')->name('delete');
-                Route::post('add', 'add')->name('add');
+                Route::post('add/{position}', 'add')->name('add');
             });
 
         // Route quản lý categories
         Route::controller(CategoryController::class)->prefix('categories')->as('categories.')->group(function () {
             Route::get('list', 'listCategories')->name('list');
-            Route::get('create', 'create')->name('create');
-            Route::post('store', 'store')->name('store');
-            Route::get('/{id}/show', 'show')->name('show');
-            Route::get('/{id}/edit', 'edit')->name('edit');
-            Route::put('{id}/update', 'update')->name('update'); // Corrected Route::
-            Route::delete('/{id}/destroy', 'destroy')->name('destroy');
+            Route::get('edit-pl/{slug}', 'edit_pl')->name('edit_pl');
+            Route::get('edit-dm/{slug}', 'edit_dm')->name('edit_dm');
+            Route::post('add-phan-loai', 'phan_loai')->name('them_pl');
+            Route::post('add-danh-muc', 'danh_muc')->name('them_dm');
+            Route::put('update-pl/{category}', 'update_pl')->name('update_pl');
+            Route::put('update-danh-muc/{subCategory}', 'update_dm')->name('update_dm');
+            Route::delete('delete-danh-muc/{category}', 'destroy')->name('delete_pl');
+            Route::delete('delete-sub-danh-muc/{subCategory}', 'destroySub')->name('delete_dm');
         });
 
         // Route quản lý products
@@ -103,16 +106,14 @@ Route::prefix('admin')
             Route::get('listTrashed', 'trashed')->name('listTrashed');
             Route::get('restore-all', 'restoreAll')->name('restoreAll');
         });
-
-
         // Route quản lý comment
         Route::controller(CommentController::class)->prefix('comment')->as('comment.')->group(function () {
             Route::get('listComment', 'listComment')->name('listComment');
             Route::get('/{id}/editComment', 'editComment')->name('editComment');
             Route::put('{id}updateComment', 'updateComment')->name('updateComment');
             Route::post('bulk-action', 'bulkAction')->name('bulkAction');
-        });
 
+        });
 
         // Route quản lý attributes
         Route::controller(AttributeController::class)->prefix('attributes')->as('attributes.')->group(function () {
@@ -141,12 +142,33 @@ Route::prefix('admin')
         // Route quản lý in hóa đơn
         Route::controller(InvoiceController::class)->prefix('invoice')->as('invoice.')->group(function () {
             Route::get('{order}/savePDF', 'savePDF')->name('save');
-            Route::get('list', 'listPDF')->name('list');
             Route::post('bulkActions', 'bulkActions')->name('bulkActions');
         });
 
-        // Route quản lý coupons
+        // thống kê
+        Route::controller(StatisticalController::class)->prefix('statistical')->as('statistical.')->group(function () {
+            Route::get('listStatistical', 'index')->name('listStatistical');
+            Route::get('statisticalOrder', 'order')->name('statisticalOrder');
+            Route::get('staticticalRevenue', 'revenue')->name('staticticalRevenue');
+            Route::get('staticticalSuccess', 'success')->name('staticticalSuccess');
+            Route::get('export', 'export')->name('export');
+        });
 
+        // Route quản lý accounts
+        Route::controller(AccountController::class)->prefix('accounts')->as('accounts.')->group(function () {
+            Route::get('/', 'index')->name('index');
+            Route::get('create', 'create')->name('create');
+            Route::post('store', 'store')->name('store');
+            Route::get('/{id}/show', 'show')->name('show');
+            Route::get('/{id}/edit', 'edit')->name('edit');
+            Route::put('{id}/update', 'update')->name('update');
+        });
+
+        // Route quản lý users
+        // Route::controller(AccountController::class)->prefix('account')->as('account.')->group(function(){
+        //     Route::get('listAcc', 'listAccounts')->name('list');
+        // });
+    
         // thống kê
         Route::controller(StatisticalController::class)->prefix('statistical')->as('statistical.')->group(function () {
             Route::get('listStatistical', 'index')->name('listStatistical');
@@ -170,46 +192,33 @@ Route::prefix('admin')
                 // Route::delete('/{id}/destroy', 'destroy')->name('destroy');
             });
 
-        // Route quản lý tài khoản
-        Route::controller(AccountController::class)
-            ->prefix('accounts')
-            ->as('accounts.')
-            ->group(function () {
-                Route::get('/', 'index')->name('index');
-                Route::get('create', 'create')->name('create');
-                Route::post('store', 'store')->name('store');
-                Route::get('/{id}/show', 'show')->name('show');
-                Route::get('/{id}/edit', 'edit')->name('edit');
-                Route::put('{id}/update', 'update')->name('update');
-                // Route::delete('/{id}/destroy', 'destroy')->name('destroy');
-            });
-
         // Route quản lý tài khoản khách hàng
         Route::controller(UserController::class)
             ->prefix('users')
             ->as('users.')
             ->group(function () {
-                Route::get('/', 'index')->name('index');
-                // Route::get('create', 'create')->name('create');
-                // Route::post('store', 'store')->name('store');
-                Route::get('/{id}/show', 'show')->name('show');
-                Route::put('{id}/updateStatus', 'updateStatus')->name('updateStatus');
-                // Route::get('/{id}/edit', 'edit')->name('edit');
-                // Route::put('{id}/update', 'update')->name('update');
-                // Route::delete('/{id}/destroy', 'destroy')->name('destroy');
-            });
+            Route::get('/', 'index')->name('index');
+            // Route::get('create', 'create')->name('create');
+            // Route::post('store', 'store')->name('store');
+            Route::get('/{id}/show', 'show')->name('show');
+            Route::put('{id}/updateStatus', 'updateStatus')->name('updateStatus');
+            // Route::get('/{id}/edit', 'edit')->name('edit');
+            // Route::put('{id}/update', 'update')->name('update');
+            // Route::delete('/{id}/destroy', 'destroy')->name('destroy');
+        });
 
         // Route quản lý posts
         Route::controller(PostController::class)->prefix('posts')->as('posts.')
             ->group(function () {
-                Route::get('list', 'listPost')->name('list');
-                Route::get('create', 'create')->name('create');
-                Route::post('store', 'store')->name('store');
-                Route::get('/{id}/show', 'show')->name('show');
-                Route::get('/{id}/edit', 'edit')->name('edit');
-                Route::put('{id}update', 'update')->name('update');
-                Route::delete('/{id}/destroy', 'destroy')->name('destroy');
-            });
+            // Route::get('formPost', 'showForm')->name('show_form');
+            Route::get('list', 'index')->name('list');
+            Route::get('create', 'create')->name('create');
+            Route::post('store', 'store')->name('store');
+            Route::get('/show/{slug}', 'show')->name('showPost');
+            Route::get('/edit/{slug}', 'edit')->name('editPost');
+            Route::put('{id}update', 'update')->name('update');
+            Route::delete('/{id}/destroy', 'destroy')->name('destroy');
+        });
         Route::controller(SupportController::class)
             ->prefix('tickets')
             ->as('ticket.')

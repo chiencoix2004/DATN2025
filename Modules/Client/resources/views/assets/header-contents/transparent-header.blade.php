@@ -92,14 +92,7 @@
                                         </li>
                                     </ul> --}}
                                 </li>
-                                <li>
-                                    <a href="javascript:void(0)">Blog <i class="ion-chevron-down"></i></a>
-                                    <ul class="kenne-dropdown">
-                                        <li><a href="blog-grid_view.html">Grid View</a></li>
-                                        <li><a href="blog-list_view.html">List View</a></li>
-                                        <li><a href="blog-details.html">Blog Details</a></li>
-                                    </ul>
-                                </li>
+                                <li><a href="{{ route('other.posts.index') }}">Tin tức</a></li>
                                 <li><a href="{{ route('other.contactUs') }}">Liên hệ</a></li>
                                 <li><a href="{{ route('other.aboutUs') }}">Giới thiệu</a></li>
                             </ul>
@@ -115,7 +108,7 @@
                             <li class="minicart-wrap">
                                 <a href="#miniCart" class="minicart-btn toolbar-btn">
                                     <div class="minicart-count_area">
-                                        <span class="item-count">03</span>
+                                        <span class="item-count">0</span>
                                         <i class="ion-bag"></i>
                                     </div>
                                 </a>

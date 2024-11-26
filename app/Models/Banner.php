@@ -27,7 +27,7 @@ class Banner extends Model
     {
         return $this->all();
     }
-
+    
     public function Addbanner( $image, $link, $banner_position, $offer_text, $title, $description)
     {
         return $this->insert([

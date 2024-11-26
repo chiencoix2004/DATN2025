@@ -94,8 +94,8 @@ img {
 }
 
 .img-full {
-  width: 100%;
-  height: 100%;
+  width: 150px;
+  height: 75px;
   overflow: hidden;
   display: block;
 }
@@ -7118,6 +7118,7 @@ i, .tab-content .tab-pane.active, .scroll-to-top i, .quantity .cart-plus-minus >
   display: -webkit-flex !important;
   display: -ms-flexbox !important;
   display: flex !important;
+  margin-bottom: 0.5cm;
 }
 
 @media (max-width: 479px) {
@@ -7127,19 +7128,25 @@ i, .tab-content .tab-pane.active, .scroll-to-top i, .quantity .cart-plus-minus >
 }
 
 .latest-blog_area-2 .blog-item .blog-img {
-  height: 100%;
-  width: 100%;
+  width: 300px;
+  height: 150px;
+  object-fit: cover;
 }
 
 .latest-blog_area-2 .blog-item .blog-content {
   text-align: left;
   padding-left: 25px;
+  max-width: 550px; /* Giới hạn chiều dài tối đa */
+  overflow: hidden; /* Ẩn phần nội dung tràn ra ngoài */
+  text-overflow: ellipsis; /* Thêm dấu "..." nếu nội dung vượt quá */
+  white-space: nowrap; /* Giữ nội dung trên một dòng */
 }
 
-@media (max-width: 479px) {
+@media (max-width: 500px) {
   .latest-blog_area-2 .blog-item .blog-content {
     padding-left: 0;
     padding-top: 25px;
+    max-width: 100%; /* Trả về full chiều rộng trên màn hình nhỏ */
   }
 }
 

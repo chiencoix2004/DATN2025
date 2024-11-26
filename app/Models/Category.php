@@ -13,12 +13,14 @@ class Category extends Model
     protected $fillable = [
         'name',
         'slug',
-        'image_cover',
         'note',
-        'parent_id',
-
+        'image_cover',
     ];
 
     public $timestamp = false;
     protected $dates = ['deleted_at'];
+    public function sub_category()
+    {
+        return $this->hasMany(SubCategory::class);
+    }
 }

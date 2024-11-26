@@ -24,6 +24,9 @@ class AttributeController extends Controller
     public function addAttr(Request $request)
     {
         $values = $request->values;
+        if ($values == null) {
+            return redirect()->back()->with(['error' => 'Chưa thêm giá trị thuộc tính, mời kiểm tra lại!']);
+        }
         if (!empty(array_filter($values, fn($value) => empty ($value)))) {
             return redirect()->back()->with(['error' => 'Một số giá trị thuộc tính trống, mời kiểm tra lại!']);
         }

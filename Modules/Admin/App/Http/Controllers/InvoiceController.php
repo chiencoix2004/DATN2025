@@ -59,16 +59,21 @@ class InvoiceController extends Controller
                 // Trả về file zip để tải xuống
                 return response()->download($zipPath)->deleteFileAfterSend(true);
             }
+            $status = Order::STATUS_ORDER;
             if ($request->slAction == 'confirmed') {
-                $orders = Order::query()->whereIn('id', $request->idOrder)->get();
-                foreach ($orders as $data) {
-                    $data->update(['status_order' => Order::STATUS_ORDER['confirmed']]);
+                foreach ($request->idOrder as $id) {
+                    $data = Order::query()->find($id);
+                    if ($data->status_order != $status['confirmed'] && $data->status_order && $status['shipping'] && $data->status_order != $status['received'] && $data->status_order != $status['canceled']) {
+                        $data->update(['status_order' => $status['confirmed']]);
+                    }
                 }
             }
             if ($request->slAction == 'shipping') {
-                $orders = Order::query()->whereIn('id', $request->idOrder)->get();
-                foreach ($orders as $data) {
-                    $data->update(['status_order' => Order::STATUS_ORDER['shipping']]);
+                foreach ($request->idOrder as $id) {
+                    $data = Order::query()->find($id);
+                    if ($data->status_order == $status['confirmed']) {
+                        $data->update(['status_order' => $status['shipping']]);
+                    }
                 }
             }
         } else {
@@ -89,41 +94,5 @@ class InvoiceController extends Controller
         $fileName = 'invoice-' . $data->id . '-' . Str::slug($data->user_name) . "-$date" . '.pdf';
         return $pdf->download($fileName);
         // return view('admin::contents.orders.invoices.view', compact('data'));
-    }
-    public function listPDF()
-    {
-        $directoryPath = storage_path('app/public/invoices');
-        if (!File::exists($directoryPath)) {
-            return view('admin::contents.error-404', ['error' => 'Thư mục tìm kiếm không tồn tại!']);
-        }
-        $files = File::files($directoryPath);
-        if (empty($files)) {
-            return redirect()->route('admin.orders.list')->with('error', 'Danh sách hóa đơn hiện trống!');
-        }
-        $fileData = [];
-        foreach ($files as $file) {
-            $fileData[] = [
-                'name' => $file->getFilename(), // Tên file
-                'size' => $file->getSize(), // Dung lượng file
-            ];
-        }
-        // Số lượng file mỗi trang
-        $perPage = 10;
-        // Lấy trang hiện tại từ URL (nếu không có trang nào, sẽ là 1)
-        $currentPage = LengthAwarePaginator::resolveCurrentPage();
-        // Tạo một collection từ dữ liệu file
-        $fileCollection = collect($fileData);
-        // Lấy các file cho trang hiện tại
-        $currentPageFiles = $fileCollection->slice(($currentPage - 1) * $perPage, $perPage)->all();
-        // Tạo đối tượng LengthAwarePaginator
-        $paginatedFiles = new LengthAwarePaginator(
-            $currentPageFiles, // Các file trong trang hiện tại
-            count($fileCollection), // Tổng số file
-            $perPage, // Số lượng file mỗi trang
-            $currentPage, // Trang hiện tại
-            ['path' => url()->current()] // Đường dẫn hiện tại để phân trang
-        );
-
-        return view('admin::contents.orders.invoices.listInvoices', compact('paginatedFiles'));
     }
 }

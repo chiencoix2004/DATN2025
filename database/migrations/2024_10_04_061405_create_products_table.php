@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Category;
+use App\Models\SubCategory;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -14,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('products', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(Category::class)->nullable()->constrained()->nullOnDelete()->cascadeOnUpdate();
+            $table->foreignIdFor(SubCategory::class)->nullable()->constrained()->nullOnDelete()->cascadeOnUpdate();
             $table->string('name',255);
             $table->string('sku',255)->unique();
             $table->string('slug', 255)->unique();

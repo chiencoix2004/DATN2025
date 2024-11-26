@@ -1,4 +1,26 @@
 {{-- @dd(Auth::user()) --}}
+@section('css-setting')
+    <style>
+        #search-results {
+            position: absolute;
+            width: 100%;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            max-height: 200px;
+            overflow-y: auto;
+            z-index: 1000;
+        }
+
+        #search-results div {
+            padding: 10px;
+            cursor: pointer;
+        }
+
+        #search-results div:hover {
+            background-color: #f0f0f0;
+        }
+    </style>
+@endsection
 <header class="main-header_area">
     @include('client::assets.header-contents.transparent-header')
     @include('client::assets.header-contents.header-sticky')
@@ -42,7 +64,7 @@
                             </form>
                         </li>
                         <br>
-                        
+
                     </ul>
                 @else
                     <ul class="offcanvas-component_menu">
@@ -91,13 +113,68 @@
             <div class="container">
                 <a href="#" class="btn-close"><i class="ion-android-close"></i></a>
                 <div class="offcanvas-search">
-                    <form action="#" class="hm-searchbox">
-                        <input type="text" placeholder="Tìm kiếm tại đây ...">
+                    <form action="{{ route('search') }}" method="POST" class="hm-searchbox">
+                        @csrf
+                        <input type="text" name="keywd" placeholder="Tìm kiếm tại đây ..."
+                            onkeyup="searchCustomer()" autocomplete="off" id="searchbar" required>
+                        <div id="search-results" class="search-results"></div>
+
                         <button class="search_btn" type="submit"><i class="ion-ios-search-strong"></i></button>
                     </form>
                 </div>
             </div>
         </div>
     </div>
+    <script>
+        function searchCustomer() {
+            let keyword = $('#searchbar').val();
+            let crftoken = $('input[name="_token"]').val(); // Lấy CSRF token từ input ẩn
+            if (keyword.length > 2) {
+                $.ajax({
+                    url: 'http://127.0.0.1:8000/api/v1/hintseach',
+                    method: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify({
+                        "keywd": keyword
+                    }),
+                    success: function(data) {
+                        let resultBox = $('#search-results');
+                        resultBox.empty(); // Xóa kết quả trước đó
+                        if (data.length > 0) {
+                            data.forEach(function(item) {
+                                resultBox.append('<div onclick="selectCustomer(\'' + item.name +
+                                    '\')">' + item.name + '</div>');
+                            });
+                        } else {
+                            resultBox.append('');
+                        }
+                    }
+                });
+            } else {
+                $('#search-results').empty();
+            }
+        }
+
+        function selectCustomer(keyword) {
+            let crftoken = $('input[name="_token"]').val(); // Lấy lại CSRF token
+            $.ajax({
+                url: 'http://127.0.0.1:8000/search',
+                method: 'POST',
+                contentType: 'application/json',
+                headers: {
+                    'X-CSRF-TOKEN': crftoken // Gửi token trong headers để bảo mật hơn
+                },
+                data: JSON.stringify({
+                    "keywd": keyword
+                }),
+                success: function(response) {
+                    //location to search page
+                    window.location.href = 'search/' + keyword;
+
+                }
+            });
+        }
+    </script>
+
     <div class="global-overlay"></div>
 </header>

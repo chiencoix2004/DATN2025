@@ -85,9 +85,6 @@
                                             <button class="btn btn-primary d-block w-100 mt-3" type="submit"
                                                 name="submit">Gửi liên kết đặt lại</button>
                                         </form>
-                                        {{-- <a class="fs-10 text-600" href="#!">Tôi không thể khôi phục tài
-                                            khoản của mình bằng trang này<span
-                                                class="d-inline-block ms-1">&rarr;</span></a> --}}
                                         <div>
                                             <hr class="bg-300" />
                                             <div class="d-flex justify-content-center">
@@ -110,7 +107,7 @@
         <script>
             Swal.fire({
                 title: "Gửi mail thất bại",
-                text: "vui lòng thử lại",
+                text: "{{ session('error') }}",
                 icon: "error"
             });
         </script>

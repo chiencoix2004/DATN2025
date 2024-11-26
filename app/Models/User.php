@@ -56,18 +56,23 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
-        'password' => 'hashed',
     ];
 
     // public function role(){
     //     return $this->belongsTo(Role::class);
     // }
     public function listUser(){
-        return $this->select('id','fullname','email','address','user_image')->get();
+        return $this->select('id','full_name','email','address','user_image')->get();
     }
     public function getUser($id){
         return $this->where('id',$id)->first();
     }
 
+    public function searchUser($key){
+        return $this->where('full_name','like','%'.$key.'%')
+        ->orWhere('email','like','%'.$key.'%')
+        ->orWhere('id','like','%'.$key.'%')
+        ->get();
 
+    }
 }

@@ -10,7 +10,7 @@
                                     width="200px">
                             </a>
                         </div>
-                        <p class="short-desc">Subscribe to our newsleter, Enter your emil address</p>
+                        {{-- <p class="short-desc">Subscribe to our newsleter, Enter your emil address</p>
                         <div class="newsletter-form_wrap">
                             <form
                                 action="https://devitems.us11.list-manage.com/subscribe/post?u=6bbb9b6f5827bd842d9640c82&amp;id=05d85f18ef"
@@ -25,47 +25,60 @@
                                     </div>
                                 </div>
                             </form>
-                        </div>
+                        </div> --}}
                     </div>
                 </div>
                 <div class="col-lg-6 offset-lg-1">
                     <div class="row footer-widgets_wrap">
                         <div class="col-lg-4 col-md-4 col-sm-4">
                             <div class="footer-widgets_title">
-                                <h4>Shopping</h4>
+                                <h4>Trang khác</h4>
                             </div>
                             <div class="footer-widgets">
                                 <ul>
-                                    <li><a href="javascript:void(0)">Product</a></li>
-                                    <li><a href="javascript:void(0)">My Cart</a></li>
-                                    <li><a href="javascript:void(0)">Wishlist</a></li>
-                                    <li><a href="javascript:void(0)">Cart</a></li>
+                                    <li><a href="{{ route('shop.shopIndex') }}">Cửa hàng</a></li>
+                                    <li><a href="{{ route('other.contactUs') }}">Liên hệ</a></li>
+                                    <li><a href="{{ route('other.aboutUs') }}">Giới thiệu</a></li>
                                 </ul>
                             </div>
                         </div>
                         <div class="col-lg-4 col-md-4 col-sm-4">
                             <div class="footer-widgets_title">
-                                <h4>Account</h4>
+                                <h4>Tài khoản</h4>
                             </div>
                             <div class="footer-widgets">
-                                <ul>
-                                    <li><a href="javascript:void(0)">Login</a></li>
-                                    <li><a href="javascript:void(0)">Register</a></li>
-                                    <li><a href="javascript:void(0)">Help</a></li>
-                                    <li><a href="javascript:void(0)">Support</a></li>
-                                </ul>
+                                @if (Auth::user())
+                                    <ul>
+                                        <li>
+                                            <a href="{{ route('my-account') }}">Chi tiết tài khoản</a>
+                                        </li>
+                                        <li>
+                                            <form action="{{ route('logout') }}" method="POST">
+                                                @csrf
+                                                <button type="submit">Đăng xuất</button>
+                                            </form>
+                                        </li>
+                                    </ul>
+                                @else
+                                    <ul>
+                                        <li><a href="{{ route('formReg') }}">Đăng ký</a></li>
+                                        <li><a href="{{ route('showForm') }}">Đăng nhập</a></li>
+                                    </ul>
+                                @endif
                             </div>
                         </div>
                         <div class="col-lg-4 col-md-4 col-sm-4">
                             <div class="footer-widgets_title">
-                                <h4>Categories</h4>
+                                <h4>Danh mục</h4>
                             </div>
                             <div class="footer-widgets">
                                 <ul>
-                                    <li><a href="javascript:void(0)">Men</a></li>
-                                    <li><a href="javascript:void(0)">Women</a></li>
-                                    <li><a href="javascript:void(0)">Jeans</a></li>
-                                    <li><a href="javascript:void(0)">Shoes</a></li>
+                                    @php
+                                        $ctgFoot = \DB::table('categories')->get();
+                                    @endphp
+                                    @foreach ($ctgFoot as $item)
+                                        <li><a href="javascript:void(0)">{{ $item->name }}</a></li>
+                                    @endforeach
                                 </ul>
                             </div>
                         </div>
@@ -77,15 +90,9 @@
     <div class="footer-bottom_area">
         <div class="container">
             <div class="row align-items-center">
-                <div class="col-md-6">
+                <div class="col-md-12 text-center">
                     <div class="copyright">
-                        <span>Copyright &copy; 2023 <a href="javascript:void(0)">Kenne.</a> All rights
-                            reserved.</span>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="payment">
-                        <img src="{{ asset('theme/client/images/footer/payment/1.png') }}" alt="Kenne's Payment Method">
+                        <span>Bản quyền &copy; 2023 <a href="/">Thời trang Phong cách Việt.</a></span>
                     </div>
                 </div>
             </div>

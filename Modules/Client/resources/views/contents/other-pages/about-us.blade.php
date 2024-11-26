@@ -26,7 +26,7 @@
                     <div class="overview-img text-center img-hover_effect">
                         <a href="#">
                             <img class="img-full" src="{{ asset('theme/client/images/about-us/1.jpg') }}"
-                                alt="Kenne's About Us Image">
+                                alt="Kenne's About Us Image" style="width: 100%; height: 100%;">
                         </a>
                     </div>
                 </div>
