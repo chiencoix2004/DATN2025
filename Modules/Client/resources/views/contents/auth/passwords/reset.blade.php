@@ -23,10 +23,11 @@
         <div class="container">
             <div class="row">
                 <div class="d-flex justify-content-center align-items-center ">
+                    
                     <!-- Login Form s-->
                     <form action="{{ route('password.update') }}" method="POST" class="col-md-6">
                         @csrf
-                        <div class="login-forgot">
+                        <div class="login-form">
                             <h4 class="login-title text-center">Quên Mật Khẩu</h4>
 
                             <div class="row justify-content-center">
@@ -39,7 +40,7 @@
                                     <label>Mật Khẩu mới:</label>
                                     <input type="password" name='password' required placeholder="Nhập mật khẩu mới">
                                 </div>
-                                <div class="col-md-8 mb-3">
+                                <div class="col-md-8 mb-3 ">
                                     <label>Nhập lại Mật Khẩu: </label>
                                     <input type="password" name='password_confirmation' required
                                         placeholder="Xác nhận mật khẩu mới">
@@ -56,6 +57,7 @@
                             </div>
                         </div>
                     </form>
+                   
                 </div>
             </div>
         </div>

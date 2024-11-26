@@ -11,7 +11,7 @@
                 <h2 style="margin-top: 30px;">Thời trang Phong cách Việt</h2>
                 <ul>
                     <li><a href="{{ route('home') }}">Trang chủ</a></li>
-                    {{-- <li class="active">Đăng nhập - Đăng ký</li> --}}
+                    <li class="active">Quên mật khẩu</li>
                 </ul>
             </div>
         </div>
@@ -21,20 +21,21 @@
     <!-- Begin Kenne's Login Register Area -->
     <div class="kenne-login-register_area">
         <div class="container">
-            <div class="row">
-                <div class="d-flex justify-content-center align-items-center">
+            <div class="row d-flex justify-content-center">
+                <div class="col-sm-12 col-md-12 col-xs-12 col-lg-6">
                     <!-- Login Form s-->
-                    <form action="{{ route('email-password') }}" method="POST" class="text-center">
+                    <form action="{{ route('email-password') }}" method="POST">
                         @csrf
-                        <div class="login-forgot">
-                            <h4 class="login-title">VUI LÒNG NHẬP EMAIL</h4>
-
-                            <div class="col-auto">
+                        <div class="login-form">
+                            <h4 class="login-title">Quên mật khẩu</h4>
+                            <div class="row">
                                 <div class="col-md-12 col-12">
-                                    <input class="form-control" type="email" name='email' required placeholder="Nhập Email của bạn:">
+                                    <label>Email : </label>
+                                    <input type="email" name='email' placeholder="Email Address">
+                                    
                                 </div>
-                                <div class="d-flex justify-content-center">
-                                    <button type="submit" class="kenne-login_btn">Gửi link đặt lại mật khẩu</button>
+                                <div class="col-md-12 d-flex justify-content-between align-items-center">
+                                    <button class="kenne-login_btn" type="submit">Quên mật khẩu</button>
                                 </div>
                                 @if (session('status'))
                                     <div style="color: green">

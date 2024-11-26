@@ -134,15 +134,21 @@ class CartController extends Controller
                 ->with("productVariant.color")
                 ->with("productVariant.product")
                 ->get();
-            return response()->json([
-                'cartItems' => $cartItems,
-                'totalAmount' => $cart->total_amount,
-                'discount' => session('discount') ? session('discount') : 0,
-                'discount_code' => session('discount_code') ? session('discount_code') : '',
-                'message' => 'Lấy danh sách giỏ hàng thành công!'
-            ], 200);
+
+            // dd($cartItems->count());
+            if ($cartItems->count() == 0) {
+                return response()->json(['message' => 'Giỏ hàng của bạn đang trống!'], 404);
+            } else {
+                return response()->json([
+                    'cartItems' => $cartItems,
+                    'totalAmount' => $cart->total_amount,
+                    'discount' => session('discount') ? session('discount') : 0,
+                    'discount_code' => session('discount_code') ? session('discount_code') : '',
+                    'message' => 'Lấy danh sách giỏ hàng thành công!'
+                ], 200);
+            };
         } else {
-            return response()->json(['message' => 'chưa đăng nhập'], 200);
+            return response()->json(['message' => 'chưa đăng nhập'], 404);
         }
     }
 
@@ -194,16 +200,28 @@ class CartController extends Controller
     {
         $coupon = CouponModel::where('code', $request->coupon_code)->first();
         if ($coupon) {
-            $current_date = date('Y-m-d');
+            $current_date = date('Y-m-d H:i:s');
             $order_total = Cart::where('user_id', auth()->id())->first()->total_amount;
             if ($current_date < $coupon->date_start) {
-                return response()->json(['error' => 'Mã giảm giá chưa có hiệu lực.'], 400);
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Mã giảm giá chưa có hiệu lực.'
+                ], 200);
             } elseif ($current_date > $coupon->date_end) {
-                return response()->json(['error' => 'Mã giảm giá đã hết hạn.'], 400);
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Mã giảm giá đã hết hạn.'
+                ], 200);
             } elseif ($order_total < $coupon->minimum_spend) {
-                return response()->json(['error' => 'Số tiền chi tiêu phải lớn hơn hoặc bằng ' . $coupon->minimum_spend . '.'], 400);
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Số tiền chi tiêu phải lớn hơn hoặc bằng ' . $coupon->minimum_spend . '.'
+                ], 200);
             } elseif ($order_total > $coupon->maximum_spend) {
-                return response()->json(['error' => 'Số tiền chi tiêu phải nhỏ hơn hoặc bằng ' . $coupon->maximum_spend . '.'], 400);
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Số tiền chi tiêu phải nhỏ hơn hoặc bằng ' . $coupon->maximum_spend . '.'
+                ], 200);
             } else {
                 // Tính toán giá trị giảm giá
                 if ($coupon->discount_type == 'percent') {
@@ -215,14 +233,17 @@ class CartController extends Controller
                 // Kiểm tra số lượng mã giảm giá
                 if ($coupon->quantity > 0) {
 
+                    $discount_value = round($discount_value);
+
                     session(['discount' => $discount_value]);
                     session(['discount_code' => $request->coupon_code]);
 
                     return response()->json([
-                        'success' => 'Áp dụng mã giảm giá thành công!',
+                        'success' => true,
+                        'message' => 'Áp dụng mã giảm giá thành công!',
                     ], 200);
                 } else {
-                    return response()->json(['error' => 'Mã giảm giá đã sử dụng hết.'], 400);
+                    return response()->json(['error' => 'Mã giảm giá đã sử dụng hết.'], 200);
                 }
             }
         } else {
@@ -285,16 +306,28 @@ class CartController extends Controller
 
         $coupon = CouponModel::where('code', $discount_code)->first();
         if ($coupon) {
-            $current_date = date('Y-m-d');
-            $order_total = $totalAmount;
+            $current_date = date('Y-m-d H:i:s');
+            $order_total = Cart::where('user_id', $userId)->first()->total_amount;
             if ($current_date < $coupon->date_start) {
-                return response()->json(['error' => 'Mã giảm giá chưa có hiệu lực.'], 400);
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Mã giảm giá chưa có hiệu lực.'
+                ], 200);
             } elseif ($current_date > $coupon->date_end) {
-                return response()->json(['error' => 'Mã giảm giá đã hết hạn.'], 400);
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Mã giảm giá đã hết hạn.'
+                ], 200);
             } elseif ($order_total < $coupon->minimum_spend) {
-                return response()->json(['error' => 'Số tiền chi tiêu phải lớn hơn hoặc bằng ' . $coupon->minimum_spend . '.'], 400);
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Số tiền chi tiêu phải lớn hơn hoặc bằng ' . $coupon->minimum_spend . '.'
+                ], 200);
             } elseif ($order_total > $coupon->maximum_spend) {
-                return response()->json(['error' => 'Số tiền chi tiêu phải nhỏ hơn hoặc bằng ' . $coupon->maximum_spend . '.'], 400);
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Số tiền chi tiêu phải nhỏ hơn hoặc bằng ' . $coupon->maximum_spend . '.'
+                ], 200);
             } else {
                 // Tính toán giá trị giảm giá
                 if ($coupon->discount_type == 'percent') {
@@ -305,10 +338,14 @@ class CartController extends Controller
 
                 // Kiểm tra số lượng mã giảm giá
                 if ($coupon->quantity > 0) {
-                    $totalAmount = $totalAmount - $discount_value;
+                    $discount_value = round($discount_value);
                 }
             }
         }
+
+        $totalAmount = $totalAmount - $discount_value;
+
+        // dd($totalAmount);
 
         // $payment_method = $payment_method == 'cod' ? 'Thanh toán khi nhận hàng' : 'Thanh toán qua thẻ MOMO';
         if ($payment_method == 'vnpay') {
@@ -424,6 +461,10 @@ class CartController extends Controller
         $user_email = $user->email;
         $user_address = $user->address;
 
+        if ($payment_method == 'cod') {
+            $payment_method = 'Thanh toán khi nhận hàng';
+        }
+
         $order = Order::create([
             "users_id" => $userId,
             "user_name" => $user_full_name,
@@ -483,8 +524,16 @@ class CartController extends Controller
         //         ]
         //     ], 500);
         // }
+        return response()->json([
+            $link = route('my-account'),
+            "type" => "success",
+            "message" => "Đặt hàng thành công!",
+            'method' => 'vnpay',
+            "link" => "$link",
+        ], 200);
     }
-    public function meanhxuyen(){
+    public function meanhxuyen()
+    {
         $Ammout = $_GET['vnp_Amount'];
         $Bankcode = $_GET['vnp_BankCode'];
         $vnp_BankTranNo = isset($_GET['vnp_BankTranNo']) ? $_GET['vnp_BankTranNo'] : "";
@@ -513,23 +562,33 @@ class CartController extends Controller
         ];
         // dd(auth()->user());
         if ($vnp_ResponseCode == "00") {
-            
+
             //dd( auth::id());
             $order = Order::find($order_id);
             $order->status_payment = "Đã thanh toán";
             $order->status_order = "Đã xác nhận";
             $order->save();
-            if($order){
-                $cart = Cart::where('user_id',$user_id)->first();
-                CartItem::where('cart_id', $cart->id)->delete();
-                $cart->delete();
-            }
-            return redirect()->route('my-account')->with('success', 'Đặt hàng thành công!');
+
+            $orderItems = OrderDetail::query()
+                ->with('productVariant')
+                ->with("productVariant.size")
+                ->with("productVariant.color")
+                ->with("productVariant.product")
+                ->where('order_id', $order_id)
+                ->get();
+
+            // if ($order) {
+            //     $cart = Cart::where('user_id', $user_id)->first();
+            //     CartItem::where('cart_id', $cart->id)->delete();
+            //     $cart->delete();
+            // }
+            // dd($returndata);
+            return view('client::contents.shops.checkoutOrderDetail', compact('returndata', 'orderItems', 'order'));
         } else {
             $order = Order::query()->with('orderDetails')->find($order_id);
             $order->orderDetails()->forceDelete();
             $order->forceDelete();
-            return redirect()->route('my-account')->with('error', 'Đặt hàng thất bại!');
+            return view('client::contents.shops.checkoutOrderDetail', compact('returndata'));
         }
     }
     /**

@@ -107,7 +107,8 @@
                     $('#totalAmount').text(formatVND(response.totalAmount));
                 },
                 error: function(xhr, status, error) {
-                    console.error('Error fetching cart items:', error);
+                    $('#minicart').empty();
+                    console.error('Giỏ hàng của bạn đang trống!:', error);
                 }
             });
         }
@@ -145,6 +146,10 @@
                 success: function(response) {
                     var itemCount = response.cartItems.length;
                     $('.item-count').text(itemCount);
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    $('.item-count').text(0);
+                    console.error("Lỗi khi lấy sản phẩm:", textStatus, errorThrown);
                 }
             });
         }
