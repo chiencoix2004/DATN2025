@@ -64,12 +64,8 @@ class BannerController extends Controller
             return redirect()->route('admin.banner.list')->with('error', 'Xóa banner thất bại');
         }
     }
-    public function add(StoreSlide $request)
+    public function add($position, StoreSlide $request)
     {
-        $position = $request->vi_tri;
-        if ($position ) {
-            # code...
-        }
         try {
             DB::beginTransaction();
             if ($position == 1) {
@@ -83,17 +79,5 @@ class BannerController extends Controller
             DB::rollBack();
             return redirect()->back()->with('error', $exception->getMessage());
         }
-        // $file = $request->file('hinh_anh');
-        // $fileName = time() . '_' . $file->getClientOriginalName();
-        // $data = $file->move(public_path('uploads'), $fileName);
-        // if ($data) {
-        //     try {
-        //         $data = new Banner();
-        //         $banner = $data->Addbanner($fileName, $request->lien_ket, $request->vi_tri, $request->offer_text, $request->title, $request->description);
-        //         return redirect()->route('admin.banner.list')->with('success', 'Thêm banner thành công');
-        //     } catch (\Exception $e) {
-        //         dd($e->getMessage());
-        //     }
-        // }
     }
 }

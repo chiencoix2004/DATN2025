@@ -14,14 +14,13 @@
                         @if (session()->has('success'))
                             <h5 class="mb-2 mb-md-0 text-success">{{ session('success') }}</h5>
                         @else
-                            <h5 class="mb-2 mb-md-0">Banner - Slider</h5>
+                            <h5 class="mb-2 mb-md-0">Banner</h5>
                         @endif
                     @endif
                 </div>
             </div>
         </div>
     </div>
-    @yield('banner-contents')
     <div class="container my-4">
         <h2 class="text-center mb-4">Chỉnh sửa Banner</h2>
         <div class="row justify-content-center">
