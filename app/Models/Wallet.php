@@ -41,7 +41,6 @@ class Wallet extends Model
         ->first();
     }
 
-
     public function createWallet($data)
     {
         $wallet = new Wallet();

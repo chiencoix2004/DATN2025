@@ -11,7 +11,7 @@ class Product extends Model
     use HasFactory, SoftDeletes;
     protected $table = 'products';
     protected $fillable = [
-        'category_id',
+        'sub_category_id',
         'name',
         'sku',
         'slug',
@@ -30,10 +30,10 @@ class Product extends Model
     protected $casts = [
         'is_active' => 'boolean',
     ];
-    public function category()
+    public function sub_category()
     {
         // 1-1
-        return $this->belongsTo(Category::class);
+        return $this->belongsTo(SubCategory::class);
     }
     public function images()
     {

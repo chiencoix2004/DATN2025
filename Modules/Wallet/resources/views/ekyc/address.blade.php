@@ -4,7 +4,7 @@
 <div class="container">
     <div class="text-center mb-4">
         <!-- Heading -->
-        <h3 class="text-primary">Kích hoạt ví Skibidi Wallet</h3>
+        <h3 class="text-primary">Kích hoạt ví điện tử</h3>
     </div>
 
     <!-- Status Bar -->

@@ -81,7 +81,11 @@
                                         @endsession <span class="discount"> 0 VNĐ</span></li>
                                     <li>Tổng cộng <span class="total">0 VNĐ</span></li>
                                 </ul>
-                                <a href="{{ route('cart.checkout') }}">Tiến hành thanh toán</a>
+                                <div class="btn-checkout">
+                                    <a href="{{ route('cart.checkout') }}">Tiến hành thanh toán</a>
+
+                                </div>
+                                {{-- <a href="{{ route('cart.checkout') }}">Tiến hành thanh toán</a> --}}
                             </div>
                         </div>
                     </div>
@@ -109,6 +113,7 @@
                         }
                     },
                     error: function(jqXHR, textStatus, errorThrown) {
+                        $('#cart-table-body').empty(); // Xóa nội dung  bảng giỏ hàng
                         console.error("Yêu cầu AJAX thất bại:", textStatus, errorThrown);
                     }
                 });
@@ -270,6 +275,9 @@
 
                     },
                     error: function(jqXHR, textStatus, errorThrown) {
+                        $('.cart-page-total ul li .totalAmount').text(formatPrice(0)); // Cập nhật tổng tiền
+                        $('.cart-page-total ul li .discount').text(formatPrice(0)); // Cập nhật giảm giá
+                        $('.cart-page-total ul li .total').text(formatPrice(0)); // Cập nhật tổng cộng
                         console.error("Yêu cầu AJAX thất bại:", textStatus, errorThrown);
                     }
                 });
@@ -289,14 +297,15 @@
                         },
                         success: function(response) {
                             if (response.success) {
-                                alert("Áp dụng mã giảm giá thành công!");
+                                // alert("Áp dụng mã giảm giá thành công!");
+                                alert(response.message);
                                 updateCartTotal(); // Cập nhật tổng tiền giỏ hàng
                             } else {
-                                alert("Mã giảm giá không hợp lệ hoặc đã hết hạn!");
+                                alert(response.message);
                             }
                         },
                         error: function(jqXHR, textStatus, errorThrown) {
-                            alert("Mã giảm giá không hợp lệ hoặc đã hết hạn!");
+                            console.error("Lỗi khi áp dụng mã giảm giá:", textStatus, errorThrown);
                         }
                     });
                 } else {
@@ -310,5 +319,4 @@
 
         });
     </script>
-    
 @endsection

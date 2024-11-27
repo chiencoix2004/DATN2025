@@ -13,9 +13,8 @@ class OrderSeeder extends Seeder
     /**
      * Run the database seeds.
      */
-   public function run(): void
+    public function run(): void
     {
-        $discountTypes = Order::TYPE_DISCOUNT;
         $orderStatuses = Order::STATUS_ORDER;
         $paymentStatus = Order::STATUS_PAYMENT;
         $paymentMethods = Order::METHOD_PAYMENT;
@@ -28,7 +27,6 @@ class OrderSeeder extends Seeder
                 'user_phone' => "098765432" . rand(1, 10),
                 'user_email' => "uy" . rand(1, 10) . "@gmail.com",
                 'user_address' => "Hà Nội $i",
-                'user_note' => "Ghi chú $i",
                 'ship_user_name' => "Đô $i",
                 'ship_user_phone' => "0987654321",
                 'ship_user_email' => "do1234$i@gmail.com",
@@ -39,8 +37,6 @@ class OrderSeeder extends Seeder
                 'payment_method' => $paymentMethods[array_rand($paymentMethods)],
                 'status_payment' => $paymentStatus[array_rand($paymentStatus)],
                 'date_create_order' => now(),
-                'code_coupon' => 'KHONGGIAMGIA',
-                'discount_type' => $discountTypes[array_rand($discountTypes)],
                 'discount' => 0,
                 'shipping_method' => $shippingMethods[array_rand($shippingMethods)]
             ]);

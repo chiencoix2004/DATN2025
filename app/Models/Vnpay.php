@@ -119,13 +119,13 @@ class Vnpay extends Model
         $inputData = array(
             "vnp_Version" => "2.1.0",
             "vnp_TmnCode" => $this->vnp_TmnCode,
-            "vnp_Amount" => $vnp_Amount*1000,
+            "vnp_Amount" => $vnp_Amount * 1000,
             "vnp_Command" => "pay",
             "vnp_CreateDate" => date('YmdHis'),
             "vnp_CurrCode" => "VND",
             "vnp_IpAddr" => $this->vnp_IpAddr,
             "vnp_Locale" => $vnp_Locale,
-            "vnp_OrderInfo" => "Thanh toan GD tai ".env("APP_NAME").":" . $this->vnp_TxnRef,
+            "vnp_OrderInfo" => "Thanh toan GD tai: $this->vnp_TxnRef",
             "vnp_OrderType" => "other",
             "vnp_ReturnUrl" => $return_url,
             "vnp_TxnRef" => $this->vnp_TxnRef,
@@ -150,15 +150,60 @@ class Vnpay extends Model
             $query .= urlencode($key) . "=" . urlencode($value) . '&';
         }
 
-        $vnp_Url = $this->vnp_apiUrl . "?" . $query;
+        $vnp_Url = $this->vnp_Url . "?" . $query;
         if (isset($this->vnp_hashSecret)) {
-            $vnpSecureHash = hash_hmac('sha512', $hashdata, $this->vnp_hashSecret);
+            $vnpSecureHash =   hash_hmac('sha512', $hashdata, $this->vnp_hashSecret);//
             $vnp_Url .= 'vnp_SecureHash=' . $vnpSecureHash;
         }
         header('Location: ' . $vnp_Url);
         die();
 
     }
+
+    public function create_link_payment_url($vnp_Amount, $vnp_Locale,$return_url){
+        $inputData = array(
+            "vnp_Version" => "2.1.0",
+            "vnp_TmnCode" => $this->vnp_TmnCode,
+            "vnp_Amount" => $vnp_Amount * 1000,
+            "vnp_Command" => "pay",
+            "vnp_CreateDate" => date('YmdHis'),
+            "vnp_CurrCode" => "VND",
+            "vnp_IpAddr" => $this->vnp_IpAddr,
+            "vnp_Locale" => $vnp_Locale,
+            "vnp_OrderInfo" => "Thanh toan GD tai: $this->vnp_TxnRef",
+            "vnp_OrderType" => "other",
+            "vnp_ReturnUrl" => $return_url,
+            "vnp_TxnRef" => $this->vnp_TxnRef,
+            "vnp_ExpireDate" => $this->expire
+        );
+
+        if (isset($vnp_BankCode) && $vnp_BankCode != "") {
+            $inputData['vnp_BankCode'] = $vnp_BankCode;
+        }
+
+        ksort($inputData);
+        $query = "";
+        $i = 0;
+        $hashdata = "";
+        foreach ($inputData as $key => $value) {
+            if ($i == 1) {
+                $hashdata .= '&' . urlencode($key) . "=" . urlencode($value);
+            } else {
+                $hashdata .= urlencode($key) . "=" . urlencode($value);
+                $i = 1;
+            }
+            $query .= urlencode($key) . "=" . urlencode($value) . '&';
+        }
+
+        $vnp_Url = $this->vnp_Url . "?" . $query;
+        if (isset($this->vnp_hashSecret)) {
+            $vnpSecureHash =   hash_hmac('sha512', $hashdata, $this->vnp_hashSecret);//
+            $vnp_Url .= 'vnp_SecureHash=' . $vnpSecureHash;
+        }
+        return $vnp_Url;
+
+    }
+
 
     public function ipn_payment (){
 

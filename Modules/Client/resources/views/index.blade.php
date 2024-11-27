@@ -1,28 +1,14 @@
 @extends('client::layouts.master')
-
 @section('title')
     Fashion | Thời trang Phong cách Việt
 @endsection
 @section('contents')
     {{-- @include('client::contents.homeWeb.slider-area') --}}
     <!-- Begin Slider Area -->
-   <!-- Begin Slider Area -->
-   <style>
-    .kenne-banner_area-4 {
-  background-image: url('{{ asset('uploads/' . $bannerbottom->first()->img_banner) }}');
-  background-repeat: no-repeat;
-  background-position: center center;
-  background-size: cover;
-  min-height: 565px;
-  position: relative;
-  padding-top: 0;
-  margin-top: 90px;
-}
-
-    </style>
-   <div class="slider-area">
-    <div class="kenne-element-carousel home-slider arrow-style"
-        data-slick-options='{
+    <!-- Begin Slider Area -->
+    <div class="slider-area">
+        <div class="kenne-element-carousel home-slider arrow-style"
+            data-slick-options='{
         "slidesToShow": 1,
         "slidesToScroll": 1,
         "infinite": true,
@@ -34,7 +20,7 @@
         "pauseOnHover" : false,
         "pauseOnFocus" : false
         }'
-        data-slick-responsive='[
+            data-slick-responsive='[
         {"breakpoint":768, "settings": {
         "slidesToShow": 1
         }},
@@ -42,25 +28,32 @@
         "slidesToShow": 1
         }}
     ]'>
-        @foreach ($slider as $key => $items)
-            <div class="slide-item animation-style-01" style="background-image: url('{{ asset('uploads/' . $items->img_banner) }}'); background-repeat: no-repeat; background-position: center center; background-size: cover; min-height: 1000px;">
-                <div class="slider-progress"></div>
-                <div class="container">
-                    <div class="slide-content">
-                        <span>{{ $items->offer_text}}</span>
-                        <h2>{{ $items->title }}</h2>
-                        <p class="short-desc">{{ $items->description }}</p>
-                        <div class="slide-btn">
-                            <a class="kenne-btn" href="{{ $items->link }}">Mua sắm ngay</a>
+            @foreach ($slider as $key => $items)
+                @php
+                    $url = $items->img_banner;
+                    if (!\Str::contains($url, 'http')) {
+                        $url = \Storage::url($url);
+                    }
+                @endphp
+                <div class="slide-item animation-style-01"
+                    style="background-image: url('{{ $url }}'); background-repeat: no-repeat; background-position: center center; background-size: cover; min-height: 1000px;">
+                    <div class="slider-progress"></div>
+                    <div class="container">
+                        <div class="slide-content">
+                            <span>{{ $items->offer_text }}</span>
+                            <h2>{{ $items->title }}</h2>
+                            <p class="short-desc">{{ $items->description }}</p>
+                            <div class="slide-btn">
+                                <a class="kenne-btn" href="{{ $items->link }}">Mua sắm ngay</a>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        @endforeach
+            @endforeach
+        </div>
     </div>
-</div>
-<!-- Slider Area End Here -->
-<!-- Slider Area End Here -->
+    <!-- Slider Area End Here -->
+    <!-- Slider Area End Here -->
 
     <!-- Begin Service Area -->
     <div class="service-area">
@@ -101,17 +94,17 @@
     <div class="banner-area">
         <div class="container">
             <div class="row">
-              @foreach ($bannertop as $items )
-              <div class="col-md-4 col-6 custom-xxs-col">
-                <div class="banner-item img-hover_effect">
-                    <div cslick-list draggablelass="banner-img">
-                        <a href="{{ $items->link }}">
-                            <img src="{{ asset('uploads/' . $items->img_banner) }}" alt="{{ $items->title }}">
-                        </a>
+                @foreach ($bannertop as $items)
+                    <div class="col-md-4 col-6 custom-xxs-col">
+                        <div class="banner-item img-hover_effect">
+                            <div cslick-list draggablelass="banner-img">
+                                <a href="{{ $items->link }}">
+                                    <img src="{{ asset('uploads/' . $items->img_banner) }}" alt="{{ $items->title }}">
+                                </a>
+                            </div>
+                        </div>
                     </div>
-                </div>
-            </div>
-              @endforeach
+                @endforeach
             </div>
         </div>
     </div>
@@ -124,21 +117,26 @@
         <div class="container">
             <div class="row">
                 @foreach ($bannercenter as $items)
-                <div class="col-md-6">
-                    <div class="banner-item img-hover_effect">
-                        <div class="banner-img">
-                            <a href="{{ $items->link }}">
-                                <img src="{{ asset('uploads/' . $items->img_banner) }}" alt="{{ $items->title }}">
-                            </a>
+                    @php
+                        $url = $items->img_banner;
+                        if (!\Str::contains($url, 'http')) {
+                            $url = 'uploads/' . $url;
+                        }
+                    @endphp
+                    <div class="col-md-6">
+                        <div class="banner-item img-hover_effect">
+                            <div class="banner-img">
+                                <a href="{{ $items->link }}">
+                                    <img src="{{ $url }}" alt="{{ $items->title }}">
+                                </a>
+                            </div>
                         </div>
                     </div>
-                </div>
                 @endforeach
             </div>
         </div>
     </div>
     <!-- Banner Area Two End Here -->
-    @include('client::contents.homeWeb.product-tab_area')
     @include('client::contents.homeWeb.latest-blog_area')
 
     <!-- Begin Kenne's Banner Area Four -->
@@ -283,4 +281,24 @@
         </div>
     </div> --}}
     <!-- Kenne's Instagram Area End Here -->
+@endsection
+@section('css-setting')
+    @php
+        $bannerBT = $bannerbottom->first()->img_banner;
+        if (!\Str::contains($bannerBT, 'http')) {
+            $bannerBT = \Storage::url($bannerBT);
+        }
+    @endphp
+    <style>
+        .kenne-banner_area-4 {
+            background-image: url('{{ $bannerBT }}');
+            background-repeat: no-repeat;
+            background-position: center center;
+            background-size: cover;
+            min-height: 565px;
+            position: relative;
+            padding-top: 0;
+            margin-top: 90px;
+        }
+    </style>
 @endsection

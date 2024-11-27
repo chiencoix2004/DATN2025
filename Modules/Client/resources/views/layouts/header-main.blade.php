@@ -1,29 +1,32 @@
 {{-- @dd(Auth::user()) --}}
+@section('css-setting')
+    <style>
+        #search-results {
+            position: absolute;
+            width: 100%;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            max-height: 200px;
+            overflow-y: auto;
+            z-index: 1000;
+        }
+
+        #search-results div {
+            padding: 10px;
+            cursor: pointer;
+        }
+
+        #search-results div:hover {
+            background-color: #f0f0f0;
+        }
+    </style>
+@endsection
 <header class="main-header_area">
     @include('client::assets.header-contents.transparent-header')
     @include('client::assets.header-contents.header-sticky')
     @include('client::assets.header-contents.header-miniCart')
     @include('client::assets.header-contents.header-mobileMenu')
-<style>
-    #search-results {
-    position: absolute;
-    width: 100%;
-    background-color: #fff;
-    border: 1px solid #ddd;
-    max-height: 200px;
-    overflow-y: auto;
-    z-index: 1000;
-}
 
-#search-results div {
-    padding: 10px;
-    cursor: pointer;
-}
-
-#search-results div:hover {
-    background-color: #f0f0f0;
-}
-</style>
     <div class="offcanvas-menu_wrapper" id="offcanvasMenu">
         <div class="offcanvas-menu-inner">
             <a href="#" class="btn-close"><i class="ion-android-close"></i></a>
@@ -61,7 +64,7 @@
                             </form>
                         </li>
                         <br>
-                        
+
                     </ul>
                 @else
                     <ul class="offcanvas-component_menu">
@@ -112,7 +115,8 @@
                 <div class="offcanvas-search">
                     <form action="{{ route('search') }}" method="POST" class="hm-searchbox">
                         @csrf
-                        <input type="text" name="keywd" placeholder="Tìm kiếm tại đây ..." onkeyup="searchCustomer()" autocomplete="off" id="searchbar" required>
+                        <input type="text" name="keywd" placeholder="Tìm kiếm tại đây ..."
+                            onkeyup="searchCustomer()" autocomplete="off" id="searchbar" required>
                         <div id="search-results" class="search-results"></div>
 
                         <button class="search_btn" type="submit"><i class="ion-ios-search-strong"></i></button>
@@ -130,13 +134,16 @@
                     url: 'http://127.0.0.1:8000/api/v1/hintseach',
                     method: 'POST',
                     contentType: 'application/json',
-                    data: JSON.stringify({ "keywd": keyword }),
+                    data: JSON.stringify({
+                        "keywd": keyword
+                    }),
                     success: function(data) {
                         let resultBox = $('#search-results');
                         resultBox.empty(); // Xóa kết quả trước đó
                         if (data.length > 0) {
                             data.forEach(function(item) {
-                                resultBox.append('<div onclick="selectCustomer(\'' + item.name + '\')">' + item.name + '</div>');
+                                resultBox.append('<div onclick="selectCustomer(\'' + item.name +
+                                    '\')">' + item.name + '</div>');
                             });
                         } else {
                             resultBox.append('');
@@ -157,10 +164,12 @@
                 headers: {
                     'X-CSRF-TOKEN': crftoken // Gửi token trong headers để bảo mật hơn
                 },
-                data: JSON.stringify({ "keywd": keyword }),
+                data: JSON.stringify({
+                    "keywd": keyword
+                }),
                 success: function(response) {
-                  //location to search page
-                  window.location.href = 'search/' + keyword;
+                    //location to search page
+                    window.location.href = 'search/' + keyword;
 
                 }
             });

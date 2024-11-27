@@ -13,7 +13,8 @@ class Cart extends Model
         'total_amount',
     ];
 
-    public function cartItems(){
+    public function cartItems()
+    {
         return $this->hasMany(CartItem::class);
     }
 }

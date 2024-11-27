@@ -8,6 +8,7 @@ use Illuminate\Http\Response;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
 use App\Models\Category;
+use Illuminate\Support\Facades\Auth;
 
 class ClientController extends Controller
 {
@@ -15,7 +16,8 @@ class ClientController extends Controller
      * Display a listing of the resource.
      */
     public function index()
-    {
+    {   
+        // dd( Auth::id());
         $banner = new Banner();
         $slider = $banner->getSliderPosition();
         $bannertop = $banner->getTopPosition();
@@ -85,7 +87,7 @@ class ClientController extends Controller
                 return view('client::search.list', compact('products', 'listcategory'));
         }
     }
-
+    
     public function searchprice(Request $request)
     {
         $keywd = $request->keywd;

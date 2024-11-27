@@ -161,6 +161,7 @@ class WalletController extends Controller
         } else {
             return view('wallet::transhistory.resultvnpay', compact('returndata'));
         }
+        return view('wallet::transhistory.resultvnpay', compact('returndata'));
     }
     public function transaction($id)
     {
