@@ -29,16 +29,19 @@ use Modules\Client\App\Http\Controllers\ReviewController;
 |
 */
 
-Route::controller(ClientController::class)->group(function () {
+Route::controller(ClientController::class)
+->group(function () {
     Route::get('/', 'index')->name('index');
     Route::post('search', 'search')->name('search');
     Route::post('shortingseach', 'shortingseach')->name('shortingseach');
     Route::post('searchprice', 'searchprice')->name('searchprice');
     route::get('seach/category/{id}/{keywd}', 'seachcategory')->name('seachcategory');
+
     route::get(('search/{keywd}'), 'searchget')->name('searchget');
     // Route::get('querybuilder')
 });
-Route::controller(ShopController::class)->prefix('shop')->as('shop.')->group(function () {
+Route::controller(ShopController::class)->prefix('shop')->as('shop.')->middleware("user")
+->group(function () {
     Route::get('/', 'index')->name('shopIndex');
     Route::get('product-detail/{slug}', 'show')->name('productDetail');
     Route::post('rend-variant', 'rendAjax')->name('rend_variant');
@@ -54,7 +57,6 @@ Route::prefix('other')->as('other.')->group(function () {
     Route::get('aboutUs', function () {
         return view('client::contents.other-pages.about-us');
     })->name('aboutUs');
-    //Bài viết
     Route::get('/posts', [PostController::class, 'index'])->name('posts.index');
     Route::get('/postDetail/{slug}', [PostController::class, 'show'])->name('postDetail');
     Route::post('search', [PostController::class, 'search'])->name('posts.search');

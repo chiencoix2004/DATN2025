@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Trx_history_detail extends Model
 {
     use HasFactory;
-    private $table = "trx_history_detail";
+    protected $table = "trx_history_detail";
     protected $fillable = [
         "trx_detail_desc",
         "trx_date_issue",
