@@ -5,6 +5,7 @@ namespace Modules\Client\App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\ColorAttribute;
+use App\Models\Comment;
 use App\Models\Product;
 use App\Models\ProductVariant;
 use App\Models\SizeAttribute;
@@ -78,27 +79,42 @@ class ShopController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request): RedirectResponse
-    {
-        //
-    }
-
-    /**
      * Show the specified resource.
      */
+    // public function show(string $slug)
+    // {
+
+    //     $data = Product::query()->where(['slug' => $slug])->first();
+    //     if ($data) {
+    //         return view('client::contents.shops.productDetail', compact('data'));
+    //     } else {
+    //         return abort(404);
+    //     }
+    // }
     public function show(string $slug)
     {
+
         $data = Product::query()->where(['slug' => $slug])->first();
-        if ($data) {
+        $realedProducts = Product::query()->where(['sub_category_id' => $data->sub_category_id])->where('id', '!=', $data->id)->get();
+      //  dd($realedProducts);
+      if ($data) {
+            // Lấy danh sách bình luận và thông tin người dùng liên quan
+            $comments = Comment::with('user') // Eager load quan hệ 'user'
+                ->where('products_id', $data->id)
+                ->where('status', 2)
+                ->orderBy('comment_date', 'desc')
+                ->get();
+
+
             $realedProducts = Product::query()->where(['sub_category_id' => $data->sub_category_id])->where('id', '!=', $data->id)->get();
             // dd($realedProducts);
-            return view('client::contents.shops.productDetail', compact('data', 'realedProducts'));
+            return view('client::contents.shops.productDetail', compact('data', 'realedProducts','comments'));
+
         } else {
             return abort(404);
         }
     }
+
 
     /**
      * Show the form for editing the specified resource.
@@ -111,16 +127,6 @@ class ShopController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, $id): RedirectResponse
-    {
-        //
-    }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy($id)
-    {
-        //
-    }
+
 }

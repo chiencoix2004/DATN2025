@@ -271,7 +271,7 @@
                                 <li><a class="active" data-bs-toggle="tab" href="#description"><span>Mô tả sản
                                             phẩm</span></a>
                                 </li>
-                                <li><a data-bs-toggle="tab" href="#specification"><span>Thông tin khác</span></a></li>
+                                {{-- <li><a data-bs-toggle="tab" href="#specification"><span>Thông tin khác</span></a></li> --}}
                                 <li><a data-bs-toggle="tab" href="#reviews"><span>Bình luận - Đánh giá (1)</span></a></li>
                             </ul>
                         </div>
@@ -281,12 +281,34 @@
                                     {!! $data->description !!}
                                 </div>
                             </div>
-                            <div id="specification" class="tab-pane" role="tabpanel">
-                                {!! $data->material !!}
-                            </div>
-                            <div id="reviews" class="tab-pane" role="tabpanel">
+                            {{-- <div id="specification" class="tab-pane" role="tabpanel">
+                                <table class="table table-bordered specification-inner_stuff">
+                                    <tbody>
+                                        <tr>
+                                            <td colspan="2"><strong>Memory</strong></td>
+                                        </tr>
+                                    </tbody>
+                                    <tbody>
+                                        <tr>
+                                            <td>test 1</td>
+                                            <td>8gb</td>
+                                        </tr>
+                                    </tbody>
+                                    <tbody>
+                                        <tr>
+                                            <td colspan="2"><strong>Processor</strong></td>
+                                        </tr>
+                                    </tbody>
+                                    <tbody>
+                                        <tr>
+                                            <td>No. of Cores</td>
+                                            <td>1</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div> --}}
+                            {{-- <div id="reviews" class="tab-pane" role="tabpanel">
                                 <div class="tab-pane active" id="tab-review">
-                                    <form class="form-horizontal" id="form-review">
                                         <div id="review">
                                             <table class="table table-striped table-bordered">
                                                 <tbody>
@@ -310,44 +332,95 @@
                                                     </tr>
                                                 </tbody>
                                             </table>
+                                        </div> --}}
+
+                                        <div id="review">
+                                            <h3>Đánh giá sản phẩm</h3>
+                                            @if($comments->count() > 0)
+                                                <table class="table table-striped table-bordered">
+                                                    <tbody>
+                                                        @foreach($comments as $comment)
+                                                            <tr>
+                                                                <td>Email khách hàng</td>
+                                                                <td>Nội dung</td>
+                                                                <td>Đánh giá</td>
+                                                                <td>Ngày bình luận</td>
+                                                            </tr>
+                                                            <tr>
+                                                                {{-- <td style="width: 50%;"><strong>{{ $comment->user->email ?? 'Khách hàng' }}</strong></td> --}}
+                                                                <td style="width: 50%;"><strong>
+                                                                    @php
+                                                                      $email = $comment->user->email ?? 'Khách hàng';
+                                                                      // Kiểm tra nếu email có tồn tại
+                                                                      if (strpos($email, '@')) {
+                                                                          $username = substr($email, 0, strpos($email, '@')); // Lấy phần trước dấu "@"
+                                                                          $domain = substr($email, strpos($email, '@')); // Lấy phần sau dấu "@"
+                                                                          // Hiển thị 3 ký tự đầu và thay phần còn lại bằng dấu sao
+                                                                          $usernameMasked = substr($username, 0, 3) . str_repeat('*', strlen($username) - 3);
+                                                                          echo $usernameMasked . $domain;
+                                                                      } else {
+                                                                          echo $email; // Nếu không phải email, hiển thị "Khách hàng"
+                                                                      }
+                                                                    @endphp
+                                                                  </strong></td>
+                                                                  
+                                                                <td ><p>{{ $comment->comments }}</p></td>
+                                                                <td class="text-right">{{ $comment->rating }} <i class="ion-android-star"></i> </td>
+                                                                <td class="text-right">{{ \Carbon\Carbon::parse($comment->comment_date)->format('d/m/Y') }}</td>
+                                                            </tr>
+                                                        @endforeach
+                                                    </tbody>
+                                                </table>
+                                            @else
+                                                <p>Hiện tại chưa có đánh giá nào cho sản phẩm này.</p>
+                                            @endif
                                         </div>
-                                        <h2>Write a review</h2>
-                                        <div class="form-group required">
-                                            <div class="col-sm-12 p-0">
-                                                <label>Your Email <span class="required">*</span></label>
-                                                <input class="review-input" type="email" name="con_email"
-                                                    id="con_email" required>
+
+
+
+                                    @if (Auth::check())
+                                        <h2>Viết đánh giá</h2>
+                                        <form action="{{ route('submit-review') }}" method="POST">
+                                            @csrf
+                                            <input type="hidden" name="product_id" value="{{ $data->id }}">
+                                            <!-- ID sản phẩm -->
+
+                                            <div class="form-group required">
+                                                <div class="col-sm-12 p-0">
+                                                    <label>Email của bạn <span class="required">*</span></label>
+                                                    <input class="review-input" type="email"
+                                                        value="{{ Auth::user()->email }}" readonly>
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div class="form-group required second-child">
-                                            <div class="col-sm-12 p-0">
-                                                <label class="control-label">Share your opinion</label>
-                                                <textarea class="review-textarea" name="con_message" id="con_message"></textarea>
-                                                <div class="help-block"><span class="text-danger">Note:</span> HTML is
-                                                    not
-                                                    translated!</div>
+                                            <div class="form-group required second-child">
+                                                <div class="col-sm-12 p-0">
+                                                    <label>Ý kiến của bạn</label>
+                                                    <textarea class="review-textarea" name="comments" required></textarea>
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div class="form-group last-child required">
-                                            <div class="col-sm-12 p-0">
-                                                <div class="your-opinion">
-                                                    <label>Your Rating</label>
-                                                    <span>
-                                                        <select class="star-rating">
+                                            <div class="form-group last-child required">
+                                                <div class="col-sm-12 p-0">
+                                                    <div class="your-opinion">
+                                                        <label>Đánh giá của bạn</label>
+                                                        <select class="star-rating" name="rating" required>
                                                             <option value="1">1</option>
                                                             <option value="2">2</option>
                                                             <option value="3">3</option>
                                                             <option value="4">4</option>
                                                             <option value="5">5</option>
                                                         </select>
-                                                    </span>
+                                                    </div>
                                                 </div>
                                             </div>
                                             <div class="kenne-btn-ps_right">
-                                                <button class="kenne-btn">Continue</button>
+                                                <button type="submit" class="kenne-btn">Gửi đánh giá</button>
                                             </div>
+                                        </form>
+                                    @else
+                                        <div class="login-required">
+                                            <p>Bạn cần đăng nhập để bình luận.</p>
                                         </div>
-                                    </form>
+                                    @endif
                                 </div>
                             </div>
                         </div>
