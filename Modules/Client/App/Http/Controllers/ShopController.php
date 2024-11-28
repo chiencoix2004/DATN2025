@@ -95,7 +95,7 @@ class ShopController extends Controller
     {
 
         $data = Product::query()->where(['slug' => $slug])->first();
-        $realedProducts = Product::query()->where(['category_id' => $data->category_id])->where('id', '!=', $data->id)->get();
+        $realedProducts = Product::query()->where(['sub_category_id' => $data->sub_category_id])->where('id', '!=', $data->id)->get();
       //  dd($realedProducts);
       if ($data) {
             // Lấy danh sách bình luận và thông tin người dùng liên quan

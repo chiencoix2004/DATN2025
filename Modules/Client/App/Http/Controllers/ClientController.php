@@ -3,12 +3,14 @@
 namespace Modules\Client\App\Http\Controllers;
 
 use App\Models\Post;
+use App\Models\Banner;
+use App\Models\Product;
+use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Http\Controllers\Controller;
-use Illuminate\Http\RedirectResponse;
-use App\Models\Category;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\RedirectResponse;
 
 class ClientController extends Controller
 {
