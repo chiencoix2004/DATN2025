@@ -3,6 +3,7 @@
 namespace Modules\Admin\App\Http\Controllers;
 
 use App\Models\User;
+use App\Notifications\ForgotPasswordAdmin;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -27,32 +28,23 @@ class ForgotPasswordController extends Controller
 
     public function postForgotPassword(Request $request): RedirectResponse
     {
-        
+
+
         $request->validate(['email' => 'required|email']);
 
+        $email = $request->email;
         $user = User::where('email', $request->email)->first();
 
         if (!$user) {
             return back()->withErrors(['email' => 'Email không tồn tại trong hệ thống.']);
-        }else{
+        } else {
             if ($user->roles_id != 2) {
-                $status = Password::sendResetLink($request->only('email'));
-            
-                if ($status === Password::RESET_LINK_SENT) {
-                    return redirect()->route('admin.confirm.mail')
-                        ->with([
-                            'success' => 'Liên kết đặt lại mật khẩu đã được gửi đến email của bạn.',
-                            'email' => $request->email
-                        ]);
-                } else {
-                    return redirect()->back()->with('error','Đã xảy ra lỗi, vui lòng thử lại sau.');
-                }
-            }else{
-                return redirect()->back()->with('error','Email không tồn tại trong hệ thống.');
+                $user->notify(new ForgotPasswordAdmin());
+                return redirect()->route('admin.confirm.mail')->with('email', $email);
+            } else {
+                return redirect()->back()->with('error', 'Email không tồn tại trong hệ thống.');
             }
         }
-        
-       
     }
     public function resetPassword(Request $request, $token)
     {
@@ -65,7 +57,7 @@ class ForgotPasswordController extends Controller
             'token' => 'required',
             'email' => 'required|email',
             'password' => 'required|string|min:8|confirmed|regex:/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&#])[A-Za-z\d@$!%*?&#]{8,}$/',
-            'password_confirmation' => 'required_with:password|same:password',
+            // 'password_confirmation' => 'required_with:password|same:password',
         ], [
             'password.required' => 'Vui lòng nhập mật khẩu.',
             'password.string' => 'Mật khẩu phải là chuỗi ký tự.',
@@ -73,33 +65,33 @@ class ForgotPasswordController extends Controller
             'password.confirmed' => 'Xác nhận mật khẩu không khớp.',
             'password.regex' => 'Mật khẩu cần chứa ít nhất 1 chữ, 1 số và 1 ký tự đặc biệt',
 
-            'password_confirmation.required_with' => 'Vui lòng xác nhận mật khẩu.',
-            'password_confirmation.same' => 'Mật khẩu xác nhận không khớp với mật khẩu.',
+            // 'password_confirmation.required_with' => 'Vui lòng xác nhận mật khẩu.',
+            // 'password_confirmation.same' => 'Mật khẩu xác nhận không khớp với mật khẩu.',
         ]);
 
         if ($validator->fails()) {
             return redirect()->back()->withErrors($validator)->withInput();
         }
 
+
+
         // dd($validator->fails());
-       
         $status = Password::reset(
             $request->only('email', 'password', 'password_confirmation', 'token'),
             function ($user, $password) {
-                $user->forceFill([
-                    'password' => Hash::make($password)
-                ])->save();
-
-                $user->setRememberToken(Str::random(60));
+                $user->password = Hash::make($password);
+                $user->save();
+                // dd($user);
             }
         );
+        return redirect()->route('login.admin')->with('status', 'Mật khẩu đã được cập nhật thành công.');
 
-        if ($status == Password::PASSWORD_RESET) {
-            DB::table('password_reset_tokens')->where('email', $request->input('email'))->delete();
-            return redirect()->route('login.admin')->with('status', __($status));
-        } else {
-            return back()->withErrors(['email' => [__($status)]]);
-        }
+
+        // return $status === Password::PASSWORD_RESET
+        //     ? redirect()->route('login.admin')->with('status', __($status))
+        //     : back()->withErrors(['email' => [__($status)]]);
+
+       
     }
 
     public function confirmMail()
