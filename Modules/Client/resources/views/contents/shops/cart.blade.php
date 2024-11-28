@@ -10,8 +10,8 @@
             <div class="breadcrumb-content">
                 <h2>Shop Related</h2>
                 <ul>
-                    <li><a href="index.html">Home</a></li>
-                    <li class="active">Cart</li>
+                    <li><a href="{{ route('index') }}">Trang Chủ</a></li>
+                    <li class="active">Giỏ Hàng</li>
                 </ul>
             </div>
         </div>
