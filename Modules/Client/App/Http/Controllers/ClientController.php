@@ -3,8 +3,6 @@
 namespace Modules\Client\App\Http\Controllers;
 
 use App\Models\Post;
-use App\Models\Banner;
-use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Http\Controllers\Controller;

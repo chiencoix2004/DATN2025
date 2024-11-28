@@ -79,14 +79,6 @@ class ShopController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request): RedirectResponse
-    {
-        //
-    }
-
-    /**
      * Show the specified resource.
      */
     // public function show(string $slug)
@@ -101,10 +93,11 @@ class ShopController extends Controller
     // }
     public function show(string $slug)
     {
-        // Tìm sản phẩm theo slug
-        $data = Product::query()->where('slug', $slug)->first();
 
-        if ($data) {
+        $data = Product::query()->where(['slug' => $slug])->first();
+        $realedProducts = Product::query()->where(['category_id' => $data->category_id])->where('id', '!=', $data->id)->get();
+      //  dd($realedProducts);
+      if ($data) {
             // Lấy danh sách bình luận và thông tin người dùng liên quan
             $comments = Comment::with('user') // Eager load quan hệ 'user'
                 ->where('products_id', $data->id)
@@ -123,10 +116,6 @@ class ShopController extends Controller
     }
 
 
-
-
-
-
     /**
      * Show the form for editing the specified resource.
      */
@@ -138,16 +127,6 @@ class ShopController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, $id): RedirectResponse
-    {
-        //
-    }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy($id)
-    {
-        //
-    }
+
 }

@@ -16,9 +16,11 @@ use Modules\Admin\App\Http\Controllers\SupportController;
 use Modules\Admin\App\Http\Controllers\CategoryController;
 use Modules\Admin\App\Http\Controllers\AttributeController;
 use Modules\Admin\App\Http\Controllers\StatisticalController;
-use Modules\Admin\App\Http\Controllers\AuthenticateController;
 use Modules\Admin\App\Http\Controllers\NotificationController;
 use Modules\Admin\App\Http\Controllers\ForgotPasswordController;
+use Modules\Admin\App\Http\Controllers\AuthenticateController;
+use Modules\Admin\App\Http\Controllers\WalletController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -76,7 +78,6 @@ Route::prefix('admin')
                 Route::get('delete/{id}', 'delete')->name('delete');
                 Route::post('add/{position}', 'add')->name('add');
             });
-
         // Route quản lý categories
         Route::controller(CategoryController::class)->prefix('categories')->as('categories.')->group(function () {
             Route::get('list', 'listCategories')->name('list');
@@ -89,6 +90,23 @@ Route::prefix('admin')
             Route::delete('delete-danh-muc/{category}', 'destroy')->name('delete_pl');
             Route::delete('delete-sub-danh-muc/{subCategory}', 'destroySub')->name('delete_dm');
         });
+
+
+        //walelt
+
+        Route::controller(WalletController::class)->prefix('wallet')->as('wallet.')->group(function (){
+            Route::get('list-withdraw', 'index')->name('list');
+            Route::get('withdraw/{id}', 'withdraw')->name('withdraw');
+            Route::post('update-withdraw', 'updatepost')->name('updateupdatepost');
+            Route::post('lock-wallet', 'lockwallet')->name('lockwallet');
+            Route::post('holdback', 'holdback')->name('holdback');
+            Route::get('list-wallet', 'listallwallet')->name('listallwallet');
+            Route::get('wallet-info/{id}', 'walletinfo')->name('walletinfo');
+
+
+        });
+
+
 
         // Route quản lý products
         Route::controller(ProductController::class)->prefix('product')->as('product.')->group(function () {
@@ -112,8 +130,17 @@ Route::prefix('admin')
             Route::get('/{id}/editComment', 'editComment')->name('editComment');
             Route::put('{id}updateComment', 'updateComment')->name('updateComment');
             Route::post('bulk-action', 'bulkAction')->name('bulkAction');
-
         });
+
+    // Route quản lý attributes
+    Route::controller(AttributeController::class)->prefix('attributes')->as('attributes.')->group(function () {
+        Route::get('list', 'listAttr')->name('listAttr');
+        Route::post('add', 'addAttr')->name('addAttr');
+        Route::get('{id}/delValueC', 'delValueC')->name('delValueC');
+        Route::get('{id}/delValueS', 'delValueS')->name('delValueS');
+        Route::get('{atrr}/edit', 'showFormEdit')->name('edit');
+        Route::put('{atrr}/update', 'update')->name('update');
+    });
 
         // Route quản lý attributes
         Route::controller(AttributeController::class)->prefix('attributes')->as('attributes.')->group(function () {
