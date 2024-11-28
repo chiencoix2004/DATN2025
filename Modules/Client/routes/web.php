@@ -40,7 +40,7 @@ Route::controller(ClientController::class)
     route::get(('search/{keywd}'), 'searchget')->name('searchget');
     // Route::get('querybuilder')
 });
-Route::controller(ShopController::class)->prefix('shop')->as('shop.')->middleware("user")
+Route::controller(ShopController::class)->prefix('shop')->as('shop.')
 ->group(function () {
     Route::get('/', 'index')->name('shopIndex');
     Route::get('product-detail/{slug}', 'show')->name('productDetail');
@@ -111,3 +111,5 @@ Route::controller(CartController::class)->group(function () {
     Route::get('/cart/checkout', 'order')->name('cart.checkout');
     Route::post('/cart/remove-discount-code', 'removeDiscountCode')->name('cart.removeDiscountCode');
 });
+
+Route::post('/submit-review', [ReviewController::class, 'submitReview'])->name('submit-review');
