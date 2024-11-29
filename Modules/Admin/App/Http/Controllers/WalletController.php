@@ -10,6 +10,9 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Exception;
 use App\Models\Trx_history;
+use App\Models\UserEkyc;
+use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\Storage;
 
 class WalletController extends Controller
 {
@@ -116,9 +119,6 @@ class WalletController extends Controller
         try{
            $data =  $withdraw->updatewithdraw($withdraw_request_id, $data_wallet);
             if ($data){
-                $withdraw = new Withdraw();
-                $data =  $withdraw->updatewithdraw($withdraw_request_id, $trx_data);
-
                 try{
                     $wallet  = new Wallet();
                     $wallet ->setLockedWallet($request->wallet_id);
@@ -147,8 +147,130 @@ class WalletController extends Controller
         $data = $wallet->getWalletInfo($id);
         $trx = new Trx_history();
         $data_trx = $trx->gettrxuser($id);
-        dd($data_trx);
+        //dd($data_trx);
 
         return view('admin::wallet.userdetal', compact('data','data_trx'));
     }
+    public function setActive($id){
+        $wallet = new Wallet();
+        try{
+            $wallet->setActiveWallet($id);
+            return back()->with('success', 'Cập nhật thành công');
+        } catch(Exception $e){
+            dd($e);
+        }
+
+    }
+    public function SetInActive($id){
+        $wallet = new Wallet();
+        try{
+            $wallet->setInActiveWallet($id);
+            return back()->with('success', 'Cập nhật thành công');
+        } catch(Exception $e){
+            dd($e);
+        }
+
+    }
+    public function SetBasicUser($id){
+        $wallet = new Wallet();
+        try{
+            $wallet->setLevelBasicWallet($id);
+            return back()->with('success', 'Cập nhật thành công');
+        } catch(Exception $e){
+            dd($e);
+        }
+
+    }
+     public function SetFullUser($id){
+        $wallet = new Wallet();
+        try{
+            $wallet->setLevelFullWallet($id);
+            return back()->with('success', 'Cập nhật thành công');
+        } catch(Exception $e){
+            dd($e);
+        }
+
+    }
+    public function lockwalletUser(Request $request){
+        $wallet = new Wallet();
+        try{
+            $wallet->setLockedWallet($request->wallet_id);
+            if(isset($request->admin_note)){
+                $wallet->updateAdminNote($request->wallet_id,$request->admin_note);
+            }
+            return back()->with('success', 'Cập nhật thành công');
+        } catch(Exception $e){
+            dd($e);
+        }
+
+    }
+
+
+    public function SeachWithdraw(Request $request){
+        $withdraw = new Withdraw();
+        $data = $withdraw->seach($request->keywd);
+        return view('admin::wallet.list', compact('data'));
+    }
+
+    public function listUserPending(){
+        $ekyc = new UserEkyc();
+        $data = $ekyc->listPedingUser();
+        dd($data);
+    }
+
+    public function userpedDetail($id)
+    {
+        //0
+        $ekyc = new UserEkyc();
+        $data = $ekyc->getUserKyc($id);
+        //dd($data);
+        //1
+        $idcard_back = $data->id_card_image_back;
+        $idcard_front = $data->id_card_image_front;
+        //2
+        $idcard_back_content = Storage::get($idcard_back );
+        $idcard_front_content = Storage::get($idcard_front);
+        //3
+        $idcard_back_decode = Crypt::decrypt($idcard_back_content);
+        $idcard_front_decode = Crypt::decrypt($idcard_front_content);
+        //4
+        $idcard_back_base64 = 'data:image/jpeg;base64,' . base64_encode($idcard_back_decode);
+        $idcard_front_base64 = 'data:image/jpeg;base64,' . base64_encode($idcard_front_decode);
+
+        return view('admin::wallet.userpedetail', compact('data', 'idcard_back_base64', 'idcard_front_base64'));
+
+    }
+
+    public function userpedUpdate(Request $request){
+        if(empty($request->status)){
+            return back()->withErrors(['status' => 'Vui lòng chọn trạng thái']);
+        }
+
+        if($request->status == 1){
+            if(isset($request->admin_note)){
+                $wallet = new Wallet();
+                $wallet->updateAdminNote($request->wallet_account_id,$request->admin_note);
+            }
+            $ekyc = new UserEkyc();
+            $ekyc->setStasusAprroved($request->id);
+            $wallet = new Wallet();
+            $wallet->setLevelFullWallet($request->wallet_account_id);
+            return back()->with('success', 'Cập nhật thành công');
+
+        } else if($request->status == 2){
+            if(isset($request->admin_note)){
+                $wallet = new Wallet();
+                $wallet->updateAdminNote($request->wallet_account_id,$request->admin_note);
+            }
+            $ekyc = new UserEkyc();
+            $ekyc->setfillekyc($request->id);
+            $wallet = new Wallet();
+            $wallet->setLevelBasicWallet($request->wallet_account_id);
+            return back()->with('success', 'Cập nhật thành công');
+        }
+
+
+    }
 }
+
+

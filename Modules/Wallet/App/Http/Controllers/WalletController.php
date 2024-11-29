@@ -36,19 +36,26 @@ class WalletController extends Controller
         return view('wallet::trans.topup');
     }
     public function charge(Request $request)
-    {
-        $decimal_Ammount = $request->ammount;
-        // echo $decimal_Ammount;
-        //format to integer
-        $intammount = ($decimal_Ammount / 1) * 100;
-        // echo($intammount);
-        $new_Payment =  new Vnpay();
-        try {
-            $new_Payment->create_payment($intammount, "vn");
-        } catch (\Exception $e) {
-            return redirect()->back()->with("error", $e->getMessage());
-        }
+{
+    $decimal_Ammount = $request->ammount;
+
+    // Remove dots and convert to integer
+    $decimal_Ammount = str_replace('.', '', $decimal_Ammount);
+
+    if (!is_numeric($decimal_Ammount)) {
+        return redirect()->back()->with("error", "Invalid amount value.");
     }
+
+    // Format to integer
+    $intammount = intval($decimal_Ammount /10);
+
+    $new_Payment = new Vnpay();
+    try {
+        $new_Payment->create_payment($intammount, "vn");
+    } catch (\Exception $e) {
+        return redirect()->back()->with("error", $e->getMessage());
+    }
+}
     public function callbackvnpaydata()
     {
         $user_id = Auth::user()->id;

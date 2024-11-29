@@ -98,6 +98,15 @@ Route::prefix('admin')
             Route::post('holdback', 'holdback')->name('holdback');
             Route::get('list-wallet', 'listallwallet')->name('listallwallet');
             Route::get('wallet-info/{id}', 'walletinfo')->name('walletinfo');
+            Route::get('setActive/{id}', 'setActive')->name('setActive');
+            Route::get('SetInActive/{id}', 'SetInActive')->name('SetInActive');
+            Route::get('SetLevelBasic/{id}', 'SetBasicUser')->name('SetBasicUser');
+            Route::get('SetLevelFull/{id}', 'SetFullUser')->name('SetFullUser');
+            Route::post('lock-wallet', 'lockwalletUser')->name('lockwalletUser');
+            Route::get('listUserPending', 'listUserPending')->name('listUserPending');
+            Route::get('userpedDetail/{id}', 'userpedDetail')->name('userpedDetail');
+            Route::post('userpedUpdate', 'userpedUpdate')->name('userpedUpdate');
+
 
 
         });

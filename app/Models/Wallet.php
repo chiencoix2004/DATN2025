@@ -176,5 +176,10 @@ class Wallet extends Model
             return $wallet;
         });
     }
+    public function search($keywd){
+        return $this->where('wallet_account_id', $keywd)
+        ->orWhere('user_id', $keywd)
+        ->get();
+    }
 }
 

@@ -60,4 +60,9 @@ class Withdraw extends Model
     public function updatewithdraw($withdraw_request_id,$data){
         return $this->where('withdraw_request_id',$withdraw_request_id)->update($data);
     }
+    public function seach($keywd){
+        return $this->where('withdraw_request_id',$keywd)
+        ->orWhere('wallet_account_id',$keywd)
+        ->get();
+    }
 }
