@@ -3,9 +3,9 @@
 @section('content')
 <script src="{{ Module::asset('wallet:libs/gridjs/gridjs.umd.js') }}"></script>
     <div class="">
-        <div class="alert alert-primary" role="alert">
+        {{-- <div class="alert alert-primary" role="alert">
             <p><i class="mdi mdi-alert-circle-outline me-2"></i> Ví tiền đang trong trạng thái xây dựng, chức năng xác thực người đã được tắt</p>
-         </div>
+         </div> --}}
         @if($data->wallet_status != 1)
         <div class="alert alert-danger" role="alert">
            <p> <i class="mdi mdi-block-helper me-2"></i> Ví tiền của bạn đã bị vô hiệu hóa, vui lòng liên hệ đội ngũ hỗ trợ để biết thêm chi tiết</p>
@@ -17,7 +17,7 @@
            <p> Một số chức năng sẽ không thể sử dụng sau đây</p>
            <ul>
                 <li> Rút tiền</li>
-                <li> Chuyển tiền</li>
+                {{-- <li> Chuyển tiền</li> --}}
                 <li> Nạp tiền</li>
             </ul>
         </div>

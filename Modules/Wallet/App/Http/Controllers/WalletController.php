@@ -37,6 +37,15 @@ class WalletController extends Controller
     }
     public function charge(Request $request)
 {
+    $wallet = new Wallet();
+    $user_id = auth()->user()->id;
+    $data = $wallet->getWallet($user_id);
+    if($data->wallet_user_level == 1){
+        return redirect()->back()->with('error', 'Tài khoản của bạn chưa được xác thực');
+    }
+    if($data->wallet_status != 1){
+        return redirect()->back()->with('error', 'Ví tiền của bạn đã bị vô hiệu hóa');
+    }
     $decimal_Ammount = $request->ammount;
 
     // Remove dots and convert to integer
@@ -62,6 +71,7 @@ class WalletController extends Controller
         $wallet = new Wallet();
         $walletaccount = $wallet->getWallet($user_id);
         $wallet_account_id = $walletaccount->wallet_account_id;
+
 
         $returndata = [
             'Ammout' => $_GET['vnp_Amount'],
@@ -195,6 +205,12 @@ class WalletController extends Controller
         $wallet_account_id = $data->wallet_account_id;
         $WalletStastus = $wallet->getWalletStastus($wallet_account_id);
         $WalletLevel = $wallet->getWalletLevel($wallet_account_id);
+        if($data->wallet_user_level == 1){
+            return redirect()->back()->with('error', 'Tài khoản của bạn chưa được xác thực');
+        }
+        if($data->wallet_status != 1){
+            return redirect()->back()->with('error', 'Ví tiền của bạn đã bị vô hiệu hóa');
+        }
 
         // Remove any formatting characters and convert to integer
         $decimal_Ammount = str_replace(['.', ','], '', $request->amount);

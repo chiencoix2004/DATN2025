@@ -92,7 +92,7 @@
                                     <input type="radio" id="status2" name="status" value="2">
                                     <label for="status2">Từ chối thông tin</label>
                                 </div>
-                                <input type="hidden" name="id" value="{{ $data->id }}">
+                                <input type="hidden" name="id" value="{{ $data->user_id }}">
                                 <input type="hidden" name="wallet_account_id" value="{{ $data->wallet_account_id }}">
                             </div>
                             <button type="submit" class="btn btn-primary">Xác nhận</button>

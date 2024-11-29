@@ -594,8 +594,7 @@
                                     </li>
                                     <li>
                                         <a href="{{ route('wallet.index') }}" class="nav-link ">
-                                            <i class="bx bx-home
-                                            icon nav-icon"></i>
+                                            <i class="bx bx-wallet-alt"> </i>
                                             <span data-key="t-dashboard">Ví của tôi</span>
                                         </a>
                                     </li>
@@ -614,7 +613,7 @@
                                             <span data-key="t-dashboard">Nạp Tiền </span>
                                         </a>
                                     </li>
-                                    <li>
+                                    {{-- <li>
                                         <a href="index.html" class="nav-link ms-3">
                                             <i class="fas fa-money-bill-wave
                                             icon nav-icon"></i>
@@ -627,7 +626,7 @@
                                             icon nav-icon"></i>
                                             <span data-key="t-dashboard">Cài đặt ví tiền </span>
                                         </a>
-                                    </li>
+                                    </li> --}}
                                     {{-- <li class="nav-item dropdown">
                                         <a class="nav-link dropdown-toggle arrow-none" href="#" id="topnav-uielement" role="button"
                                             data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

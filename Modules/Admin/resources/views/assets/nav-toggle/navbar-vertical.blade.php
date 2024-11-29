@@ -181,7 +181,7 @@
                             <span class="nav-link-icon">
                                 <span class="fas fa-chart-pie"></span>
                             </span>
-                            <span class="nav-link-text ps-1">Danh sách yêu cầu duyệt</span>
+                            <a class="nav-link" href="{{ route('admin.wallet.listUserPending') }}">  <span class="nav-link-text ps-1">Yêu cầu duyệt thông tin</span> </a>
                         </div>
 
 

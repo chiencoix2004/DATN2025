@@ -95,12 +95,14 @@ class UserEkyc extends Model
     }
 
     public function listPedingUser(){
-        return $this->where('status', "PENDING_APROVED")->get();
+        return $this->join("wallet","wallet.user_id","=","user_wallet_detail.user_id")
+        ->where('user_wallet_detail.status', "PENDING_APROVED")
+        ->get();
     }
     public function getUserKyc($id){
         return $this
         ->join("wallet","wallet.user_id","=","user_wallet_detail.user_id")
-        ->where('user_wallet_detail.id', $id)->first();
+        ->where('user_wallet_detail.user_id', $id)->first();
     }
 
 }

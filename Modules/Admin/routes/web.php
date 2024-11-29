@@ -91,6 +91,7 @@ Route::prefix('admin')
         //walelt
 
         Route::controller(WalletController::class)->prefix('wallet')->as('wallet.')->group(function (){
+
             Route::get('list-withdraw', 'index')->name('list');
             Route::get('withdraw/{id}', 'withdraw')->name('withdraw');
             Route::post('update-withdraw', 'updatepost')->name('updateupdatepost');
@@ -106,8 +107,11 @@ Route::prefix('admin')
             Route::get('listUserPending', 'listUserPending')->name('listUserPending');
             Route::get('userpedDetail/{id}', 'userpedDetail')->name('userpedDetail');
             Route::post('userpedUpdate', 'userpedUpdate')->name('userpedUpdate');
-
-
+            Route::post('search-withdraw', 'SeachWithdraw')->name('SeachWithdraw');
+            Route::post('search-wallet', 'SeachWallet')->name('SeachWallet');
+            Route::get('list-withdraw-ped', 'listwithdrawPed')->name('listwithdrawPed');
+            Route::get('list-withdraw-approved', 'listwithdrawapp')->name('listwithdrawapp');
+            Route::get('list-withdraw-reject', 'listwithdrawrej')->name('listwithdrawrej');
 
         });
 

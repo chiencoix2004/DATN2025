@@ -169,7 +169,7 @@
                                         <div class="modal-body">
                                             <p>Nếu bạn bỏ qua phần này thì bạn sẽ không thể thực hiện các chức năng sau đây</p>
                                             <ul>
-                                                <li>Chuyển tiền</li>
+                                                {{-- <li>Chuyển tiền</li> --}}
                                                 <li>Nạp tiền</li>
                                                 <li>Rút tiền</li>
                                             </ul>

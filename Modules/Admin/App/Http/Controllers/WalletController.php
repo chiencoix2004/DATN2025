@@ -209,13 +209,15 @@ class WalletController extends Controller
     public function SeachWithdraw(Request $request){
         $withdraw = new Withdraw();
         $data = $withdraw->seach($request->keywd);
+
         return view('admin::wallet.list', compact('data'));
     }
 
     public function listUserPending(){
         $ekyc = new UserEkyc();
         $data = $ekyc->listPedingUser();
-        dd($data);
+      //  dd($data);
+    return view('admin::wallet.lisUserPed', compact('data'));
     }
 
     public function userpedDetail($id)
@@ -253,6 +255,7 @@ class WalletController extends Controller
             }
             $ekyc = new UserEkyc();
             $ekyc->setStasusAprroved($request->id);
+
             $wallet = new Wallet();
             $wallet->setLevelFullWallet($request->wallet_account_id);
             return back()->with('success', 'Cập nhật thành công');
@@ -263,7 +266,9 @@ class WalletController extends Controller
                 $wallet->updateAdminNote($request->wallet_account_id,$request->admin_note);
             }
             $ekyc = new UserEkyc();
-            $ekyc->setfillekyc($request->id);
+
+                $ekyc->setfillekyc($request->id);
+
             $wallet = new Wallet();
             $wallet->setLevelBasicWallet($request->wallet_account_id);
             return back()->with('success', 'Cập nhật thành công');
@@ -271,6 +276,31 @@ class WalletController extends Controller
 
 
     }
-}
+    public function listwithdrawPed(){
+        $withdraw = new Withdraw();
+         $data = $withdraw->getListped();
+         return view('admin::wallet.list', compact('data'));
+    }
+    public function listwithdrawapp(){
+         $withdraw = new Withdraw();
+         $data = $withdraw->getaproved();
+         return view('admin::wallet.list', compact('data'));
+    }
+    public function listwithdrawrej(){
+        $withdraw = new Withdraw();
+        $data = $withdraw->getRejected();
+        return view('admin::wallet.list', compact('data'));
+   }
+   public function SeachWallet(Request $request){
+    $wallet = new Wallet();
+    $data = $wallet->search($request->search);
+    return view('admin::wallet.listuser', compact('data'));
+   }
+   public function SeachWalletPed(Request $request){
+    $wallet = new Wallet();
+    $data = $wallet->search($request->search);
+    return view('admin::wallet.listuser', compact('data'));
+   }
 
+}
 

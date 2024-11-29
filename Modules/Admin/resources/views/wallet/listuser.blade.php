@@ -11,22 +11,14 @@
                 {{-- <a href="{{ route('admin.ticket.create') }}" class="btn btn-primary mt-2">Tạo vé mới</a> --}}
                 {{-- searchbar --}}
                 <div class="mt-2">
-                    <form action="{{ route('admin.ticket.search') }}" method="POST">
+                    <form action="{{ route('admin.wallet.SeachWallet') }}" method="POST">
                         @csrf
                         <div class="input-group">
                             <input type="text" class="form-control" name="search" placeholder="Tìm kiếm theo mã ví hoặc mã khách hàng">
                             <button class="btn btn-outline-secondary" type="submit">Tìm kiếm</button>
                         </div>
                     </form>
-                    {{-- date to date --}}
-                    <form action="#" method="POST">
-                        @csrf
-                        <div class="input-group mt-2">
-                            <input type="date" class="form-control" name="from_date">
-                            <input type="date" class="form-control" name="to_date">
-                            <button class="btn btn-outline-secondary" type="submit">Tìm kiếm theo ngày</button>
-                        </div>
-                    </form>
+
                 </div>
             </div>
             {{-- <div class="col-md-6 text-end">
