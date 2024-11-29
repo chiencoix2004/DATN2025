@@ -150,9 +150,9 @@ class Vnpay extends Model
             $query .= urlencode($key) . "=" . urlencode($value) . '&';
         }
 
-        $vnp_Url = $this->vnp_apiUrl . "?" . $query;
+        $vnp_Url = $this->vnp_Url . "?" . $query;
         if (isset($this->vnp_hashSecret)) {
-            $vnpSecureHash = hash_hmac('sha512', $hashdata, $this->vnp_hashSecret);
+            $vnpSecureHash =   hash_hmac('sha512', $hashdata, $this->vnp_hashSecret);//
             $vnp_Url .= 'vnp_SecureHash=' . $vnpSecureHash;
         }
         header('Location: ' . $vnp_Url);
