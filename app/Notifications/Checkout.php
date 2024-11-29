@@ -38,24 +38,25 @@ class Checkout extends Notification
      */
     public function toMail(object $notifiable): MailMessage
     {
-        $mailMessage = (new MailMessage)
-            ->subject('Hóa đơn đặt hàng')
-            ->line('Cảm ơn bạn đã đặt hàng!')
-            ->line('Mã đơn hàng: ' . $this->order->id)
-            ->line('Trạng thái đơn hàng: ' . $this->order->status_order)
-            ->line('Trạng thái thanh toán: ' . $this->order->status_payment);
+        $orderItemsArray = [];
 
         foreach ($this->orderItems as $item) {
-            $mailMessage->line('Sản phẩm: ' . $item->productVariant->product->name)
-            ->line('Kích thước: ' . $item->productVariant->size->size_value)
-            ->line('Màu sắc: ' . $item->productVariant->color->color_value)
-            ->line('Số lượng: ' . $item->quantity)
-            ->line('Giá: ' . $item->price);
+            $orderItemsArray[] = [
+                'name' => $item->productVariant->product->name,
+                'image' => $item->productVariant->product->image_avatar,
+                'size' => $item->productVariant->size->size_value,
+                'color' => $item->productVariant->color->color_value,
+                'quantity' => $item->product_quantity,
+                'price' => $item->product_price_final,
+            ];
         }
 
-        $mailMessage->line('Cảm ơn bạn đã sử dụng ứng dụng của chúng tôi!');
-
-        return $mailMessage;
+        return (new MailMessage)
+            ->subject('Hóa đơn đặt hàng')
+            ->view('client::emails.order', [
+                'order' => $this->order,
+                'orderItems' => $orderItemsArray,
+            ]);
     }
 
     /**
