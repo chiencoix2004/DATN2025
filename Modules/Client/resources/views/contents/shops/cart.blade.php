@@ -8,7 +8,7 @@
     <div class="breadcrumb-area">
         <div class="container">
             <div class="breadcrumb-content">
-                <h2>Shop Related</h2>
+                <h2>Thời trang Phong cách Việt</h2>
                 <ul>
                     <li><a href="{{ route('index') }}">Trang Chủ</a></li>
                     <li class="active">Giỏ Hàng</li>
