@@ -376,7 +376,7 @@
                                 if (response.method == 'vnpay') {
                                     window.location.href = response.link;
                                 } else {
-                                    window.location.href = '/my-account';
+                                    window.location.href = response.link;
                                 }
 
                                 // } else {

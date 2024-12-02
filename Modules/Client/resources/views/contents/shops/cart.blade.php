@@ -176,6 +176,7 @@
                             loadCartItems(); // Cập nhật sản phẩm trong minicart
                             loadCartItemCount(); // Cập nhật số lượng sản phẩm trong minicart
 
+
                         } else {
                             // $('.item-count').text(0);
                             console.error("Lỗi khi lấy danh sách giỏ hàng:", response.message);
@@ -184,6 +185,10 @@
                     error: function(jqXHR, textStatus, errorThrown) {
                         $('#cart-table-body').empty(); // Xóa nội dung  bảng giỏ hàng
                         $('.item-count').text(0);
+                        loadCartItems();
+                        loadCartItemCount();
+                        $('#totalAmount').text(formatVND(0));
+
                         console.error("Yêu cầu AJAX thất bại:", textStatus, errorThrown);
                     }
                 });
@@ -316,6 +321,7 @@
                             console.log("Xóa sản phẩm thành công:", response.message);
                             fetchCartItems(); // Tải lại danh sách giỏ hàng
                             updateCartTotal();
+                            
                         } else {
                             console.error("Lỗi khi xóa sản phẩm:", response.message);
                         }
@@ -372,10 +378,12 @@
                                 alert(response.message);
                                 updateCartTotal(); // Cập nhật tổng tiền giỏ hàng
                             } else {
-                                alert(response.message);
+                                // alert(response.message);
+                                alert(response.error);
                             }
                         },
                         error: function(jqXHR, textStatus, errorThrown) {
+                            
                             console.error("Lỗi khi áp dụng mã giảm giá:", textStatus,
                                 errorThrown);
                         }
