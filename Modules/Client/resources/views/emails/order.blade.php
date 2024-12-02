@@ -131,7 +131,7 @@
                 @endforeach
                 @foreach ($orderItems as $item)
                     <tr class="tfoot">
-                        <th colspan="5" style="text-align: right;">{{ $item['name'] }}:</th>
+                        <th colspan="4" style="text-align: right;">{{ $item['name'] }}:</th>
                         <td style="text-align: right;">
                             {{ number_format($item['price'], 0, ',', '.') }} VND
                             x {{ $item['quantity'] }}
@@ -139,7 +139,7 @@
                     </tr>
                 @endforeach
                 <tr class="tfoot">
-                    <th colspan="5" style="text-align: right;">Giảm giá:</th>
+                    <th colspan="4" style="text-align: right;">Giảm giá:</th>
                     <td style="text-align: right;">
                         @if ($order->discount > 0)
                             {{ number_format($data->discount, 0, ',', '.') }} VNĐ
@@ -149,7 +149,7 @@
                     </td>
                 </tr class="tfoot">
                 <tr class="tfoot">
-                    <th colspan="5" style="text-align: right; border-top: 1px solid black;">Tổng đơn hàng:</th>
+                    <th colspan="4" style="text-align: right; border-top: 1px solid black;">Tổng đơn hàng:</th>
                     <th style="text-align: right; border-top: 1px solid black;">
                         {{ number_format($order->total_price, 0, ',', '.') }} (VNĐ)
                     </th>

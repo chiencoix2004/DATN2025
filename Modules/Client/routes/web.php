@@ -113,3 +113,5 @@ Route::controller(CartController::class)->group(function () {
 });
 
 Route::post('/submit-review', [ReviewController::class, 'submitReview'])->name('submit-review');
+
+Route::get('/invoice/{id}', [MyAccountController::class, 'invoiceDetail'])->name('invoice.show');

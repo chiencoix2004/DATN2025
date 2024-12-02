@@ -111,17 +111,38 @@ class MyAccountController extends Controller
     public function downloadPDF($id)
     {
         // Lấy dữ liệu đơn hàng cùng với các sản phẩm liên quan
-        $data = Order::query()->with('orderItems')->findOrFail($id);
+        $order = Order::findOrFail($id);
+
+        $orderItemsO = OrderDetail::query()
+            ->with('productVariant')
+            ->with("productVariant.size")
+            ->with("productVariant.color")
+            ->with("productVariant.product")
+            ->where('order_id', $order->id)
+            ->get();
+
+        $orderItems = [];
+
+        foreach ($orderItemsO as $item) {
+            $orderItems[] = [
+                'name' => $item->productVariant->product->name,
+                'image' => $item->productVariant->product->image_avatar,
+                'size' => $item->productVariant->size->size_value,
+                'color' => $item->productVariant->color->color_value,
+                'quantity' => $item->product_quantity,
+                'price' => $item->product_price_final,
+            ];
+        }
 
         // Tạo PDF sử dụng view và dữ liệu
-        $pdf = app(PDF::class)->loadView('admin::contents.orders.invoices.view', compact('data'))->setOptions([
+        $pdf = app(PDF::class)->loadView('client::emails.order', compact('order','orderItems'))->setOptions([
             'isRemoteEnabled' => true,
             'chroot' => public_path(),
         ]);
 
         // Đặt tên file tùy chỉnh
-        $date = Carbon::parse($data->date_create_order)->format('d-m-Y');
-        $fileName = 'hóa đơn -' . $data->id . '-' . Str::slug($data->user_name) . "-$date" . '.pdf';
+        $date = Carbon::parse($order->date_create_order)->format('d-m-Y');
+        $fileName = 'hóa đơn -' . $order->id . '-' . Str::slug($order->user_name) . "-$date" . '.pdf';
 
         // Trả về PDF dưới dạng file tải về
         return $pdf->download($fileName);
@@ -289,5 +310,18 @@ class MyAccountController extends Controller
     {
         auth()->logout();
         return redirect()->route('index');
+    }
+
+    public function invoiceDetail($id)
+    {
+        $order = Order::query()->where('users_id', auth()->id())->findOrFail($id);
+        $orderItems = OrderDetail::query()
+            ->with('productVariant')
+            ->with("productVariant.size")
+            ->with("productVariant.color")
+            ->with("productVariant.product")
+            ->where('order_id', $order->id)->get();
+
+        return view('client::contents.shops.orderDetail', compact('order', 'orderItems'));
     }
 }
