@@ -5,6 +5,8 @@
 @endsection
 @section('css-setting')
     <link href="{{ Module::asset('wallet:css/icons.min.css') }}" rel="stylesheet" type="text/css" />
+    <script src="{{ asset('dataTables/datatables.js') }}"></script>
+    <script src="{{ asset('sweetalert2/sweetalert2.all.min.js') }}"></script>
 @endsection
 @section('contents')
     <!-- Begin Kenne's Breadcrumb Area -->
@@ -47,6 +49,7 @@
                     <strong>Ngày Tạo:</strong>
                     {{ \Carbon\Carbon::parse($order->date_create_order)->format('H:i d/m/Y') }}<br>
                     <strong>Trạng thái thanh toán: </strong>{{ $order->status_payment }} <br>
+                    <strong>Trạng thái đơn hàng: </strong>{{ $order->status_order }} <br>
                 </div>
 
             </div>
@@ -136,12 +139,24 @@
             </div>
 
             <div class="row mb-5">
+                <h3>Thao tác</h3>
                 <div class="col-md-3">
                     <a href="{{ route('orders.downloadPDF', ['id' => $order->id]) }}" class="kenne-btn kenne-btn_sm">In hóa
                         đơn</a>
                 </div>
                 <div class="col-md-3">
+                    @if ($order->status_order == 'Chờ xác nhận' || $order->status_order == 'Đã xác nhận')
+                        <button class="kenne-btn kenne-btn_sm" onclick="cancelOrder({{ $order->id }})">Hủy đơn hàng</button>
+                    @endif
 
+                    @if ($order->status_order == 'Đơn hàng bị hủy')
+                        <button class="kenne-btn kenne-btn_sm" onclick="resetOrder({{ $order->id }})">Đặt lại đơn hàng</button>
+                    @endif
+
+                    @if ($order->status_order == 'Đang giao hàng')
+                        <button class="kenne-btn kenne-btn_sm"
+                            onclick="markOrderAsReceived({{ $order->id }})">Đã nhận hàng</button>
+                    @endif
                 </div>
                 <div class="col-md-3">
 
@@ -155,4 +170,94 @@
     <!-- Kenne's Content Wrapper Area End Here -->
 @endsection
 @section('js-setting')
+    <script>
+        function cancelOrder(orderId) {
+            Swal.fire({
+                title: 'Bạn có chắc chắn muốn hủy đơn hàng?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Hủy đơn hàng',
+                cancelButtonText: 'Hủy bỏ',
+                reverseButtons: true
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: '/orders/' + orderId + '/cancel',
+                        type: 'POST',
+                        data: {
+                            _token: '{{ csrf_token() }}'
+                        },
+                        success: function(response) {
+                            
+                            location.reload(); // Tải lại trang để cập nhật trạng thái
+                            Swal.fire('Thành công!', response.message, 'success');
+                            
+                        },
+                        error: function(xhr) {
+                            Swal.fire('Lỗi!', xhr.responseJSON.message, 'error');
+                        }
+                    });
+                }
+            });
+        }
+
+        function resetOrder(orderId) {
+            Swal.fire({
+                title: 'Bạn có chắc chắn muốn đặt lại đơn hàng?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Đặt lại đơn hàng',
+                cancelButtonText: 'Hủy bỏ',
+                reverseButtons: true
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: '/orders/' + orderId + '/reset',
+                        type: 'POST',
+                        data: {
+                            _token: '{{ csrf_token() }}'
+                        },
+                        success: function(response) {
+                            location.reload(); // Tải lại trang để cập nhật trạng thái
+                            Swal.fire('Thành công!', response.message, 'success');
+
+                            
+                        },
+                        error: function(xhr) {
+                            Swal.fire('Lỗi!', xhr.responseJSON.message, 'error');
+                        }
+                    });
+                }
+            });
+        }
+
+        function markOrderAsReceived(orderId) {
+            Swal.fire({
+                title: 'Bạn có chắc chắn đã nhận hàng?',
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonText: 'Đã nhận',
+                cancelButtonText: 'Hủy bỏ'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: '/orders/' + orderId + '/received',
+                        type: 'POST',
+                        data: {
+                            _token: '{{ csrf_token() }}'
+                        },
+                        success: function(response) {
+                            location.reload(); // Tải lại trang để cập nhật trạng thái
+                            Swal.fire('Thành công!', response.message, 'success');
+
+                            
+                        },
+                        error: function(xhr) {
+                            Swal.fire('Lỗi!', xhr.responseJSON.message, 'error');
+                        }
+                    });
+                }
+            });
+        }
+    </script>
 @endsection
