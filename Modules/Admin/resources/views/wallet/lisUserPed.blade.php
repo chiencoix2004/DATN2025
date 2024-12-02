@@ -7,10 +7,10 @@
     <div class="card mb-3 p-4">
         <div class="row align-items-center">
             <div class="col-md-6">
-                <h3 class="mb-0">Danh sách ví tiền </h3>
+                <h3 class="mb-0">Danh sách thông tin duyệt</h3>
                 {{-- <a href="{{ route('admin.ticket.create') }}" class="btn btn-primary mt-2">Tạo vé mới</a> --}}
                 {{-- searchbar --}}
-                <div class="mt-2">
+                {{-- <div class="mt-2">
                     <form action="{{ route('admin.wallet.SeachWallet') }}" method="POST">
                         @csrf
                         <div class="input-group">
@@ -18,8 +18,7 @@
                             <button class="btn btn-outline-secondary" type="submit">Tìm kiếm</button>
                         </div>
                     </form>
-
-                </div>
+                </div> --}}
             </div>
             {{-- <div class="col-md-6 text-end">
                 <a href="{{ route('admin.ticket.spam') }}" class="btn btn-outline-danger ms-2">
@@ -44,17 +43,16 @@
             <table class="table table-bordered table-striped" id="example">
                 <thead class="table-light">
                     <tr>
-                        <th>Mã Ví</th>
+                        <th>Mã Khách hàng</th>
                         <th>Tên chủ sở hữu</th>
                         <th>Xác thực thông tin</th>
-                        <th>Trạng thái ví</th>
                         <th>Hành động</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach ( $data as $item)
                     <tr>
-                        <td>{{ $item->wallet_account_id }}</td>
+                        <td>{{ $item->user_id}}</td>
                         <td>{{ $item->frist_name }}{{ $item->last_name }}</td>
                         <td>
                             @if($item->wallet_user_level == 1)
@@ -63,18 +61,9 @@
                                 <span class="badge bg-success">Đã xác thực</span>
                             @endif
                         </td>
-                        <td>
-                            @if($item->wallet_status == 1)
-                                <span class="badge bg-success">Đang hoạt động</span>
-                            @elseif($item->wallet_status == 2)
-                                <span class="badge bg-primary">Dừng hoạt động</span>
-                                @elseif($item->wallet_status == 3)
-                                <span class="badge bg-danger">Khóa ví</span>
-                            @endif
-                        </td>
                         {{-- <td>{{ ucfirst($item->ticket_category) }}</td> --}}
                         <td>
-                            <a href="{{ route('admin.wallet.walletinfo', ['id' => $item->wallet_account_id]) }}" class="btn btn-primary btn-sm" >Xem</a>
+                            <a href="{{ route('admin.wallet.userpedDetail', ['id' => $item->user_id]) }}" class="btn btn-primary btn-sm" >Xem</a>
                            {{-- @if($item->ticket_status == 1) --}}
                            {{-- <a href="{{ route('admin.ticket.setSpam', ['id' => $item->ticket_id]) }}" class="btn btn-danger btn-sm" onclick="return confirm('Bạn có chắc chắn muốn chuyển sang spam không?')">Spam</a>
                            <a href="{{ route('admin.ticket.setComplete', ['id' => $item->ticket_id]) }}" class="btn btn-success btn-sm" onclick="return confirm('Bạn có chắc chắn muốn chuyển sang hoàn thành không?')" >Hoàn thành</a> --}}
@@ -90,3 +79,4 @@
 </div>
 
 @endsection
+

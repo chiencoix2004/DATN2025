@@ -3,7 +3,6 @@
 @section('contents')
 <?php
 use Carbon\Carbon;
-
 ?>
     <div class="container">
         <div class="row">
@@ -67,9 +66,9 @@ use Carbon\Carbon;
                                     <button class="btn btn-danger" data-bs-toggle="modal"
                                         data-bs-target="#modalLockWallet">Khóa ví người dùng</button>
                                     <button class="btn btn-warning" data-bs-toggle="modal"
-                                        data-bs-target="#modalHoldFunds"> Chỉnh trạng thái ví về không hoạt động</button>
+                                        data-bs-target="#modalWalletLevel"> Chỉnh trạng thái ví</button>
                                         <button class="btn btn-warning" data-bs-toggle="modal"
-                                        data-bs-target="#modalUserLevel"> Chỉnh độ xác thực thông tin của người dùng </button>
+                                        data-bs-target="#modalUserLevel"> Chỉnh độ xác thực của ví </button>
                                 </div>
                             </div>
                         </div>
@@ -84,10 +83,9 @@ use Carbon\Carbon;
                                         <button type="button" class="btn-close" data-bs-dismiss="modal"
                                             aria-label="Close"></button>
                                     </div>
-                                    <form action="{{ route('admin.wallet.lockwallet') }}" method="POST">
+                                    <form action="{{ route('admin.wallet.lockwalletUser') }}" method="POST">
                                         @csrf
                                         <div class="modal-body">
-                                            <input type="hidden" name="user_id" value="{{ $data->user_id }}">
                                             <input type="hidden" name="wallet_id" value="{{ $data->wallet_account_id }}">
                                             <div class="mb-3">
                                                 <label for="lockReason" class="form-label">Lý do khóa ví</label>
@@ -105,36 +103,52 @@ use Carbon\Carbon;
                         </div>
 
                         <!-- Modal Giữ khoản tiền điều tra -->
-                        <div class="modal fade" id="modalHoldFunds" tabindex="-1" aria-labelledby="holdFundsLabel"
+                        <div class="modal fade" id="modalWalletLevel" tabindex="-1" aria-labelledby="holdWalletLevel"
                             aria-hidden="true">
                             <div class="modal-dialog" role="document">
                                 <div class="modal-content">
                                     <div class="modal-header">
-                                        <h5 class="modal-title" id="holdFundsLabel">Chỉnh về trạng thái không hoạt động</h5>
+                                        <h5 class="modal-title" id="holdFundsLabel">Chỉnh trạng thái ví</h5>
                                         <button type="button" class="btn-close" data-bs-dismiss="modal"
                                             aria-label="Close"></button>
                                     </div>
-                                    <form action="{{ route('admin.wallet.holdback') }}" method="POST">
-                                        @csrf
-                                        <div class="modal-body">
-                                            <input type="hidden" name="user_id" value="{{ $data->user_id }}">
-                                            <input type="hidden" name="wallet_id" value="{{ $data->wallet_account_id }}">
 
-                                            <div class="mb-3">
-                                                <label for="holdReason" class="form-label">Lý do</label>
-                                                <textarea class="form-control" id="holdReason" name="admin_note" rows="3"></textarea>
-                                            </div>
-                                            </p>
+                                        <div class="modal-body">
+                                           <a href="{{ route('admin.wallet.SetInActive', ['id' => $data->wallet_account_id]) }}" class="btn btn-warning">Chỉnh ví về dừng hoạt động</a>
+                                             <a href="{{ route('admin.wallet.setActive', ['id' => $data->wallet_account_id]) }}" class="btn btn-success">Chỉnh ví về hoạt động</a>
                                         </div>
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-secondary"
                                                 data-bs-dismiss="modal">Hủy</button>
-                                            <button type="submit" class="btn btn-warning">Cập nhật trạng thái</button>
+
                                         </div>
-                                    </form>
                                 </div>
                             </div>
                         </div>
+
+                        <!-- Modal Chỉnh độ xác thực của ví -->
+                        <div class="modal fade" id="modalUserLevel" tabindex="-1" aria-labelledby="UserLevel"
+                        aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="holdFundsLabel">Chỉnh trạng thái Xác thực</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                        aria-label="Close"></button>
+                                </div>
+
+                                    <div class="modal-body">
+                                       <a href="{{ route('admin.wallet.SetBasicUser', ['id' => $data->wallet_account_id]) }}" class="btn btn-success">Xác Thực cơ bản </a>
+                                         <a href="{{ route('admin.wallet.SetFullUser', ['id' => $data->wallet_account_id]) }}" class="btn btn-warning">Xác Thực Đầy đủ </a>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary"
+                                            data-bs-dismiss="modal">Hủy</button>
+
+                                    </div>
+                            </div>
+                        </div>
+                    </div>
                     </div>
                 </div>
         </div>
@@ -152,24 +166,27 @@ use Carbon\Carbon;
                                 <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
                                     data-bs-target="#collapse{{ $index }}" aria-expanded="false"
                                     aria-controls="collapse{{ $index }}">
-                                    Giao dịch
+                                    Giao dịch #{{$history->trx_id}} {{ $history->trx_type }} với số tiền {{ number_format($history->trx_amount) }} VND
                                 </button>
                             </h2>
                             <div id="collapse{{ $index }}" class="accordion-collapse collapse"
                                 aria-labelledby="heading{{ $index }}" data-bs-parent="#withdrawHistoryAccordion">
                                 <div class="accordion-body">
                                     <ul>
-                                        <li>Số tiền: {{ number_format($history->amount) }} VND</li>
-                                        <li>Ngày yêu cầu: {{ $history->request_date }}</li>
-                                        <li>Trạng thái: @if ($history->status == 1)
+                                        <li>Số tiền: {{ number_format($history->trx_amount) }} VND</li>
+                                        <li>Ngày yêu cầu: {{ $history->trx_date_issue }}</li>
+                                        <li>Trạng thái: @if ($history->trx_status == 1)
                                                 Chờ duyệt
-                                            @elseif ($history->status == 2)
+                                            @elseif ($history->trx_status == 2)
                                                 Hoàn thành
-                                            @elseif ($history->status == 3)
+                                            @elseif ($history->trx_status == 3)
                                                 Thất Bại
                                             @endif
                                         </li>
-                                        <li>Ghi chú của admin: {{ $history->admin_note }}</li>
+                                        <li>Nội dung giao dịch: {{ $history->trx_detail_desc}}</li>
+                                        @if($history->withdraw_request_id != null)
+                                        <li> <a class="btn btn-primary" href="{{ route('admin.wallet.withdraw', ['id' => $history->withdraw_request_id]) }}">Xem chi tiết</a></li>
+                                        @endif
                                     </ul>
                                 </div>
                             </div>
