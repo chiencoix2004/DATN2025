@@ -27,7 +27,7 @@
                         <p>Nơi sinh: <strong>{{ $data->place_of_birth }}</strong></p>
                         <p>Nơi Ở hiện tại: <strong>{{ $data->place_of_residence }}</strong></p>
                         <p>Số điện thoại: <strong>{{ $data->phone_number }}</strong></p>
-                        <p>Ngày cấp: <strong>{{ date('d/m/Y', strtotime($data->date_of_issue)) }}</strong></p>
+                        <p>Ngày cấp: <strong>{{ date('d/m/Y', strtotime($data->issue_date)) }}</strong></p>
                         <p>Ngày hết hạn: <strong>{{ date('d/m/Y', strtotime($data->date_of_expiry)) }}</strong></p>
                         <p>Nơi cấp: <strong>{{ $data->place_of_issue }}</strong></p>
                     </div>

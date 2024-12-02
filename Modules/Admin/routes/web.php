@@ -60,7 +60,7 @@ Route::get('admin-confirm-mail', [ForgotPasswordController::class, 'confirmMail'
 
 Route::prefix('admin')
     ->as('admin.')
-    ->middleware('CheckAdmin')
+   // ->middleware('CheckAdmin')
     ->group(function () {
         Route::get('/', function () {
             return view('admin::contents.dashboard');
@@ -99,7 +99,7 @@ Route::prefix('admin')
             Route::get('list-withdraw', 'index')->name('list');
             Route::get('withdraw/{id}', 'withdraw')->name('withdraw');
             Route::post('update-withdraw', 'updatepost')->name('updateupdatepost');
-            Route::post('lock-wallet', 'lockwallet')->name('lockwallet');
+            Route::post('lock-wallet-withdraw', 'lockwallet')->name('lockwallet');
             Route::post('holdback', 'holdback')->name('holdback');
             Route::get('list-wallet', 'listallwallet')->name('listallwallet');
             Route::get('wallet-info/{id}', 'walletinfo')->name('walletinfo');
@@ -208,7 +208,7 @@ Route::prefix('admin')
         // Route::controller(AccountController::class)->prefix('account')->as('account.')->group(function(){
         //     Route::get('listAcc', 'listAccounts')->name('list');
         // });
-    
+
         // thống kê
         Route::controller(StatisticalController::class)->prefix('statistical')->as('statistical.')->group(function () {
             Route::get('listStatistical', 'index')->name('listStatistical');

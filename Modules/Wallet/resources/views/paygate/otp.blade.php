@@ -20,6 +20,11 @@
     {{session('error')}}
 </div>
 @endif
+@if(isset( $error))
+<div class="alert alert-danger">
+    {{ $error}}
+</div>
+@endif
 <div class="container mt-5">
     <div class="card">
         <div class="card-body p-4">

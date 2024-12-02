@@ -5,6 +5,9 @@
 @endsection
 @section('css-setting')
     <link href="{{ Module::asset('wallet:css/icons.min.css') }}" rel="stylesheet" type="text/css" />
+    <?php
+      Use PhpOffice\PhpSpreadsheet\Style\NumberFormat\NumberFormatter;
+    ?>
 @endsection
 @section('contents')
     <!-- Begin Kenne's Breadcrumb Area -->
@@ -25,7 +28,7 @@
     <div class="kenne-content_wrapper">
         <div class="container">
             <div class="container">
-                @if ($returndata['vnp_ResponseCode'] == 00)
+                @if ($returndata['status'] == "success")
                     <div class="d-flex justify-content-center">
                         <i class="bx bx-check-circle text-success" style="font-size: 150px;"></i>
                     </div>
@@ -40,43 +43,26 @@
                         <div class="card">
                             <div class="card-body">
                                 <h3 class="card-title text-center">Thông tin giao dịch</h3>
-                                <p class="card-text ">Mã giao dịch: <strong>{{ $returndata['vnp_TxnRef'] }}</strong></p>
-                                <p class="card-text">Mã tham chiếu: <strong>{{ $returndata['vnp_BankTranNo'] }}</strong></p>
-                                <p class="card-text">Số tiền: <strong>{{ number_format($returndata['Ammout'] / 100) }}
+                                {{-- <p class="card-text ">Mã giao dịch: <strong>{{ $returndata['order_id'] }}</strong></p> --}}
+                                <p class="card-text">Số tiền: <strong>{{ number_format($returndata['ammount'] ) }}
                                         VND</strong>
                                 </p>
                                 <p class="card-text">Phương thức thanh toán:
-                                    <strong>{{ $returndata['vnp_CardType'] }}</strong>
+                                    <strong>Ví tiền điện tử</strong>
                                 </p>
-                                <p class="card-text">Ngày khởi tạo: <strong>{{ $returndata['vnp_PayDate'] }}</strong></p>
-                                <p class="card-text">Mã chain <strong>{{ $returndata['vnp_SecureHash'] }}</strong></p>
                             </div>
                         </div>
                     </div>
                 @endif
 
-                @if ($returndata['vnp_ResponseCode'] != 00)
+                @if ($returndata['status'] != 'success')
                     <div class="d-flex justify-content-center">
                         <i class="bx bx-x-circle text-danger" style="font-size: 150px;"></i>
                     </div>
                     <div class="d-flex justify-content-center">
                         <div class="text-center">
                             <h3 class="mt-3">Thanh toán thất bại </h3>
-                            @if ($returndata['vnp_ResponseCode'] == 24)
                                 <p class="text-muted">Giao dịch đã bị hủy bởi người dùng</p>
-                            @elseif ($returndata['vnp_ResponseCode'] == 12)
-                                <p class="text-muted">Thẻ/Tài khoản của bạn bị khóa.</p>
-                            @elseif ($returndata['vnp_ResponseCode'] == 07)
-                                <p class="text-muted">Hành vì gian lận giao dịch được phát hiện
-                                @elseif ($returndata['vnp_ResponseCode'] == 13)
-                                <p class="text-muted"> Bạn nhập sai mật khẩu xác thực giao dịch (OTP). Xin quý khách vui
-                                    lòng
-                                    thực hiện lại giao dịch.</p>
-                            @elseif ($returndata['vnp_ResponseCode'] == 51)
-                                <p class="text-muted"> Giao dịch không thành công do: Tài khoản của quý khách không đủ số dư
-                                    để
-                                    thực hiện giao dịch.</p>
-                            @endif
                             </p>
                             <button class="btn kenne-login_btn"
                                 onclick="window.location.href='{{ route('cart.checkout') }}'">Quay
@@ -111,7 +97,7 @@
             <div class="row mb-3">
 
             </div>
-            @if ($returndata['vnp_ResponseCode'] == 00)
+            @if ($returndata['status'] == "success")
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="row">
