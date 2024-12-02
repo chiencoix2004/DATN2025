@@ -27,17 +27,17 @@ class ForgotPasswordController extends Controller
 
     public function postForgotPassword(Request $request): RedirectResponse
     {
-        
+
         $request->validate(['email' => 'required|email']);
 
         $user = User::where('email', $request->email)->first();
 
         if (!$user) {
             return back()->withErrors(['email' => 'Email không tồn tại trong hệ thống.']);
-        }else{
+        } else {
             if ($user->roles_id != 2) {
                 $status = Password::sendResetLink($request->only('email'));
-            
+
                 if ($status === Password::RESET_LINK_SENT) {
                     return redirect()->route('admin.confirm.mail')
                         ->with([
@@ -45,14 +45,12 @@ class ForgotPasswordController extends Controller
                             'email' => $request->email
                         ]);
                 } else {
-                    return redirect()->back()->with('error','Đã xảy ra lỗi, vui lòng thử lại sau.');
+                    return redirect()->back()->with('error', 'Đã xảy ra lỗi, vui lòng thử lại sau.');
                 }
-            }else{
-                return redirect()->back()->with('error','Email không tồn tại trong hệ thống.');
+            } else {
+                return redirect()->back()->with('error', 'Email không tồn tại trong hệ thống.');
             }
         }
-        
-       
     }
     public function resetPassword(Request $request, $token)
     {
@@ -82,15 +80,19 @@ class ForgotPasswordController extends Controller
         }
 
         // dd($validator->fails());
-       
+
         $status = Password::reset(
             $request->only('email', 'password', 'password_confirmation', 'token'),
             function ($user, $password) {
-                $user->forceFill([
-                    'password' => Hash::make($password)
-                ])->save();
+                // $user->forceFill([
+                //     'password' => Hash::make($password)
+                // ])->save();
 
+                $user->password = Hash::make($password);
                 $user->setRememberToken(Str::random(60));
+                $user->save();
+
+                // $user->setRememberToken(Str::random(60));
             }
         );
 
