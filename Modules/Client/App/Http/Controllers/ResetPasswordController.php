@@ -38,6 +38,8 @@ class ResetPasswordController extends Controller
                 $user->save();
             }
         );
+        // dd($status);
+
         return $status === Password::PASSWORD_RESET
             ? redirect()->route('showForm')->with('status', __($status))
             : back()->withErrors(['email' => [__($status)]]);

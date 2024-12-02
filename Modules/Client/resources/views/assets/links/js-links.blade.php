@@ -58,8 +58,8 @@
                     loadCartItemCount();
 
                 },
-                error: function(error) {
-                    // alert(response.error);
+                error: function(error,response) {
+                    alert(response.message);
                     console.error(error);
                 }
             });
@@ -108,7 +108,7 @@
                 },
                 error: function(xhr, status, error) {
                     $('#minicart').empty();
-                    console.error('Giỏ hàng của bạn đang trống!:', error);
+                    // console.error('Giỏ hàng của bạn đang trống!:', error);
                 }
             });
         }
@@ -149,17 +149,13 @@
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
                     $('.item-count').text(0);
-                    console.error("Lỗi khi lấy sản phẩm:", textStatus, errorThrown);
+                    // console.error("Lỗi khi lấy sản phẩm:", textStatus, errorThrown);
                 }
             });
         }
 
         loadCartItemCount();
-
-
         setInterval(loadCartItemCount, 60000);
-
-
         loadCartItems();
 
 
