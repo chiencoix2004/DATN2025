@@ -41,11 +41,11 @@ class PostController extends Controller
      * Show the specified resource.
      */
     public function show($slug)
-{
-    $post = Post::where(['slug_post' => $slug, 'published_id' => 1])->first();
-    $posts = Post::where('published_id', 1)->latest('created_at')->get(); // Lấy tất cả bài viết
-    return view('client::contents.other-pages.post-detail', compact('post', 'posts'));
-}
+    {
+        $post = Post::where(['slug_post' => $slug, 'published_id' => 1])->first();
+        $posts = Post::where('published_id', 1)->latest('created_at')->get(); // Lấy tất cả bài viết
+        return view('client::contents.other-pages.post-detail', compact('post', 'posts'));
+    }
 
     /**
      * Show the form for editing the specified resource.
@@ -72,11 +72,42 @@ class PostController extends Controller
     }
     // Tìm kiếm bài viết theo tiêu đề (Title)
     public function search(Request $request)
-    {
-        // dd($request->all());
-        $query = $request->search_input; // Lấy từ khóa tìm kiếm từ request
-        // Tìm kiếm bài viết theo tiêu đề
-        $data = Post::where('title', 'like', '%' . $query . '%')->first();
-        return view('client::contents.other-pages.post', compact('data'));
+{
+    $query = $request->search_input;
+
+    // Kiểm tra nếu người dùng không nhập gì vào ô tìm kiếm
+    if (empty(trim($query))) {
+        return view('client::contents.other-pages.post', [
+            'data' => null, // Không có kết quả tìm kiếm
+            'posts' => null, // Không hiển thị bài viết gần đây
+            'error' => 'Vui lòng nhập từ khóa để tìm kiếm!' // Thông báo lỗi
+        ]);
     }
+
+    // Lấy danh sách bài viết đã xuất bản
+    $posts = Post::where('published_id', true)->latest()->paginate(5);
+
+    // Tìm kiếm bài viết theo tiêu đề
+    $data = Post::where('published_id', true)
+                ->where('title', 'like', '%' . $query . '%')
+                ->get();
+
+    // Nếu không có kết quả tìm kiếm
+    if ($data->isEmpty()) {
+        return view('client::contents.other-pages.post', [
+            'data' => null, // Không có kết quả tìm kiếm
+            'posts' => $posts, // Danh sách bài viết gần đây
+            'error' => 'Không tìm thấy bài viết nào phù hợp!' // Thông báo lỗi
+        ]);
+    }
+
+    // Nếu có kết quả tìm kiếm
+    return view('client::contents.other-pages.post', [
+        'data' => $data, // Kết quả tìm kiếm
+        'posts' => null, // Không hiển thị bài viết gần đây
+        'error' => null // Không có lỗi
+    ]);
+}
+
+
 }

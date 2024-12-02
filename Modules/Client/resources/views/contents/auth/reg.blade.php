@@ -57,11 +57,22 @@
                                         <span class='text-danger'> {{ $message }}</span>
                                     @enderror
                                 </div>
-                                <div class="col-12 d-flex justify-content-between align-items-center">
-                                    <button type='submit' class="kenne-register_btn">Đăng Ký</button>
-                                    <h6 style="margin-top: 20px;">- hoặc đăng ký với -</h6>
-                                    <a href="{{ route('auth.google') }}" class="a-register_btn">Google</a>
+                                <div class="col-md-12 d-flex justify-content-between align-items-center">
+                                    <div class="col-md-12">
+                                        <div class="d-flex justify-content-center gap-2">
+                                            <button type='submit' class="kenne-register_btn w-100">Đăng Ký</button>
+                                            <a href="{{ route('auth.google') }}" class="btn a-register_btn w-100">
+                                                <i class="ri-google-fill me-1"></i> Google
+                                            </a>
+                                        </div>
+                                    
+                                        <div class="mt-4 text-center">
+                                            <p class="mb-0">Bạn đã có tài khoản rồi <a href="{{ route('showForm') }}"
+                                                    class="fw-semibold text-primary text-decoration-underline"> Đăng nhập </a> </p>
+                                        </div>
+                                    </div>
                                 </div>
+                                
                             </div>
                         </div>
                     </form>

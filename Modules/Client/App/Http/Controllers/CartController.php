@@ -15,6 +15,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Models\ProductVariant;
 use App\Http\Controllers\Controller;
+use App\Notifications\Checkout;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
@@ -43,17 +44,37 @@ class CartController extends Controller
 
     public function add(Request $request)
     {
+        if (!auth()->check()) {
+            return response()->json(['message' => 'bạn chưa đăng nhập!'], 200);
+        }
+
+        if ($request->color_attribute_id == null || $request->size_attribute_id == null) {
+            return response()->json(['message' => ' vui lòng kiểu sản phẩm'], 200);
+        }
+
+
 
         $productId = $request->product_id;
-        $productVariantId = ProductVariant::where('product_id', '=', $productId)
+        $productVariant = ProductVariant::where('product_id', '=', $productId)
             ->where('color_attribute_id', '=', $request->color_attribute_id)
             ->where('size_attribute_id', '=', $request->size_attribute_id)
-            ->first()->id;
+            ->first();
+        $productVariantId = $productVariant->id;
+        if (!$productVariantId) {
+            return response()->json(['message' => 'Sản phẩm không tồn tại!'], 200);
+        }
+
+        if ($productVariant->quantity == 0) {
+            return response()->json(['message' => 'hết hàng'], 200);
+        }
+
         $quantity = $request->quantity;
         $total_amount = 0;
         $product_image = Product::find($productId)->image_avatar;
+
         // dd($productVariantId);
         if (auth()->check()) {
+
             // Người dùng đã đăng nhập
             $cart = Cart::firstOrCreate(['user_id' => auth()->id()]);
             $cartItem = $cart->cartItems()->firstOrCreate(['product_id' => $productId, 'product_variant_id' => $productVariantId], ['quantity' => 0, 'price' => 0, 'price_total' => 0]);
@@ -100,7 +121,6 @@ class CartController extends Controller
                         } elseif ($product_price_sale === null && $product_start_date === null && $product_end_date === null) {
                             $price = $product_price_default; // Không có giá khuyến mãi, trả về giá mặc định
                         };
-
                     };
 
                     if ($price !== null) {
@@ -151,7 +171,7 @@ class CartController extends Controller
                         } elseif ($product_price_sale === null && $product_start_date === null && $product_end_date === null) {
                             $price = $product_price_default; // Không có giá khuyến mãi, trả về giá mặc định
                         };
-                    // dd($price);
+                        // dd($price);
                     };
                     if ($price !== null) {
                         $total_amount += $item->quantity * $price;
@@ -195,7 +215,7 @@ class CartController extends Controller
                 ], 200);
             };
         } else {
-            return response()->json(['message' => 'chưa đăng nhập'], 404);
+            return response()->json(['message' => 'chưa đăng nhập'], 400);
         }
     }
 
@@ -294,7 +314,7 @@ class CartController extends Controller
                 }
             }
         } else {
-            return response()->json(['error' => 'Mã giảm giá không tồn tại!'], 400);
+            return response()->json(['error' => 'Mã giảm giá không tồn tại!'], 200);
         }
     }
 
@@ -349,6 +369,7 @@ class CartController extends Controller
         $totalAmount = 0;
 
         $cart = Cart::where('user_id', $userId)->first();
+
         $totalAmount = $cart->total_amount;
 
         $coupon = CouponModel::where('code', $discount_code)->first();
@@ -403,6 +424,10 @@ class CartController extends Controller
                 ->with("productVariant.color")
                 ->with("productVariant.product")
                 ->get();
+
+            foreach ($cartItems as $item) {
+                ProductVariant::where('id', $item->product_variant_id)->decrement('quantity', $item->quantity);
+            }
 
             $validator = Validator::make($request->all(), [
                 'user_address' => 'required',
@@ -533,6 +558,10 @@ class CartController extends Controller
         ]);
 
         foreach ($cartItems as $item) {
+            ProductVariant::where('id', $item->product_variant_id)->decrement('quantity', $item->quantity);
+        }
+
+        foreach ($cartItems as $item) {
             $oder_detail = OrderDetail::create([
                 "order_id" => $order->id,
                 "product_id" => $item->product_id,
@@ -547,12 +576,11 @@ class CartController extends Controller
 
         // sửa lại giá
         // xóa số lượng sản phẩm ở product và biến thể
-
-        $cart = Cart::where('user_id', $userId)->first();
-
-        CartItem::where('cart_id', $cart->id)->delete();
-
-        $cart->delete();
+        if ($order) {
+            $cart = Cart::where('user_id', $userId)->first();
+            CartItem::where('cart_id', $cart->id)->delete();
+            $cart->delete();
+        }
         // try {
         //     return response()->json([
         //         "type" => "success",
@@ -571,8 +599,22 @@ class CartController extends Controller
         //         ]
         //     ], 500);
         // }
+        $orderItems = OrderDetail::query()
+            ->with('productVariant')
+            ->with("productVariant.size")
+            ->with("productVariant.color")
+            ->with("productVariant.product")
+            ->where('order_id', $order->id)
+            ->get();
+
+        if ($order) {
+            $user = User::find($userId);
+            dispatch(function() use ($user, $order, $orderItems) {
+                $user->notify(new Checkout($order, $orderItems));
+            })->afterResponse();
+        }
+        $link = route('client.invoice.show', ['id' => $order->id]);
         return response()->json([
-            $link = route('my-account'),
             "type" => "success",
             "message" => "Đặt hàng thành công!",
             'method' => 'vnpay',
@@ -624,11 +666,17 @@ class CartController extends Controller
                 ->where('order_id', $order_id)
                 ->get();
 
-            // if ($order) {
-            //     $cart = Cart::where('user_id', $user_id)->first();
-            //     CartItem::where('cart_id', $cart->id)->delete();
-            //     $cart->delete();
-            // }
+            if ($order) {
+                $cart = Cart::where('user_id', $user_id)->first();
+                CartItem::where('cart_id', $cart->id)->delete();
+                $cart->delete();
+            }
+
+            if ($order) {
+                $user = User::find($user_id);
+                $user->notify(new Checkout($order, $orderItems));
+            }
+
             // dd($returndata);
             return view('client::contents.shops.checkoutOrderDetail', compact('returndata', 'orderItems', 'order'));
         } else {

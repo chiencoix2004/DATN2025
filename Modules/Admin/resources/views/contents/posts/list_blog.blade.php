@@ -53,7 +53,7 @@
                                     <img src="{{ \Storage::url($item->image_post) }}" alt="Error!" width="100px">
                                 </td>
                                 <td class="align-middle white-space-nowrap fw-semi-bold title">
-                                    <a href="">{{ $item->title }}</a>
+                                    <a href="{{ route('admin.posts.showPost', $item->slug_post) }}">{{ $item->title }}</a>
                                 </td>
                                 <td class="align-middle text-start view">{{ Str::limit($item->short_description, 100) }}</td>
                                 <td class="align-middle text-start date">{{ $item->created_at }}</td>
