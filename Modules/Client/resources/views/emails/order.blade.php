@@ -142,7 +142,7 @@
                     <th colspan="4" style="text-align: right;">Giảm giá:</th>
                     <td style="text-align: right;">
                         @if ($order->discount > 0)
-                            {{ number_format($data->discount, 0, ',', '.') }} VNĐ
+                            {{ number_format($order->discount, 0, ',', '.') }} VNĐ
                         @else
                             ...
                         @endif

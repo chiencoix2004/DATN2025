@@ -12,6 +12,7 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Carbon;
 use App\Models\OrderDetailModel;
 use App\Http\Controllers\Controller;
+use App\Models\ProductVariant;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\RedirectResponse;
@@ -160,6 +161,11 @@ class MyAccountController extends Controller
             ], 400);
         };
 
+        $orderDetails = OrderDetail::where('order_id', $order->id)->get();
+
+        foreach ($orderDetails as $item) {
+            ProductVariant::where('id', $item->product_variant_id)->increment('quantity', $item->product_quantity);
+        }
 
         $order->status_order = 'Đơn hàng bị hủy';
         $order->save();
@@ -173,10 +179,18 @@ class MyAccountController extends Controller
 
         // dd($order);
 
+
+
         if ($order->status_order !== 'Đơn hàng bị hủy') {
             return response()->json([
                 'message' => 'Chỉ có thể đặt lại đơn hàng ở trạng thái hủy.',
             ], 400);
+        }
+
+        $orderDetails = OrderDetail::where('order_id', $order->id)->get();
+
+        foreach ($orderDetails as $item) {
+            ProductVariant::where('id', $item->product_variant_id)->decrement('quantity', $item->product_quantity);
         }
 
         $order->status_order = 'Chờ xác nhận';
