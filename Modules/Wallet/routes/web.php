@@ -39,6 +39,7 @@ Route::controller(PayController::class)
     Route::post("otp", [PayController::class,"otp"])->name("otp");
     Route::post("charge", [PayController::class,"chagre"])->name("charge");
     Route::get("resendotp/{id}", [PayController::class,"resendtotp"])->name("resendtotp");
+    Route::get('errorpayment', [PayController::class, 'errorpayment'])->name('errorpayment');
 
 });
 

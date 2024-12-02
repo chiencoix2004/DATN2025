@@ -129,7 +129,31 @@ class PayController extends Controller
             return redirect()->back()->with('error', 'Mã OTP không hợp lệ hoặc đã hết hạn');
         } else {
             $otp->deleteCode($otpstring);
-
+            $key = env('VNP_HASH_SECRET'); // Replace with your actual secret key
+            $hashmac = hash_hmac('sha512', $id . date('Y-m-d H:i:s'), $key);
+            $data = [
+                'wallet_account_id' => $walletaccount->wallet_account_id,
+                'trx_type' => "deposit",
+                'trx_from' => "Wallet",
+                'trx_to' => "Shop",
+                'trx_amount' => ($decoded_data['ammount'] / 100),
+                'trx_balance_available' => $walletaccount->wallet_balance_available - ($decoded_data['ammount'] / 100),
+                'trx_hash_request' => $hashmac ,
+                'trx_status' => 1,
+                'created_at' => date('Y-m-d H:i:s'),
+                'updated_at' => date('Y-m-d H:i:s')
+            ];
+            // $trx = new Trx_history();
+            // $trx->createTrx($data);
+            // $trx_id = $trx->getLasttrxid();
+            // $trx_lastid = $trx_id->trx_id;
+            $data_trx_detail = [
+               // 'trx_id' => $trx_lastid,
+                'trx_detail_desc' => "Thanh toán đơn hàng " . $decoded_data['orderid'],
+                'trx_date_issue' => date('Y-m-d H:i:s'),
+                'vnp_SecureHash' => $hashmac,
+            ];
+             dd($data);
         }
     }
     public function resendtotp ($id){
