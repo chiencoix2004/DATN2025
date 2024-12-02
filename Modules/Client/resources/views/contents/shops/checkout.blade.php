@@ -88,6 +88,7 @@
                                             <select name="payment_method" id="payment_method" class="form-control">
                                                 <option value="cod">Thanh toán khi nhận hàng</option>
                                                 <option value="vnpay">Thanh toán qua VNPAY</option>
+                                                <option value="wallet">Thanh toán qua Ví tiền</option>
                                             </select>
                                             <p></p>
                                         </div>

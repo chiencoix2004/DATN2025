@@ -52,7 +52,7 @@ class Checkout extends Notification
         }
 
         return (new MailMessage)
-            ->subject('Hóa đơn đặt hàng')
+            ->subject('Cảm ơn bạn đã đặt hàng tại cửa hàng chúng tôi - mã đơn hàng #' . $this->order->id)
             ->view('client::emails.order', [
                 'order' => $this->order,
                 'orderItems' => $orderItemsArray,
