@@ -265,7 +265,18 @@ class CartController extends Controller
 
     public function applyCoupon(Request $request)
     {
+        
         $coupon = CouponModel::where('code', $request->coupon_code)->first();
+
+        if(!auth()->check()){
+            return response()->json(['error' => 'Bạn chưa đăng nhập!'], 200);
+        }
+        $cartId = Cart::where('user_id', auth()->id())->first()->id;
+        $cartItems = CartItem::where('cart_id', $cartId)->get();
+        if ($cartItems->count() == 0) {
+            return response()->json(['error' => 'Giỏ hàng của bạn đang trống!'], 200);
+        }
+        
         if ($coupon) {
             $current_date = date('Y-m-d H:i:s');
             $order_total = Cart::where('user_id', auth()->id())->first()->total_amount;
@@ -613,6 +624,7 @@ class CartController extends Controller
                 $user->notify(new Checkout($order, $orderItems));
             })->afterResponse();
         }
+
         $link = route('client.invoice.show', ['id' => $order->id]);
         return response()->json([
             "type" => "success",
