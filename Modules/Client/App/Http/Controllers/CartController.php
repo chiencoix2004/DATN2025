@@ -424,6 +424,10 @@ class CartController extends Controller
                 ->with("productVariant.product")
                 ->get();
 
+            foreach ($cartItems as $item) {
+                ProductVariant::where('id', $item->product_variant_id)->decrement('quantity', $item->quantity);
+            }
+
             $validator = Validator::make($request->all(), [
                 'user_address' => 'required',
                 'user_phone' => 'required|regex:/^[0-9]{10}$/',
@@ -551,6 +555,10 @@ class CartController extends Controller
             "status_payment" => "Chưa thanh toán",
             "total_price" => $totalAmount
         ]);
+
+        foreach ($cartItems as $item) {
+            ProductVariant::where('id', $item->product_variant_id)->decrement('quantity', $item->quantity);
+        }
 
         foreach ($cartItems as $item) {
             $oder_detail = OrderDetail::create([
