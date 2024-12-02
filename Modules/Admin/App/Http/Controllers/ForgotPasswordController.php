@@ -46,6 +46,7 @@ class ForgotPasswordController extends Controller
             }
         }
     }
+  
     public function resetPassword(Request $request, $token)
     {
         return view('admin::contents.forgot-password.reset-password', ['token' => $token, 'email' => $request->email]);
@@ -73,15 +74,12 @@ class ForgotPasswordController extends Controller
             return redirect()->back()->withErrors($validator)->withInput();
         }
 
-
-
-        // dd($validator->fails());
         $status = Password::reset(
             $request->only('email', 'password', 'password_confirmation', 'token'),
             function ($user, $password) {
                 $user->password = Hash::make($password);
+                $user->setRememberToken(Str::random(60));
                 $user->save();
-                // dd($user);
             }
         );
         return redirect()->route('login.admin')->with('status', 'Mật khẩu đã được cập nhật thành công.');

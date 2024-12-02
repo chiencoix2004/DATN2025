@@ -4,6 +4,7 @@ namespace Modules\Client\App\Http\Controllers;
 
 
 
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
@@ -33,6 +34,7 @@ class ResetPasswordController extends Controller
             $request->only('email','password','password_confirmation','token'),
             function ($user,$password){
                 $user->password = Hash::make($password);
+                $user->setRememberToken(Str::random(60));
                 $user->save();
             }
         );
