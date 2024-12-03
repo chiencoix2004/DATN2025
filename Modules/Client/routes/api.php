@@ -32,7 +32,7 @@ Route::controller(ClientController::class)->group(function () {
 });
 
 Route::controller(TicketController::class)->group(function () {
-    Route::post('v1/aigenerate/{id}', 'aigenerate')->name('aigenerate');
+    Route::get('v1/aigenerate/{id}', 'aigenerate')->name('aigenerate');
 });
 
 

@@ -108,6 +108,8 @@ Route::controller(TicketController::class)
 ->name('ticket.')
 ->group(function () {
     Route::post('add-ticket', 'addTicket')->name('addTicket');
+    Route::get('chat/{id}', [TicketController::class,'chatshow'])->name('chat');
+    Route::post('sent-chat', 'sentchat')->name('sentchat');
 
 });
 

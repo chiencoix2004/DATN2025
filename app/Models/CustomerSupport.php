@@ -118,7 +118,7 @@ class CustomerSupport extends Model
     }
     public function updateAiAnalyze($id, $ticket_ai_analyze)
     {
-        return $this->where('id', $id)->update([
+        return $this->where('ticket_id', $id)->update([
             'ticket_ai_analyze' => $ticket_ai_analyze,
         ]);
     }

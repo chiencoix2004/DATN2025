@@ -53,7 +53,7 @@
                                 @csrf
                                 <div class="form-group">
                                     <label>Họ và tên <span class="required">*</span></label>
-                                    <input type="text" name="con_name" id="con_name" required>
+                                    <input type="text" name="con_name" id="con_name"  @if(isset(Auth::user()->full_name)) value={{ Auth::user()->full_name }} @endif required>
                                 </div>
                                 <div class="form-group">
                                     <label>Email <span class="required">*</span></label>
@@ -63,9 +63,9 @@
                                 <div class="form-group">
                                     <label>Loại yêu cầu <span class="required">*</span></label>
                                     <select name="status" id="status" class="form-control">
-                                        <option value="1">Tài khoản</option>
-                                        <option value="2">Mua hàng</option>
-                                        <option value="3">Sản phẩm</option>
+                                        <option value="Account">Tài khoản</option>
+                                        <option value="Order">Mua hàng</option>
+                                        <option value="Product">Sản phẩm</option>
                                     </select>
                                 </div>
                                 <div class="form-group">
@@ -168,5 +168,19 @@
             </div>
         </div>
     </div>
-    <!-- Brand Area End Here -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var ticketId = "{{ session('ticket_id') }}";
+            if (ticketId) {
+                fetch(`/api/v1/aigenerate/${ticketId}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.message) {
+                            document.getElementById('aiSummary').innerText = data.message;
+                        }
+                    })
+                    .catch(error => console.error('Error:', error));
+            }
+        });
+    </script>
 @endsection
