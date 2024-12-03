@@ -36,25 +36,42 @@ class WalletController extends Controller
         return view('wallet::trans.topup');
     }
     public function charge(Request $request)
-    {
-        $decimal_Ammount = $request->ammount;
-        // echo $decimal_Ammount;
-        //format to integer
-        $intammount = ($decimal_Ammount / 1) * 100;
-        // echo($intammount);
-        $new_Payment =  new Vnpay();
-        try {
-            $new_Payment->create_payment($intammount, "vn");
-        } catch (\Exception $e) {
-            return redirect()->back()->with("error", $e->getMessage());
-        }
+{
+    $wallet = new Wallet();
+    $user_id = auth()->user()->id;
+    $data = $wallet->getWallet($user_id);
+    if($data->wallet_user_level == 1){
+        return redirect()->back()->with('error', 'Tài khoản của bạn chưa được xác thực');
     }
+    if($data->wallet_status != 1){
+        return redirect()->back()->with('error', 'Ví tiền của bạn đã bị vô hiệu hóa');
+    }
+    $decimal_Ammount = $request->ammount;
+
+    // Remove dots and convert to integer
+    $decimal_Ammount = str_replace('.', '', $decimal_Ammount);
+
+    if (!is_numeric($decimal_Ammount)) {
+        return redirect()->back()->with("error", "Invalid amount value.");
+    }
+
+    // Format to integer
+    $intammount = intval($decimal_Ammount /10);
+
+    $new_Payment = new Vnpay();
+    try {
+        $new_Payment->create_payment($intammount, "vn");
+    } catch (\Exception $e) {
+        return redirect()->back()->with("error", $e->getMessage());
+    }
+}
     public function callbackvnpaydata()
     {
         $user_id = Auth::user()->id;
         $wallet = new Wallet();
         $walletaccount = $wallet->getWallet($user_id);
         $wallet_account_id = $walletaccount->wallet_account_id;
+
 
         $returndata = [
             'Ammout' => $_GET['vnp_Amount'],
@@ -189,6 +206,12 @@ class WalletController extends Controller
         $wallet_account_id = $data->wallet_account_id;
         $WalletStastus = $wallet->getWalletStastus($wallet_account_id);
         $WalletLevel = $wallet->getWalletLevel($wallet_account_id);
+        if($data->wallet_user_level == 1){
+            return redirect()->back()->with('error', 'Tài khoản của bạn chưa được xác thực');
+        }
+        if($data->wallet_status != 1){
+            return redirect()->back()->with('error', 'Ví tiền của bạn đã bị vô hiệu hóa');
+        }
 
         // Remove any formatting characters and convert to integer
         $decimal_Ammount = str_replace(['.', ','], '', $request->amount);

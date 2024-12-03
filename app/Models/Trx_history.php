@@ -63,4 +63,8 @@ class Trx_history extends Model
         ->update($data);
         return $trx;
     }
+    public function searchdatetodate($from, $to){
+        return $this->whereBetween('created_at', [$from, $to])->get();
+    }
+
 }

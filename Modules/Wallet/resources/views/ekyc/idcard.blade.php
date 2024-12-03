@@ -62,7 +62,7 @@
                 </div>
             @endif
             <div class="card-body">
-                <form class="needs-validation" method="POST" action="{{ route('ekyc.uploadkyc')  }}" novalidate>
+                <form class="needs-validation" method="POST" action="{{ route('ekyc.uploadkyc')  }}" enctype="multipart/form-data" novalidate>
                     @csrf
                     <div class="mb-3">
                         <label for="id_number" class="form-label">Số CCCD</label>
@@ -81,8 +81,8 @@
                         </div>
                         <div class="col-md-6">
                             <div class="mb-3">
-                                <label for="place_of_issue" class="form-label">Ngày Hết Hạn</label>
-                                <input class="form-control" type="date" id="example-date-input" value="{{ $info->date_of_expiry }}" name="place_of_issue" required>
+                                <label for="date_of_expiry" class="form-label">Ngày Hết Hạn</label>
+                                <input class="form-control" type="date" id="example-date-input" value="{{ $info->date_of_expiry }}" name="date_of_expiry" required>
                                 <div class="invalid-feedback">Vui lòng chọn ngày hết hạn</div>
                                 <div class="valid-feedback"></div>
                             </div>
@@ -95,7 +95,7 @@
                     </div>
                     <div class="mb-3">
                         <label for="email" class="form-label">Quê Quán</label>
-                        <input type="email" class="form-control" id="email" name="place_of_birth" value="{{ $info->place_of_birth }}" required>
+                        <input type="text" class="form-control" id="email" name="place_of_birth" value="{{ $info->place_of_birth }}" required>
                         <div class="invalid-feedback">Vui lòng nhập quê quán</div>
                     </div>
                     <div class="row">
@@ -109,6 +109,7 @@
                                         <div>
                                             <div class="fallback">
                                                 <input name="id_card_image_front" type="file" required>
+                                                <div class="invalid-feedback">Vui lòng chọn ảnh</div>
                                             </div>
                                             <div class="dz-message needsclick">
                                                 <div class="mb-3">
@@ -116,7 +117,7 @@
                                                 </div>
                                                 <h4>Kéo ảnh hoặc bấm vào để tải ảnh lên</h4>
                                             </div>
-                                            <div class="invalid-feedback">Vui lòng chọn ảnh</div>
+
                                         </div>
                                     </div>
                                 </div>
@@ -132,6 +133,7 @@
                                         <div>
                                             <div class="fallback">
                                                 <input name="id_card_image_back" type="file" required>
+                                                <div class="invalid-feedback">Vui lòng chọn ảnh</div>
                                             </div>
                                             <div class="dz-message needsclick">
                                                 <div class="mb-3">
@@ -139,7 +141,7 @@
                                                 </div>
                                                 <h4>Kéo ảnh hoặc bấm vào để tải ảnh lên.</h4>
                                             </div>
-                                            <div class="invalid-feedback">Vui lòng chọn ảnh</div>
+
                                         </div>
                                     </div>
                                 </div>
@@ -167,7 +169,7 @@
                                         <div class="modal-body">
                                             <p>Nếu bạn bỏ qua phần này thì bạn sẽ không thể thực hiện các chức năng sau đây</p>
                                             <ul>
-                                                <li>Chuyển tiền</li>
+                                                {{-- <li>Chuyển tiền</li> --}}
                                                 <li>Nạp tiền</li>
                                                 <li>Rút tiền</li>
                                             </ul>
