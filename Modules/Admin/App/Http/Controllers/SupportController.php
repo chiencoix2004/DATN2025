@@ -7,6 +7,7 @@ use App\Models\CustomerSupport;
 use App\Models\CustomerSupportDetail;
 use App\Models\Order;
 use App\Models\User;
+use App\Notifications\ResponeTicket;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -23,6 +24,7 @@ class SupportController extends Controller
          $countOpen = $listTicket->where('ticket_status', 1)->count();
          $countClose = $listTicket->where('ticket_status', 2)->count();
         $countSpam = $listTicket->where('ticket_status', 3)->count();
+       // dd($listTicket);
          return view('admin::ticket.list', compact('listTicket', 'countOpen', 'countClose', 'countSpam'));
     }
 
@@ -53,7 +55,7 @@ class SupportController extends Controller
         $ticket_title = $request->title;
         $ticket_content = $request->content;
         $ticket_category = $request->category;
-        $ticket_ai_analyze = "Vé trợ giúp này được tạo bởi hệ thống, không có phân tích khi tạo bởi hệ thống";
+        $ticket_ai_analyze = NULL;
         $ticket_attachment = NULL;
         $ticket_reply = "Tạo vé trợ giúp thành công vui lòng chờ khách hàng phản hồi";
         $ticket_reply_by = "ai";
@@ -88,6 +90,7 @@ class SupportController extends Controller
         $detailticket = $detailticket->getdetail($id);
         $account = new User();
         $account = $account->getUser($user_id);
+        //dd($account);
         $order = new Order();
         $order = $order->getlast5Orders($user_id);
         return view('admin::ticket.chat', compact('detailticket', 'account', 'order'));
@@ -126,6 +129,15 @@ class SupportController extends Controller
         $ticket = new CustomerSupportDetail();
         $ticket = $ticket->addmessage($ticket_id, $ticket_reply, $ticket_attachment, $ticket_reply_by);
         if($ticket){
+            if(isset($request->notify)){
+                $user = User::find($request->user_id);
+                $data = [
+                    'full_name' => $user->full_name,
+                    'message' =>  $ticket_reply,
+                    'ticket_id' =>$ticket_id
+                ];
+                $user->notify(new ResponeTicket($data));
+            }
             return redirect()->back();
         } else {
             return redirect()->back()->with('error', 'Gửi phản hồi thất bại');

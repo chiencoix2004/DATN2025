@@ -42,4 +42,14 @@ class CustomerSupportDetail extends Model
             'ticket_reply_date' => now(),
         ]);
     }
+    public function addmessageAI($ticket_id, $ticket_reply, $ticket_reply_attachment, $ticket_reply_by)
+    {
+        return $this->insert([
+            'ticket_id' => $ticket_id,
+            'ticket_reply' => $ticket_reply,
+            'ticket_reply_attachment' => $ticket_reply_attachment,
+            'ticket_reply_by' => $ticket_reply_by,
+            'ticket_reply_date' => now(),
+        ]);
+    }
 }
