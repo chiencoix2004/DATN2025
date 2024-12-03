@@ -19,6 +19,8 @@ use App\Notifications\Checkout;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Modules\Client\App\Events\NewOrderNotificationEvent;
 
 class CartController extends Controller
 {
@@ -265,7 +267,18 @@ class CartController extends Controller
 
     public function applyCoupon(Request $request)
     {
+        
         $coupon = CouponModel::where('code', $request->coupon_code)->first();
+
+        if(!auth()->check()){
+            return response()->json(['error' => 'Bạn chưa đăng nhập!'], 200);
+        }
+        $cartId = Cart::where('user_id', auth()->id())->first()->id;
+        $cartItems = CartItem::where('cart_id', $cartId)->get();
+        if ($cartItems->count() == 0) {
+            return response()->json(['error' => 'Giỏ hàng của bạn đang trống!'], 200);
+        }
+        
         if ($coupon) {
             $current_date = date('Y-m-d H:i:s');
             $order_total = Cart::where('user_id', auth()->id())->first()->total_amount;
@@ -637,6 +650,24 @@ if ($payment_method == 'wallet') {
             "total_price" => $totalAmount
         ]);
 
+        if ($order) {
+            $notification = " - ID: {$user->id}, Họ và Tên: {$user->full_name}";
+            event(new NewOrderNotificationEvent($notification));
+
+            $message = [
+                'order_id' => $order->id,
+                'user_id' => $user->id,
+                'full_name' => $user->full_name,
+                'message' => 'Đơn hàng mới ',
+            ];
+
+            DB::table('notifications')->insert([
+                'user_id' => null,
+                'title' => 'Thông báo đơn hàng mới',
+                'message' =>  json_encode($message),
+            ]);
+        }
+
         foreach ($cartItems as $item) {
             ProductVariant::where('id', $item->product_variant_id)->decrement('quantity', $item->quantity);
         }
@@ -693,6 +724,7 @@ if ($payment_method == 'wallet') {
                 $user->notify(new Checkout($order, $orderItems));
             })->afterResponse();
         }
+
         $link = route('client.invoice.show', ['id' => $order->id]);
         return response()->json([
             "type" => "success",
