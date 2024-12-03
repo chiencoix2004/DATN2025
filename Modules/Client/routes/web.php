@@ -115,3 +115,5 @@ Route::controller(CartController::class)->group(function () {
 Route::post('/submit-review', [ReviewController::class, 'submitReview'])->name('submit-review');
 
 Route::get('/invoice/{id}', [MyAccountController::class, 'invoiceDetail'])->name('client.invoice.show');
+// routes/web.php
+Route::post('/send-notification', [CartController::class, 'sendNotification'])->name('send.notification');
