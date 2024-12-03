@@ -140,11 +140,11 @@
 
             <div class="row mb-5">
                 <h3>Thao tác</h3>
-                <div class="col-md-3">
+                <div class="col-md-3 mb-3">
                     <a href="{{ route('orders.downloadPDF', ['id' => $order->id]) }}" class="kenne-btn kenne-btn_sm">In hóa
                         đơn</a>
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-3 mb-3">
                     @if ($order->status_order == 'Chờ xác nhận' || $order->status_order == 'Đã xác nhận')
                         <button class="kenne-btn kenne-btn_sm" onclick="cancelOrder({{ $order->id }})">Hủy đơn hàng</button>
                     @endif
@@ -158,10 +158,10 @@
                             onclick="markOrderAsReceived({{ $order->id }})">Đã nhận hàng</button>
                     @endif
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-3 mb-3">
 
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-3 mb-3">
 
                 </div>
             </div>
