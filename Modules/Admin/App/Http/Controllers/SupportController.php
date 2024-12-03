@@ -23,6 +23,7 @@ class SupportController extends Controller
          $countOpen = $listTicket->where('ticket_status', 1)->count();
          $countClose = $listTicket->where('ticket_status', 2)->count();
         $countSpam = $listTicket->where('ticket_status', 3)->count();
+       // dd($listTicket);
          return view('admin::ticket.list', compact('listTicket', 'countOpen', 'countClose', 'countSpam'));
     }
 

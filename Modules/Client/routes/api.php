@@ -4,7 +4,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Modules\Client\App\Http\Controllers\CartController;
 use Modules\Client\App\Http\Controllers\ClientController;
-
+use Modules\Client\App\Http\Controllers\TicketController;
+use PHPUnit\Framework\Attributes\Ticket;
 
 /*
     |--------------------------------------------------------------------------
@@ -28,6 +29,10 @@ Route::post('/cart/checkout', [CartController::class, 'checkout'])->name('checko
 
 Route::controller(ClientController::class)->group(function () {
     Route::post('v1/hintseach', 'seachhint')->name('seachhint');
+});
+
+Route::controller(TicketController::class)->group(function () {
+    Route::post('v1/aigenerate/{id}', 'aigenerate')->name('aigenerate');
 });
 
 

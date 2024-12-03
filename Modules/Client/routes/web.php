@@ -11,6 +11,7 @@ use Modules\Client\App\Http\Controllers\ClientController;
 use Modules\Client\App\Http\Controllers\RegisterController;
 use Modules\Client\App\Http\Controllers\MyAccountController;
 use Artesaos\SEOTools\Contracts\SEOTools;
+use Modules\Client\App\Http\Controllers\TicketController;
 use Modules\Client\App\Http\Controllers\VerificationController;
 use Modules\Client\App\Http\Controllers\ResetPasswordController;
 use Modules\Client\App\Http\Controllers\ForgotPasswordController;
@@ -53,7 +54,9 @@ Route::controller(CartController::class)->prefix('cart')->as('cart.')->group(fun
 Route::prefix('other')->as('other.')->group(function () {
     Route::get('contact', function () {
         return view('client::contents.other-pages.contact-us');
-    })->name('contactUs');
+    })
+    ->middleware('auth.checkLog')
+    ->name('contactUs');
     Route::get('aboutUs', function () {
         return view('client::contents.other-pages.about-us');
     })->name('aboutUs');
@@ -101,6 +104,12 @@ Route::get('auth/google', [LoginController::class, 'redirectToGoogle'])->name('a
 Route::get('auth/google/callback', [LoginController::class, 'handleGoogleCallback']);
 
 //giỏ hàng
+Route::controller(TicketController::class)
+->name('ticket.')
+->group(function () {
+    Route::post('add-ticket', 'addTicket')->name('addTicket');
+
+});
 
 Route::controller(CartController::class)->group(function () {
     Route::post('/cart/add', 'add')->name('cart.add');

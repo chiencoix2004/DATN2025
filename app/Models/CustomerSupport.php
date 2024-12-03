@@ -176,4 +176,8 @@ class CustomerSupport extends Model
             ->orWhere('ticket_category', 'like', '%' . $keyword . '%')
             ->get();
     }
+    public function getLastticket()
+    {
+        return $this->orderBy('ticket_id', 'desc')->first();
+    }
 }

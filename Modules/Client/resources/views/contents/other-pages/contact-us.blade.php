@@ -2,6 +2,7 @@
 
 @section('title')
     Liên hệ | Thời trang Phong cách Việt
+
 @endsection
 @section('contents')
     <!-- Begin Kenne's Breadcrumb Area -->
@@ -34,7 +35,7 @@
                         </div>
                         <div class="single-contact-block">
                             <h4><i class="fa fa-phone"></i> Phone</h4>
-                            <p>Mobile: (08) 123 456 789</p>
+                            <p>Mobile: (84) 123 456 789</p>
                             <p>Hotline: 1009 678 456</p>
                         </div>
                         <div class="single-contact-block last-child">
@@ -48,14 +49,24 @@
                     <div class="contact-form-content">
                         <h3 class="contact-page-title">Nói với chúng tôi vấn đề của bạn</h3>
                         <div class="contact-form">
-                            <form id="contact-form" action="https://whizthemes.com/mail-php/mamunur/kenne/kenne.php">
+                            <form action="{{ route('ticket.addTicket') }}" method="POST" enctype="multipart/form-data">
+                                @csrf
                                 <div class="form-group">
                                     <label>Họ và tên <span class="required">*</span></label>
                                     <input type="text" name="con_name" id="con_name" required>
                                 </div>
                                 <div class="form-group">
                                     <label>Email <span class="required">*</span></label>
-                                    <input type="email" name="con_email" id="con_email" required>
+                                    <input type="email" name="con_email" id="con_email" @if(isset(Auth::user()->email)) value={{ Auth::user()->email }} @endif>
+                                </div>
+                                <input type="hidden" name="con_user_id" id="con_user_id" @if(isset(Auth::user()->id)) value={{ Auth::user()->id }} @endif>
+                                <div class="form-group">
+                                    <label>Loại yêu cầu <span class="required">*</span></label>
+                                    <select name="status" id="status" class="form-control">
+                                        <option value="1">Tài khoản</option>
+                                        <option value="2">Mua hàng</option>
+                                        <option value="3">Sản phẩm</option>
+                                    </select>
                                 </div>
                                 <div class="form-group">
                                     <label>Tiêu đề</label>
@@ -64,6 +75,10 @@
                                 <div class="form-group form-group-2">
                                     <label>Lời nhắn của bạn</label>
                                     <textarea name="con_message" id="con_message"></textarea>
+                                </div>
+                                <div class="form-group-2">
+                                    <label>File đính kèm</label>
+                                    <input type="file" name="con_file" id="con_file">
                                 </div>
                                 <div class="form-group">
                                     <button type="submit" value="submit" id="submit" class="kenne-contact-form_btn"
