@@ -22,6 +22,7 @@ return new class extends Migration
             $table->tinyInteger('ticket_auto_reply_ai')->default(0);//1 true, 0 false
             $table->tinyInteger('mark_as_spam')->default(0);//1 true, 0 false
             //chỗ này không thấy mã nhân viên nào thì không thể chỉ định col employee_id
+            $table->timestamps();
         });
     }
 
