@@ -140,33 +140,59 @@
 
             <div class="row mb-5">
                 <h3>Thao tác</h3>
-                <div class="col-md-3">
+                <div class="col-md-3 mb-3">
                     <a href="{{ route('orders.downloadPDF', ['id' => $order->id]) }}" class="kenne-btn kenne-btn_sm">In hóa
                         đơn</a>
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-3 mb-3">
                     @if ($order->status_order == 'Chờ xác nhận' || $order->status_order == 'Đã xác nhận')
-                        <button class="kenne-btn kenne-btn_sm" onclick="cancelOrder({{ $order->id }})">Hủy đơn hàng</button>
+                        <button class="kenne-btn kenne-btn_sm" onclick="cancelOrder({{ $order->id }})">Hủy đơn
+                            hàng</button>
                     @endif
 
                     @if ($order->status_order == 'Đơn hàng bị hủy')
-                        <button class="kenne-btn kenne-btn_sm" onclick="resetOrder({{ $order->id }})">Đặt lại đơn hàng</button>
+                        <button class="kenne-btn kenne-btn_sm" onclick="resetOrder({{ $order->id }})">Đặt lại đơn
+                            hàng</button>
                     @endif
 
                     @if ($order->status_order == 'Đang giao hàng')
-                        <button class="kenne-btn kenne-btn_sm"
-                            onclick="markOrderAsReceived({{ $order->id }})">Đã nhận hàng</button>
+                        <button class="kenne-btn kenne-btn_sm" onclick="markOrderAsReceived({{ $order->id }})">Đã nhận
+                            hàng</button>
                     @endif
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-3 mb-3">
 
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-3 mb-3">
 
                 </div>
             </div>
         </div>
     </div>
+    <script>
+        $(document).ready(function() {
+            // Kiểm tra xem có query parameter 'email' không
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('email') === 'true') {
+                const id = {{ $order->id }}; 
+
+                $.ajax({
+                    url: '{{ route('send.notification') }}',
+                    method: 'POST',
+                    data: {
+                        id: id,
+                        _token: '{{ csrf_token() }}' // CSRF token
+                    },
+                    success: function(response) {
+                        console.log('Notification sent successfully.');
+                    },
+                    error: function(xhr) {
+                        console.error('Error sending notification:', xhr);
+                    }
+                });
+            }
+        });
+    </script>
     <!-- Kenne's Content Wrapper Area End Here -->
 @endsection
 @section('js-setting')
@@ -188,10 +214,10 @@
                             _token: '{{ csrf_token() }}'
                         },
                         success: function(response) {
-                            
+
                             location.reload(); // Tải lại trang để cập nhật trạng thái
                             Swal.fire('Thành công!', response.message, 'success');
-                            
+
                         },
                         error: function(xhr) {
                             Swal.fire('Lỗi!', xhr.responseJSON.message, 'error');
@@ -221,7 +247,7 @@
                             location.reload(); // Tải lại trang để cập nhật trạng thái
                             Swal.fire('Thành công!', response.message, 'success');
 
-                            
+
                         },
                         error: function(xhr) {
                             Swal.fire('Lỗi!', xhr.responseJSON.message, 'error');
@@ -250,7 +276,7 @@
                             location.reload(); // Tải lại trang để cập nhật trạng thái
                             Swal.fire('Thành công!', response.message, 'success');
 
-                            
+
                         },
                         error: function(xhr) {
                             Swal.fire('Lỗi!', xhr.responseJSON.message, 'error');

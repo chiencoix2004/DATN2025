@@ -21,34 +21,57 @@
     <!-- Begin Kenne's About Us Area -->
     <div class="about-us-area">
         <div class="container">
-            <div class="row">
+            <!-- Phần giới thiệu -->
+            <div class="row align-items-center mb-5">
                 <div class="col-lg-6 col-md-5">
                     <div class="overview-img text-center img-hover_effect">
                         <a href="#">
                             <img class="img-full" src="{{ asset('theme/client/images/about-us/1.jpg') }}"
-                                alt="Kenne's About Us Image" style="width: 100%; height: 100%;">
+                                alt="Kenne's About Us Image" style="width: 100%; height: auto; border-radius: 10px;">
                         </a>
                     </div>
                 </div>
-                <div class="col-lg-6 col-md-7 d-flex align-items-center">
+                <div class="col-lg-6 col-md-7">
                     <div class="overview-content">
-                        <h2>Chào mừng đến với <span>Fashion</span> Thời trang Phong cách Việt!</h2>
-                        <p class="short_desc">Tại Fashion, chúng tôi tự hào mang đến cho bạn những 
-                            sản phẩm thời trang chất lượng cao, kết hợp giữa xu hướng quốc tế và 
-                            phong cách Việt Nam độc đáo. Được thành lập với sứ mệnh nâng tầm phong 
-                            cách thời trang của người Việt, Fashion không chỉ là nơi bạn tìm thấy 
-                            những bộ trang phục đẹp mà còn là nơi giúp bạn thể hiện cá tính và gu thẩm mỹ riêng.</p>
+
+                        <h2 class="mb-4">Chào mừng đến với <span>Fashion</span> Thời trang Phong cách Việt!</h2>
+                        <p class="short_desc mb-4">
+                            Chào mừng bạn đến với Thời Trang Phong Cách Việt, nơi hội tụ tinh hoa thời trang Việt Nam! Chúng tôi tự hào mang đến những thiết kế thời trang vừa hiện đại vừa đậm chất truyền thống, nhằm tôn vinh vẻ đẹp và bản sắc văn hóa Việt.
+                        </p>
                         <div class="kenne-about-us_btn-area">
-                            <a class="about-us_btn" href="{{ route('shop.shopIndex') }}">Mua sắm ngay</a>
+                            <a class="about-us_btn btn btn-primary" href="{{ route('shop.shopIndex') }}">Mua sắm ngay</a>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
+        
+            <!-- Sứ mệnh và Tầm nhìn -->
+            <div class="row mb-5">
+                <!-- Sứ mệnh -->
+                <div class="col-lg-6 col-md-6">
+                    <div class="mission-content">
+                        <h3 class="mb-3">Sứ mệnh của chúng tôi</h3>
+                        <p class="short_desc">
+                            Chúng tôi cam kết giữ gìn và lan tỏa giá trị văn hóa dân tộc thông qua thời trang. Mỗi sản phẩm tại Thời Trang Phong Cách Việt không chỉ là một bộ trang phục, mà còn là câu chuyện về lịch sử, nghệ thuật, và tình yêu quê hương.
+                        </p>
+                    </div>
+                </div>
+                <!-- Tầm nhìn -->
+                <div class="col-lg-6 col-md-6">
+                    <div class="vision-content">
+                        <h3 class="mb-3">Tầm nhìn</h3>
+                        <p class="short_desc">
+                            Hướng tới trở thành thương hiệu thời trang hàng đầu đại diện cho phong cách sống Việt Nam trên bản đồ quốc tế. Chúng tôi mong muốn đưa những giá trị truyền thống vượt khỏi biên giới, tạo dấu ấn đặc sắc trong ngành công nghiệp thời trang toàn cầu.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>    
     </div>
 
-    <!-- Begin Kenne's Team Area -->
-    <div class="team-area">
+
+    <!-- Begin Kenne's Project Countdown Area -->
+    {{-- <div class="project-count-area">
         <div class="container">
             <div class="row">
                 <div class="col-12">
@@ -100,6 +123,10 @@
                 </div>
             </div>
         </div>
+    </div> --}}
+    <!-- Kenne's Project Countdown Area End Here -->
+    <!-- Begin Kenne's Team Area -->
+    <div class="team-area">
         <div class="container">
             <div class="row">
                 <div class="col-12">

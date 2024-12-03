@@ -25,23 +25,22 @@
             <div class="row">
                 <div class="col-lg-5 offset-lg-1 col-md-12 order-1 order-lg-2">
                     <div class="contact-page-side-content">
-                        <h3 class="contact-page-title">Contact Us</h3>
-                        <p class="contact-page-message">Claritas est etiam processus dynamicus, qui sequitur
-                            mutationem consuetudium lectorum. Mirum est notare quam littera gothica, quam nunc putamus parum
-                            claram anteposuerit litterarum formas human.</p>
+                        <h3 class="contact-page-title">Liên hệ chúng tôi</h3>
+                        <p class="contact-page-message">Thời Trang Phong Cách Việt luôn sẵn sàng lắng nghe ý kiến và hỗ trợ bạn. Hãy liên hệ với chúng tôi để được tư vấn và giải đáp.</p>
                         <div class="single-contact-block">
-                            <h4><i class="fa fa-fax"></i> Address</h4>
-                            <p>123 Main Street, Anytown, CA 12345 – USA</p>
+                            <h4><i class="fa fa-fax"></i> Địa chỉ</h4>
+                            <p>123 Phố Thời Trang, Quận Phong Cách, TP. Hồ Chí Minh</p>
                         </div>
                         <div class="single-contact-block">
-                            <h4><i class="fa fa-phone"></i> Phone</h4>
-                            <p>Mobile: (84) 123 456 789</p>
-                            <p>Hotline: 1009 678 456</p>
+
+                            <h4><i class="fa fa-phone"></i> Điện thoại</h4>
+                            <p>Mobile: 028-8888-5555</p>
+                            <p>Hotline: 0359-956-926</p>
                         </div>
                         <div class="single-contact-block last-child">
                             <h4><i class="fa fa-envelope-o"></i> Email</h4>
-                            <p>yourmail@domain.com</p>
-                            <p>support@hastech.company</p>
+                            <p>nguyenxuanbinh2k4@gmail.com</p>
+                            <p>xuyenqua@fashion.company</p>
                         </div>
                     </div>
                 </div>
