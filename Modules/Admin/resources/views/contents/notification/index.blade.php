@@ -58,7 +58,7 @@
                             @php
                                 $dataMessage = json_decode($notification->message, true);
                             @endphp
-                            {{-- @dd( $dataMessage)n --}}
+                            {{-- @dd( $dataMessage) --}}
                             {{ $dataMessage['message'] }}
                             @if ($dataMessage['order_id'] != null)
                                 <a href="{{ route('admin.orders.detail', $dataMessage['order_id']) }}">Đơn hàng {{ $dataMessage['order_id'] }}</a>
@@ -66,6 +66,7 @@
                             @if ($dataMessage['user_id'] !=null)
                                 tài khoản <a href="{{ route('admin.users.show', ['id'=>$dataMessage['user_id']]) }}"> {{ $dataMessage['full_name'] }}</a>
                             @endif
+                            
                         </span>
                     </div>
                 </div>

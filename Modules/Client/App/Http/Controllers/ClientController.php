@@ -18,14 +18,14 @@ class ClientController extends Controller
      * Display a listing of the resource.
      */
     public function index()
-    {   
+    {
         // dd( Auth::id());
         $banner = new Banner();
         $slider = $banner->getSliderPosition();
         $bannertop = $banner->getTopPosition();
         $bannercenter = $banner->getCenterPosition();
         $bannerbottom = $banner->getBottomPosition();
-        // dd($bannerbottom);
+         //dd($bannerbottom);
         $products_new = Product::query()->latest('id')->where('is_active', 1)->limit(10)->get();
         $posts = Post::where('published_id', 1)->latest('created_at')->paginate(5);
         return view('client::index', compact('bannertop', 'bannercenter', 'bannerbottom', 'slider', 'products_new', 'posts'));
@@ -89,7 +89,7 @@ class ClientController extends Controller
                 return view('client::search.list', compact('products', 'listcategory'));
         }
     }
-    
+
     public function searchprice(Request $request)
     {
         $keywd = $request->keywd;

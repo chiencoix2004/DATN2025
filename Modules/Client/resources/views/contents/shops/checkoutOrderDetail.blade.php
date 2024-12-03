@@ -33,7 +33,7 @@
                     <div class="d-flex justify-content-center">
                         <div class="text-center">
                             <h3 class="mt-3">Thanh toán thành công</h3>
-                            <p class="text-muted">Cảm ơn bạn đã sử dụng ví tiền</p>
+                            <p class="text-muted">Cảm ơn bạn đã mua hàng với chúng tôi</p>
                         </div>
                     </div>
                     <div class="d-flex justify-content-center mt-2">

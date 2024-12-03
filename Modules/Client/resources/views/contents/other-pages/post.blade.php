@@ -32,7 +32,7 @@
                                 </form>
                             </div>
                         </div>
-                        @if (!isset($data))
+                        @if (isset($posts) && $posts->count() > 0)
                             <div class="kenne-blog-sidebar">
                                 <h4 class="kenne-blog-sidebar-title">Tin tức gần đây</h4>
                                 @foreach ($posts as $item)
@@ -57,64 +57,74 @@
                 </div>
                 <div class="col-lg-9 order-lg-2 order-1">
                     <div class="row blog-item_wrap">
-                        @if (isset($data))
+                        @if (isset($error))
                             <div class="col-12">
-                                <div class="blog-item">
-                                    <div class="blog-img">
-                                        <a href="{{ route('other.postDetail', $data->slug_post) }}">
-                                            <img src="{{ Storage::url($data->image_post) }}" alt="{{ $data->title }}">
-                                        </a>
-                                    </div>
-                                    <div class="blog-content">
-                                        <h3 class="heading">
-                                            <a
-                                                href="{{ route('other.postDetail', $data->slug_post) }}">{{ $data->title }}</a>
-                                        </h3>
-                                        <p class="short-desc">
-                                            {{-- {{ Str::limit(strip_tags($item->content), 100, '...') }} --}}
-                                            {!! Str::limit($data->short_description, 150) !!}
-                                        </p>
-                                        <div class="blog-meta">
-                                            <ul>
-                                                <li>{{ $data->created_at->format('d/m/Y') }}</li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
+                                <p class="alert alert-warning">{{ $error }}</p>
                             </div>
-                        @else
-                            @foreach ($posts as $item)
+                        @elseif (isset($data) && $data->count() > 0)
+                            <div class="col-12">
+                                <h2 class="search-results-title">Kết quả tìm kiếm</h2>
+                            </div>
+                            @foreach ($data as $post)
                                 <div class="col-12">
                                     <div class="blog-item">
                                         <div class="blog-img">
-                                            <a href="{{ route('other.postDetail', $item->slug_post) }}">
-                                                <img src="{{ Storage::url($item->image_post) }}"
-                                                    alt="{{ $item->title }}">
+                                            <a href="{{ route('other.postDetail', $post->slug_post) }}">
+                                                <img src="{{ Storage::url($post->image_post) }}" alt="{{ $post->title }}">
                                             </a>
                                         </div>
                                         <div class="blog-content">
                                             <h3 class="heading">
                                                 <a
-                                                    href="{{ route('other.postDetail', $item->slug_post) }}">{{ $item->title }}</a>
+                                                    href="{{ route('other.postDetail', $post->slug_post) }}">{{ $post->title }}</a>
                                             </h3>
                                             <p class="short-desc">
-                                                {{-- {{ Str::limit(strip_tags($item->content), 100, '...') }} --}}
-                                                {!! Str::limit($item->short_description, 250) !!}
+                                                {!! Str::limit($post->short_description, 150) !!}
                                             </p>
                                             <div class="blog-meta">
                                                 <ul>
-                                                    <li>{{ $item->created_at->format('d/m/Y') }}</li>
+                                                    <li>{{ $post->created_at->format('d/m/Y') }}</li>
                                                 </ul>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             @endforeach
+                        @else
+                            <h2 class="sidebar-title">Tin tức gần đây</h2>
+                            @if (isset($posts) && $posts->count() > 0)
+                                @foreach ($posts as $item)
+                                    <div class="col-12">
+                                        <div class="blog-item">
+                                            <div class="blog-img">
+                                                <a href="{{ route('other.postDetail', $item->slug_post) }}">
+                                                    <img src="{{ Storage::url($item->image_post) }}"
+                                                        alt="{{ $item->title }}">
+                                                </a>
+                                            </div>
+                                            <div class="blog-content">
+                                                <h3 class="heading">
+                                                    <a
+                                                        href="{{ route('other.postDetail', $item->slug_post) }}">{{ $item->title }}</a>
+                                                </h3>
+                                                <p class="short-desc">
+                                                    {!! Str::limit($item->short_description, 250) !!}
+                                                </p>
+                                                <div class="blog-meta">
+                                                    <ul>
+                                                        <li>{{ $item->created_at->format('d/m/Y') }}</li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endforeach
+                            @endif
                         @endif
                     </div>
                 </div>
             </div>
-            @if (!isset($data))
+            @if (isset($posts) && $posts->count() > 0)
                 <div class="row">
                     <div class="col-lg-12">
                         {{ $posts->links('pagination::bootstrap-5') }}

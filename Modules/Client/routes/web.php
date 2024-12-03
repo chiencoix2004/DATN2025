@@ -71,6 +71,7 @@ Route::get('/showform', [AuthController::class, 'form'])->name('showForm');
 Route::get('/form-reg', [AuthController::class, 'form_reg'])->name('formReg');
 Route::get('/email/verify/{id}', [VerificationController::class, 'verify'])->name('verification.verify');
 
+
 // Route::get('/login', [LoginController::class, 'showLoginForm'])->name('showLoginForm');
 Route::post('/login', [LoginController::class, 'login'])->name('login');
 
@@ -86,7 +87,7 @@ Route::controller(MyAccountController::class)->middleware('auth.checkLog')->grou
     // dang xuat tai khoan
     Route::post('/logout', 'logout')->name('logout');
 });
-
+route::get('responehandle', [CartController::class, 'handlewallet'])->name('handlewallet');
 // Route cho trang yêu cầu đặt lại mật khẩu
 Route::get('/forgot-password', [ForgotPasswordController::class, 'forgotPasswordForm'])->name('forgot-password');
 Route::post('/forgot-password', [ForgotPasswordController::class, 'sendResetLinkEmail'])->name('email-password');
@@ -113,3 +114,5 @@ Route::controller(CartController::class)->group(function () {
 });
 
 Route::post('/submit-review', [ReviewController::class, 'submitReview'])->name('submit-review');
+
+Route::get('/invoice/{id}', [MyAccountController::class, 'invoiceDetail'])->name('client.invoice.show');

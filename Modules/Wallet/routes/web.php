@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use Modules\Wallet\App\Http\Controllers\EkycController;
+use Modules\Wallet\App\Http\Controllers\PayController;
 use Modules\Wallet\App\Http\Controllers\WalletController;
 
 /*
@@ -28,6 +29,20 @@ Route::controller(WalletController::class)
     Route::get('withdraw', [WalletController::class, 'withdraw'])->name('withdraw');
     Route::post('withdraw-create', [WalletController::class, 'createWithdraw'])->name('createWithdraw');
 });
+Route::controller(PayController::class)
+->middleware(["user","userwallet"])
+->name("wallet.pay.")
+->prefix("wallet/pay")
+->group(function(){
+    Route::get("wlpay.htm", [PayController::class,"index"])->name("index");
+    route::get("/{id}", [PayController::class,"token"])->name("token");
+    Route::post("otp", [PayController::class,"otp"])->name("otp");
+    Route::post("charge", [PayController::class,"chagre"])->name("charge");
+    Route::get("resendotp/{id}", [PayController::class,"resendtotp"])->name("resendtotp");
+    Route::get('errorpayment', [PayController::class, 'errorpayment'])->name('errorpayment');
+
+});
+
 
 Route::controller(EkycController::class)
 ->middleware(["user"])
