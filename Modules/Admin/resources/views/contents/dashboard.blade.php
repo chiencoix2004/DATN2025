@@ -177,45 +177,19 @@
                             class="fas fa-chevron-right ms-1 fs-11"></span></a></div>
             </div>
         </div>
-        <div class="col-lg-6 ps-lg-2 mb-3">
+        <div class="col-lg-12 ps-lg-2 mb-3">
             <div class="card h-lg-100">
                 <div class="card-header">
                     <div class="row flex-between-center">
                         <div class="col-auto">
-                            <h6 class="mb-0">Total Sales</h6>
-                        </div>
-                        <div class="col-auto d-flex"><select class="form-select form-select-sm select-month me-2">
-                                <option value="0">January</option>
-                                <option value="1">February</option>
-                                <option value="2">March</option>
-                                <option value="3">April</option>
-                                <option value="4">May</option>
-                                <option value="5">Jun</option>
-                                <option value="6">July</option>
-                                <option value="7">August</option>
-                                <option value="8">September</option>
-                                <option value="9">October</option>
-                                <option value="10">November</option>
-                                <option value="11">December</option>
-                            </select>
-                            <div class="dropdown font-sans-serif btn-reveal-trigger"><button
-                                    class="btn btn-link text-600 btn-sm dropdown-toggle dropdown-caret-none btn-reveal"
-                                    type="button" id="dropdown-total-sales" data-bs-toggle="dropdown"
-                                    data-boundary="viewport" aria-haspopup="true" aria-expanded="false"><span
-                                        class="fas fa-ellipsis-h fs-11"></span></button>
-                                <div class="dropdown-menu dropdown-menu-end border py-2"
-                                    aria-labelledby="dropdown-total-sales"><a class="dropdown-item"
-                                        href="#!">View</a><a class="dropdown-item" href="#!">Export</a>
-                                    <div class="dropdown-divider"></div><a class="dropdown-item text-danger"
-                                        href="#!">Remove</a>
-                                </div>
-                            </div>
+                            <h6 class="mb-0">Doanh thu theo tháng</h6>
                         </div>
                     </div>
                 </div>
                 <div class="card-body h-100 pe-0">
                     <!-- Find the JS file for the following chart at: src\js\charts\echarts\total-sales.js--><!-- If you are not using gulp based workflow, you can find the transpiled code at: public\assets\js\theme.js-->
-                    <div class="echart-line-total-sales h-100" data-echart-responsive="true"></div>
+                    <div class="echart-line-chart-example" style="min-height: 300px;" data-echart-responsive="true">
+                    </div>
                 </div>
             </div>
         </div>
@@ -229,8 +203,8 @@
                             <thead class="bg-body-tertiary">
                                 <tr>
                                     <th class="text-900">Sản phẩm bán chạy</th>
-                                    {{-- <th class="text-900 text-end">Revenue ($3333)</th>
-                                    <th class="text-900 pe-x1 text-end" style="width: 8rem">Revenue (%)
+                                    <th class="text-900 text-end">Số lượng bán</th>
+                                    {{-- <th class="text-900 pe-x1 text-end" style="width: 8rem">Revenue (%)
                                     </th> --}}
                                 </tr>
                             </thead>
@@ -249,8 +223,8 @@
                                                 </div>
                                             </div>
                                         </td>
-                                        {{-- <td class="align-middle text-end fw-semi-bold">$1311</td>
-                                        <td class="align-middle pe-x1">
+                                        <td class="align-middle text-end fw-semi-bold">{{ $item->total_quantity }}</td>
+                                        {{-- <td class="align-middle pe-x1">
                                             <div class="d-flex align-items-center">
                                                 <div class="progress me-3 rounded-3 bg-200"
                                                     style="height: 5px; width:80px;" role="progressbar"
@@ -322,64 +296,24 @@
                     </div> --}}
                 </div>
                 <div class="card-body py-2">
-                    <div class="d-flex align-items-center position-relative mb-3">
-                        <div class="avatar avatar-2xl status-online">
-                            <img class="rounded-circle" src="{{ asset('theme/admin/img/team/1.jpg') }}"
-                                alt="" />
+                    @foreach ($listUser as $item)
+                        <div class="d-flex align-items-center position-relative mb-3">
+                            <div class="avatar avatar-2xl">
+                                <img class="rounded-circle" src="{{ asset($item->user_image) }}" alt="" />
+                            </div>
+                            <div class="flex-1 ms-3">
+                                <h6 class="mb-0 fw-semi-bold"><a class="stretched-link text-900"
+                                        href="{{ route('admin.users.show', ['id' => $item->id]) }}">{{ $item->full_name }}</a>
+                                </h6>
+                                <p class="text-500 fs-11 mb-0">Khách hàng</p>
+                            </div>
                         </div>
-                        <div class="flex-1 ms-3">
-                            <h6 class="mb-0 fw-semi-bold"><a class="stretched-link text-900"
-                                    href="pages/user/profile.html">Emma Watson</a></h6>
-                            <p class="text-500 fs-11 mb-0">Admin</p>
-                        </div>
-                    </div>
-                    <div class="d-flex align-items-center position-relative mb-3">
-                        <div class="avatar avatar-2xl status-online">
-                            <img class="rounded-circle" src="{{ asset('theme/admin/img/team/2.jpg') }}"
-                                alt="" />
-                        </div>
-                        <div class="flex-1 ms-3">
-                            <h6 class="mb-0 fw-semi-bold"><a class="stretched-link text-900"
-                                    href="pages/user/profile.html">Antony Hopkins</a></h6>
-                            <p class="text-500 fs-11 mb-0">Moderator</p>
-                        </div>
-                    </div>
-                    <div class="d-flex align-items-center position-relative mb-3">
-                        <div class="avatar avatar-2xl status-away">
-                            <img class="rounded-circle" src="{{ asset('theme/admin/img/team/3.jpg') }}"
-                                alt="" />
-                        </div>
-                        <div class="flex-1 ms-3">
-                            <h6 class="mb-0 fw-semi-bold"><a class="stretched-link text-900"
-                                    href="pages/user/profile.html">Anna Karinina</a></h6>
-                            <p class="text-500 fs-11 mb-0">Editor</p>
-                        </div>
-                    </div>
-                    <div class="d-flex align-items-center position-relative mb-3">
-                        <div class="avatar avatar-2xl status-offline">
-                            <img class="rounded-circle" src="{{ asset('theme/admin/img/team/4.jpg') }}"
-                                alt="" />
-                        </div>
-                        <div class="flex-1 ms-3">
-                            <h6 class="mb-0 fw-semi-bold"><a class="stretched-link text-900"
-                                    href="pages/user/profile.html">John Lee</a></h6>
-                            <p class="text-500 fs-11 mb-0">Admin</p>
-                        </div>
-                    </div>
-                    <div class="d-flex align-items-center position-relative false">
-                        <div class="avatar avatar-2xl status-offline">
-                            <img class="rounded-circle" src="{{ asset('theme/admin/img/team/5.jpg') }}"
-                                alt="" />
-                        </div>
-                        <div class="flex-1 ms-3">
-                            <h6 class="mb-0 fw-semi-bold"><a class="stretched-link text-900"
-                                    href="pages/user/profile.html">Rowen Atkinson</a></h6>
-                            <p class="text-500 fs-11 mb-0">Editor</p>
-                        </div>
-                    </div>
+                    @endforeach
+
+
                 </div>
                 <div class="card-footer bg-body-tertiary p-0"><a class="btn btn-sm btn-link d-block w-100 py-2"
-                        href="app/social/followers.html">All active users<span
+                        href="{{ route('admin.users.index') }}">Xem tất cả<span
                             class="fas fa-chevron-right ms-1 fs-11"></span></a></div>
             </div>
         </div>
@@ -455,4 +389,120 @@
 @endsection
 @section('js-setting')
     <script src="{{ asset('theme/admin/vendors/echarts/echarts.min.js') }}"></script>
+    <script src="{{ asset('theme/admin/js/echarts-example.js') }}"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            echartsLineChartInit();
+        });
+
+        function echartsLineChartInit() {
+            var $lineChartEl = document.querySelector('.echart-line-chart-example');
+            if ($lineChartEl) {
+                // Get options from data attribute
+                var userOptions = utils.getData($lineChartEl, 'options');
+                var chart = window.echarts.init($lineChartEl);
+                var months = [
+                    'T1', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'T8', 'T9',
+                    'T10', 'T11', 'T12'
+                ];
+                var data = @json($salesData);
+                var _tooltipFormatter2 = function _tooltipFormatter2(params) {
+                    return "\n      <div>\n          <h6 class=\"fs-10 text-700 mb-0\">\n            <span class=\"fas fa-circle me-1\" style='color:"
+                        .concat(params[0].borderColor, "'></span>\n            ").concat(params[0].name, " : ")
+                        .concat(params[0].value, "\n          </h6>\n      </div>\n      ");
+                };
+                var getDefaultOptions = function getDefaultOptions() {
+                    return {
+                        tooltip: {
+                            trigger: 'axis',
+                            padding: [7, 10],
+                            backgroundColor: utils.getGrays()['100'],
+                            borderColor: utils.getGrays()['300'],
+                            textStyle: {
+                                color: utils.getGrays()['1100']
+                            },
+                            borderWidth: 1,
+                            formatter: _tooltipFormatter2,
+                            transitionDuration: 0,
+                            position: function position(pos, params, dom, rect, size) {
+                                return getPosition(pos, params, dom, rect, size);
+                            },
+                            axisPointer: {
+                                type: 'none'
+                            }
+                        },
+                        xAxis: {
+                            type: 'category',
+                            data: months,
+                            boundaryGap: false,
+                            axisLine: {
+                                lineStyle: {
+                                    color: utils.getGrays()['300']
+                                }
+                            },
+                            axisTick: {
+                                show: false
+                            },
+                            axisLabel: {
+                                color: utils.getGrays()['400'],
+                                formatter: function formatter(value) {
+                                    return value.substring(0, 3);
+                                },
+                                margin: 15
+                            },
+                            splitLine: {
+                                show: false
+                            }
+                        },
+                        yAxis: {
+                            type: 'value',
+                            splitLine: {
+                                lineStyle: {
+                                    type: 'dashed',
+                                    color: utils.getGrays()['200']
+                                }
+                            },
+                            boundaryGap: false,
+                            axisLabel: {
+                                show: true,
+                                color: utils.getGrays()['400'],
+                                margin: 15
+                            },
+                            axisTick: {
+                                show: false
+                            },
+                            axisLine: {
+                                show: false
+                            },
+                            min: 600
+                        },
+                        series: [{
+                            type: 'line',
+                            data: data,
+                            itemStyle: {
+                                color: utils.getGrays()['100'],
+                                borderColor: utils.getColor('primary'),
+                                borderWidth: 2
+                            },
+                            lineStyle: {
+                                color: utils.getColor('primary')
+                            },
+                            showSymbol: false,
+                            symbol: 'circle',
+                            symbolSize: 10,
+                            smooth: false,
+                            hoverAnimation: true
+                        }],
+                        grid: {
+                            right: '3%',
+                            left: '10%',
+                            bottom: '10%',
+                            top: '5%'
+                        }
+                    };
+                };
+                echartSetOption(chart, userOptions, getDefaultOptions);
+            }
+        };
+    </script>
 @endsection

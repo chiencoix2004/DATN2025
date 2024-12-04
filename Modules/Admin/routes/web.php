@@ -63,9 +63,7 @@ Route::prefix('admin')
     ->as('admin.')
     // ->middleware('CheckAdmin')
     ->group(function () {
-        Route::get('/', function () {
-            return view('admin::contents.dashboard');
-        })->name('home');
+        Route::get('/', [DashboardController::class, 'index'])->name('home');
         
         Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
