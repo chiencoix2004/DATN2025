@@ -32,7 +32,7 @@ class TicketController extends Controller
         $ticket_reply_by = "created by user";
         try {
             if ($attachment) {
-                $filepath = $attachment->store('tickets', 'public'); // Store the file in the 'tickets' directory in the 'public' disk
+                $filepath = $attachment->storeAs('tickets', $attachment->getClientOriginalName(), 'public'); // Store the file in the 'tickets' directory in the 'public' disk with the original name
             } else {
                 $filepath = NULL;
             }

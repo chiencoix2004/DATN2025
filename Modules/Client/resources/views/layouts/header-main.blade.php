@@ -39,13 +39,13 @@
                 <p>Thời trang Phong cách Việt-Fashion là sự hòa quyện giữa truyền thống và hiện đại của văn hóa Việt. 
                 </p>
             </div>
-            <div class="offcanvas-component">
+            {{-- <div class="offcanvas-component">
                 <span class="offcanvas-component_title">Ngôn ngữ</span>
                 <ul class="offcanvas-component_menu">
                     <li class="active"><a href="javascript:void(0)">Tiếng Việt</a></li>
                     <li><a href="javascript:void(0)">Tiếng Anh</a></li>
                 </ul>
-            </div>
+            </div> --}}
             <div class="offcanvas-component">
                 <span class="offcanvas-component_title">Tài khoản của tôi</span>
                 @if (Auth::user())
