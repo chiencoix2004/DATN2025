@@ -65,7 +65,6 @@
                 timeOut: 5000
             });
         });
-
     </script>
     @yield('css-libs')
     @include('admin::assets.link-assets.link-css')
@@ -91,25 +90,6 @@
                 @include('admin::assets.nav-contents.navbar-top-content')
                 @include('admin::assets.nav-contents.navbar-combo-content')
                 @include('admin::assets.nav-contents.nav-script')
-                @if ($errors->any())
-                <div class="alert alert-danger">
-                    <ul>
-                        @foreach ($errors->all() as $error)
-                            <li>{{ $error }}</li>
-                        @endforeach
-                    </ul>
-                </div>
-            @endif
-            @if(session('success'))
-                <div class="alert alert-success">
-                    {{session('success')}}
-                </div>
-            @endif
-            @if(session('error'))
-                <div class="alert alert-danger">
-                    {{session('error')}}
-                </div>
-            @endif
                 @yield('contents')
                 @include('admin::assets.footer.footer-content')
             </div>
