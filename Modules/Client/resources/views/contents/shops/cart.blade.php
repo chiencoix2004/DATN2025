@@ -379,7 +379,7 @@
                                 updateCartTotal(); // Cập nhật tổng tiền giỏ hàng
                             } else {
                                 // alert(response.message);
-                                alert(response.error);
+                                alert(response.message);
                             }
                         },
                         error: function(jqXHR, textStatus, errorThrown) {
