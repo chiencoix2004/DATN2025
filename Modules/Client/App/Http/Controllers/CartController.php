@@ -189,7 +189,8 @@ class CartController extends Controller
     }
 
     public function index()
-    {
+    {   
+        Cart::firstOrCreate(['user_id' => auth()->id()]);
         return view('client::contents.shops.cart');
     }
 
@@ -271,12 +272,18 @@ class CartController extends Controller
         $coupon = CouponModel::where('code', $request->coupon_code)->first();
 
         if (!auth()->check()) {
-            return response()->json(['error' => 'Bạn chưa đăng nhập!'], 200);
+            return response()->json([
+                'success' => false,
+                'message' => 'Bạn chưa đăng nhập!'
+            ], 200);
         }
         $cartId = Cart::where('user_id', auth()->id())->first()->id;
         $cartItems = CartItem::where('cart_id', $cartId)->get();
         if ($cartItems->count() == 0) {
-            return response()->json(['error' => 'Giỏ hàng của bạn đang trống!'], 200);
+            return response()->json([
+                'success' => false,
+                'message' => 'Giỏ hàng của bạn đang trống!'
+            ], 200);
         }
 
         if ($coupon) {
@@ -804,6 +811,7 @@ if ($payment_method == 'wallet') {
         }
 
         return response()->json(['success' => true]);
+    }
 
     public function handlewallet(){
         $status = $_GET['status'];
