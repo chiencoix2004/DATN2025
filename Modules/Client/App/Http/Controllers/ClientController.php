@@ -89,6 +89,10 @@ class ClientController extends Controller
                 return view('client::search.list', compact('products', 'listcategory'));
         }
     }
+    public function map()
+    {
+        return view('client::map');
+    }
 
     public function searchprice(Request $request)
     {
