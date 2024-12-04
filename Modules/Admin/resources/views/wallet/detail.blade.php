@@ -42,8 +42,12 @@
                         <h3 class="card-title">QR chuyển khoản</h3>
                     </div>
                     <div class="card-body text-center">
+                        @if ($data->status != 2 || $data->status != 3)
+                        <p>Yêu cầu đã hoàn thành, không thể tạo mã QR</p>
+                        @else
                         <img src="https://img.vietqr.io/image/{{ $data->bank_name }}-{{ $data->bank_account_number }}-print.png?amount={{ $data->amount }}&accountName={{ $data->bank_account_name }}&addInfo=yeu cau rut tien {{ $data->withdraw_request_id }} tai PCV Fasion"
                             alt="Ảnh CK" class="img-fluid">
+                        @endif
                     </div>
                 </div>
             </div>
@@ -52,7 +56,7 @@
                     <div class="card-header bg-primary text-white">
                         <h3 class="card-title">Chỉnh sửa, cập nhật trạng thái</h3>
                     </div>
-                    @if ($data->status != 2)
+                    @if ($data->status != 2 && $data->status != 3)
                         <div class="card-body">
                             <p>Chỉnh sửa trạng thái và ghi chú</p>
                             <form method="POST" action="{{ route('admin.wallet.updateupdatepost') }}">

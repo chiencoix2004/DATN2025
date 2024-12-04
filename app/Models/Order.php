@@ -68,4 +68,18 @@ class Order extends Model
     {
         return $this->where('users_id', $users_id)->orderBy('id', 'desc')->limit(5)->get();
     }
+
+    public function cancelOrder($order_id){
+        return $this->where('id', $order_id)
+        ->update([
+            //enum sv vl
+            'status_order' => 'Đơn hàng bị hủy',
+        ]);
+    }
+    public function adminNote($order_id,$note){
+        return $this->where('id', $order_id)
+        ->update([
+            'ship_user_note' => $note,
+        ]);
+    }
 }

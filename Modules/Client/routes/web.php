@@ -75,6 +75,7 @@ Route::get('/form-reg', [AuthController::class, 'form_reg'])->name('formReg');
 Route::get('/email/verify/{id}', [VerificationController::class, 'verify'])->name('verification.verify');
 
 
+
 // Route::get('/login', [LoginController::class, 'showLoginForm'])->name('showLoginForm');
 Route::post('/login', [LoginController::class, 'login'])->name('login');
 

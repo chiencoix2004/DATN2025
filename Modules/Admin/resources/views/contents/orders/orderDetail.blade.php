@@ -62,9 +62,96 @@
                         @endforeach
                     </select>
                     <button type="submit" class="btn btn-primary">Cập nhật</button>
+                </form>
+                    <!-- Modal trigger button -->
+                    @if($data->status_payment == 'Đã thanh toán')
+                    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#modalId">
+                        Hủy và hoàn tiền đơn hàng
+                    </button>
+                    @else
+                    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#modalId1">
+                        Hủy đơn hàng
+                    </button>
+                    @endif
+
+                    <!-- Modal Body -->
+                    <!-- if you want to close by clicking outside the modal, delete the last endpoint:data-bs-backdrop and data-bs-keyboard -->
+                    <div class="modal fade" id="modalId" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false"
+                        role="dialog" aria-labelledby="modalTitleId" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-sm" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="modalTitleId">
+                                        Xác nhận hủy và hoàn tiền đơn hàng
+                                    </h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                        aria-label="Close"></button>
+                                </div>
+                                <form action="{{ route('admin.orders.cancelAndRefund', $data) }}" method="POST">
+                                    @csrf
+                                    <div class="modal-body">
+                                        <div class="form-group">
+                                            <label for="reason">Lý do hủy đơn hàng</label>
+                                            <textarea class="form-control" name="reason" id="reason" rows="3"
+                                                required></textarea>
+                                            <input type="hidden" name="status_order" value="canceled">
+                                            <input type="hidden" name="order_id" value="{{ $data->id }}">
+                                            <input type="hidden" name="user_id" value="{{ $data->users_id }}">
+                                            <input type="hidden" name="total_price" value="{{ $data->total_price }}">
+                                            <input type="hidden" name="full_name" value="{{ $data->user_name }}">
+                                        </div>
+                                        <p class="text-danger">Lưu ý: Hủy đơn hàng sẽ không thể khôi phục lại</p>
+
+                                    </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                        Quay lại
+                                    </button>
+                                    <button type="submit" class="btn btn-primary">Hủy đơn hàng và hoàn tiền</button>
+                                </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal fade" id="modalId1" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false"
+                        role="dialog" aria-labelledby="modalTitleId" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-sm" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="modalTitleId">
+                                        Xác nhận hủy đơn hàng
+                                    </h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                        aria-label="Close"></button>
+                                </div>
+                                <form action="{{ route('admin.orders.cancel', $data) }}" method="POST">
+                                    @csrf
+                                    <div class="modal-body">
+                                        <div class="form-group">
+                                            <label for="reason">Lý do hủy đơn hàng</label>
+                                            <textarea class="form-control" name="reason" id="reason" rows="3"
+                                                required></textarea>
+                                            <input type="hidden" name="status_order" value="canceled">
+                                            <input type="hidden" name="order_id" value="{{ $data->id }}">
+                                        </div>
+                                        <p class="text-danger">Lưu ý: Hủy đơn hàng sẽ không thể khôi phục lại</p>
+
+                                    </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                        Quay lại
+                                    </button>
+                                    <button type="submit" class="btn btn-primary">Hủy đơn hàng</button>
+                                </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Optional: Place to the bottom of scripts -->
                 @endif
             </div>
-        </form>
+
     </div>
     <div class="card mb-3">
         <div class="card-body">
@@ -88,7 +175,7 @@
                     </p>
                     <p class="mb-0 fs-10"> <strong>Điện thoại: </strong><a
                             href="tel:{{ $data->ship_user_phone }}">{{ $data->ship_user_phone }}</a></p>
-                    <div class="text-500 fs-10">({{ $data->ship_user_note }})</div>
+                    <div class="mb-0 fs-10">Ghi chú đơn hàng:<strong> {{ $data->ship_user_note }} </strong></div>
                 </div>
                 <div class="col-md-6 col-lg-4 mb-4 mb-lg-0">
                     <h5 class="mb-3 fs-9">Phương thức thanh toán</h5>

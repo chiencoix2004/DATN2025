@@ -115,7 +115,7 @@
                                         </div>
                                     </td>
                                     <td class="order py-2 align-middle white-space-nowrap">
-                                        <a href="order-details.html">
+                                        <a href="{{ route('admin.orders.detail',['order'=> $order->id]) }}">
                                             <strong>#{{ $order->id }}</strong>
                                         </a>
                                         của <strong>{{ $order->user_name }}</strong>

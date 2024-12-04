@@ -17,12 +17,7 @@
                 <h1 style="font-size: 24px; margin-bottom: 20px; text-align: center;">Yêu cầu rút tiền được tạo</h1>
                 <p style="margin-bottom: 20px;">Xin chào {{ $data['full_name']}},</p>
                 <p style="margin-bottom: 20px;">Bạn vừa yêu cầu rút khoản tiền <strong>{{ number_format($data['ammount']) }}  VND </strong>, vui lòng chờ 24 - 48h để được duyệt đơn</p>
-                <!-- <div style="text-align: center; margin: 30px 0;">
-                    <span style="font-size: 36px; font-weight: bold; padding: 10px 20px; background-color: #f0f0f0; border-radius: 5px; letter-spacing: 5px;">
-                        {{ $data['otp_code'] }}
-                    </span>
-                </div>
-                <p style="margin-bottom: 20px;">Mã này sẽ hết hạn trong vòng <strong>5 phút </strong>.<strong>TUYỆT ĐỐI KHÔNG CHIA SẺ MÃ OTP CHO NGƯỜI KHÁC </strong></p>-->
+                <p style="margin-bottom: 20px;">Vui lòng chờ 24-48h để được duyệt khoản tiền</p>
                 <p style="margin-bottom: 20px;">Nếu bạn không yêu cầu giao dịch này, vui lòng <strong>đổi mật khẩu ngay lập tức </strong></p>
                 <p style="margin-bottom: 20px;">Cảm ơn bạn đã sử dụng ví tiền của chúng tôi!</p>
             </td>

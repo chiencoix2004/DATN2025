@@ -177,6 +177,8 @@ Route::prefix('admin')
             Route::get('listOrders', 'listOrder')->name('list');
             Route::get('{order}/orderDetail', 'orderDetail')->name('detail');
             Route::put('{order}/update', 'orderUpdate')->name('update');
+            Route::post('cancelOrder', 'cancelOrder')->name('cancel');
+            Route::post('cancelAndRefund', 'cancelAndRefund')->name('cancelAndRefund');
         });
 
         // Route quản lý in hóa đơn
