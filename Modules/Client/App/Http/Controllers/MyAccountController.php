@@ -11,14 +11,20 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Carbon;
 use App\Models\OrderDetailModel;
+use App\Models\Wallet;
+use App\Models\Trx_history;
+use App\Models\Trx_history_detail;
 use App\Http\Controllers\Controller;
 use App\Models\ProductVariant;
+use App\Models\User;
+use App\Notifications\ReciveTransferNotification;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Barryvdh\DomPDF\Facade\Pdf as FacadePdf;
+use Exception;
 
 class MyAccountController extends Controller
 {
@@ -136,7 +142,7 @@ class MyAccountController extends Controller
         }
 
         // Tạo PDF sử dụng view và dữ liệu
-        $pdf = app(PDF::class)->loadView('client::emails.order', compact('order','orderItems'))->setOptions([
+        $pdf = app(PDF::class)->loadView('client::emails.order', compact('order', 'orderItems'))->setOptions([
             'isRemoteEnabled' => true,
             'chroot' => public_path(),
         ]);
@@ -151,26 +157,95 @@ class MyAccountController extends Controller
 
     public function cancelOrder($id)
     {
+        // thằng nào để enum bằng tiếng việt sv vl
         $order = Order::findOrFail($id);
-
-        // dd($order);
-
+        $status_payment = $order->status_payment;
+        $payment_method = $order->payment_method;
+        $status_order = $order->status_order;
+        $toal_price = $order->total_price;
+       // dd($order);
         if ($order->status_order !== 'Chờ xác nhận' && $order->status_order !== 'Đã xác nhận') {
             return response()->json([
                 'message' => 'Chỉ có thể hủy đơn hàng ở trạng thái Chờ xác nhận hoặc Đã xác nhận.',
             ], 400);
         };
+        if ($status_payment == 'Đã thanh toán') {
+            if ($payment_method == 'Thanh toán ví tiền' || $payment_method == 'Thanh toán qua VNpay') {
+                //refund
+                $wallet = new Wallet();
+                $trx = new Trx_history();
+                $trx_detail = new Trx_history_detail();
+                $user_wallet_data = $wallet->getWallet($order->users_id);
+                $wallet_account_id = $user_wallet_data->wallet_account_id;
+                if (empty($user_wallet_data)) {
+                    return response()->json([
+                        'message' => 'Bạn chưa đăng ký ví tiền, vui lòng đăng ký ví tiền điện tử để được hoàn tiền',
+                    ], 400);
+                } else {
+                    $key = env('VNP_HASH_SECRET'); // Replace with your actual secret key
+                    $hashmac = hash_hmac('sha512', $order->users_id . date('Y-m-d H:i:s'), $key);
+                    $data_trx = [
+                        'wallet_account_id' => $wallet_account_id,
+                        'trx_type' => "Transfer",
+                        'trx_from' => "Shop",
+                        'trx_to' => "Wallet",
+                        'trx_amount' => $toal_price,
+                        'trx_balance_available' => $user_wallet_data->wallet_balance_available + $toal_price,
+                        'trx_hash_request' => $hashmac,
+                        'trx_status' => 1,
+                        'created_at' => date('Y-m-d H:i:s'),
+                        'updated_at' => date('Y-m-d H:i:s')
+                    ];
+                    $trx = new Trx_history();
+                    $trx->createTrx($data_trx);
+                    $trx_id = $trx->getLasttrxid();
+                    $trx_lastid = $trx_id->trx_id;
+                    $data_trx_detail = [
+                        'trx_id' => $trx_lastid,
+                        'trx_detail_desc' => "Hoàn trả giao dịch đơn hàng #" . $order->id . " tại " . "PCV Fashion",
+                        'trx_date_issue' => date('Y-m-d H:i:s'),
+                        'vnp_SecureHash' => $hashmac,
+                    ];
+                    try {
+                        $trx_detail = new Trx_history_detail();
+                        $trx_detail->createTrxDetail($data_trx_detail);
+                        $wallet->addBalance($wallet_account_id, $toal_price);
+                        $noti_data = [
+                            'user_name' => Auth::user()->full_name,
+                            'amount' => $toal_price,
+                            'trx_id' => $trx_lastid,
+                            'request_time' => date('Y-m-d H:i:s'),
+                            'request_id' => $hashmac,
+                            'wallet_account_id' => $wallet_account_id,
+                        ];
+                        $user = User::find($order->users_id);
+                        $user->notify(new ReciveTransferNotification($noti_data));
+                        $orderDetails = OrderDetail::where('order_id', $order->id)->get();
 
-        $orderDetails = OrderDetail::where('order_id', $order->id)->get();
+                        foreach ($orderDetails as $item) {
+                            ProductVariant::where('id', $item->product_variant_id)->increment('quantity', $item->product_quantity);
+                        }
 
-        foreach ($orderDetails as $item) {
-            ProductVariant::where('id', $item->product_variant_id)->increment('quantity', $item->product_quantity);
+                        $order->status_order = 'Đơn hàng bị hủy';
+                        $order->save();
+                        return response()->json(['message' => 'Đơn hàng đã hủy thành công, Vui lòng đợi tiền về ví trong vòng 24h.'], 200);
+                    } catch (Exception $e) {
+                        return response()->json(['message' => $e->getMessage()], 400);
+                    }
+                }
+            } //enum sv vl
+        } else {
+            $orderDetails = OrderDetail::where('order_id', $order->id)->get();
+
+            foreach ($orderDetails as $item) {
+                ProductVariant::where('id', $item->product_variant_id)->increment('quantity', $item->product_quantity);
+            }
+
+            $order->status_order = 'Đơn hàng bị hủy';
+            $order->save();
+
+            return response()->json(['message' => 'Đơn hàng được hủy thành công.'], 200);
         }
-
-        $order->status_order = 'Đơn hàng bị hủy';
-        $order->save();
-
-        return response()->json(['message' => 'Đơn hàng được hủy thành công.'], 200);
     }
 
     public function resetOrder($id)
@@ -229,38 +304,6 @@ class MyAccountController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
-    {
-        return view('client::create');
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request): RedirectResponse
-    {
-        //
-    }
-
-    /**
-     * Show the specified resource.
-     */
-    public function show($id)
-    {
-        return view('client::show');
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit($id)
-    {
-        return view('client::edit');
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
     public function changePassword(Request $request)
     {
         $messages = [
@@ -316,7 +359,11 @@ class MyAccountController extends Controller
             $user->address = $request->address;
         }
 
-        $user->save();
+        if ($user instanceof \Illuminate\Database\Eloquent\Model) {
+            $user->save();
+        } else {
+            return response()->json(['error' => 'User model not found.'], 400);
+        }
 
         return response()->json(['success' => true, 'message' => 'Thông tin đã được cập nhật thành công.']);
     }

@@ -13,6 +13,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use PhpParser\Node\Stmt\Return_;
+use Exception;
 
 class WalletController extends Controller
 {
@@ -277,6 +278,40 @@ class WalletController extends Controller
             }
         } else {
             return redirect()->route('wallet.index')->with('error', 'Ví tiền của bạn đã bị vô hiệu hóa');
+        }
+    }
+
+    public function withdrawcanel($id){
+        $data = [
+            'status'=> 3,
+            'admin_note'=> "Yêu cầu bị hủy bởi người dùng",
+            'admin_response_date'=> date('Y-m-d H:i:s')
+        ];
+        $data_trx = [
+            'trx_status' => 2,
+            'updated_at' =>  date('Y-m-d H:i:s')
+        ];
+        $withdraw = new Withdraw();
+        $data_wd = $withdraw->getwithdraw($id);
+        dd($data_wd);
+        $trx_id = $data_wd->trx_id;
+        $ammount = $data_wd->amount;
+        try{
+           $data =  $withdraw->updatewithdraw($id, $data);
+            if ($data){
+                $trx = new Trx_history();
+                $wallet = new Wallet();
+                try{
+                    $trx->updateTrx($trx_id, $data_trx);
+                    $wallet->addBalance($data_wd->wallet_account_id, $ammount);
+                    return back()->with('success', 'Yêu cầu đã được cập nhật');
+                } catch(Exception $e){
+                    dd($e);
+                }
+
+            }
+        } catch(Exception $e){
+            dd($e);
         }
     }
 }

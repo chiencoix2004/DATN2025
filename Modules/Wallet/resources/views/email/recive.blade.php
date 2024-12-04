@@ -14,13 +14,13 @@
         </tr> --}}
         <tr>
             <td style="padding: 20px;">
-                <h1 style="font-size: 24px; margin-bottom: 20px; text-align: center;">Bạn vừa thanh toán một khoản tiền</h1>
+                <h1 style="font-size: 24px; margin-bottom: 20px; text-align: center;">Bạn vừa nhận một khoản thanh toán hoàn tiền</h1>
                 <p style="margin-bottom: 20px;">Xin chào {{ $data['user_name']}},</p>
-                <p style="margin-bottom: 20px;">Bạn vừa thanh toán thành công một khoản tiền <strong>{{ number_format($data['amount']) }}  VND </strong></p>
+                <p style="margin-bottom: 20px;">Bạn vừa nhận một khoản thanh toán hoàn tiền <strong>{{ number_format($data['amount']) }}  VND </strong></p>
                 <p style="margin-bottom: 20px;">Chi tiết giao dịch:</strong></p>
                 <ul style="margin-bottom: 20px;">
                     <li>Mã giao dịch: <strong>{{ $data['trx_id'] }}</strong></li>
-                    <li>Tài khoản: <strong>{{ $data['wallet_account_id'] }}</strong></li>
+                    <li>Tài khoản nhận: <strong>{{ $data['wallet_account_id'] }}</strong></li>
                     <li>Ngày khởi tạo: <strong>{{ $data['request_time'] }}</strong></li>
                     <li>Request ID: <strong>{{ $data['request_id'] }}</strong></li>
                 </ul>

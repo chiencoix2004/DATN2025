@@ -30,8 +30,8 @@ class Trx_history extends Model
     public function gettrxuser($wallet_account_id){
         return $this->where('trx_history.wallet_account_id', $wallet_account_id)
         ->join('trx_history_detail','trx_history_detail.trx_id','=','trx_history.trx_id')
-        ->orderBy('trx_history_detail.created_at', 'desc')
-        ->get();
+        ->orderBy('trx_history_detail.trx_id', 'desc')
+        ->paginate(5);
     }
     public function trans_detail_withdraw($trx_id){
         return $this->where('trx_history.trx_id', $trx_id)
