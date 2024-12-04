@@ -270,7 +270,7 @@
                                     </div>
                                     <div id="pagination-controls" class="pagination-controls"></div>
                                 </div>
-                                <div id="orderDetailsModal" class="modal" style="display: none;">
+                                {{-- <div id="orderDetailsModal" class="modal" style="display: none;">
                                     <div class="modal-content">
                                         <span class="close-button" onclick="closeModal()">&times;</span>
                                         <!-- Container Chi tiết Đơn hàng -->
@@ -354,7 +354,7 @@
                                         </div>
 
                                     </div>
-                                </div>
+                                </div> --}}
 
                             </div>
 
@@ -521,14 +521,8 @@
         </div>
     </div>
     <!-- Brand Area End Here -->
-
-    @if (session('status'))
-        <script>
-            // alert('Đặt hàng thành công! vui lòng xem lịch sử đơn hàng');
-            Swal.fire('Thành công!', 'vui lòng xem lịch sử đơn hàng', 'success');
-        </script>
-        {{-- alert('Thanh toán thành công!'); --}}
-    @endif
+    
+   
 @endsection
 @section('js-setting')
     <script>
@@ -557,45 +551,12 @@
                     </button>
                     <ul class="dropdown-menu">
                         <li>
-                            <a class="dropdown-item view-order-btn" href="javascript:void(0)" data-order-id="${order.id}">
+                            <a class="dropdown-item view-order-btn" href="{{ route('index') }}/invoice/${order.id}" data-order-id="${order.id}">
                                 Xem chi tiết
                             </a>
                         </li>
             `;
-
-                                // Thêm các action tùy theo trạng thái
-                                if (order.status === 'Chờ xác nhận' || order.status === 'Đã xác nhận') {
-                                    actionButtons += `
-                    <li>
-                        <a class="dropdown-item cancel-order-btn" href="javascript:void(0)" data-order-id="${order.id}">
-                            Hủy
-                        </a>
-                    </li>
-                `;
-                                } else if (order.status === 'Đơn hàng bị hủy') {
-                                    actionButtons += `
-                    <li>
-                        <a class="dropdown-item reset-order-btn" href="javascript:void(0)" data-order-id="${order.id}">
-                            Đặt lại
-                        </a>
-                    </li>
-                `;
-                                } else if (order.status === 'Đang giao hàng') {
-                                    actionButtons += `
-                    <li>
-                        <a class="dropdown-item received-order-btn" href="javascript:void(0)" data-order-id="${order.id}">
-                            Đã nhận hàng
-                        </a>
-                    </li>
-                `;
-                                }
-
-                                actionButtons += `
-                    </ul>
-                </div>
-            `;
-
-                                row.innerHTML = `
+                        row.innerHTML = `
                 <td><a class="account-order-id" href="javascript:void(0)">#${order.id}</a></td>
                 <td>${order.date}</td>
                 <td>${order.status}</td>
@@ -642,92 +603,6 @@
                     .catch(error => {
                         console.error('Lỗi khi lấy đơn hàng:', error);
                     });
-            }
-
-            function markOrderAsReceived(orderId) {
-                Swal.fire({
-                    title: 'Bạn có chắc chắn đã nhận hàng?',
-                    icon: 'question',
-                    showCancelButton: true,
-                    confirmButtonText: 'Đã nhận',
-                    cancelButtonText: 'Hủy bỏ'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        $.ajax({
-                            url: '/orders/' + orderId + '/received',
-                            type: 'POST',
-                            data: {
-                                _token: '{{ csrf_token() }}'
-                            },
-                            success: function(response) {
-                                Swal.fire('Thành công!', response.message, 'success');
-                                // location.reload(); // Tải lại trang để cập nhật trạng thái
-                                loadOrders();
-                            },
-                            error: function(xhr) {
-                                Swal.fire('Lỗi!', xhr.responseJSON.message, 'error');
-                            }
-                        });
-                    }
-                });
-            }
-
-            function cancelOrder(orderId) {
-                Swal.fire({
-                    title: 'Bạn có chắc chắn muốn hủy đơn hàng?',
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonText: 'Hủy đơn hàng',
-                    cancelButtonText: 'Hủy bỏ',
-                    reverseButtons: true
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        $.ajax({
-                            url: '/orders/' + orderId + '/cancel',
-                            type: 'POST',
-                            data: {
-                                _token: '{{ csrf_token() }}'
-                            },
-                            success: function(response) {
-                                Swal.fire('Thành công!', response.message, 'success');
-                                // location.reload(); // Tải lại trang để cập nhật trạng thái
-                                loadOrders();
-                            },
-                            error: function(xhr) {
-                                Swal.fire('Lỗi!', xhr.responseJSON.message, 'error');
-                            }
-                        });
-                    }
-                });
-            }
-
-            function resetOrder(orderId) {
-                Swal.fire({
-                    title: 'Bạn có chắc chắn muốn đặt lại đơn hàng?',
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonText: 'Đặt lại đơn hàng',
-                    cancelButtonText: 'Hủy bỏ',
-                    reverseButtons: true
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        $.ajax({
-                            url: '/orders/' + orderId + '/reset',
-                            type: 'POST',
-                            data: {
-                                _token: '{{ csrf_token() }}'
-                            },
-                            success: function(response) {
-                                Swal.fire('Thành công!', response.message, 'success');
-                                // location.reload(); // Tải lại trang để cập nhật trạng thái
-                                loadOrders();
-                            },
-                            error: function(xhr) {
-                                Swal.fire('Lỗi!', xhr.responseJSON.message, 'error');
-                            }
-                        });
-                    }
-                });
             }
 
             // Cập nhật các nút phân trang dựa trên dữ liệu phản hồi
@@ -777,90 +652,6 @@
             // Tải đơn hàng ban đầu
             loadOrders();
         });
-
-        function openOrderDetails(orderId) {
-            // Hiển thị modal
-            document.getElementById('orderDetailsModal').style.display = 'block';
-
-            // Lấy chi tiết đơn hàng qua AJAX
-            fetch(`/get-order-details/${orderId}`)
-                .then(response => response.json())
-                .then(data => {
-                    // Đặt ID Đơn hàng
-                    document.getElementById('order-id').textContent = data.id;
-                    document.getElementById('order-status').textContent = data.status;
-
-                    // Điền thông tin sản phẩm đơn hàng
-                    const itemsContainer = document.getElementById('order-items');
-                    itemsContainer.innerHTML = data.items.map(item => `
-        <tr>
-            <td><img src="{{ Storage::url('${item.image}') }}" alt="Hình ảnh sản phẩm" style="width: 50px; height: 50px;">
-                 ${item.name} - Size: ${item.size} - Màu: <input type="color" value="${item.color}" disabled>
-                    
-            </td>
-            <td>${item.quantity}</td>
-            <td>${item.price} VND</td>
-            <td>${item.total} VND</td>
-        </tr>
-        `).join('');
-
-                    // Điền thông tin tóm tắt đơn hàng
-                    const summaryContainer = document.getElementById('order-summary');
-                    summaryContainer.innerHTML = `
-        <tr><td>Tổng cộng :</td><td>${data.grand_total}</td></tr>
-        <tr><td>Giảm giá :</td><td>${data.discount}</td></tr>
-        <tr><th>Tổng :</th><th>${data.total}</th></tr>
-        `;
-
-                    // Điền thông tin giao hàng
-                    document.getElementById('shipping-info').innerHTML = `
-        <strong>Tên người nhận :</strong> ${data.shipping.name}<br>
-        <strong>Địa chỉ :</strong> ${data.shipping.address}<br>
-        <strong>Email :</strong> ${data.shipping.email}<br>
-        <strong>Số điện thoại :</strong> ${data.shipping.phone}
-        `;
-
-                    // Điền thông tin thanh toán
-                    const billingInfo = document.getElementById('billing-info');
-                    billingInfo.innerHTML = `
-        <li><p><strong>Loại thanh toán:</strong> ${data.billing.payment_method}</p></li>
-        <li><p><strong>Trạng thái thanh toán:</strong> ${data.billing.status_payment}</p></li>
-        `;
-
-                    // Điền thông tin giao hàng
-                    document.getElementById('delivery-info').innerHTML = `
-        <i class="mdi mdi-truck-fast h2 text-muted"></i>
-        <p><strong>ID Đơn hàng :</strong> ${data.delivery.order_id}</p>
-        <p><strong>Phương thức vận chuyển :</strong> ${data.delivery.shipping_method}</p>
-        `;
-                })
-                .catch(error => {
-                    console.error('Lỗi khi lấy chi tiết đơn hàng:', error);
-                });
-        }
-
-        // Hàm đóng modal
-        function closeModal() {
-            document.getElementById('orderDetailsModal').style.display = 'none';
-        }
-
-
-        // Thêm sự kiện click vào mỗi nút "Xem"
-        document.addEventListener("DOMContentLoaded", function() {
-            document.querySelectorAll('.view-order-btn').forEach(button => {
-                button.addEventListener('click', function() {
-                    const orderId = this.getAttribute('data-order-id');
-                    openOrderDetails(orderId);
-                });
-            });
-        });
-
-        function printInvoice() {
-            const orderId = document.getElementById('order-id').textContent;
-            // Mở một cửa sổ mới để tải xuống PDF
-            window.location.href = `/orders/${orderId}/download-pdf`;
-        }
-
         document.addEventListener("DOMContentLoaded", function() {
             const changePasswordForm = document.getElementById("changePasswordForm");
 

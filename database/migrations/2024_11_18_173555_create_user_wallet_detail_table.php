@@ -14,9 +14,9 @@ return new class extends Migration
         Schema::create('user_wallet_detail', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('user_id');
-            $table->text('id_card_image_front')->nullable();
-            $table->text('id_card_image_back')->nullable();
-            $table->text('id_card_face')->nullable();
+            $table->longText('id_card_image_front')->nullable();
+            $table->longText('id_card_image_back')->nullable();
+            $table->longText('id_card_face')->nullable();
             $table->text('id_number')->nullable();
             $table->string('frist_name')->nullable();
             $table->string('last_name')->nullable();

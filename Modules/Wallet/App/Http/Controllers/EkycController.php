@@ -11,7 +11,9 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Exception;
+use Illuminate\Support\Facades\Crypt;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Storage;
 
 class EkycController extends Controller
 {
@@ -85,6 +87,43 @@ class EkycController extends Controller
         if($request->id_number == empty($request->id_number)){
             return redirect()->back()->withErrors(['id_number' => 'Vui lòng nhập số CMND/CCCD']);
         }
+        $id_card_image_front = $request->file('id_card_image_front');
+        $id_card_image_back = $request->file('id_card_image_back');
+        $encypted_front = Crypt::encrypt(file_get_contents($id_card_image_front));
+        $encypted_back = Crypt::encrypt(file_get_contents($id_card_image_back));
+        //save file to storage
+        try{
+            $filepath1 = 'id_cards/' . Auth::user()->id . 'front.enc';
+            $filepath2 = 'id_cards/' . Auth::user()->id . 'back.enc';
+            Storage::put($filepath1, $encypted_front);
+            Storage::put($filepath2, $encypted_back);
+        } catch (Exception $e) {
+            return dd($e->getMessage());
+        }
+
+        $kyc_data = [
+            'id_number' => $request->id_number,
+            'issue_date' => $request->issue_date,
+            'date_of_expiry' => $request->date_of_expiry,
+            'place_of_issue' => $request->place_of_issue,
+            'place_of_birth' => $request->place_of_birth,
+            'id_card_image_front' => "$filepath1",
+            'id_card_image_back' => "$filepath2",
+
+        ];
+       $userKyc = new UserEkyc();
+      try{
+        $data = $userKyc->updateuserinfo(Auth::user()->id, $kyc_data);
+        $user = new UserEkyc();
+        $user->setStasusPedingAprroved(Auth::user()->id);
+
+        if($data){
+            return redirect()->route('ekyc.verifytos');
+        }
+      } catch (Exception $e) {
+        return dd($e->getMessage());
+      }
+
     }
     public function step2skip(){
         $user = new UserEkyc();
@@ -103,26 +142,45 @@ class EkycController extends Controller
 
     public function registerwallet(Request $request){
        $tos = $request->TOS;
+       $wallet = new Wallet();
+       $user_id = auth()->user()->id;
+       $data = $wallet->getWallet($user_id);
+       $user = new UserEkyc();
+       $data_kyc = $user->getUserKycInfo($user_id);
+       $idimg = $data_kyc->id_card_image_front;
+        if($data){
+            $wallet_account_id = $data->wallet_account_id;
+        }
       if($tos == 'on'){
-          $user = new UserEkyc();
-          $user->setfillCompleted(Auth::user()->id);
-          $user->setStasusCompletedBasic(Auth::user()->id);
-          $walletdata = [
-            'user_id' => Auth::user()->id,
-            'wallet_account_id' => random_int(100000,999999),
-            'wallet_balance_available' => 0,
-            'wallet_status' => 1,
-            'wallet_user_level' => 1,
-
-          ];
-          try{
-            $wallet = new Wallet();
-            $wallet->createWallet($walletdata);
+         if(isset($wallet_account_id)){
+            $user = new UserEkyc();
+            $user->setfillCompleted(Auth::user()->id);
+            $user->setStasusPedingAprroved(Auth::user()->id);
             return redirect()->route('wallet.index');
-          } catch(Exception $e){
-            return dd($e->getMessage());
-          }
-        }else{
+        }
+        if(isset($idimg)){
+            $user = new UserEkyc();
+            $user->setfillCompleted(Auth::user()->id);
+            $user->setStasusPedingAprroved(Auth::user()->id);
+            $walletdata = [
+              'user_id' => Auth::user()->id,
+              'wallet_account_id' => random_int(100000,999999),
+              'wallet_balance_available' => 0,
+              'wallet_status' => 1,
+              'wallet_user_level' => 1,
+
+            ];
+            try{
+              $wallet = new Wallet();
+              $wallet->createWallet($walletdata);
+              return redirect()->route('wallet.index');
+            } catch(Exception $e){
+              return dd($e->getMessage());
+            }
+        }
+        return redirect()->route('wallet.index');
+
+        } else{
             return redirect()->back()->withErrors('Vui lòng chấp nhận điều khoản sử dụng');
          }
     }

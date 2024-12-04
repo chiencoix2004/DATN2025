@@ -38,17 +38,17 @@
                                 <div class="row">
                                     <div class="col-md-6">
                                         <div class="checkout-form-list">
-                                            <label> Tên <span class="required">*</span></label>
-                                            <input placeholder="Nhập tên của bạn" type="text" id="first_name"
-                                                name="first_name">
+                                            <label>Họ <span class="required">*</span></label>
+                                            <input placeholder="Nhập họ của bạn" type="text" id="last_name"
+                                                name="last_name" value="{{ explode(' ', Auth::user()->full_name)[0] }}">
                                             <p></p>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="checkout-form-list">
-                                            <label>Họ <span class="required">*</span></label>
-                                            <input placeholder="Nhập họ của bạn" type="text" id="last_name"
-                                                name="last_name">
+                                            <label>Tên <span class="required">*</span></label>
+                                            <input placeholder="Nhập tên của bạn" type="text" id="first_name"
+                                                name="first_name" value="{{ implode(' ', array_slice(explode(' ', Auth::user()->full_name), 1)) }}">
                                             <p></p>
                                         </div>
                                     </div>
@@ -56,7 +56,7 @@
                                         <div class="checkout-form-list">
                                             <label>Địa chỉ <span class="required">*</span></label>
                                             <input placeholder="Nhập địa chỉ" type="text" id="user_address"
-                                                name="user_address">
+                                                name="user_address" value="{{Auth::user()->address}}">
                                             <p></p>
                                         </div>
                                     </div>
@@ -64,14 +64,14 @@
                                         <div class="checkout-form-list">
                                             <label>Email <span class="required">*</span></label>
                                             <input placeholder="nhập email" type="email" id="user_email"
-                                                name="user_email">
+                                                name="user_email" value="{{Auth::user()->email}}">
                                             <p></p>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="checkout-form-list">
                                             <label>Số điện thoại <span class="required">*</span></label>
-                                            <input type="text" id="user_phone" name="user_phone">
+                                            <input type="text" id="user_phone" name="user_phone" value="{{auth::user()->phone}}">
                                             <p></p>
                                         </div>
                                     </div>
@@ -88,6 +88,7 @@
                                             <select name="payment_method" id="payment_method" class="form-control">
                                                 <option value="cod">Thanh toán khi nhận hàng</option>
                                                 <option value="vnpay">Thanh toán qua VNPAY</option>
+                                                <option value="wallet">Thanh toán qua Ví tiền</option>
                                             </select>
                                             <p></p>
                                         </div>
@@ -376,7 +377,7 @@
                                 if (response.method == 'vnpay') {
                                     window.location.href = response.link;
                                 } else {
-                                    window.location.href = '/my-account';
+                                    window.location.href = response.link;
                                 }
 
                                 // } else {

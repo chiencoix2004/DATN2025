@@ -7,10 +7,10 @@
                     <img src="{{ asset('theme/client/images/menu/logoF.png') }}" alt="Header Logo">
                 </a>
             </div>
-            <nav class="offcanvas-navigation">
+            {{-- <nav class="offcanvas-navigation">
                 <ul class="mobile-menu">
                     <li class="menu-item-has-children active">
-                        <a href="#"><span class="mm-text">Trang chủ</span></a>
+                        <a href="{{ route('index') }}"><span class="mm-text">Trang chủ</span></a>
                     </li>
                     <li class="menu-item-has-children">
                         <a href="{{ route('shop.shopIndex') }}">
@@ -192,7 +192,7 @@
                         </ul>
                     </li>
                 </ul>
-            </nav>
+            </nav> --}}
             <nav class="offcanvas-navigation user-setting_area">
                 <ul class="mobile-menu">
                     <li class="menu-item-has-children active">
@@ -202,29 +202,40 @@
                             </span>
                         </a>
                         <ul class="sub-menu">
-                            <li>
-                                <a href="{{ route('auth.myAcc') }}">
-                                    <span class="mm-text">Tài khoản của tôi</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="{{ route('auth.log-reg') }}">
-                                    <span class="mm-text">Đăng nhập | Đăng ký</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="wishlist.html">
-                                    <span class="mm-text">Yêu thích</span>
-                                </a>
-                            </li>
-                            <li>
+                            @if (Auth::check())
+                                <li>
+                                    <a href="{{ route('my-account') }}">
+                                        <span class="mm-text">Tài khoản của tôi</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <form action="{{ route('logout') }}" method="POST">
+                                        @csrf
+                                        <button type="submit">Đăng xuất</button>
+                                    </form>
+                                </li>
+                            @else
+                                <li>
+                                    <a href="{{ route('showForm') }}">
+                                        <span class="mm-text">Đăng nhập</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{{ route('formReg') }}">
+                                        <span class="mm-text"> Đăng ký</span>
+                                    </a>
+                                </li>
+                            @endif
+
+
+                            {{-- <li>
                                 <a href="checkout.html">
                                     <span class="mm-text">Thanh toán</span>
                                 </a>
-                            </li>
+                            </li> --}}
                         </ul>
                     </li>
-                    <li class="menu-item-has-children">
+                    {{-- <li class="menu-item-has-children">
                         <a href="#"><span class="mm-text">Ngôn ngữ</span></a>
                         <ul class="sub-menu">
                             <li>
@@ -238,7 +249,7 @@
                                 </a>
                             </li>
                         </ul>
-                    </li>
+                    </li> --}}
                 </ul>
             </nav>
         </div>

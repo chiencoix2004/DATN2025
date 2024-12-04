@@ -187,19 +187,20 @@
                             </span>
                             <span class="nav-link-text ps-1">Danh sách yêu cầu rút tiền</span>
                         </div>
-                        <div class="d-flex align-items-center">
-                            <span class="nav-link-icon">
-                                <span class="fas fa-chart-pie"></span>
-                            </span>
-                            <span class="nav-link-text ps-1">Quản lý ví tiền</span>
-                        </div>
-                        <div class="d-flex align-items-center">
-                            <span class="nav-link-icon">
-                                <span class="fas fa-chart-pie"></span>
-                            </span>
-                            <span class="nav-link-text ps-1">Giao Dịch VNPAY</span>
-                        </div>
                     </a>
+                        <div class="d-flex align-items-center">
+                            <span class="nav-link-icon">
+                                <span class="fas fa-chart-pie"></span>
+                            </span>
+                          <a class="nav-link" href="{{ route('admin.wallet.listallwallet') }}">  <span class="nav-link-text ps-1">Quản lý ví tiền</span> </a>
+                        </div>
+                        <div class="d-flex align-items-center">
+                            <span class="nav-link-icon">
+                                <span class="fas fa-chart-pie"></span>
+                            </span>
+                            <a class="nav-link" href="{{ route('admin.wallet.listUserPending') }}">  <span class="nav-link-text ps-1">Yêu cầu duyệt thông tin</span> </a>
+                        </div>
+
 
                 </li>
 

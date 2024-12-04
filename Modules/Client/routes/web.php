@@ -11,6 +11,7 @@ use Modules\Client\App\Http\Controllers\ClientController;
 use Modules\Client\App\Http\Controllers\RegisterController;
 use Modules\Client\App\Http\Controllers\MyAccountController;
 use Artesaos\SEOTools\Contracts\SEOTools;
+use Modules\Client\App\Http\Controllers\TicketController;
 use Modules\Client\App\Http\Controllers\VerificationController;
 use Modules\Client\App\Http\Controllers\ResetPasswordController;
 use Modules\Client\App\Http\Controllers\ForgotPasswordController;
@@ -53,7 +54,9 @@ Route::controller(CartController::class)->prefix('cart')->as('cart.')->group(fun
 Route::prefix('other')->as('other.')->group(function () {
     Route::get('contact', function () {
         return view('client::contents.other-pages.contact-us');
-    })->name('contactUs');
+    })
+    ->middleware('auth.checkLog')
+    ->name('contactUs');
     Route::get('aboutUs', function () {
         return view('client::contents.other-pages.about-us');
     })->name('aboutUs');
@@ -71,6 +74,7 @@ Route::get('/showform', [AuthController::class, 'form'])->name('showForm');
 Route::get('/form-reg', [AuthController::class, 'form_reg'])->name('formReg');
 Route::get('/email/verify/{id}', [VerificationController::class, 'verify'])->name('verification.verify');
 
+
 // Route::get('/login', [LoginController::class, 'showLoginForm'])->name('showLoginForm');
 Route::post('/login', [LoginController::class, 'login'])->name('login');
 
@@ -86,7 +90,7 @@ Route::controller(MyAccountController::class)->middleware('auth.checkLog')->grou
     // dang xuat tai khoan
     Route::post('/logout', 'logout')->name('logout');
 });
-
+route::get('responehandle', [CartController::class, 'handlewallet'])->name('handlewallet');
 // Route cho trang yêu cầu đặt lại mật khẩu
 Route::get('/forgot-password', [ForgotPasswordController::class, 'forgotPasswordForm'])->name('forgot-password');
 Route::post('/forgot-password', [ForgotPasswordController::class, 'sendResetLinkEmail'])->name('email-password');
@@ -100,6 +104,14 @@ Route::get('auth/google', [LoginController::class, 'redirectToGoogle'])->name('a
 Route::get('auth/google/callback', [LoginController::class, 'handleGoogleCallback']);
 
 //giỏ hàng
+Route::controller(TicketController::class)
+->name('ticket.')
+->group(function () {
+    Route::post('add-ticket', 'addTicket')->name('addTicket');
+    Route::get('chat/{id}', [TicketController::class,'chatshow'])->name('chat');
+    Route::post('sent-chat', 'sentchat')->name('sentchat');
+
+});
 
 Route::controller(CartController::class)->group(function () {
     Route::post('/cart/add', 'add')->name('cart.add');
@@ -113,3 +125,8 @@ Route::controller(CartController::class)->group(function () {
 });
 
 Route::post('/submit-review', [ReviewController::class, 'submitReview'])->name('submit-review');
+
+Route::get('/invoice/{id}', [MyAccountController::class, 'invoiceDetail'])->name('client.invoice.show');
+
+Route::post('/send-notification', [CartController::class, 'sendNotification'])->name('send.notification');
+

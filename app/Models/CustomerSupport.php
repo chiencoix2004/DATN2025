@@ -118,7 +118,7 @@ class CustomerSupport extends Model
     }
     public function updateAiAnalyze($id, $ticket_ai_analyze)
     {
-        return $this->where('id', $id)->update([
+        return $this->where('ticket_id', $id)->update([
             'ticket_ai_analyze' => $ticket_ai_analyze,
         ]);
     }
@@ -175,5 +175,9 @@ class CustomerSupport extends Model
             ->orWhere('ticket_content', 'like', '%' . $keyword . '%')
             ->orWhere('ticket_category', 'like', '%' . $keyword . '%')
             ->get();
+    }
+    public function getLastticket()
+    {
+        return $this->orderBy('ticket_id', 'desc')->first();
     }
 }

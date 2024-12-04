@@ -8,10 +8,10 @@
     <div class="breadcrumb-area">
         <div class="container">
             <div class="breadcrumb-content">
-                <h2>Shop Related</h2>
+                <h2>Thời trang Phong cách Việt</h2>
                 <ul>
-                    <li><a href="index.html">Home</a></li>
-                    <li class="active">Cart</li>
+                    <li><a href="{{ route('index') }}">Trang Chủ</a></li>
+                    <li class="active">Giỏ Hàng</li>
                 </ul>
             </div>
         </div>
@@ -99,6 +99,69 @@
 @section('js-setting')
     <script>
         $(document).ready(function() {
+
+            function loadCartItems() {
+                $.ajax({
+                    url: '/cart/list',
+                    method: 'GET',
+                    dataType: 'json',
+                    success: function(response) {
+                        $('#minicart').empty();
+                        response.cartItems.forEach(function(item) {
+                            let product = item.product_variant.product;
+                            let quantity = item.quantity;
+                            let price = item.price;
+
+                            let productHTML = `
+                          <li class="minicart-product">
+                                <a class="product-item_remove" href="javascript:void(0)" onclick="removeFromMiniCart(${item.id})"><i class="ion-android-close"></i></a>
+                                <div class="product-item_img">
+                                     <img src="{{ Storage::url('${product.image_avatar}') }}" alt="${product.name}">
+                                </div>
+                                <div class="product-item_content">
+                                     <a class="product-item_title" href="shop-left-sidebar.html">${product.name}</a>
+                                     <div>
+                                        - Size: ${item.product_variant.size.size_value}
+                                        <br>
+                                        - Màu: <input type="color" value="${item.product_variant.color.color_value}" disabled>
+                                    </div>
+                                     <span class="product-item_quantity">${quantity} x ${formatVND(price)}</span>
+                                </div>
+                          </li>
+                          `;
+                            $('#minicart').append(productHTML);
+                        });
+
+                        $('#totalAmount').text(formatVND(response.totalAmount));
+                    },
+                    error: function(xhr, status, error) {
+                        $('#minicart').empty();
+                        // console.error('Giỏ hàng của bạn đang trống!:', error);
+                    }
+                });
+            }
+
+            function loadCartItemCount() {
+                $.ajax({
+                    url: '/cart/list',
+                    method: 'GET',
+                    success: function(response) {
+                        var itemCount = response.cartItems.length;
+                        $('.item-count').text(itemCount);
+                    },
+                    error: function(jqXHR, textStatus, errorThrown) {
+                        $('.item-count').text(0);
+                        // console.error("Lỗi khi lấy sản phẩm:", textStatus, errorThrown);
+                    }
+                });
+            }
+
+            function formatVND(amount) {
+                return amount.toLocaleString('vi-VN', {
+                    style: 'currency',
+                    currency: 'VND'
+                });
+            }
             // Hàm lấy danh sách sản phẩm trong giỏ hàng
             function fetchCartItems() {
                 $.ajax({
@@ -108,12 +171,24 @@
                     success: function(response) {
                         if (response.message === "Lấy danh sách giỏ hàng thành công!") {
                             displayCartItems(response.cartItems); // Hiển thị các mặt hàng trong giỏ
+                            // var itemCount = response.cartItems.length;
+                            // $('.item-count').text(itemCount);
+                            loadCartItems(); // Cập nhật sản phẩm trong minicart
+                            loadCartItemCount(); // Cập nhật số lượng sản phẩm trong minicart
+
+
                         } else {
+                            // $('.item-count').text(0);
                             console.error("Lỗi khi lấy danh sách giỏ hàng:", response.message);
                         }
                     },
                     error: function(jqXHR, textStatus, errorThrown) {
                         $('#cart-table-body').empty(); // Xóa nội dung  bảng giỏ hàng
+                        $('.item-count').text(0);
+                        loadCartItems();
+                        loadCartItemCount();
+                        $('#totalAmount').text(formatVND(0));
+
                         console.error("Yêu cầu AJAX thất bại:", textStatus, errorThrown);
                     }
                 });
@@ -250,6 +325,7 @@
                             console.log("Xóa sản phẩm thành công:", response.message);
                             fetchCartItems(); // Tải lại danh sách giỏ hàng
                             updateCartTotal();
+                            
                         } else {
                             console.error("Lỗi khi xóa sản phẩm:", response.message);
                         }
@@ -279,7 +355,8 @@
 
                     },
                     error: function(jqXHR, textStatus, errorThrown) {
-                        $('.cart-page-total ul li .totalAmount').text(formatPrice(0)); // Cập nhật tổng tiền
+                        $('.cart-page-total ul li .totalAmount').text(formatPrice(
+                            0)); // Cập nhật tổng tiền
                         $('.cart-page-total ul li .discount').text(formatPrice(0)); // Cập nhật giảm giá
                         $('.cart-page-total ul li .total').text(formatPrice(0)); // Cập nhật tổng cộng
                         console.error("Yêu cầu AJAX thất bại:", textStatus, errorThrown);
@@ -305,11 +382,14 @@
                                 alert(response.message);
                                 updateCartTotal(); // Cập nhật tổng tiền giỏ hàng
                             } else {
-                                alert(response.message);
+                                // alert(response.message);
+                                alert(response.error);
                             }
                         },
                         error: function(jqXHR, textStatus, errorThrown) {
-                            console.error("Lỗi khi áp dụng mã giảm giá:", textStatus, errorThrown);
+                            
+                            console.error("Lỗi khi áp dụng mã giảm giá:", textStatus,
+                                errorThrown);
                         }
                     });
                 } else {

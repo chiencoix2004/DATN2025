@@ -60,7 +60,7 @@ Route::get('admin-confirm-mail', [ForgotPasswordController::class, 'confirmMail'
 
 Route::prefix('admin')
     ->as('admin.')
-    ->middleware('CheckAdmin')
+   // ->middleware('CheckAdmin')
     ->group(function () {
         Route::get('/', function () {
             return view('admin::contents.dashboard');
@@ -95,14 +95,27 @@ Route::prefix('admin')
         //walelt
 
         Route::controller(WalletController::class)->prefix('wallet')->as('wallet.')->group(function (){
+
             Route::get('list-withdraw', 'index')->name('list');
             Route::get('withdraw/{id}', 'withdraw')->name('withdraw');
             Route::post('update-withdraw', 'updatepost')->name('updateupdatepost');
-            Route::post('lock-wallet', 'lockwallet')->name('lockwallet');
+            Route::post('lock-wallet-withdraw', 'lockwallet')->name('lockwallet');
             Route::post('holdback', 'holdback')->name('holdback');
             Route::get('list-wallet', 'listallwallet')->name('listallwallet');
             Route::get('wallet-info/{id}', 'walletinfo')->name('walletinfo');
-
+            Route::get('setActive/{id}', 'setActive')->name('setActive');
+            Route::get('SetInActive/{id}', 'SetInActive')->name('SetInActive');
+            Route::get('SetLevelBasic/{id}', 'SetBasicUser')->name('SetBasicUser');
+            Route::get('SetLevelFull/{id}', 'SetFullUser')->name('SetFullUser');
+            Route::post('lock-wallet', 'lockwalletUser')->name('lockwalletUser');
+            Route::get('listUserPending', 'listUserPending')->name('listUserPending');
+            Route::get('userpedDetail/{id}', 'userpedDetail')->name('userpedDetail');
+            Route::post('userpedUpdate', 'userpedUpdate')->name('userpedUpdate');
+            Route::post('search-withdraw', 'SeachWithdraw')->name('SeachWithdraw');
+            Route::post('search-wallet', 'SeachWallet')->name('SeachWallet');
+            Route::get('list-withdraw-ped', 'listwithdrawPed')->name('listwithdrawPed');
+            Route::get('list-withdraw-approved', 'listwithdrawapp')->name('listwithdrawapp');
+            Route::get('list-withdraw-reject', 'listwithdrawrej')->name('listwithdrawrej');
 
         });
 
@@ -195,7 +208,7 @@ Route::prefix('admin')
         // Route::controller(AccountController::class)->prefix('account')->as('account.')->group(function(){
         //     Route::get('listAcc', 'listAccounts')->name('list');
         // });
-    
+
         // thống kê
         Route::controller(StatisticalController::class)->prefix('statistical')->as('statistical.')->group(function () {
             Route::get('listStatistical', 'index')->name('listStatistical');

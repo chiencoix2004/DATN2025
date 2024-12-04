@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Notifications\ForgotPasswordClient;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Password;
 
@@ -39,16 +40,9 @@ class ForgotPasswordController extends Controller
         if (!$email) {
             return back()->withErrors(['email' => 'Email không tồn tại.']);
         } else {
-            if ($email->roles_id == 2) {
-                // Gửi link đặt lại mật khẩu đến email
-                $status = Password::sendResetLink($request->only('email'));
-
-                return $status === Password::RESET_LINK_SENT
-                    ? back()->with(['status' => 'Chúng tôi đã gửi email liên kết đặt lại mật khẩu của bạn'])
-                    : back()->withErrors(['email' => __($status)]);
-            } else {
-                return back()->withErrors(['email' => 'Email không tồn tại.']);
-            }
+            $email->notify(new ForgotPasswordClient());
         }
+
+        return redirect()->route('forgot-password')->with('message', 'Email đã được gửi. Vui lòng kiểm tra email của bạn.');
     }
 }

@@ -21,7 +21,7 @@
                         @if($detailticket->first()->ticket_attachment)
                         <div class="d-flex justify-content-start mb-2">
                             <div class="bg-gray-100 p-2 rounded">
-                                <img src="{{ $detailticket->first()->ticket_attachment }}" alt="Attachment" class="img-fluid" height="10%">
+                                <img src="{{ Storage::url($detailticket->first()->ticket_attachment) }}" alt="Attachment" class="img-fluid" style="height: 10%;">
                             </div>
                         </div>
                         @endif
@@ -57,7 +57,12 @@
                             <textarea id="customerResponse" name="response" class="form-control" rows="4" placeholder="Nhập phản hồi..."></textarea>
                             <input type="text" name="ticket_id" value="{{ $detailticket->first()->ticket_id }}" hidden>
                             <input type="reply_by" name="reply_by" value="admin" hidden>
+                            <input type="hidden" name="user_id" value="{{ $detailticket->first()->user_id}}">
 
+                        </div>
+                        <div class="mb-3">
+                            <label for="notify" class="form-label">Thông báo email cho người dùng</label>
+                            <input type="checkbox" name="notify" id="notify" value="1">
                         </div>
                         <button type="submit" class="btn btn-primary mt-2">Gửi</button>
                     </form>
@@ -66,10 +71,10 @@
                 <!-- Ticket Status Options -->
                 <div class="d-flex justify-content-between">
                     <div class="form-check">
-                        <a href="#" class="btn btn-primary">Sửa thành hoàn thành</a>
+                        <a href="{{ route('admin.ticket.setComplete', ['id' => $detailticket->first()->ticket_id]) }}" class="btn btn-primary">Sửa thành hoàn thành</a>
                     </div>
                     <div class="form-check">
-                        <a href="#" class="btn btn-danger">Sửa thành spam</a>
+                        <a href="{{ route('admin.ticket.setSpam', ['id' => $detailticket->first()->ticket_id]) }}" class="btn btn-danger">Sửa thành spam</a>
                     </div>
                 </div>
             </div>
@@ -86,7 +91,9 @@
 
             </div>
             <div class="card-body">
-                <textarea id="aiSummary" class="form-control" rows="10" placeholder="Tóm tắt từ AI..." readonly>{{ $detailticket->first()->ticket_ai_analyze }}</textarea>
+                <textarea id="aiSummary" class="form-control" rows="10" placeholder="Tóm tắt từ AI..." readonly>
+                    {{ strip_tags(Parsedown::instance()->text($detailticket->first()->ticket_ai_analyze)) }}
+                </textarea>
             </div>
         </div>
         <div class="card mb-4">
@@ -97,10 +104,10 @@
 
                 <ul class="list-group">
 
-                    <li class="list-group-item"><strong>Họ và tên:</strong> {{ $account->first()->full_name }}</li>
-                    <li class="list-group-item"><strong>Email:</strong> {{ $account->first()->email}}</li>
-                    <li class="list-group-item"><strong>Số điện thoại:</strong> {{ $account->first()->phone}}</li>
-                    <li class="list-group-item"><strong>Địa chỉ:</strong> {{ $account->first()->address}}</li>
+                    <li class="list-group-item"><strong>Họ và tên:</strong> {{ $account->full_name }}</li>
+                    <li class="list-group-item"><strong>Email:</strong> {{ $account->email}}</li>
+                    <li class="list-group-item"><strong>Số điện thoại:</strong> {{ $account->phone}}</li>
+                    <li class="list-group-item"><strong>Địa chỉ:</strong> {{ $account->address}}</li>
                 </ul>
             </div>
         </div>
