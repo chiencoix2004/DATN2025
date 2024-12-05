@@ -6,12 +6,14 @@ use App\Http\Controllers\Controller;
 use App\Models\Comment;
 use App\Models\CustomerSupport;
 use App\Models\Order;
+use App\Models\Post;
 use App\Models\Product;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\DB;
 
 class DashboardController extends Controller
 {
@@ -115,6 +117,24 @@ class DashboardController extends Controller
         ->where('status_order', 'Chờ xác nhận')
         ->count();
 
+        $coutPost = Post::query()
+        ->where('published_id', 1)
+        ->count();
+
+        $bestCustomers = User::select(
+            'users.id',
+            'users.full_name',
+            'users.email',
+            DB::raw('COUNT(orders.id) as total_orders'),
+            DB::raw('SUM(orders.total_price) as total_spend')
+        )
+        ->join('orders', 'users.id', '=', 'orders.users_id')
+        ->where('users.roles_id', 2) 
+        ->where('orders.status_order', 'Đã nhận hàng') 
+        ->groupBy('users.id', 'users.full_name')
+        ->orderBy('total_orders', 'desc')
+        ->limit(5)
+        ->get();
 
 
         return view(
@@ -136,7 +156,9 @@ class DashboardController extends Controller
                 'received',
                 'revenueOrder',
                 'listComment',
-                'listPending'
+                'listPending',
+                'coutPost',
+                'bestCustomers'
             )
         );
     }

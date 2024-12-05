@@ -7,8 +7,9 @@
         <div class="col-md-6 col-xxl-4">
             <div class="card h-md-100 ecommerce-card-min-width">
                 <div class="card-header pb-0">
-                    <h6 class="mb-0 mt-2 d-flex align-items-center">Doanh thu {{ $month }}<span class="ms-1 text-400"
-                            data-bs-toggle="tooltip" data-bs-placement="top" title="Calculated according to last week's sales">
+                    <h6 class="mb-0 mt-2 d-flex align-items-center">Doanh thu tháng {{ $month }}<span
+                            class="ms-1 text-400" data-bs-toggle="tooltip" data-bs-placement="top"
+                            title="Calculated according to last week's sales">
                             {{-- <span class="far fa-question-circle"
                                 data-fa-transform="shrink-1"></span> --}}
                         </span></h6>
@@ -136,7 +137,7 @@
                     <h6>Đơn hàng chờ xác nhận</h6>
                     <div class="display-4 fs-5 mb-2 fw-normal font-sans-serif text-warning"
                         data-countup='{"endValue":58.386,"decimalPlaces":2,"suffix":"k"}'>
-                        {{ number_format($listPending, 0, ',', '.') }} 
+                        {{ number_format($listPending, 0, ',', '.') }}
                     </div>
                     {{-- <a class="fw-semi-bold fs-10 text-nowrap"
                         href="">Chi tiết<span
@@ -377,7 +378,8 @@
         <div class="col-lg-5 col-xl-4 ps-lg-2 mb-3">
             <div class="card h-100">
                 <div class="card-header d-flex flex-between-center bg-body-tertiary py-2">
-                    <h6 class="mb-0">Bình luận gần đây</h6><a class="py-1 fs-10 font-sans-serif" href="{{ route('admin.comment.listComment') }}">Xem tất
+                    <h6 class="mb-0">Bình luận gần đây</h6><a class="py-1 fs-10 font-sans-serif"
+                        href="{{ route('admin.comment.listComment') }}">Xem tất
                         cả</a>
                 </div>
                 <div class="card-body pb-0">
@@ -388,8 +390,8 @@
                             <div class="ms-3 flex-shrink-1 flex-grow-1">
                                 <h6 class="mb-1">
                                     <a class="stretched-link text-900 fw-semi-bold"
-                                        href="{{ route('admin.comment.editComment', ['id'=>$item]) }}">{{ Str::limit($item->comments, 35, '...') }}</a>
-                                    </h6>
+                                        href="{{ route('admin.comment.editComment', ['id' => $item]) }}">{{ Str::limit($item->comments, 35, '...') }}</a>
+                                </h6>
 
                             </div>
                         </div>
@@ -444,31 +446,19 @@
         <div class="col-md-6 col-xxl-3 ps-md-2 order-xxl-1 mb-3 mb-xxl-0">
             <div class="card h-100">
                 <div class="card-header bg-body-tertiary d-flex flex-between-center py-2">
-                    <h6 class="mb-0">Bandwidth Saved</h6>
-                    <div class="dropdown font-sans-serif btn-reveal-trigger"><button
-                            class="btn btn-link text-600 btn-sm dropdown-toggle dropdown-caret-none btn-reveal"
-                            type="button" id="dropdown-bandwidth-saved" data-bs-toggle="dropdown"
-                            data-boundary="viewport" aria-haspopup="true" aria-expanded="false"><span
-                                class="fas fa-ellipsis-h fs-11"></span></button>
-                        <div class="dropdown-menu dropdown-menu-end border py-2"
-                            aria-labelledby="dropdown-bandwidth-saved"><a class="dropdown-item" href="#!">View</a><a
-                                class="dropdown-item" href="#!">Export</a>
-                            <div class="dropdown-divider"></div><a class="dropdown-item text-danger"
-                                href="#!">Remove</a>
-                        </div>
-                    </div>
+                    <h6 class="mb-0">Số lượng bài viết</h6>
                 </div>
                 <div class="card-body d-flex flex-center flex-column">
                     <!-- Find the JS file for the following chart at: src/js/charts/echarts/bandwidth-saved.js--><!-- If you are not using gulp based workflow, you can find the transpiled code at: public/assets/js/theme.js-->
-                    <div class="echart-bandwidth-saved" data-echart-responsive="true"></div>
+
                     <div class="text-center mt-3">
                         <h6 class="fs-9 mb-1"><span class="fas fa-check text-success me-1"
-                                data-fa-transform="shrink-2"></span>35.75 GB saved</h6>
-                        <p class="fs-10 mb-0">38.44 GB total bandwidth</p>
+                                data-fa-transform="shrink-2"></span>{{ $coutPost }} bài viết công khai</h6>
+                        {{-- <p class="fs-10 mb-0">38.44 GB total bandwidth</p> --}}
                     </div>
                 </div>
                 <div class="card-footer bg-body-tertiary py-2">
-                    <div class="row flex-between-center">
+                    {{-- <div class="row flex-between-center">
                         <div class="col-auto"><select class="form-select form-select-sm">
                                 <option>Last 6 Months</option>
                                 <option>Last Year</option>
@@ -476,37 +466,72 @@
                             </select></div>
                         <div class="col-auto"><a class="fs-10 font-sans-serif" href="#!">Help</a>
                         </div>
-                    </div>
+                    </div> --}}
+                    <div class="card-footer bg-body-tertiary p-0"><a class="btn btn-sm btn-link d-block w-100 py-2"
+                            href="{{ route('admin.posts.list') }}">Xem tất cả<span
+                                class="fas fa-chevron-right ms-1 fs-11"></span></a></div>
                 </div>
             </div>
         </div>
         <div class="col-xxl-6 px-xxl-2">
-            <div class="card h-100">
-                <div class="card-header bg-body-tertiary py-2">
-                    <div class="row flex-between-center">
-                        <div class="col-auto">
-                            <h6 class="mb-0">Top Products</h6>
-                        </div>
-                        <div class="col-auto d-flex"><a class="btn btn-link btn-sm me-2" href="#!">View Details</a>
-                            <div class="dropdown font-sans-serif btn-reveal-trigger"><button
-                                    class="btn btn-link text-600 btn-sm dropdown-toggle dropdown-caret-none btn-reveal"
-                                    type="button" id="dropdown-top-products" data-bs-toggle="dropdown"
-                                    data-boundary="viewport" aria-haspopup="true" aria-expanded="false"><span
-                                        class="fas fa-ellipsis-h fs-11"></span></button>
-                                <div class="dropdown-menu dropdown-menu-end border py-2"
-                                    aria-labelledby="dropdown-top-products"><a class="dropdown-item"
-                                        href="#!">View</a><a class="dropdown-item" href="#!">Export</a>
-                                    <div class="dropdown-divider"></div><a class="dropdown-item text-danger"
-                                        href="#!">Remove</a>
-                                </div>
-                            </div>
-                        </div>
+            <div class="card h-lg-100 overflow-hidden">
+                <div class="card-body p-0">
+                    <div class="table-responsive scrollbar">
+                        <table class="table table-dashboard mb-0 table-borderless fs-10 border-200">
+                            <thead class="bg-body-tertiary">
+                                <tr>
+                                    <th class="text-900">5 tài khoản đặt nhiều nhất</th>
+                                    <th class="text-900 text-end">Số lượng đơn</th>
+                                    <th class="text-900 pe-x1 text-end" style="width: 8rem">Tổng tiền
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($bestCustomers as $item)
+                                    <tr class="border-bottom border-200">
+                                        <td>
+                                            <div class="d-flex align-items-center position-relative">
+                                                {{-- <img
+                                                    class="rounded-1 border border-200" src="{{ $item->image_avatar }}"
+                                                    width="60" alt="" /> --}}
+                                                <div class="flex-1 ms-3">
+                                                    <h6 class="mb-1 fw-semi-bold"><a class="text-1100 stretched-link"
+                                                            href="{{ route('admin.users.show', ['id' => $item->id]) }}">{{ $item->full_name }}</a>
+                                                    </h6>
+                                                    <p class="fw-semi-bold mb-0 text-500">{{ $item->email }}</p>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="align-middle text-end fw-semi-bold">{{ $item->total_orders }}</td>
+                                        <td class="align-middle text-end fw-semi-bold">{{ number_format($item->total_spend, 0, ',', '.') }} VNĐ</td>
+                                        {{-- <td class="align-middle pe-x1">
+                                            <div class="d-flex align-items-center">
+                                                <div class="progress me-3 rounded-3 bg-200"
+                                                    style="height: 5px; width:80px;" role="progressbar"
+                                                    aria-valuenow="39" aria-valuemin="0" aria-valuemax="100">
+                                                    <div class="progress-bar rounded-pill" style="width: 39%;"></div>
+                                                </div>
+                                                <div class="fw-semi-bold ms-2">39%</div>
+                                            </div>
+                                        </td> --}}
+                                    </tr>
+                                @endforeach
+
+
+                            </tbody>
+                        </table>
                     </div>
                 </div>
-                <div class="card-body h-100">
-                    <!-- Find the JS file for the following chart at: src/js/charts/echarts/top-products.js--><!-- If you are not using gulp based workflow, you can find the transpiled code at: public/assets/js/theme.js-->
-                    <div class="echart-bar-top-products h-100" data-echart-responsive="true"></div>
-                </div>
+                {{-- <div class="card-footer bg-body-tertiary py-2">
+                    <div class="row flex-between-center">
+                        <div class="col-auto"><select class="form-select form-select-sm">
+                                <option>Last 7 days</option>
+                                <option>Last Month</option>
+                                <option>Last Year</option>
+                            </select></div>
+                        <div class="col-auto"><a class="btn btn-sm btn-falcon-default" href="#!">View All</a></div>
+                    </div>
+                </div> --}}
             </div>
         </div>
     </div>
