@@ -103,7 +103,7 @@ Route::post('/reset-password', [ResetPasswordController::class, 'reset'])->name(
 // đăng nhập với google
 Route::get('auth/google', [LoginController::class, 'redirectToGoogle'])->name('auth.google');
 Route::get('auth/google/callback', [LoginController::class, 'handleGoogleCallback']);
-
+Route::get('map', [ClientController::class, 'map'])->name('map');
 //giỏ hàng
 Route::controller(TicketController::class)
 ->name('ticket.')

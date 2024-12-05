@@ -34,5 +34,7 @@ Route::controller(ClientController::class)->group(function () {
 Route::controller(TicketController::class)->group(function () {
     Route::get('v1/aigenerate/{id}', 'aigenerate')->name('aigenerate');
 });
-
+Route::controller(ClientController::class)->group(function () {
+    Route::get('v1/getshipping/{id}', 'shipping')->name('shipping');
+});
 

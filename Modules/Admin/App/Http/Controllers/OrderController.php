@@ -4,6 +4,7 @@ namespace Modules\Admin\App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\Order;
+use App\Models\Shipping;
 use App\Models\Wallet;
 use App\Models\Trx_history;
 use App\Models\Trx_history_detail;
@@ -31,9 +32,17 @@ class OrderController extends Controller
     public function orderDetail(Order $order)
     {
         $data = $order::query()->with('orderItems')->findOrFail($order->id);
-        // dd($data);
         $statusOrder = Order::STATUS_ORDER;
         $statusPayment = Order::STATUS_PAYMENT;
+        // dd($data);
+        if($data->status_order == 'Đang giao hàng'){
+            $shipping = new Shipping();
+            $data_ship = $shipping->getShipping($order->id);
+            $frist_location = $shipping->getOldestShipping($order->id);
+            $last_location = $shipping->getLastUpdateShipping($order->id);
+            //dd($last_location );
+            return view('admin::contents.orders.orderDetail', compact('data', 'statusOrder', 'statusPayment','data_ship','frist_location','last_location'));
+       }
         return view('admin::contents.orders.orderDetail', compact('data', 'statusOrder', 'statusPayment'));
     }
     public function orderUpdate(Request $request, Order $order)
@@ -188,5 +197,34 @@ class OrderController extends Controller
                 return redirect()->back()->with(['error' => $e->getMessage()]);
             }
         }
+    }
+    public function updateShip(Request $request)
+    {
+        if( empty($request->status)){
+            return redirect()->back()->with(['error'=> 'Vui lòng chọn trạng thái giao hàng!']);
+        }
+        $data = [
+            'order_id'=> $request->order_id,
+            'status' => $request->status,
+            'latitude' => $request->latitude,
+            'longitude' => $request->longitude,
+            'updated_at' => now(),
+        ];
+        //dd($data);
+     try {
+        $shipping = new Shipping();
+        $shipping->updateShipping($data, $request->order_id);
+        return redirect()->back()->with(['success'=> 'Cập nhật trạng thái giao hàng thành công!']);
+     } catch(Exception $e) {
+      dd($e->getMessage());
+     }
+    }
+    public function createShip($id){
+        $shipping = new Shipping();
+        $shipping->createShipping($id);
+        $order = new Order();
+        $order->setShipping($id);
+        return redirect()->back()->with(['success'=> 'Tạo trạng thái giao hàng thành công!']);
+
     }
 }

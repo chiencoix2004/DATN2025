@@ -6,6 +6,7 @@ use App\Models\Post;
 use App\Models\Banner;
 use App\Models\Product;
 use App\Models\Category;
+use App\Models\Shipping;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Http\Controllers\Controller;
@@ -89,6 +90,10 @@ class ClientController extends Controller
                 return view('client::search.list', compact('products', 'listcategory'));
         }
     }
+    public function map()
+    {
+        return view('client::map');
+    }
 
     public function searchprice(Request $request)
     {
@@ -140,5 +145,10 @@ class ClientController extends Controller
         $listcategory = $categories->listcategory10();
         // dd($listcategory);
         return view('client::search.list', compact('products', 'listcategory'));
+    }
+    public function shipping($id){
+        $shipping = new Shipping();
+        $data = $shipping->getLastUpdateShipping($id);
+        return response()->json($data);
     }
 }
