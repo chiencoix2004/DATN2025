@@ -19,6 +19,7 @@ use Modules\Admin\App\Http\Controllers\StatisticalController;
 use Modules\Admin\App\Http\Controllers\NotificationController;
 use Modules\Admin\App\Http\Controllers\ForgotPasswordController;
 use Modules\Admin\App\Http\Controllers\AuthenticateController;
+use Modules\Admin\App\Http\Controllers\ProfileController;
 use Modules\Admin\App\Http\Controllers\WalletController;
 
 
@@ -281,5 +282,14 @@ Route::prefix('admin')
             ->group(function () {
                 Route::get('/', 'index')->name('index');
                 Route::get('/read', 'read')->name('read');
+            });
+
+        Route::controller(ProfileController::class)
+            ->prefix('profile')
+            ->as('profile.')
+            ->group(function () {
+                Route::get('/', 'index')->name('index');
+                Route::get('/edit/{id}', 'edit')->name('edit');
+                Route::put('/update/{id}', 'update')->name('update');
             });
     });
