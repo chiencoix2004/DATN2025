@@ -51,6 +51,11 @@ class Product extends Model
         return $this->hasMany(ProductVariant::class);
     }
 
+    public function orderDetails()
+    {
+        return $this->hasMany(OrderDetail::class, 'product_id');
+    }
+
     public function searchproduct($keywd){
         return $this
         ->join('categories','products.category_id','=','categories.id')
