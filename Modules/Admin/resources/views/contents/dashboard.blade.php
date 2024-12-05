@@ -51,29 +51,25 @@
                 <div class="card-body">
                     <div class="row h-100 justify-content-between g-0">
                         <div class="col-5 col-sm-6 col-xxl pe-2">
-                            <h6 class="mt-1">Market Share</h6>
+                            <h6 class="mt-1">Tỉ lệ đặt hàng {{ \Carbon\Carbon::now()->format('m/Y') }}</h6>
                             <div class="fs-11 mt-3">
                                 <div class="d-flex flex-between-center mb-1">
-                                    <div class="d-flex align-items-center"><span class="dot bg-primary"></span><span
-                                            class="fw-semi-bold">Samsung</span></div>
-                                    <div class="d-xxl-none">33%</div>
+                                    <div class="d-flex align-items-center"><span class="dot bg-success"></span><span
+                                            class="fw-semi-bold">Thành công</span></div>
+                                    <div class="d-xxl-none">{{ $successfulMonthOrders }}%</div>
                                 </div>
                                 <div class="d-flex flex-between-center mb-1">
-                                    <div class="d-flex align-items-center"><span class="dot bg-info"></span><span
-                                            class="fw-semi-bold">Huawei</span></div>
-                                    <div class="d-xxl-none">29%</div>
-                                </div>
-                                <div class="d-flex flex-between-center mb-1">
-                                    <div class="d-flex align-items-center"><span class="dot bg-300"></span><span
-                                            class="fw-semi-bold">Apple</span></div>
-                                    <div class="d-xxl-none">20%</div>
+                                    <div class="d-flex align-items-center"><span class="dot bg-danger"></span><span
+                                            class="fw-semi-bold">Thất Bại</span></div>
+                                    <div class="d-xxl-none">{{ $cancelledMonthOrders }}%</div>
                                 </div>
                             </div>
                         </div>
                         <div class="col-auto position-relative">
                             <div class="echart-market-share"></div>
                             <div class="position-absolute top-50 start-50 translate-middle text-1100 fs-7">
-                                26M</div>
+                                <span class="fas fa-shopping-cart"></span></div>
+                       
                         </div>
                     </div>
                 </div>
@@ -184,15 +180,18 @@
                         <div class="col">
                             <h6 class="mb-0">Phiếu hỗ trợ gần đây</h6>
                         </div>
-                        {{-- <div class="col-auto text-center pe-x1"><select class="form-select form-select-sm">
+                        <div class="col-auto text-center pe-x1">
+                            {{-- <select class="form-select form-select-sm">
                                 <option>Working Time</option>
                                 <option>Estimated Time</option>
                                 <option>Billable Time</option>
-                            </select></div> --}}
+                            </select> --}}
+                            <h6 class="mb-0">trạng thái</h6>
+                        </div>
                     </div>
                 </div>
                 <div class="card-body p-0">
-
+                    @foreach ($listTicket as $item)
                         <div class="row g-0 align-items-center py-2 position-relative border-bottom border-200">
                             <div class="col ps-x1 py-1 position-static">
                                 <div class="d-flex align-items-center">
@@ -203,8 +202,9 @@
                                     </div> --}}
                                     <div class="flex-1">
                                         <h6 class="mb-0 d-flex align-items-center"><a class="text-800 stretched-link"
-                                                href="">
-                                                </a>
+                                                href="{{ route('admin.ticket.show', ['id' => $item->ticket_id, 'user_id' => $item->user_id]) }}">
+                                                {{ $item->ticket_title }}
+                                            </a>
                                             {{-- <span
                                                 class="badge rounded-pill ms-2 bg-200 text-primary">38%</span> --}}
                                         </h6>
@@ -214,10 +214,17 @@
                             <div class="col py-1">
                                 <div class="row flex-end-center g-0">
                                     <div class="col-auto pe-2">
-                                        <span
-                                            class="badge rounded-pill ms-2 bg-200 text-primary"></span>
-                                        <span
-                                            class="badge rounded-pill ms-2 bg-200 text-primary"></span>
+                                        {{-- <span class="badge rounded-pill ms-2 bg-200 text-primary">
+                                        
+                                        </span> --}}
+                                        @if ($item->ticket_status == 1)
+                                            <span class="badge bg-warning">Mở</span>
+                                        @elseif($item->ticket_status == 2)
+                                            <span class="badge bg-success">Hoàn thành</span>
+                                        @else
+                                            <span class="badge bg-danger">Spam</span>
+                                        @endif
+                                        {{-- <span  class="badge rounded-pill ms-2 bg-200 text-primary"></span> --}}
                                     </div>
                                     {{-- <div class="col-5 pe-x1 ps-2">
                                         
@@ -225,8 +232,7 @@
                                 </div>
                             </div>
                         </div>
-
-
+                    @endforeach
                 </div>
                 <div class="card-footer bg-body-tertiary p-0"><a class="btn btn-sm btn-link d-block w-100 py-2"
                         href="{{ route('admin.ticket.index') }}">Xem tất cả<span
@@ -446,6 +452,7 @@
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             echartsBasicBarChartInit();
+            marketShareInit();
         });
 
         function echartsBasicBarChartInit() {
@@ -577,5 +584,77 @@
                 echartSetOption(chart, userOptions, getDefaultOptions);
             }
         }
+        function marketShareInit() {
+            var ECHART_MARKET_SHARE = '.echart-market-share';
+            var $echartMarketShare = document.querySelector(ECHART_MARKET_SHARE);
+            if ($echartMarketShare) {
+            var userOptions = utils.getData($echartMarketShare, 'options');
+            var chart = window.echarts.init($echartMarketShare);
+            var getDefaultOptions = function getDefaultOptions() {
+                return {
+                color: [utils.getColors().success, utils.getColors().danger, utils.getGrays()[300]],
+                tooltip: {
+                    trigger: 'item',
+                    padding: [7, 10],
+                    backgroundColor: utils.getGrays()['100'],
+                    borderColor: utils.getGrays()['300'],
+                    textStyle: {
+                    color: utils.getGrays()['1100']
+                    },
+                    borderWidth: 1,
+                    transitionDuration: 0,
+                    formatter: function formatter(params) {
+                    return "<strong>".concat(params.data.name, ":</strong> ").concat(params.percent,
+                        "%");
+                    }
+                },
+                position: function position(pos, params, dom, rect, size) {
+                    return getPosition(pos, params, dom, rect, size);
+                },
+                legend: {
+                    show: false
+                },
+                series: [{
+                    type: 'pie',
+                    radius: ['100%', '87%'],
+                    avoidLabelOverlap: false,
+                    hoverAnimation: false,
+                    itemStyle: {
+                    borderWidth: 2,
+                    borderColor: utils.getColor('gray-100')
+                    },
+                    label: {
+                    normal: {
+                        show: false,
+                        position: 'center',
+                        textStyle: {
+                        fontSize: '20',
+                        fontWeight: '500',
+                        color: utils.getGrays()['100']
+                        }
+                    },
+                    emphasis: {
+                        show: false
+                    }
+                    },
+                    labelLine: {
+                    normal: {
+                        show: false
+                    }
+                    },
+                    data: [{
+                    value: {{ $successfulMonthOrders }},
+                    name: 'Thành Công'
+                    }, {
+                    value: {{ $cancelledMonthOrders }},
+                    name: 'Thất Bại'
+                    },
+                ]
+                }]
+                };
+            };
+            echartSetOption(chart, userOptions, getDefaultOptions);
+            }
+        };
     </script>
 @endsection

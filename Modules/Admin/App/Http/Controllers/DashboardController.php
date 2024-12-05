@@ -4,6 +4,7 @@ namespace Modules\Admin\App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\Comment;
+use App\Models\CustomerSupport;
 use App\Models\Order;
 use App\Models\Product;
 use App\Models\User;
@@ -16,10 +17,10 @@ class DashboardController extends Controller
 {
 
     public function index()
-    {   
+    {
         // Lấy 5 đơn hàng mới nhất
         $order = Order::query()
-            ->select('id', 'status_order','status_payment')
+            ->select('id', 'status_order', 'status_payment')
             ->orderBy('id', 'desc')
             ->limit(5)
             ->get();
@@ -35,14 +36,14 @@ class DashboardController extends Controller
             ->get();
         // lấy 5 user mới nhất
         $listUser = User::query()
-            ->select('id', 'full_name', 'email','user_image')
+            ->select('id', 'full_name', 'email', 'user_image')
             ->where('roles_id', 2)
             ->orderBy('id', 'desc')
             ->limit(5)
             ->get();
         // lấy số lượng Khách hàng
         $countUser = User::query()
-            ->select('id', 'full_name', 'email','user_image')
+            ->select('id', 'full_name', 'email', 'user_image')
             ->where('roles_id', 2)
             ->count();
         // Lấy doanh số cho 12 tháng
@@ -50,23 +51,55 @@ class DashboardController extends Controller
         for ($i = 0; $i < 12; $i++) {
             $month = Carbon::now()->subMonths($i)->format('Y-m'); // Lấy tháng hiện tại trừ đi i tháng
             $sales = Order::where('date_create_order', 'like', $month . '%')
-            ->sum('total_price'); // Tính tổng doanh thu cho tháng đó
+                ->sum('total_price'); // Tính tổng doanh thu cho tháng đó
 
             $salesData[] = $sales; // Lưu doanh thu theo tháng
         }
         // Đảo ngược mảng để có thứ tự từ tháng 1 đến tháng 12
         $salesData = array_reverse($salesData);
-        
+
         // lấy 5 phiếu hõ trợ mới nhất
-        $listTicket = Comment::query()
-            ->select('id', 'content', 'status')
-            ->orderBy('id', 'desc')
+        $listTicket = CustomerSupport::query()
+            ->select('ticket_title', 'ticket_id', 'ticket_status', 'user_id')
+            ->orderBy('ticket_id', 'desc')
             ->limit(5)
             ->get();
-        
-        // dd($salesData);
 
 
-        return view('admin::contents.dashboard', compact('order', 'bestSell', 'listUser','countUser','salesData'));
+        $currentMonth = Carbon::now()->format('Y-m');
+        // Lấy thống kê đơn hàng cho tháng hiện tại
+        $totalMonthOrders = Order::where('created_at', 'like', $currentMonth . '%')
+            ->count();
+        $successfulMonthOrders = Order::where('created_at', 'like', $currentMonth . '%')
+            ->where('status_order', 'Đã nhận hàng')
+            ->count();
+        $cancelledMonthOrders = Order::where('created_at', 'like', $currentMonth . '%')
+            ->where('status_order', 'Đơn hàng bị hủy')
+            ->count();
+        // Tính tỷ lệ phần trăm
+        $totalProcessedOrders = $successfulMonthOrders + $cancelledMonthOrders;
+        $monthSuccessRate = $totalProcessedOrders > 0 ?
+            round(($successfulMonthOrders / $totalProcessedOrders) * 100, 2) : 0;
+        $monthCancellationRate = $totalProcessedOrders > 0 ?
+            round(($cancelledMonthOrders / $totalProcessedOrders) * 100, 2) : 0;
+
+        // dd($listTicket);
+
+
+
+        return view(
+            'admin::contents.dashboard',
+            compact(
+                'order',
+                'bestSell',
+                'listUser',
+                'countUser',
+                'salesData',
+                'listTicket',
+                'successfulMonthOrders',
+                'cancelledMonthOrders',
+                'currentMonth'
+            )
+        );
     }
 }
