@@ -90,9 +90,11 @@
                     <div class="col-lg-4 col-md-4">
                         <div class="service-item">
                             <div class="content">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="currentColor" class="bi bi-headset" viewBox="0 0 16 16">
-                                    <path d="M8 1a5 5 0 0 0-5 5v1h1a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V6a6 6 0 1 1 12 0v6a2.5 2.5 0 0 1-2.5 2.5H9.366a1 1 0 0 1-.866.5h-1a1 1 0 1 1 0-2h1a1 1 0 0 1 .866.5H11.5A1.5 1.5 0 0 0 13 12h-1a1 1 0 0 1-1-1V8a1 1 0 0 1 1-1h1V6a5 5 0 0 0-5-5"/>
-                                  </svg>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="currentColor"
+                                    class="bi bi-headset" viewBox="0 0 16 16">
+                                    <path
+                                        d="M8 1a5 5 0 0 0-5 5v1h1a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V6a6 6 0 1 1 12 0v6a2.5 2.5 0 0 1-2.5 2.5H9.366a1 1 0 0 1-.866.5h-1a1 1 0 1 1 0-2h1a1 1 0 0 1 .866.5H11.5A1.5 1.5 0 0 0 13 12h-1a1 1 0 0 1-1-1V8a1 1 0 0 1 1-1h1V6a5 5 0 0 0-5-5" />
+                                </svg>
                                 <h4>Hỗ trợ trực tuyến</h4>
                                 <p>Hỗ trợ 24/24h</p>
                             </div>
@@ -104,26 +106,6 @@
     </div>
     <!-- Service Area End Here -->
 
-    <!-- Begin Banner Area -->
-    <div class="banner-area">
-        <div class="container">
-            <div class="row">
-                @foreach ($bannertop as $items)
-                    <div class="col-md-4 col-6 custom-xxs-col">
-                        <div class="banner-item img-hover_effect">
-                            <div cslick-list draggablelass="banner-img">
-                                <a href="{{ $items->link }}">
-                                    <img src="{{ asset('uploads/' . $items->img_banner) }}" alt="{{ $items->title }}">
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                @endforeach
-            </div>
-        </div>
-    </div>
-    <!-- Banner Area End Here -->
-
     @include('client::contents.homeWeb.product-area')
 
     <!-- Begin Banner Area Two -->
@@ -134,7 +116,7 @@
                     @php
                         $url = $items->img_banner;
                         if (!\Str::contains($url, 'http')) {
-                            $url = 'uploads/' . $url;
+                            $url = \Storage::url($url);
                         }
                     @endphp
                     <div class="col-md-6">
@@ -152,18 +134,30 @@
     </div>
     <!-- Banner Area Two End Here -->
     @include('client::contents.homeWeb.latest-blog_area')
-
+    @php
+        $url = $bannerbottom->first()->img_banner;
+        if (!\Str::contains($url, 'http')) {
+            $url = \Storage::url($url);
+        }
+    @endphp
+    <style>
+        .kenne-banner_area-4 {
+            background-image: url('{{ $url }}');
+            background-repeat: no-repeat;
+            background-position: center center;
+            background-size: cover;
+            min-height: 565px;
+            position: relative;
+            padding-top: 0;
+            margin-top: 90px;
+        }
+    </style>
     <!-- Begin Kenne's Banner Area Four -->
     <div class="kenne-banner_area kenne-banner_area-4">
         <div class="banner-img"></div>
         <div class="banner-content">
-            <h3>{{ $bannerbottom->first()->title }}</h3>
-            <p>{{ $bannerbottom->first()->description }}</p>
-            <div class="contact-us">
-                <a href="callto://+123123321345">(+123) 123 321 345</a>
-            </div>
             <div class="kenne-btn-ps_center">
-                <a class="kenne-btn transparent-btn" href="{{ $bannerbottom->first()->link }}">Mua sắm ngay</a>
+                <a class="kenne-btn transparent-btn" href="{{ route('shop.shopIndex') }}">Mua sắm ngay</a>
             </div>
         </div>
     </div>
@@ -295,24 +289,4 @@
         </div>
     </div> --}}
     <!-- Kenne's Instagram Area End Here -->
-@endsection
-@section('css-setting')
-    @php
-        $bannerBT = $bannerbottom->first()->img_banner;
-        if (!\Str::contains($bannerBT, 'http')) {
-            $bannerBT = \Storage::url($bannerBT);
-        }
-    @endphp
-    <style>
-        .kenne-banner_area-4 {
-            background-image: url('{{ $bannerBT }}');
-            background-repeat: no-repeat;
-            background-position: center center;
-            background-size: cover;
-            min-height: 565px;
-            position: relative;
-            padding-top: 0;
-            margin-top: 90px;
-        }
-    </style>
 @endsection

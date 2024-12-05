@@ -189,7 +189,7 @@
                 <div class="card mb-3 rendFormEdit"></div>
                 <div class="card mb-3">
                     <div class="card-header bg-body-tertiary">
-                        <h6 class="mb-0">Thêm mới danh mục</h6>
+                        <h6 class="mb-0">Thêm mới danh mục lớn</h6>
                     </div>
                     <div class="card-body">
                         <div class="row gx-2">
@@ -237,14 +237,17 @@
                                 @csrf
                                 <div class="col-12 mb-3">
                                     <div class="form-group">
-                                        <label for="id_phan_loai">Chọn phân loại:</label>
+                                        <label for="id_phan_loai">Chọn danh mục:</label>
                                         <select class="form-select" id="id_phan_loai"
-                                            data-options='{"placeholder":"Chọn phân loại danh mục"}' name="id_phan_loai">
+                                            data-options='{"placeholder":"Chọn danh mục"}' name="id_phan_loai">
                                             <option value="">-- Chọn danh mục --</option>
                                             @foreach ($data as $item)
                                                 <option value="{{ $item->id }}">{{ $item->name }}</option>
                                             @endforeach
                                         </select>
+                                        @error('id_phan_loai')
+                                            <label class="form-label text-danger">{{ $message }}</label>
+                                        @enderror
                                     </div>
                                 </div>
                                 <div class="col-12 mb-3">

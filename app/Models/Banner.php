@@ -4,10 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Banner extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
 
     protected $table = 'banners';
 
@@ -17,6 +18,10 @@ class Banner extends Model
         'banner_position',
         'created_at',
         'updated_at',
+        'deleted_at',
+        'offer_text',
+        'title',
+        'description',
     ];
 
     public function getCreatedAtAttribute($value)

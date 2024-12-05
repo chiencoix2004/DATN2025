@@ -802,18 +802,9 @@
                 document.querySelectorAll('.single-color').forEach(label => {
                     label.classList.remove('active');
                 });
-                // Bỏ style inline-block khỏi tất cả các span.color-text
-                document.querySelectorAll('.color-text').forEach(span => {
-                    span.style.display = 'inline'; // Reset lại style
-                });
                 // Thêm class 'active' cho label tương ứng với input được chọn
                 const label = e.target.nextElementSibling;
                 label.classList.add('active');
-                // Thêm style inline-block cho span.color-text bên trong label
-                const colorText = label.querySelector('.color-text');
-                if (colorText) {
-                    colorText.style.display = 'inline-block';
-                }
             }
         });
     </script>

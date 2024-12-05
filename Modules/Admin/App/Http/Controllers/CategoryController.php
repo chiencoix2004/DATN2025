@@ -64,7 +64,7 @@ class CategoryController extends Controller
             DB::beginTransaction();
 
             if ($request->hasFile('img_cover_update')) {
-                $img = Storage::put('categories/', $request->file('img_cover_update'));
+                $img = Storage::put('categories', $request->file('img_cover_update'));
             } else {
                 $img = $category->image_cover;
             }
@@ -178,6 +178,7 @@ class CategoryController extends Controller
             [
                 'name_sub' => 'required|unique:sub_categories,name|min:2|max:100|regex:/^[^<>]*$/',
                 'note_sub' => 'nullable|regex:/^[^<>]*$/',
+                'id_phan_loai' => 'required',
             ],
             [
                 'name_sub.required' => 'Tên loại không được để trống!',
@@ -185,6 +186,7 @@ class CategoryController extends Controller
                 'name_sub.min' => 'Tên loại có độ dài ký tự tối thiểu 2 ký tự!',
                 'name_sub.max' => 'Tên loại có độ dài tối đa 100 ký tự!',
                 'name_sub.regex' => 'Không được nhập dữ liệu có định dạng HTML!',
+                'id_phan_loai.required' => 'Vui lòng chọn danh mục lớn!',
             ]
         );
         try {
