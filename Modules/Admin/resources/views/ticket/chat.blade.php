@@ -21,7 +21,7 @@
                         @if($detailticket->first()->ticket_attachment)
                         <div class="d-flex justify-content-start mb-2">
                             <div class="bg-gray-100 p-2 rounded">
-                                <img src="{{ Storage::url($detailticket->first()->ticket_attachment) }}" alt="Attachment" class="img-fluid" style="height: 10%;">
+                                <img src="{{ Storage::url($detailticket->first()->ticket_attachment) }}" alt="Attachment" class="img-fluid" style="height: 50%;">
                             </div>
                         </div>
                         @endif

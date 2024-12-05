@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Modules\Client\App\Http\Controllers\CartController;
 use Modules\Client\App\Http\Controllers\ClientController;
+use Modules\Client\App\Http\Controllers\ShopController;
 use Modules\Client\App\Http\Controllers\TicketController;
 use PHPUnit\Framework\Attributes\Ticket;
 
@@ -34,7 +35,13 @@ Route::controller(ClientController::class)->group(function () {
 Route::controller(TicketController::class)->group(function () {
     Route::get('v1/aigenerate/{id}', 'aigenerate')->name('aigenerate');
 });
+
 Route::controller(ClientController::class)->group(function () {
     Route::get('v1/getshipping/{id}', 'shipping')->name('shipping');
 });
+Route::controller(ShopController::class)->group(function () {
+    Route::get('v1/findprod/{id}', 'showproduct')->name('showproduct');
+});
+
+
 

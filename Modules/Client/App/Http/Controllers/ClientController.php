@@ -146,6 +146,8 @@ class ClientController extends Controller
         // dd($listcategory);
         return view('client::search.list', compact('products', 'listcategory'));
     }
+
+
     public function shipping($id){
         $shipping = new Shipping();
         $data = $shipping->getLastUpdateShipping($id);
