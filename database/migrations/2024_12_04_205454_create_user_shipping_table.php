@@ -14,7 +14,7 @@ return new class extends Migration
     Schema::create('user_shipping', function (Blueprint $table) {
         $table->id();
         $table->integer('order_id')->notNullable();
-        $table->string('status', 50)->nullable();
+        $table->string('status', 255)->nullable();
         $table->float('latitude')->nullable();
         $table->float('longitude')->nullable();
         $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();

@@ -82,4 +82,11 @@ class Order extends Model
             'ship_user_note' => $note,
         ]);
     }
+
+    public function setShipping($order_id){
+        return $this->where('id', $order_id)
+        ->update([
+            'status_order' => 'Đang giao hàng',
+        ]);
+    }
 }

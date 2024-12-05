@@ -76,7 +76,7 @@
 
         // Update marker location
         function updateDeliveryLocation() {
-            fetch('/api/delivery/12345')
+            fetch('/v1/getshipping/12345')
                 .then((response) => response.json())
                 .then((data) => {
                     const { latitude, longitude } = data;
