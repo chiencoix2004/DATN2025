@@ -61,7 +61,7 @@ Route::get('admin-confirm-mail', [ForgotPasswordController::class, 'confirmMail'
 
 Route::prefix('admin')
     ->as('admin.')
-    // ->middleware('CheckAdmin')
+   ->middleware('CheckAdmin')
     ->group(function () {
         Route::get('/', [DashboardController::class, 'index'])->name('home');
         
@@ -72,7 +72,8 @@ Route::prefix('admin')
             ->group(function () {
                 Route::get('slider', 'slider')->name('slider');
                 Route::get('list', 'index')->name('list');
-                Route::put('update/{banner}', 'update')->name('update'); // Corrected Route::
+                Route::put('update/{banner}', 'update')->name('update');
+                Route::put('cap-nhat/{banner}', 'cap_nhat')->name('cap_nhat');
                 Route::get('delete/{id}', 'delete')->name('delete');
                 Route::post('add/{position}', 'add')->name('add');
             });
@@ -174,6 +175,10 @@ Route::prefix('admin')
             Route::get('listOrders', 'listOrder')->name('list');
             Route::get('{order}/orderDetail', 'orderDetail')->name('detail');
             Route::put('{order}/update', 'orderUpdate')->name('update');
+            Route::post('cancelOrder', 'cancelOrder')->name('cancel');
+            Route::post('cancelAndRefund', 'cancelAndRefund')->name('cancelAndRefund');
+            Route::post('updateShip','updateShip')->name('updateShip');
+            Route::get('createship/{id}', 'createship')->name('createship');
         });
 
         // Route quản lý in hóa đơn

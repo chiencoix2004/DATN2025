@@ -5182,7 +5182,7 @@ i, .tab-content .tab-pane.active, .scroll-to-top i, .quantity .cart-plus-minus >
 }
 
 /* ---Kenne's Banner Area Four--- */
-.kenne-banner_area-4 {
+/* .kenne-banner_area-4 {
   background-image: url("../images/banner/1-6.jpg");
   background-repeat: no-repeat;
   background-position: center center;
@@ -5191,7 +5191,7 @@ i, .tab-content .tab-pane.active, .scroll-to-top i, .quantity .cart-plus-minus >
   position: relative;
   padding-top: 0;
   margin-top: 90px;
-}
+} */
 
 .kenne-banner_area-4:before {
   content: "";

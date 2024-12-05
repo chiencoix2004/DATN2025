@@ -4,6 +4,7 @@ namespace Modules\Wallet\App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\OTP;
+use App\Notifications\TransferNotifiaction;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -15,6 +16,7 @@ use App\Models\Withdraw;
 use Illuminate\Support\Facades\Auth;
 use App\Notifications\OtpEmail;
 use Exception;
+use App\Models\Order;
 
 class PayController extends Controller
 {
@@ -50,8 +52,9 @@ class PayController extends Controller
                 'shop_name' => $shop_name,
                 'shop_desciprtion' => $shop_desciprtion,
                 'order_type' => $order_type,
-                'date_created'=> $date_created,
+                'date_created'=> $date_created + 300,
             ];
+            //dd($array_data);
         //tokenize data
         $token = base64_encode(json_encode($array_data));
         $url =  route('wallet.pay.token', ['id' => $token]);
@@ -65,10 +68,22 @@ class PayController extends Controller
         }
 
         $decoded_data = json_decode(base64_decode($id), true);
-
         if (json_last_error() !== JSON_ERROR_NONE) {
             return response()->json(['error' => 'invalid token'], 400);
         }
+        $time = now()->timestamp;
+        if($decoded_data['date_created'] < $time){
+            return response()->json(['error' => 'Expried session'], 400);
+        }
+        $order = Order::findOrFail($decoded_data['order_id']);
+        $status_payment = $order->status_payment;
+        $payment_method = $order->payment_method;
+        $status_order = $order->status_order;
+        $toal_price = $order->total_price;
+        if ($status_payment == 'Đã thanh toán') {
+            return response()->json(['error' => 'Expried session'], 400);
+        }
+
         $user_id = Auth::user()->id;
         $wallet = new Wallet();
         $walletaccount = $wallet->getWallet($user_id);
@@ -171,14 +186,25 @@ class PayController extends Controller
                 'trx_date_issue' => date('Y-m-d H:i:s'),
                 'vnp_SecureHash' => $hashmac,
             ];
+            $noti_data = [
+                    'user_name' => Auth::user()->full_name,
+                    'amount' => $decoded_data['ammount'],
+                    'trx_id' => $trx_lastid,
+                    'request_time' => date('Y-m-d H:i:s'),
+                    'request_id' => $hashmac,
+                    'wallet_account_id' => $walletaccount->wallet_account_id,
+            ];
             try {
                 $trx_detail = new Trx_history_detail();
                 $trx_detail->createTrxDetail($data_trx_detail);
                 $wallet->takeBalance($walletaccount->wallet_account_id, $decoded_data['ammount']);
+                $user = User::find($user_id);
+                $user->notify(new TransferNotifiaction($noti_data));
                 $querybuilder = "?status=success&order_id=" . $decoded_data['order_id'] . "&ammount=" . $decoded_data['ammount']. "&user_id=" . $decoded_data['user_id'];
                  $link = route('handlewallet') . $querybuilder;
                 return redirect($link);
             } catch (Exception $e) {
+                dd($e->getMessage());
                 $querybuilder = "?status=failed&order_id=" . $decoded_data['order_id'] . "&ammount=" . $decoded_data['ammount']. "&user_id=" . $decoded_data['user_id'];
                 $link = route('handlewallet') . $querybuilder;
                 return redirect($link);

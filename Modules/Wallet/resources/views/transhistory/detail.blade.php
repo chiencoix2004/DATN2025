@@ -15,7 +15,7 @@
             <p class="card-text">Phương thức thanh toán: <strong>{{ $data->first()->trx_type }}</strong></p>
             <p class="card-text">Trạng thái: <strong>@if($data->first()->trx_status == 0) Chờ duyệt @elseif ($data->first()->trx_status == 1) Hoàn thành @elseif ($data->first()->trx_status == 2) Thất Bại @endif</strong></p>
             <p class="card-text">Nội dung giao dịch: <strong>{{ $data->first()->trx_detail_desc }}</strong></p>
-            <p class="card-text">Ngày khởi tạo: <strong>{{ $data->first()->created_at }}</strong></p>
+            <p class="card-text">Ngày khởi tạo: <strong>{{ $data->first()->trx_date_issue }}</strong></p>
             <p class="card-text text-muted">Request ID: <strong>{{ $data->first()->trx_hash_request }}</strong></p>
         </div>
     </div>
@@ -32,11 +32,14 @@
             <p class="card-text">Phản hồi hệ thống: <strong>{{ $data->first()->admin_note }}</strong></p>
             <p class="card-text">Ngày khởi tạo: <strong>{{ $data->first()->request_date }}</strong></p>
             <p class="card-text">Ngày duyệt yêu cầu: <strong>{{ $data->first()->admin_response_date }}</strong></p>
+            @if ($data->first()->status == 3 || $data->first()->status == 4)
+            @else
+            <a href="{{ route('wallet.withdrawcanel', ['id'=>$data->first()->withdraw_request_id]) }}" class="btn btn-danger">Hủy yêu cầu rút tiền</a>
+            @endif
         </div>
     </div>
     @endif
     <button class="btn btn-primary" onclick="window.location.href='{{ route('wallet.index') }}'">Quay lại trang chủ</button>
-
    </div>
 </div>
 @endsection

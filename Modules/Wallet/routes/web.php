@@ -28,6 +28,7 @@ Route::controller(WalletController::class)
     Route::get('res/vnpay', [WalletController::class, 'callbackvnpaydata'])->name('callbackvnpaydata');
     Route::get('withdraw', [WalletController::class, 'withdraw'])->name('withdraw');
     Route::post('withdraw-create', [WalletController::class, 'createWithdraw'])->name('createWithdraw');
+    Route::get('withdarw-cancel/{id}', [WalletController::class, 'withdrawcanel'])->name('withdrawcanel');
 });
 Route::controller(PayController::class)
 ->middleware(["user","userwallet"])

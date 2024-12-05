@@ -1,9 +1,11 @@
 @extends('admin::layout.master')
 
 @section('title')
-    Detail Order
+    Chi tiết đơn hàng #{{ $data->id }}
 @endsection
-
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 @section('contents')
     @if (session('success'))
         <div class="card mb-3">
@@ -62,9 +64,93 @@
                         @endforeach
                     </select>
                     <button type="submit" class="btn btn-primary">Cập nhật</button>
-                @endif
-            </div>
         </form>
+
+        <!-- Modal trigger button -->
+        @if ($data->status_payment == 'Đã thanh toán')
+            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#modalId">
+                Hủy và hoàn tiền đơn hàng
+            </button>
+        @else
+            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#modalId1">
+                Hủy đơn hàng
+            </button>
+        @endif
+
+        <!-- Modal Body -->
+        <!-- if you want to close by clicking outside the modal, delete the last endpoint:data-bs-backdrop and data-bs-keyboard -->
+        <div class="modal fade" id="modalId" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false"
+            role="dialog" aria-labelledby="modalTitleId" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-sm" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="modalTitleId">
+                            Xác nhận hủy và hoàn tiền đơn hàng
+                        </h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <form action="{{ route('admin.orders.cancelAndRefund', $data) }}" method="POST">
+                        @csrf
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <label for="reason">Lý do hủy đơn hàng</label>
+                                <textarea class="form-control" name="reason" id="reason" rows="3" required></textarea>
+                                <input type="hidden" name="status_order" value="canceled">
+                                <input type="hidden" name="order_id" value="{{ $data->id }}">
+                                <input type="hidden" name="user_id" value="{{ $data->users_id }}">
+                                <input type="hidden" name="total_price" value="{{ $data->total_price }}">
+                                <input type="hidden" name="full_name" value="{{ $data->user_name }}">
+                            </div>
+                            <p class="text-danger">Lưu ý: Hủy đơn hàng sẽ không thể khôi phục lại</p>
+
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                Quay lại
+                            </button>
+                            <button type="submit" class="btn btn-primary">Hủy đơn hàng và hoàn tiền</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" id="modalId1" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false"
+            role="dialog" aria-labelledby="modalTitleId" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-sm" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="modalTitleId">
+                            Xác nhận hủy đơn hàng
+                        </h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <form action="{{ route('admin.orders.cancel', $data) }}" method="POST">
+                        @csrf
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <label for="reason">Lý do hủy đơn hàng</label>
+                                <textarea class="form-control" name="reason" id="reason" rows="3" required></textarea>
+                                <input type="hidden" name="status_order" value="canceled">
+                                <input type="hidden" name="order_id" value="{{ $data->id }}">
+                            </div>
+                            <p class="text-danger">Lưu ý: Hủy đơn hàng sẽ không thể khôi phục lại</p>
+
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                Quay lại
+                            </button>
+                            <button type="submit" class="btn btn-primary">Hủy đơn hàng</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Optional: Place to the bottom of scripts -->
+        @endif
+    </div>
+    </form>
     </div>
     <div class="card mb-3">
         <div class="card-body">
@@ -88,7 +174,7 @@
                     </p>
                     <p class="mb-0 fs-10"> <strong>Điện thoại: </strong><a
                             href="tel:{{ $data->ship_user_phone }}">{{ $data->ship_user_phone }}</a></p>
-                    <div class="text-500 fs-10">({{ $data->ship_user_note }})</div>
+                    <div class="mb-0 fs-10">Ghi chú đơn hàng:<strong> {{ $data->ship_user_note }} </strong></div>
                 </div>
                 <div class="col-md-6 col-lg-4 mb-4 mb-lg-0">
                     <h5 class="mb-3 fs-9">Phương thức thanh toán</h5>
@@ -113,107 +199,175 @@
         </div>
     </div>
     <div class="card mb-3">
-        <div class="card-body">
-            <div class="table-responsive fs-10">
-                <table class="table table-striped border-bottom">
-                    <thead class="bg-200">
-                        <tr>
-                            <th class="text-900 border-0">Sản phẩm</th>
-                            <th class="text-900 border-0 text-center">Ảnh</th>
-                            <th class="text-900 border-0 text-center">Option</th>
-                            <th class="text-900 border-0 text-center">Số lượng</th>
-                            <th class="text-900 border-0 text-end">Đơn giá (VNĐ)</th>
-                            <th class="text-900 border-0 text-end">Tổng</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach ($data->orderItems as $itemOrder)
-                            <tr class="border-200">
-                                <td class="align-middle">
-                                    <h6 class="mb-0 text-nowrap">{{ $itemOrder->product_name }}</h6>
-                                    <p class="mb-0">{{ $itemOrder->product_sku }}</p>
-                                </td>
-                                <td class="align-middle text-center">
-                                    @php
-                                        $url = $itemOrder->product_avatar;
-                                        if (!\Str::contains($url, 'http')) {
-                                            $url = \Storage::url($url);
-                                        }
-                                    @endphp
-                                    <img src="{{ $url }}" alt="....." width="50px">
-                                </td>
-                                <td class="align-middle text-start">
-                                    @php
-                                        $prdV = \App\Models\ProductVariant::query()->findOrFail(
-                                            $itemOrder->product_variant_id,
-                                        );
-                                    @endphp
-                                    Màu: <span class="badge bg"
-                                        style="background-color: {{ $prdV->color['color_value'] }};">{{ $prdV->color['color_value'] }}</span>
-                                    <br>
-                                    Kích thước: <strong>{{ $prdV->size['size_value'] }}</strong>
-                                </td>
-                                <td class="align-middle text-center">{{ $itemOrder->product_quantity }}</td>
-                                <td class="align-middle text-end">
-                                    {{ number_format((int) $itemOrder->product_price_final, 0, ',', '.') }}
-                                </td>
-                                <td class="align-middle text-end">
-                                    {{ number_format((int) $itemOrder->product_price_final * $itemOrder->product_quantity, 0, ',', '.') }}
-                                </td>
-                            </tr>
-                        @endforeach
-                    </tbody>
-                </table>
+        @if ($data->status_order == 'Đang giao hàng')
+            <div class="card-header">
+                <h3 class="text-center mt-3">Trạng thái giao hàng</h3>
             </div>
-            <div class="row g-0 justify-content-end">
-                <div class="col-auto">
-                    <table class="table table-sm table-borderless fs-10 text-end">
-                        @foreach ($data->orderItems as $itemOrder)
-                            <tr>
-                                <th class="text-900">
-                                    {{ $itemOrder->product_name }}:
-                                </th>
-                                <td class="fw-semi-bold">
-                                    {{ number_format((int) $itemOrder->product_price_final, 0, ',', '.') }}
-                                    x {{ $itemOrder->product_quantity }}
-                                </td>
-                            </tr>
-                        @endforeach
-                        <tr>
-                            <th class="text-900">Mã khuyến mại:</th>
-                            <td class="fw-semi-bold">
-                                {!! $data->code_coupon != '' ? $data->code_coupon : '...' !!}
-                            </td>
-                        </tr>
-                        <tr>
-                            <th class="text-900">Kiểu giảm giá:</th>
-                            <td class="fw-semi-bold">
-                                {!! $data->discount_type != '' ? $data->discount_type : '...' !!}
-                            </td>
-                        </tr>
-                        <tr>
-                            <th class="text-900">Giảm giá:</th>
-                            <td class="fw-semi-bold">
-                                {!! $data->discount > 0 ? $data->discount : '...' !!}
-                            </td>
-                        </tr>
-                        <tr class="border-top">
-                            <th class="text-900">Tổng đơn hàng:</th>
-                            <td class="fw-semi-bold">
-                                {{ number_format($data->total_price, 0, ',', '.') }} (VNĐ)
-                            </td>
-                        </tr>
-                    </table>
+            <div class="card-body">
+                <!-- Card lồng -->
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <form action="{{ route('admin.orders.updateShip') }}" method="POST">
+                            @csrf
+                            <div class="form-group mb-3">
+                                <label for="location">Nhập địa chỉ cập nhật</label>
+                                <input type="text" class="form-control" id="location" name="location" required>
+                                <ul id="results" style="list-style: none; padding: 0; margin: 10px 0;"></ul>
+                            </div>
+                            <div class="form-group mb-3">
+                                <label for="status">Trạng thái giao hàng</label>
+                                <input type="text" class="form-control" id="status" name="status" required>
+                            </div>
+                            <input type="hidden" name="order_id" value="{{ $data->id }}">
+                            <input type="hidden" name="latitude" id="latitude">
+                            <input type="hidden" name="longitude" id="longitude">
+
+                            <button type="submit" class="btn btn-primary w-100">
+                                Cập nhật trạng thái giao hàng
+                            </button>
+                            <p class="text-danger">Lưu ý: Tool này là tool mô phỏng, không phản ánh đến dữ liệu thực</p>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Bản đồ -->
+                <div class="table-responsive fs-10 mb-3">
+                    <div id="map" style="height: 500px; width: 100%;"></div>
+                </div>
+
+                <!-- Lịch sử giao hàng -->
+                <div class="mt-2">
+                    <h5 class="text-center">Lịch sử giao hàng</h5>
+                    <div class="card">
+                        <div class="card-body">
+                            @foreach ($data_ship as $ship)
+                                <ul class="mb-1">
+                                    <li>
+                                        {{ $ship->updated_at }} - {{ $ship->status }}
+                                    </li>
+                                </ul>
+                            @endforeach
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div class="row g-0">
-                <div class="col-6">
-                    <a class="btn btn-dark" href="{{ route('admin.orders.list') }}">Quay lại</a>
-                </div>
-                <div class="col-6 text-end">
-                    <a class="btn btn-warning" href="{{ route('admin.invoice.save', $data) }}">In hóa đơn</a>
+        @else
+            <div class="card-body">
+                <p class="text-danger">Đơn hàng chưa được xác nhận hoặc đã hủy</p>
+                @if (!in_array($data->status_order, ["Đơn hàng bị hủy", "Đặt lại hàng"]))
+                    <button type="button" class="btn btn-primary btn-lg" data-bs-toggle="modal" data-bs-target="#modalId2">
+                        Tạo đơn vận mới
+                    </button>
+                @endif
+
+                <!-- Modal -->
+                <div class="modal fade" id="modalId2" tabindex="-1" role="dialog" aria-labelledby="modalTitleId"
+                    aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="modalTitleId">
+                                    Tạo đơn vận mới
+                                </h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="container-fluid">Nếu bạn tạo đơn vận mới, đơn hàng sẽ chuyển trạng thái "Đang vận chuyển".</div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                    Hủy
+                                </button>
+                                <a href="{{ route('admin.orders.createship', ['id' => $data->id]) }}" class="btn btn-primary">
+                                    Tạo vận đơn
+                                </a>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
+        @endif
     </div>
+
+    <script>
+        let deliveryMarker; // Khai báo biến toàn cục
+        let map; // Khai báo biến toàn cục
+
+        @if ($data->status_order == 'Đang giao hàng')
+            document.addEventListener("DOMContentLoaded", function() {
+                // Lấy dữ liệu từ Blade
+                const firstLocation = {
+                    latitude: {{ $frist_location->latitude }},
+                    longitude: {{ $frist_location->longitude }}
+                };
+                const lastLocation = {
+                    latitude: {{ $last_location->latitude }},
+                    longitude: {{ $last_location->longitude }},
+                };
+
+                const routeCoordinates = @json($data_ship->map(fn($item) => ['latitude' => $item->latitude, 'longitude' => $item->longitude]));
+
+                // Khởi tạo bản đồ
+                map = L.map('map').setView([firstLocation.latitude, firstLocation.longitude], 13);
+
+                // Thêm tile layer
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    maxZoom: 19,
+                }).addTo(map);
+
+                // Tạo marker ban đầu
+                deliveryMarker = L.marker([lastLocation.latitude, lastLocation.longitude]) // Gán vào biến toàn cục
+                    .addTo(map)
+                    .bindPopup("{{ $last_location->status }}")
+                    .openPopup();
+
+                // Thêm tuyến ship
+                const coordinates = routeCoordinates.map(coord => [coord.latitude, coord.longitude]);
+                const route = L.polyline(coordinates, {
+                    color: 'blue',
+                    weight: 5,
+                    opacity: 0.7
+                }).addTo(map);
+
+                // Fit bản đồ theo tuyến
+                map.fitBounds(route.getBounds());
+            });
+        @endif
+
+        // Xử lý tìm kiếm với Nominatim
+        $('#location').on('input', function() {
+            const query = $(this).val();
+            if (query.length > 2) {
+                // Gửi yêu cầu tới Nominatim API
+                $.getJSON(`https://nominatim.openstreetmap.org/search?format=json&q=${query}`, function(data) {
+                    $('#results').empty();
+                    data.forEach(place => {
+                        $('#results').append(
+                            `<li data-lat="${place.lat}" data-lon="${place.lon}" style="cursor: pointer; padding: 5px; border: 1px solid #ccc;">${place.display_name}</li>`
+                            );
+                    });
+                });
+            }
+        });
+
+        // Khi người dùng chọn địa chỉ từ danh sách
+        $('#results').on('click', 'li', function() {
+            const lat = $(this).data('lat');
+            const lon = $(this).data('lon');
+
+            // Cập nhật marker và bản đồ
+            deliveryMarker.setLatLng([lat, lon]).bindPopup(`Vị trí: ${lat}, ${lon}`).openPopup(); // Không lỗi nữa
+            map.setView([lat, lon], 15);
+
+            // Xóa danh sách kết quả
+            $('#results').empty();
+            $('#location').val($(this).text());
+            $('#latitude').val(lat);
+            $('#longitude').val(lon);
+            $('#status').val($(this).text());
+        });
+    </script>
+
+
+
 @endsection

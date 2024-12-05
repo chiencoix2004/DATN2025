@@ -92,7 +92,7 @@ class InvoiceController extends Controller
         );
         $date = Carbon::parse($data->date_create_order)->format('Y-m-d');
         $fileName = 'invoice-' . $data->id . '-' . Str::slug($data->user_name) . "-$date" . '.pdf';
-        return $pdf->download($fileName);
+        return $pdf->stream($fileName);
         // return view('admin::contents.orders.invoices.view', compact('data'));
     }
 }

@@ -6,6 +6,9 @@
 @section('css-setting')
     <script src="{{ asset('sweetalert2/sweetalert2.all.min.js') }}"></script>
     <link rel="stylesheet" href="{{ asset('sweetalert2/sweetalert2.min.css') }}">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 @endsection
 @section('contents')
     <!-- Begin Kenne's Breadcrumb Area -->
@@ -58,6 +61,7 @@
                                             <input placeholder="Nhập địa chỉ" type="text" id="user_address"
                                                 name="user_address" value="{{Auth::user()->address}}">
                                             <p></p>
+                                            <ul id="results" style="list-style: none; padding: 0; margin: 10px 0;"></ul>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
@@ -252,6 +256,29 @@
             </div>
         </div>
     </div>
+    <script>
+          $('#user_address').on('input', function () {
+            const query = $(this).val();
+            if (query.length > 2) {
+                // Gửi yêu cầu tới Nominatim API
+                $.getJSON(`https://nominatim.openstreetmap.org/search?format=json&q=${query}`, function (data) {
+                $('#results').empty();
+                data.forEach(place => {
+                    $('#results').append(`<li data-lat="${place.lat}" data-lon="${place.lon}" style="cursor: pointer; padding: 5px; border: 1px solid #ccc;">${place.display_name}</li>`);
+                });
+                });
+            }
+            });
+
+            // Khi người dùng chọn địa chỉ từ danh sách
+            $('#results').on('click', 'li', function () {
+
+            // Xóa danh sách kết quả
+            $('#results').empty();
+            $('#user_address').val($(this).text());
+            });
+
+        </script>
 @endsection
 @section('js-setting')
     <script type="module">
