@@ -4,82 +4,89 @@
 @endsection
 @section('contents')
     <div class="row g-3 mb-3">
-        <div class="col-md-6 col-xxl-3">
+        <div class="col-md-6 col-xxl-4">
             <div class="card h-md-100 ecommerce-card-min-width">
                 <div class="card-header pb-0">
-                    <h6 class="mb-0 mt-2 d-flex align-items-center">Weekly Sales<span class="ms-1 text-400"
-                            data-bs-toggle="tooltip" data-bs-placement="top"
-                            title="Calculated according to last week's sales"><span class="far fa-question-circle"
-                                data-fa-transform="shrink-1"></span></span></h6>
+                    <h6 class="mb-0 mt-2 d-flex align-items-center">Doanh thu tháng {{ $month }}<span
+                            class="ms-1 text-400" data-bs-toggle="tooltip" data-bs-placement="top"
+                            title="Calculated according to last week's sales">
+                            {{-- <span class="far fa-question-circle"
+                                data-fa-transform="shrink-1"></span> --}}
+                        </span></h6>
                 </div>
                 <div class="card-body d-flex flex-column justify-content-end">
                     <div class="row">
                         <div class="col">
-                            <p class="font-sans-serif lh-1 mb-1 fs-5">$47K</p><span
-                                class="badge badge-subtle-success rounded-pill fs-11">+3.5%</span>
+                            <p class="font-sans-serif lh-1 mb-1 fs-5"> {{ number_format($revenue, 0, ',', '.') }} VNĐ
+                            </p>
+                            {{-- <span
+                                class="badge badge-subtle-success rounded-pill fs-11">+3.5%</span> --}}
                         </div>
                         <div class="col-auto ps-0">
-                            <div class="echart-bar-weekly-sales h-100"></div>
+                            <div class="bg-holder bg-card"
+                                style="background-image:url({{ asset('theme/admin/img/icons/spot-illustrations/corner-3.png') }});">
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="col-md-6 col-xxl-3">
+        <div class="col-md-6 col-xxl-4">
             <div class="card h-md-100">
                 <div class="card-header pb-0">
-                    <h6 class="mb-0 mt-2">Total Order</h6>
+                    <h6 class="mb-0 mt-2">Đơn hàng tháng {{ $month }}</h6>
                 </div>
                 <div class="card-body d-flex flex-column justify-content-end">
                     <div class="row justify-content-between">
                         <div class="col-auto align-self-end">
-                            <div class="fs-5 fw-normal font-sans-serif text-700 lh-1 mb-1">58.4K</div>
-                            <span class="badge rounded-pill fs-11 bg-200 text-primary"><span
-                                    class="fas fa-caret-up me-1"></span>13.6%</span>
+                            <div class="fs-5 fw-normal font-sans-serif text-700 lh-1 mb-1">
+                                {{ number_format($totalMonthOrders, 0, ',', '.') }}</div>
+                            {{-- <span class="badge rounded-pill fs-11 bg-200 text-primary"><span
+                                    class="fas fa-caret-up me-1"></span>13.6%</span> --}}
                         </div>
                         <div class="col-auto ps-0 mt-n4">
-                            <div class="echart-default-total-order"
+                            {{-- <div class="echart-default-total-order"
                                 data-echarts='{"tooltip":{"trigger":"axis","formatter":"{b0} : {c0}"},"xAxis":{"data":["Week 4","Week 5","Week 6","Week 7"]},"series":[{"type":"line","data":[20,40,100,120],"smooth":true,"lineStyle":{"width":3}}],"grid":{"bottom":"2%","top":"2%","right":"10px","left":"10px"}}'
-                                data-echart-responsive="true"></div>
+                                data-echart-responsive="true"></div> --}}
+                            <div class="bg-holder bg-card"
+                                style="background-image:url({{ asset('theme/admin/img/icons/spot-illustrations/corner-3.png') }});">
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="col-md-6 col-xxl-3">
+        <div class="col-md-6 col-xxl-4">
             <div class="card h-md-100">
                 <div class="card-body">
                     <div class="row h-100 justify-content-between g-0">
                         <div class="col-5 col-sm-6 col-xxl pe-2">
-                            <h6 class="mt-1">Market Share</h6>
+                            <h6 class="mt-1">Tỉ lệ đặt hàng tháng {{ \Carbon\Carbon::now()->format('m') }}</h6>
                             <div class="fs-11 mt-3">
                                 <div class="d-flex flex-between-center mb-1">
-                                    <div class="d-flex align-items-center"><span class="dot bg-primary"></span><span
-                                            class="fw-semi-bold">Samsung</span></div>
-                                    <div class="d-xxl-none">33%</div>
+                                    <div class="d-flex align-items-center"><span class="dot bg-success"></span><span
+                                            class="fw-semi-bold">Thành công</span></div>
+                                    <div class="d-xxl-none">{{ $successfulMonthOrders }}%</div>
                                 </div>
                                 <div class="d-flex flex-between-center mb-1">
-                                    <div class="d-flex align-items-center"><span class="dot bg-info"></span><span
-                                            class="fw-semi-bold">Huawei</span></div>
-                                    <div class="d-xxl-none">29%</div>
-                                </div>
-                                <div class="d-flex flex-between-center mb-1">
-                                    <div class="d-flex align-items-center"><span class="dot bg-300"></span><span
-                                            class="fw-semi-bold">Apple</span></div>
-                                    <div class="d-xxl-none">20%</div>
+                                    <div class="d-flex align-items-center"><span class="dot bg-danger"></span><span
+                                            class="fw-semi-bold">Thất Bại</span></div>
+                                    <div class="d-xxl-none">{{ $cancelledMonthOrders }}%</div>
                                 </div>
                             </div>
                         </div>
                         <div class="col-auto position-relative">
                             <div class="echart-market-share"></div>
                             <div class="position-absolute top-50 start-50 translate-middle text-1100 fs-7">
-                                26M</div>
+                                <span class="fas fa-shopping-cart"></span>
+                            </div>
+
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="col-md-6 col-xxl-3">
+        {{-- <div class="col-md-6 col-xxl-3">
             <div class="card h-md-100">
                 <div class="card-header d-flex flex-between-center pb-0">
                     <h6 class="mb-0">Weather</h6>
@@ -118,6 +125,57 @@
                     </div>
                 </div>
             </div>
+        </div> --}}
+    </div>
+    <div class="row g-3 mb-3">
+        <div class="col-sm-6 col-md-4">
+            <div class="card overflow-hidden" style="min-width: 12rem">
+                <div class="bg-holder bg-card"
+                    style="background-image:url({{ asset('theme/admin/img/icons/spot-illustrations/corner-1.png') }});">
+                </div>
+                <div class="card-body position-relative">
+                    <h6>Đơn hàng chờ xác nhận</h6>
+                    <div class="display-4 fs-5 mb-2 fw-normal font-sans-serif text-warning"
+                        data-countup='{"endValue":58.386,"decimalPlaces":2,"suffix":"k"}'>
+                        {{ number_format($listPending, 0, ',', '.') }}
+                    </div>
+                    {{-- <a class="fw-semi-bold fs-10 text-nowrap"
+                        href="">Chi tiết<span
+                            class="fas fa-angle-right ms-1" data-fa-transform="down-1"></span></a> --}}
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-md-4">
+            <div class="card overflow-hidden" style="min-width: 12rem">
+                <div class="bg-holder bg-card"
+                    style="background-image:url({{ asset('theme/admin/img/icons/spot-illustrations/corner-2.png') }});">
+                </div>
+                <div class="card-body position-relative">
+                    <h6>Đơn hàng đang giao tháng {{ $month }}</h6>
+                    <div class="display-4 fs-5 mb-2 fw-normal font-sans-serif text-info"
+                        data-countup='{"endValue":23.434,"decimalPlaces":2,"suffix":"k"}'>
+                        {{ number_format($delivering, 0, ',', '.') }}</div>
+                    {{-- <a
+                        class="fw-semi-bold fs-10 text-nowrap" href="">Chi
+                        tiết <span class="fas fa-angle-right ms-1" data-fa-transform="down-1"></span></a> --}}
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card overflow-hidden" style="min-width: 12rem">
+                <div class="bg-holder bg-card"
+                    style="background-image:url({{ asset('theme/admin/img/icons/spot-illustrations/corner-3.png') }});">
+                </div>
+                <div class="card-body position-relative">
+                    <h6>Đơn hàng giao thành công tháng {{ $month }}</h6>
+                    <div class="display-4 fs-5 mb-2 fw-normal font-sans-serif"
+                        data-countup='{"endValue":43594,"prefix":"$"}'>{{ number_format($received, 0, ',', '.') }}</div>
+                    {{-- <a
+                        class="fw-semi-bold fs-10 text-nowrap"
+                        href="">Chi tiết<span
+                            class="fas fa-angle-right ms-1" data-fa-transform="down-1"></span></a> --}}
+                </div>
+            </div>
         </div>
     </div>
     <div class="row g-0">
@@ -126,273 +184,133 @@
                 <div class="card-header bg-body-tertiary">
                     <div class="row align-items-center">
                         <div class="col">
-                            <h6 class="mb-0">Running Projects</h6>
+                            <h6 class="mb-0">Đơn hàng gần đây</h6>
                         </div>
-                        <div class="col-auto text-center pe-x1"><select class="form-select form-select-sm">
+                        {{-- <div class="col-auto text-center pe-x1"><select class="form-select form-select-sm">
                                 <option>Working Time</option>
                                 <option>Estimated Time</option>
                                 <option>Billable Time</option>
-                            </select></div>
+                            </select></div> --}}
                     </div>
                 </div>
                 <div class="card-body p-0">
-                    <div class="row g-0 align-items-center py-2 position-relative border-bottom border-200">
-                        <div class="col ps-x1 py-1 position-static">
-                            <div class="d-flex align-items-center">
-                                <div class="avatar avatar-xl me-3">
-                                    <div class="avatar-name rounded-circle bg-primary-subtle text-dark">
-                                        <span class="fs-9 text-primary">F</span>
-                                    </div>
-                                </div>
-                                <div class="flex-1">
-                                    <h6 class="mb-0 d-flex align-items-center"><a class="text-800 stretched-link"
-                                            href="#!">Falcon</a><span
-                                            class="badge rounded-pill ms-2 bg-200 text-primary">38%</span>
-                                    </h6>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col py-1">
-                            <div class="row flex-end-center g-0">
-                                <div class="col-auto pe-2">
-                                    <div class="fs-10 fw-semi-bold">12:50:00</div>
-                                </div>
-                                <div class="col-5 pe-x1 ps-2">
-                                    <div class="progress bg-200 me-2" style="height: 5px;" role="progressbar"
-                                        aria-valuenow="38" aria-valuemin="0" aria-valuemax="100">
-                                        <div class="progress-bar rounded-pill" style="width: 38%"></div>
+                    @foreach ($order as $item)
+                        <div class="row g-0 align-items-center py-2 position-relative border-bottom border-200">
+                            <div class="col ps-x1 py-1 position-static">
+                                <div class="d-flex align-items-center">
+                                    {{-- <div class="avatar avatar-xl me-3">
+                                        <div class="avatar-name rounded-circle bg-primary-subtle text-dark">
+                                            <span class="fs-9 text-primary">F</span>
+                                        </div>
+                                    </div> --}}
+                                    <div class="flex-1">
+                                        <h6 class="mb-0 d-flex align-items-center"><a class="text-800 stretched-link"
+                                                href="{{ route('admin.orders.detail', ['order' => $item->id]) }}">Đơn hàng
+                                                #{{ $item->id }}</a>
+                                            {{-- <span
+                                                class="badge rounded-pill ms-2 bg-200 text-primary">38%</span> --}}
+                                        </h6>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                    <div class="row g-0 align-items-center py-2 position-relative border-bottom border-200">
-                        <div class="col ps-x1 py-1 position-static">
-                            <div class="d-flex align-items-center">
-                                <div class="avatar avatar-xl me-3">
-                                    <div class="avatar-name rounded-circle bg-success-subtle text-dark">
-                                        <span class="fs-9 text-success">R</span>
+                            <div class="col py-1">
+                                <div class="row flex-end-center g-0">
+                                    <div class="col-auto pe-2">
+                                        <span
+                                            class="badge rounded-pill ms-2 bg-200 text-primary">{{ $item->status_order }}</span>
+                                        <span
+                                            class="badge rounded-pill ms-2 bg-200 text-primary">{{ $item->status_payment }}</span>
                                     </div>
-                                </div>
-                                <div class="flex-1">
-                                    <h6 class="mb-0 d-flex align-items-center"><a class="text-800 stretched-link"
-                                            href="#!">Reign</a><span
-                                            class="badge rounded-pill ms-2 bg-200 text-primary">79%</span>
-                                    </h6>
+                                    {{-- <div class="col-5 pe-x1 ps-2">
+                                        
+                                    </div> --}}
                                 </div>
                             </div>
                         </div>
-                        <div class="col py-1">
-                            <div class="row flex-end-center g-0">
-                                <div class="col-auto pe-2">
-                                    <div class="fs-10 fw-semi-bold">25:20:00</div>
-                                </div>
-                                <div class="col-5 pe-x1 ps-2">
-                                    <div class="progress bg-200 me-2" style="height: 5px;" role="progressbar"
-                                        aria-valuenow="79" aria-valuemin="0" aria-valuemax="100">
-                                        <div class="progress-bar rounded-pill" style="width: 79%"></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row g-0 align-items-center py-2 position-relative border-bottom border-200">
-                        <div class="col ps-x1 py-1 position-static">
-                            <div class="d-flex align-items-center">
-                                <div class="avatar avatar-xl me-3">
-                                    <div class="avatar-name rounded-circle bg-info-subtle text-dark"><span
-                                            class="fs-9 text-info">B</span></div>
-                                </div>
-                                <div class="flex-1">
-                                    <h6 class="mb-0 d-flex align-items-center"><a class="text-800 stretched-link"
-                                            href="#!">Boots4</a><span
-                                            class="badge rounded-pill ms-2 bg-200 text-primary">90%</span>
-                                    </h6>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col py-1">
-                            <div class="row flex-end-center g-0">
-                                <div class="col-auto pe-2">
-                                    <div class="fs-10 fw-semi-bold">58:20:00</div>
-                                </div>
-                                <div class="col-5 pe-x1 ps-2">
-                                    <div class="progress bg-200 me-2" style="height: 5px;" role="progressbar"
-                                        aria-valuenow="90" aria-valuemin="0" aria-valuemax="100">
-                                        <div class="progress-bar rounded-pill" style="width: 90%"></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row g-0 align-items-center py-2 position-relative border-bottom border-200">
-                        <div class="col ps-x1 py-1 position-static">
-                            <div class="d-flex align-items-center">
-                                <div class="avatar avatar-xl me-3">
-                                    <div class="avatar-name rounded-circle bg-warning-subtle text-dark">
-                                        <span class="fs-9 text-warning">R</span>
-                                    </div>
-                                </div>
-                                <div class="flex-1">
-                                    <h6 class="mb-0 d-flex align-items-center"><a class="text-800 stretched-link"
-                                            href="#!">Raven</a><span
-                                            class="badge rounded-pill ms-2 bg-200 text-primary">40%</span>
-                                    </h6>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col py-1">
-                            <div class="row flex-end-center g-0">
-                                <div class="col-auto pe-2">
-                                    <div class="fs-10 fw-semi-bold">21:20:00</div>
-                                </div>
-                                <div class="col-5 pe-x1 ps-2">
-                                    <div class="progress bg-200 me-2" style="height: 5px;" role="progressbar"
-                                        aria-valuenow="40" aria-valuemin="0" aria-valuemax="100">
-                                        <div class="progress-bar rounded-pill" style="width: 40%"></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row g-0 align-items-center py-2 position-relative">
-                        <div class="col ps-x1 py-1 position-static">
-                            <div class="d-flex align-items-center">
-                                <div class="avatar avatar-xl me-3">
-                                    <div class="avatar-name rounded-circle bg-danger-subtle text-dark">
-                                        <span class="fs-9 text-danger">S</span>
-                                    </div>
-                                </div>
-                                <div class="flex-1">
-                                    <h6 class="mb-0 d-flex align-items-center"><a class="text-800 stretched-link"
-                                            href="#!">Slick</a><span
-                                            class="badge rounded-pill ms-2 bg-200 text-primary">70%</span>
-                                    </h6>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col py-1">
-                            <div class="row flex-end-center g-0">
-                                <div class="col-auto pe-2">
-                                    <div class="fs-10 fw-semi-bold">31:20:00</div>
-                                </div>
-                                <div class="col-5 pe-x1 ps-2">
-                                    <div class="progress bg-200 me-2" style="height: 5px;" role="progressbar"
-                                        aria-valuenow="70" aria-valuemin="0" aria-valuemax="100">
-                                        <div class="progress-bar rounded-pill" style="width: 70%"></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    @endforeach
+
                 </div>
                 <div class="card-footer bg-body-tertiary p-0"><a class="btn btn-sm btn-link d-block w-100 py-2"
-                        href="#!">Show all
-                        projects<span class="fas fa-chevron-right ms-1 fs-11"></span></a></div>
+                        href="{{ route('admin.orders.list') }}">Xem tất cả<span
+                            class="fas fa-chevron-right ms-1 fs-11"></span></a></div>
             </div>
         </div>
-        <div class="col-lg-6 ps-lg-2 mb-3">
-            <div class="card h-lg-100">
-                <div class="card-header">
-                    <div class="row flex-between-center">
-                        <div class="col-auto">
-                            <h6 class="mb-0">Total Sales</h6>
+        <div class="col-lg-6 pe-lg-2 mb-3">
+            <div class="card h-lg-100 overflow-hidden">
+                <div class="card-header bg-body-tertiary">
+                    <div class="row align-items-center">
+                        <div class="col">
+                            <h6 class="mb-0">Phiếu hỗ trợ gần đây</h6>
                         </div>
-                        <div class="col-auto d-flex"><select class="form-select form-select-sm select-month me-2">
-                                <option value="0">January</option>
-                                <option value="1">February</option>
-                                <option value="2">March</option>
-                                <option value="3">April</option>
-                                <option value="4">May</option>
-                                <option value="5">Jun</option>
-                                <option value="6">July</option>
-                                <option value="7">August</option>
-                                <option value="8">September</option>
-                                <option value="9">October</option>
-                                <option value="10">November</option>
-                                <option value="11">December</option>
-                            </select>
-                            <div class="dropdown font-sans-serif btn-reveal-trigger"><button
-                                    class="btn btn-link text-600 btn-sm dropdown-toggle dropdown-caret-none btn-reveal"
-                                    type="button" id="dropdown-total-sales" data-bs-toggle="dropdown"
-                                    data-boundary="viewport" aria-haspopup="true" aria-expanded="false"><span
-                                        class="fas fa-ellipsis-h fs-11"></span></button>
-                                <div class="dropdown-menu dropdown-menu-end border py-2"
-                                    aria-labelledby="dropdown-total-sales"><a class="dropdown-item"
-                                        href="#!">View</a><a class="dropdown-item" href="#!">Export</a>
-                                    <div class="dropdown-divider"></div><a class="dropdown-item text-danger"
-                                        href="#!">Remove</a>
-                                </div>
-                            </div>
+                        <div class="col-auto text-center pe-x1">
+                            {{-- <select class="form-select form-select-sm">
+                                <option>Working Time</option>
+                                <option>Estimated Time</option>
+                                <option>Billable Time</option>
+                            </select> --}}
+                            <h6 class="mb-0">trạng thái</h6>
                         </div>
                     </div>
                 </div>
-                <div class="card-body h-100 pe-0">
-                    <!-- Find the JS file for the following chart at: src\js\charts\echarts\total-sales.js--><!-- If you are not using gulp based workflow, you can find the transpiled code at: public\assets\js\theme.js-->
-                    <div class="echart-line-total-sales h-100" data-echart-responsive="true"></div>
+                <div class="card-body p-0">
+                    @foreach ($listTicket as $item)
+                        <div class="row g-0 align-items-center py-2 position-relative border-bottom border-200">
+                            <div class="col ps-x1 py-1 position-static">
+                                <div class="d-flex align-items-center">
+                                    {{-- <div class="avatar avatar-xl me-3">
+                                        <div class="avatar-name rounded-circle bg-primary-subtle text-dark">
+                                            <span class="fs-9 text-primary">F</span>
+                                        </div>
+                                    </div> --}}
+                                    <div class="flex-1">
+                                        <h6 class="mb-0 d-flex align-items-center"><a class="text-800 stretched-link"
+                                                href="{{ route('admin.ticket.show', ['id' => $item->ticket_id, 'user_id' => $item->user_id]) }}">
+                                                {{ $item->ticket_title }}
+                                            </a>
+                                            {{-- <span
+                                                class="badge rounded-pill ms-2 bg-200 text-primary">38%</span> --}}
+                                        </h6>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col py-1">
+                                <div class="row flex-end-center g-0">
+                                    <div class="col-auto pe-2">
+                                        {{-- <span class="badge rounded-pill ms-2 bg-200 text-primary">
+                                        
+                                        </span> --}}
+                                        @if ($item->ticket_status == 1)
+                                            <span class="badge bg-warning">Mở</span>
+                                        @elseif($item->ticket_status == 2)
+                                            <span class="badge bg-success">Hoàn thành</span>
+                                        @else
+                                            <span class="badge bg-danger">Spam</span>
+                                        @endif
+                                        {{-- <span  class="badge rounded-pill ms-2 bg-200 text-primary"></span> --}}
+                                    </div>
+                                    {{-- <div class="col-5 pe-x1 ps-2">
+                                        
+                                    </div> --}}
+                                </div>
+                            </div>
+                        </div>
+                    @endforeach
                 </div>
+                <div class="card-footer bg-body-tertiary p-0"><a class="btn btn-sm btn-link d-block w-100 py-2"
+                        href="{{ route('admin.ticket.index') }}">Xem tất cả<span
+                            class="fas fa-chevron-right ms-1 fs-11"></span></a></div>
             </div>
         </div>
     </div>
     <div class="row g-0">
-        <div class="col-lg-6 col-xl-7 col-xxl-8 mb-3 pe-lg-2 mb-3">
-            <div class="card h-lg-100">
-                <div class="card-body d-flex align-items-center">
-                    <div class="w-100">
-                        <h6 class="mb-3 text-800">Using Storage <strong class="text-1100">1775.06 MB
-                            </strong>of 2 GB</h6>
-                        <div class="progress-stacked mb-3 rounded-3" style="height: 10px;">
-                            <div class="progress" style="width: 43.72%;" role="progressbar" aria-valuenow="43.72"
-                                aria-valuemin="0" aria-valuemax="100">
-                                <div class="progress-bar bg-progress-gradient border-end border-100 border-2">
-                                </div>
-                            </div>
-                            <div class="progress" style="width: 18.76%;" role="progressbar" aria-valuenow="18.76"
-                                aria-valuemin="0" aria-valuemax="100">
-                                <div class="progress-bar bg-info border-end border-100 border-2"></div>
-                            </div>
-                            <div class="progress" style="width: 9.38%;" role="progressbar" aria-valuenow="9.38"
-                                aria-valuemin="0" aria-valuemax="100">
-                                <div class="progress-bar bg-success border-end border-100 border-2"></div>
-                            </div>
-                            <div class="progress" style="width: 28.14%;" role="progressbar" aria-valuenow="28.14"
-                                aria-valuemin="0" aria-valuemax="100">
-                                <div class="progress-bar bg-200"></div>
-                            </div>
-                        </div>
-                        <div class="row fs-10 fw-semi-bold text-500 g-0">
-                            <div class="col-auto d-flex align-items-center pe-3"><span
-                                    class="dot bg-primary"></span><span>Regular</span><span
-                                    class="d-none d-md-inline-block d-lg-none d-xxl-inline-block">(895MB)</span>
-                            </div>
-                            <div class="col-auto d-flex align-items-center pe-3"><span
-                                    class="dot bg-info"></span><span>System</span><span
-                                    class="d-none d-md-inline-block d-lg-none d-xxl-inline-block">(379MB)</span>
-                            </div>
-                            <div class="col-auto d-flex align-items-center pe-3"><span
-                                    class="dot bg-success"></span><span>Shared</span><span
-                                    class="d-none d-md-inline-block d-lg-none d-xxl-inline-block">(192MB)</span>
-                            </div>
-                            <div class="col-auto d-flex align-items-center"><span
-                                    class="dot bg-200"></span><span>Free</span><span
-                                    class="d-none d-md-inline-block d-lg-none d-xxl-inline-block">(576MB)</span>
-                            </div>
-                        </div>
-                    </div>
+        <div class="col-lg-12 col-xl-12 ps-lg-12 mb-3">
+            <div class="card h-100">
+                <div class="card-header d-flex flex-between-center bg-body-tertiary py-2">
+                    <h6 class="mb-0">Doanh thu theo các tháng</h6>
                 </div>
-            </div>
-        </div>
-        <div class="col-lg-6 col-xl-5 col-xxl-4 mb-3 ps-lg-2">
-            <div class="card h-lg-100">
-                <div class="bg-holder bg-card"
-                    style="background-image:url({{('theme/admin/img/icons/spot-illustrations/corner-1.png')}});"></div>
-                <!--/.bg-holder-->
-                <div class="card-body position-relative">
-                    <h5 class="text-warning">Running out of your space?</h5>
-                    <p class="fs-10 mb-0">Your storage will be running out soon. Get more space and
-                        powerful productivity features.</p><a class="btn btn-link fs-10 text-warning mt-lg-3 ps-0"
-                        href="#!">Upgrade
-                        storage<span class="fas fa-chevron-right ms-1" data-fa-transform="shrink-4 down-1"></span></a>
+                <div class="card-body pb-0">
+                    <div class="echart-basic-bar-chart-example" style="min-height: 300px;" data-echart-responsive="true">
+                    </div>
                 </div>
             </div>
         </div>
@@ -405,143 +323,47 @@
                         <table class="table table-dashboard mb-0 table-borderless fs-10 border-200">
                             <thead class="bg-body-tertiary">
                                 <tr>
-                                    <th class="text-900">Best Selling Products</th>
-                                    <th class="text-900 text-end">Revenue ($3333)</th>
-                                    <th class="text-900 pe-x1 text-end" style="width: 8rem">Revenue (%)
-                                    </th>
+                                    <th class="text-900">Sản phẩm bán chạy</th>
+                                    <th class="text-900 text-end">Số lượng bán</th>
+                                    {{-- <th class="text-900 pe-x1 text-end" style="width: 8rem">Revenue (%)
+                                    </th> --}}
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr class="border-bottom border-200">
-                                    <td>
-                                        <div class="d-flex align-items-center position-relative"><img
-                                                class="rounded-1 border border-200"
-                                                src="{{ asset('theme/admin/img/products/12.png') }}" width="60"
-                                                alt="" />
-                                            <div class="flex-1 ms-3">
-                                                <h6 class="mb-1 fw-semi-bold"><a class="text-1100 stretched-link"
-                                                        href="#!">Raven Pro</a></h6>
-                                                <p class="fw-semi-bold mb-0 text-500">Landing</p>
+                                @foreach ($bestSell as $item)
+                                    <tr class="border-bottom border-200">
+                                        <td>
+                                            <div class="d-flex align-items-center position-relative"><img
+                                                    class="rounded-1 border border-200" src="{{ $item->image_avatar }}"
+                                                    width="60" alt="" />
+                                                <div class="flex-1 ms-3">
+                                                    <h6 class="mb-1 fw-semi-bold"><a class="text-1100 stretched-link"
+                                                            href="{{ route('admin.product.detailP', ['slug' => $item->slug]) }}">{{ $item->name }}</a>
+                                                    </h6>
+                                                    <p class="fw-semi-bold mb-0 text-500">{{ $item->sku }}</p>
+                                                </div>
                                             </div>
-                                        </div>
-                                    </td>
-                                    <td class="align-middle text-end fw-semi-bold">$1311</td>
-                                    <td class="align-middle pe-x1">
-                                        <div class="d-flex align-items-center">
-                                            <div class="progress me-3 rounded-3 bg-200" style="height: 5px; width:80px;"
-                                                role="progressbar" aria-valuenow="39" aria-valuemin="0"
-                                                aria-valuemax="100">
-                                                <div class="progress-bar rounded-pill" style="width: 39%;"></div>
+                                        </td>
+                                        <td class="align-middle text-end fw-semi-bold">{{ $item->total_quantity }}</td>
+                                        {{-- <td class="align-middle pe-x1">
+                                            <div class="d-flex align-items-center">
+                                                <div class="progress me-3 rounded-3 bg-200"
+                                                    style="height: 5px; width:80px;" role="progressbar"
+                                                    aria-valuenow="39" aria-valuemin="0" aria-valuemax="100">
+                                                    <div class="progress-bar rounded-pill" style="width: 39%;"></div>
+                                                </div>
+                                                <div class="fw-semi-bold ms-2">39%</div>
                                             </div>
-                                            <div class="fw-semi-bold ms-2">39%</div>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr class="border-bottom border-200">
-                                    <td>
-                                        <div class="d-flex align-items-center position-relative"><img
-                                                class="rounded-1 border border-200"
-                                                src="{{ asset('theme/admin/img/products/10.png') }}" width="60"
-                                                alt="" />
-                                            <div class="flex-1 ms-3">
-                                                <h6 class="mb-1 fw-semi-bold"><a class="text-1100 stretched-link"
-                                                        href="#!">Boots4</a></h6>
-                                                <p class="fw-semi-bold mb-0 text-500">Portfolio</p>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td class="align-middle text-end fw-semi-bold">$860</td>
-                                    <td class="align-middle pe-x1">
-                                        <div class="d-flex align-items-center">
-                                            <div class="progress me-3 rounded-3 bg-200" style="height: 5px; width:80px;"
-                                                role="progressbar" aria-valuenow="26" aria-valuemin="0"
-                                                aria-valuemax="100">
-                                                <div class="progress-bar rounded-pill" style="width: 26%;"></div>
-                                            </div>
-                                            <div class="fw-semi-bold ms-2">26%</div>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr class="border-bottom border-200">
-                                    <td>
-                                        <div class="d-flex align-items-center position-relative"><img
-                                                class="rounded-1 border border-200"
-                                                src="{{ asset('theme/admin/img/products/11.png') }}" width="60"
-                                                alt="" />
-                                            <div class="flex-1 ms-3">
-                                                <h6 class="mb-1 fw-semi-bold"><a class="text-1100 stretched-link"
-                                                        href="#!">Falcon</a></h6>
-                                                <p class="fw-semi-bold mb-0 text-500">Admin</p>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td class="align-middle text-end fw-semi-bold">$539</td>
-                                    <td class="align-middle pe-x1">
-                                        <div class="d-flex align-items-center">
-                                            <div class="progress me-3 rounded-3 bg-200" style="height: 5px; width:80px;"
-                                                role="progressbar" aria-valuenow="16" aria-valuemin="0"
-                                                aria-valuemax="100">
-                                                <div class="progress-bar rounded-pill" style="width: 16%;"></div>
-                                            </div>
-                                            <div class="fw-semi-bold ms-2">16%</div>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr class="border-bottom border-200">
-                                    <td>
-                                        <div class="d-flex align-items-center position-relative"><img
-                                                class="rounded-1 border border-200"
-                                                src="{{ asset('theme/admin/img/products/14.png') }}" width="60"
-                                                alt="" />
-                                            <div class="flex-1 ms-3">
-                                                <h6 class="mb-1 fw-semi-bold"><a class="text-1100 stretched-link"
-                                                        href="#!">Slick</a></h6>
-                                                <p class="fw-semi-bold mb-0 text-500">Builder</p>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td class="align-middle text-end fw-semi-bold">$343</td>
-                                    <td class="align-middle pe-x1">
-                                        <div class="d-flex align-items-center">
-                                            <div class="progress me-3 rounded-3 bg-200" style="height: 5px; width:80px;"
-                                                role="progressbar" aria-valuenow="10" aria-valuemin="0"
-                                                aria-valuemax="100">
-                                                <div class="progress-bar rounded-pill" style="width: 10%;"></div>
-                                            </div>
-                                            <div class="fw-semi-bold ms-2">10%</div>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <div class="d-flex align-items-center position-relative"><img
-                                                class="rounded-1 border border-200"
-                                                src="{{ asset('theme/admin/img/products/13.png') }}" width="60"
-                                                alt="" />
-                                            <div class="flex-1 ms-3">
-                                                <h6 class="mb-1 fw-semi-bold"><a class="text-1100 stretched-link"
-                                                        href="#!">Reign Pro</a></h6>
-                                                <p class="fw-semi-bold mb-0 text-500">Agency</p>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td class="align-middle text-end fw-semi-bold">$280</td>
-                                    <td class="align-middle pe-x1">
-                                        <div class="d-flex align-items-center">
-                                            <div class="progress me-3 rounded-3 bg-200" style="height: 5px; width:80px;"
-                                                role="progressbar" aria-valuenow="8" aria-valuemin="0"
-                                                aria-valuemax="100">
-                                                <div class="progress-bar rounded-pill" style="width: 8%;"></div>
-                                            </div>
-                                            <div class="fw-semi-bold ms-2">8%</div>
-                                        </div>
-                                    </td>
-                                </tr>
+                                        </td> --}}
+                                    </tr>
+                                @endforeach
+
+
                             </tbody>
                         </table>
                     </div>
                 </div>
-                <div class="card-footer bg-body-tertiary py-2">
+                {{-- <div class="card-footer bg-body-tertiary py-2">
                     <div class="row flex-between-center">
                         <div class="col-auto"><select class="form-select form-select-sm">
                                 <option>Last 7 days</option>
@@ -550,128 +372,33 @@
                             </select></div>
                         <div class="col-auto"><a class="btn btn-sm btn-falcon-default" href="#!">View All</a></div>
                     </div>
-                </div>
+                </div> --}}
             </div>
         </div>
         <div class="col-lg-5 col-xl-4 ps-lg-2 mb-3">
             <div class="card h-100">
                 <div class="card-header d-flex flex-between-center bg-body-tertiary py-2">
-                    <h6 class="mb-0">Shared Files</h6><a class="py-1 fs-10 font-sans-serif" href="#!">View All</a>
+                    <h6 class="mb-0">Bình luận gần đây</h6><a class="py-1 fs-10 font-sans-serif"
+                        href="{{ route('admin.comment.listComment') }}">Xem tất
+                        cả</a>
                 </div>
                 <div class="card-body pb-0">
-                    <div class="d-flex mb-3 hover-actions-trigger align-items-center">
-                        <div class="file-thumbnail"><img class="border h-100 w-100 object-fit-cover rounded-2"
-                                src="{{ asset('theme/admin/img/products/5-thumb.png') }}" alt="" /></div>
-                        <div class="ms-3 flex-shrink-1 flex-grow-1">
-                            <h6 class="mb-1"><a class="stretched-link text-900 fw-semi-bold"
-                                    href="#!">apple-smart-watch.png</a></h6>
-                            <div class="fs-10"><span class="fw-semi-bold">Antony</span><span
-                                    class="fw-medium text-600 ms-2">Just Now</span></div>
-                            <div class="hover-actions end-0 top-50 translate-middle-y"><a
-                                    class="btn btn-tertiary border-300 btn-sm me-1 text-600" data-bs-toggle="tooltip"
-                                    data-bs-placement="top" title="Download"
-                                    href="{{ asset('theme/admin/img/icons/cloud-download.svg') }}"
-                                    download="download"><img src="{{ asset('theme/admin/img/icons/cloud-download.svg') }}"
-                                        alt="" width="15" /></a><button
-                                    class="btn btn-tertiary border-300 btn-sm me-1 text-600 shadow-none" type="button"
-                                    data-bs-toggle="tooltip" data-bs-placement="top" title="Edit"><img
-                                        src="{{ asset('theme/admin/img/icons/edit-alt.svg') }}" alt=""
-                                        width="15" /></button>
+                    @foreach ($listComment as $item)
+                        <div class="d-flex mb-3 hover-actions-trigger align-items-center">
+                            {{-- <div class="file-thumbnail"><img class="border h-100 w-100 object-fit-cover rounded-2"
+                                    src="{{ asset('theme/admin/img/products/5-thumb.png') }}" alt="" /></div> --}}
+                            <div class="ms-3 flex-shrink-1 flex-grow-1">
+                                <h6 class="mb-1">
+                                    <a class="stretched-link text-900 fw-semi-bold"
+                                        href="{{ route('admin.comment.editComment', ['id' => $item]) }}">{{ Str::limit($item->comments, 35, '...') }}</a>
+                                </h6>
+
                             </div>
                         </div>
-                    </div>
-                    <hr class="text-200" />
-                    <div class="d-flex mb-3 hover-actions-trigger align-items-center">
-                        <div class="file-thumbnail"><img class="border h-100 w-100 object-fit-cover rounded-2"
-                                src="{{ asset('theme/admin/img/products/3-thumb.png') }}" alt="" /></div>
-                        <div class="ms-3 flex-shrink-1 flex-grow-1">
-                            <h6 class="mb-1"><a class="stretched-link text-900 fw-semi-bold"
-                                    href="#!">iphone.jpg</a></h6>
-                            <div class="fs-10"><span class="fw-semi-bold">Antony</span><span
-                                    class="fw-medium text-600 ms-2">Yesterday at 1:30 PM</span></div>
-                            <div class="hover-actions end-0 top-50 translate-middle-y"><a
-                                    class="btn btn-tertiary border-300 btn-sm me-1 text-600" data-bs-toggle="tooltip"
-                                    data-bs-placement="top" title="Download"
-                                    href="{{ asset('theme/admin/img/icons/cloud-download.svg') }}"
-                                    download="download"><img
-                                        src="{{ asset('theme/admin/img/icons/cloud-download.svg') }}" alt=""
-                                        width="15" /></a><button
-                                    class="btn btn-tertiary border-300 btn-sm me-1 text-600 shadow-none" type="button"
-                                    data-bs-toggle="tooltip" data-bs-placement="top" title="Edit"><img
-                                        src="{{ asset('theme/admin/img/icons/edit-alt.svg') }}" alt=""
-                                        width="15" /></button>
-                            </div>
-                        </div>
-                    </div>
-                    <hr class="text-200" />
-                    <div class="d-flex mb-3 hover-actions-trigger align-items-center">
-                        <div class="file-thumbnail"><img class="img-fluid"
-                                src="{{ asset('theme/admin/img/icons/zip.png') }}" alt="" /></div>
-                        <div class="ms-3 flex-shrink-1 flex-grow-1">
-                            <h6 class="mb-1"><a class="stretched-link text-900 fw-semi-bold" href="#!">Falcon
-                                    v1.8.2</a></h6>
-                            <div class="fs-10"><span class="fw-semi-bold">Jane</span><span
-                                    class="fw-medium text-600 ms-2">27 Sep at 10:30 AM</span></div>
-                            <div class="hover-actions end-0 top-50 translate-middle-y"><a
-                                    class="btn btn-tertiary border-300 btn-sm me-1 text-600" data-bs-toggle="tooltip"
-                                    data-bs-placement="top" title="Download"
-                                    href="{{ asset('theme/admin/img/icons/cloud-download.svg') }}"
-                                    download="download"><img
-                                        src="{{ asset('theme/admin/img/icons/cloud-download.svg') }}" alt=""
-                                        width="15" /></a><button
-                                    class="btn btn-tertiary border-300 btn-sm me-1 text-600 shadow-none" type="button"
-                                    data-bs-toggle="tooltip" data-bs-placement="top" title="Edit"><img
-                                        src="{{ asset('theme/admin/img/icons/edit-alt.svg') }}" alt=""
-                                        width="15" /></button>
-                            </div>
-                        </div>
-                    </div>
-                    <hr class="text-200" />
-                    <div class="d-flex mb-3 hover-actions-trigger align-items-center">
-                        <div class="file-thumbnail"><img class="border h-100 w-100 object-fit-cover rounded-2"
-                                src="{{ asset('theme/admin/img/products/2-thumb.png') }}" alt="" /></div>
-                        <div class="ms-3 flex-shrink-1 flex-grow-1">
-                            <h6 class="mb-1"><a class="stretched-link text-900 fw-semi-bold"
-                                    href="#!">iMac.jpg</a></h6>
-                            <div class="fs-10"><span class="fw-semi-bold">Rowen</span><span
-                                    class="fw-medium text-600 ms-2">23 Sep at 6:10 PM</span></div>
-                            <div class="hover-actions end-0 top-50 translate-middle-y"><a
-                                    class="btn btn-tertiary border-300 btn-sm me-1 text-600" data-bs-toggle="tooltip"
-                                    data-bs-placement="top" title="Download"
-                                    href="{{ asset('theme/admin/img/icons/cloud-download.svg') }}"
-                                    download="download"><img
-                                        src="{{ asset('theme/admin/img/icons/cloud-download.svg') }}" alt=""
-                                        width="15" /></a><button
-                                    class="btn btn-tertiary border-300 btn-sm me-1 text-600 shadow-none" type="button"
-                                    data-bs-toggle="tooltip" data-bs-placement="top" title="Edit"><img
-                                        src="{{ asset('theme/admin/img/icons/edit-alt.svg') }}" alt=""
-                                        width="15" /></button>
-                            </div>
-                        </div>
-                    </div>
-                    <hr class="text-200" />
-                    <div class="d-flex mb-3 hover-actions-trigger align-items-center">
-                        <div class="file-thumbnail"><img class="img-fluid"
-                                src="{{ asset('theme/admin/img/icons/docs.png') }}" alt="" /></div>
-                        <div class="ms-3 flex-shrink-1 flex-grow-1">
-                            <h6 class="mb-1"><a class="stretched-link text-900 fw-semi-bold"
-                                    href="#!">functions.php</a></h6>
-                            <div class="fs-10"><span class="fw-semi-bold">John</span><span
-                                    class="fw-medium text-600 ms-2">1 Oct at 4:30 PM</span></div>
-                            <div class="hover-actions end-0 top-50 translate-middle-y"><a
-                                    class="btn btn-tertiary border-300 btn-sm me-1 text-600" data-bs-toggle="tooltip"
-                                    data-bs-placement="top" title="Download"
-                                    href="{{ asset('theme/admin/img/icons/cloud-download.svg') }}"
-                                    download="download"><img
-                                        src="{{ asset('theme/admin/img/icons/cloud-download.svg') }}" alt=""
-                                        width="15" /></a><button
-                                    class="btn btn-tertiary border-300 btn-sm me-1 text-600 shadow-none" type="button"
-                                    data-bs-toggle="tooltip" data-bs-placement="top" title="Edit"><img
-                                        src="{{ asset('theme/admin/img/icons/edit-alt.svg') }}" alt=""
-                                        width="15" /></button>
-                            </div>
-                        </div>
-                    </div>
+                        <hr class="text-200" />
+                    @endforeach
+
+
                 </div>
             </div>
         </div>
@@ -680,8 +407,8 @@
         <div class="col-md-6 col-xxl-3 pe-md-2 mb-3 mb-xxl-0">
             <div class="card">
                 <div class="card-header d-flex flex-between-center bg-body-tertiary py-2">
-                    <h6 class="mb-0">Active Users</h6>
-                    <div class="dropdown font-sans-serif btn-reveal-trigger"><button
+                    <h6 class="mb-0">Khách hàng mới</h6>
+                    {{-- <div class="dropdown font-sans-serif btn-reveal-trigger"><button
                             class="btn btn-link text-600 btn-sm dropdown-toggle dropdown-caret-none btn-reveal"
                             type="button" id="dropdown-active-user" data-bs-toggle="dropdown" data-boundary="viewport"
                             aria-haspopup="true" aria-expanded="false"><span
@@ -692,98 +419,46 @@
                             <div class="dropdown-divider"></div><a class="dropdown-item text-danger"
                                 href="#!">Remove</a>
                         </div>
-                    </div>
+                    </div> --}}
                 </div>
                 <div class="card-body py-2">
-                    <div class="d-flex align-items-center position-relative mb-3">
-                        <div class="avatar avatar-2xl status-online">
-                            <img class="rounded-circle" src="{{ asset('theme/admin/img/team/1.jpg') }}"
-                                alt="" />
+                    @foreach ($listUser as $item)
+                        <div class="d-flex align-items-center position-relative mb-3">
+                            <div class="avatar avatar-2xl">
+                                <img class="rounded-circle" src="{{ asset($item->user_image) }}" alt="" />
+                            </div>
+                            <div class="flex-1 ms-3">
+                                <h6 class="mb-0 fw-semi-bold"><a class="stretched-link text-900"
+                                        href="{{ route('admin.users.show', ['id' => $item->id]) }}">{{ $item->full_name }}</a>
+                                </h6>
+                                <p class="text-500 fs-11 mb-0">Khách hàng</p>
+                            </div>
                         </div>
-                        <div class="flex-1 ms-3">
-                            <h6 class="mb-0 fw-semi-bold"><a class="stretched-link text-900"
-                                    href="pages/user/profile.html">Emma Watson</a></h6>
-                            <p class="text-500 fs-11 mb-0">Admin</p>
-                        </div>
-                    </div>
-                    <div class="d-flex align-items-center position-relative mb-3">
-                        <div class="avatar avatar-2xl status-online">
-                            <img class="rounded-circle" src="{{ asset('theme/admin/img/team/2.jpg') }}"
-                                alt="" />
-                        </div>
-                        <div class="flex-1 ms-3">
-                            <h6 class="mb-0 fw-semi-bold"><a class="stretched-link text-900"
-                                    href="pages/user/profile.html">Antony Hopkins</a></h6>
-                            <p class="text-500 fs-11 mb-0">Moderator</p>
-                        </div>
-                    </div>
-                    <div class="d-flex align-items-center position-relative mb-3">
-                        <div class="avatar avatar-2xl status-away">
-                            <img class="rounded-circle" src="{{ asset('theme/admin/img/team/3.jpg') }}"
-                                alt="" />
-                        </div>
-                        <div class="flex-1 ms-3">
-                            <h6 class="mb-0 fw-semi-bold"><a class="stretched-link text-900"
-                                    href="pages/user/profile.html">Anna Karinina</a></h6>
-                            <p class="text-500 fs-11 mb-0">Editor</p>
-                        </div>
-                    </div>
-                    <div class="d-flex align-items-center position-relative mb-3">
-                        <div class="avatar avatar-2xl status-offline">
-                            <img class="rounded-circle" src="{{ asset('theme/admin/img/team/4.jpg') }}"
-                                alt="" />
-                        </div>
-                        <div class="flex-1 ms-3">
-                            <h6 class="mb-0 fw-semi-bold"><a class="stretched-link text-900"
-                                    href="pages/user/profile.html">John Lee</a></h6>
-                            <p class="text-500 fs-11 mb-0">Admin</p>
-                        </div>
-                    </div>
-                    <div class="d-flex align-items-center position-relative false">
-                        <div class="avatar avatar-2xl status-offline">
-                            <img class="rounded-circle" src="{{ asset('theme/admin/img/team/5.jpg') }}"
-                                alt="" />
-                        </div>
-                        <div class="flex-1 ms-3">
-                            <h6 class="mb-0 fw-semi-bold"><a class="stretched-link text-900"
-                                    href="pages/user/profile.html">Rowen Atkinson</a></h6>
-                            <p class="text-500 fs-11 mb-0">Editor</p>
-                        </div>
-                    </div>
+                    @endforeach
+
+
                 </div>
                 <div class="card-footer bg-body-tertiary p-0"><a class="btn btn-sm btn-link d-block w-100 py-2"
-                        href="app/social/followers.html">All active users<span
+                        href="{{ route('admin.users.index') }}">Xem tất cả<span
                             class="fas fa-chevron-right ms-1 fs-11"></span></a></div>
             </div>
         </div>
         <div class="col-md-6 col-xxl-3 ps-md-2 order-xxl-1 mb-3 mb-xxl-0">
             <div class="card h-100">
                 <div class="card-header bg-body-tertiary d-flex flex-between-center py-2">
-                    <h6 class="mb-0">Bandwidth Saved</h6>
-                    <div class="dropdown font-sans-serif btn-reveal-trigger"><button
-                            class="btn btn-link text-600 btn-sm dropdown-toggle dropdown-caret-none btn-reveal"
-                            type="button" id="dropdown-bandwidth-saved" data-bs-toggle="dropdown"
-                            data-boundary="viewport" aria-haspopup="true" aria-expanded="false"><span
-                                class="fas fa-ellipsis-h fs-11"></span></button>
-                        <div class="dropdown-menu dropdown-menu-end border py-2"
-                            aria-labelledby="dropdown-bandwidth-saved"><a class="dropdown-item" href="#!">View</a><a
-                                class="dropdown-item" href="#!">Export</a>
-                            <div class="dropdown-divider"></div><a class="dropdown-item text-danger"
-                                href="#!">Remove</a>
-                        </div>
-                    </div>
+                    <h6 class="mb-0">Số lượng bài viết</h6>
                 </div>
                 <div class="card-body d-flex flex-center flex-column">
                     <!-- Find the JS file for the following chart at: src/js/charts/echarts/bandwidth-saved.js--><!-- If you are not using gulp based workflow, you can find the transpiled code at: public/assets/js/theme.js-->
-                    <div class="echart-bandwidth-saved" data-echart-responsive="true"></div>
+
                     <div class="text-center mt-3">
                         <h6 class="fs-9 mb-1"><span class="fas fa-check text-success me-1"
-                                data-fa-transform="shrink-2"></span>35.75 GB saved</h6>
-                        <p class="fs-10 mb-0">38.44 GB total bandwidth</p>
+                                data-fa-transform="shrink-2"></span>{{ $coutPost }} bài viết công khai</h6>
+                        {{-- <p class="fs-10 mb-0">38.44 GB total bandwidth</p> --}}
                     </div>
                 </div>
                 <div class="card-footer bg-body-tertiary py-2">
-                    <div class="row flex-between-center">
+                    {{-- <div class="row flex-between-center">
                         <div class="col-auto"><select class="form-select form-select-sm">
                                 <option>Last 6 Months</option>
                                 <option>Last Year</option>
@@ -791,41 +466,286 @@
                             </select></div>
                         <div class="col-auto"><a class="fs-10 font-sans-serif" href="#!">Help</a>
                         </div>
-                    </div>
+                    </div> --}}
+                    <div class="card-footer bg-body-tertiary p-0"><a class="btn btn-sm btn-link d-block w-100 py-2"
+                            href="{{ route('admin.posts.list') }}">Xem tất cả<span
+                                class="fas fa-chevron-right ms-1 fs-11"></span></a></div>
                 </div>
             </div>
         </div>
         <div class="col-xxl-6 px-xxl-2">
-            <div class="card h-100">
-                <div class="card-header bg-body-tertiary py-2">
-                    <div class="row flex-between-center">
-                        <div class="col-auto">
-                            <h6 class="mb-0">Top Products</h6>
-                        </div>
-                        <div class="col-auto d-flex"><a class="btn btn-link btn-sm me-2" href="#!">View Details</a>
-                            <div class="dropdown font-sans-serif btn-reveal-trigger"><button
-                                    class="btn btn-link text-600 btn-sm dropdown-toggle dropdown-caret-none btn-reveal"
-                                    type="button" id="dropdown-top-products" data-bs-toggle="dropdown"
-                                    data-boundary="viewport" aria-haspopup="true" aria-expanded="false"><span
-                                        class="fas fa-ellipsis-h fs-11"></span></button>
-                                <div class="dropdown-menu dropdown-menu-end border py-2"
-                                    aria-labelledby="dropdown-top-products"><a class="dropdown-item"
-                                        href="#!">View</a><a class="dropdown-item" href="#!">Export</a>
-                                    <div class="dropdown-divider"></div><a class="dropdown-item text-danger"
-                                        href="#!">Remove</a>
-                                </div>
-                            </div>
-                        </div>
+            <div class="card h-lg-100 overflow-hidden">
+                <div class="card-body p-0">
+                    <div class="table-responsive scrollbar">
+                        <table class="table table-dashboard mb-0 table-borderless fs-10 border-200">
+                            <thead class="bg-body-tertiary">
+                                <tr>
+                                    <th class="text-900">5 tài khoản đặt nhiều nhất</th>
+                                    <th class="text-900 text-end">Số lượng đơn</th>
+                                    <th class="text-900 pe-x1 text-end" style="width: 8rem">Tổng tiền
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($bestCustomers as $item)
+                                    <tr class="border-bottom border-200">
+                                        <td>
+                                            <div class="d-flex align-items-center position-relative">
+                                                {{-- <img
+                                                    class="rounded-1 border border-200" src="{{ $item->image_avatar }}"
+                                                    width="60" alt="" /> --}}
+                                                <div class="flex-1 ms-3">
+                                                    <h6 class="mb-1 fw-semi-bold"><a class="text-1100 stretched-link"
+                                                            href="{{ route('admin.users.show', ['id' => $item->id]) }}">{{ $item->full_name }}</a>
+                                                    </h6>
+                                                    <p class="fw-semi-bold mb-0 text-500">{{ $item->email }}</p>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="align-middle text-end fw-semi-bold">{{ $item->total_orders }}</td>
+                                        <td class="align-middle text-end fw-semi-bold">{{ number_format($item->total_spend, 0, ',', '.') }} VNĐ</td>
+                                        {{-- <td class="align-middle pe-x1">
+                                            <div class="d-flex align-items-center">
+                                                <div class="progress me-3 rounded-3 bg-200"
+                                                    style="height: 5px; width:80px;" role="progressbar"
+                                                    aria-valuenow="39" aria-valuemin="0" aria-valuemax="100">
+                                                    <div class="progress-bar rounded-pill" style="width: 39%;"></div>
+                                                </div>
+                                                <div class="fw-semi-bold ms-2">39%</div>
+                                            </div>
+                                        </td> --}}
+                                    </tr>
+                                @endforeach
+
+
+                            </tbody>
+                        </table>
                     </div>
                 </div>
-                <div class="card-body h-100">
-                    <!-- Find the JS file for the following chart at: src/js/charts/echarts/top-products.js--><!-- If you are not using gulp based workflow, you can find the transpiled code at: public/assets/js/theme.js-->
-                    <div class="echart-bar-top-products h-100" data-echart-responsive="true"></div>
-                </div>
+                {{-- <div class="card-footer bg-body-tertiary py-2">
+                    <div class="row flex-between-center">
+                        <div class="col-auto"><select class="form-select form-select-sm">
+                                <option>Last 7 days</option>
+                                <option>Last Month</option>
+                                <option>Last Year</option>
+                            </select></div>
+                        <div class="col-auto"><a class="btn btn-sm btn-falcon-default" href="#!">View All</a></div>
+                    </div>
+                </div> --}}
             </div>
         </div>
     </div>
 @endsection
 @section('js-setting')
     <script src="{{ asset('theme/admin/vendors/echarts/echarts.min.js') }}"></script>
+    <script src="{{ asset('theme/admin/js/echarts-example.js') }}"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            echartsBasicBarChartInit();
+            marketShareInit();
+        });
+
+        function echartsBasicBarChartInit() {
+            var $barChartEl = document.querySelector('.echart-basic-bar-chart-example');
+            if ($barChartEl) {
+                // Get options from data attribute
+                var userOptions = utils.getData($barChartEl, 'options');
+                var chart = window.echarts.init($barChartEl);
+                var months = ['T1', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'T8', 'T9',
+                    'T10', 'T11', 'T12'
+                ];
+                var data = @json($salesData); // Ensure this is an array of numbers
+
+                // Custom tooltip formatter function to format values as VND
+                var tooltipFormatter = function(params) {
+                    if (params && params.length > 0) {
+                        var month = months[params[0].dataIndex]; // Get the month from the data index
+                        var value = params[0].value; // Get the value for the corresponding month
+
+                        // Debugging: Log the value to check its type
+                        console.log('Value:', value, 'Type:', typeof value);
+
+                        // Ensure value is a number
+                        if (typeof value === 'number') {
+                            return month + ': ' + value.toLocaleString('vi-VN', {
+                                style: 'currency',
+                                currency: 'VND'
+                            }); // Format the value as VND
+                        } else {
+                            return month + ': ' + value; // Fallback if not a number
+                        }
+                    }
+                    return '';
+                };
+
+                var getDefaultOptions = function getDefaultOptions() {
+                    return {
+                        tooltip: {
+                            trigger: 'axis',
+                            padding: [7, 10],
+                            backgroundColor: utils.getGrays()['100'],
+                            borderColor: utils.getGrays()['300'],
+                            textStyle: {
+                                color: utils.getGrays()['1100']
+                            },
+                            borderWidth: 1,
+                            formatter: tooltipFormatter, // Use the custom formatter
+                            transitionDuration: 0,
+                            axisPointer: {
+                                type: 'none'
+                            }
+                        },
+                        xAxis: {
+                            type: 'category',
+                            data: months,
+                            axisLine: {
+                                lineStyle: {
+                                    color: utils.getGrays()['300'],
+                                    type: 'solid'
+                                }
+                            },
+                            axisTick: {
+                                show: false
+                            },
+                            axisLabel: {
+                                color: utils.getGrays()['400'],
+                                formatter: function(value) {
+                                    return value; // Keep the full month label
+                                },
+                                margin: 15
+                            },
+                            splitLine: {
+                                show: false
+                            }
+                        },
+                        yAxis: {
+                            type: 'value',
+                            boundaryGap: true,
+                            axisLabel: {
+                                show: true,
+                                color: utils.getGrays()['400'],
+                                margin: 15,
+                                formatter: function(value) {
+                                    return value.toLocaleString('vi-VN', {
+                                        style: 'currency',
+                                        currency: 'VND'
+                                    }); // Format Y-axis labels as VND
+                                }
+                            },
+                            splitLine: {
+                                show: true,
+                                lineStyle: {
+                                    color: utils.getGrays()['200']
+                                }
+                            },
+                            axisTick: {
+                                show: false
+                            },
+                            axisLine: {
+                                show: false
+                            },
+                            min: 600
+                        },
+                        series: [{
+                            type: 'bar',
+                            name: 'Total',
+                            data: data,
+                            lineStyle: {
+                                color: utils.getColor('primary')
+                            },
+                            itemStyle: {
+                                color: utils.getColor('primary'),
+                                barBorderRadius: [3, 3, 0, 0]
+                            },
+                            showSymbol: false,
+                            symbol: 'circle',
+                            smooth: false,
+                            hoverAnimation: true
+                        }],
+                        grid: {
+                            right: '3%',
+                            left: '10%',
+                            bottom: '10%',
+                            top: '5%'
+                        }
+                    };
+                };
+
+                echartSetOption(chart, userOptions, getDefaultOptions);
+            }
+        }
+
+        function marketShareInit() {
+            var ECHART_MARKET_SHARE = '.echart-market-share';
+            var $echartMarketShare = document.querySelector(ECHART_MARKET_SHARE);
+            if ($echartMarketShare) {
+                var userOptions = utils.getData($echartMarketShare, 'options');
+                var chart = window.echarts.init($echartMarketShare);
+                var getDefaultOptions = function getDefaultOptions() {
+                    return {
+                        color: [utils.getColors().success, utils.getColors().danger, utils.getGrays()[300]],
+                        tooltip: {
+                            trigger: 'item',
+                            padding: [7, 10],
+                            backgroundColor: utils.getGrays()['100'],
+                            borderColor: utils.getGrays()['300'],
+                            textStyle: {
+                                color: utils.getGrays()['1100']
+                            },
+                            borderWidth: 1,
+                            transitionDuration: 0,
+                            formatter: function formatter(params) {
+                                return "<strong>".concat(params.data.name, ":</strong> ").concat(params.percent,
+                                    "%");
+                            }
+                        },
+                        position: function position(pos, params, dom, rect, size) {
+                            return getPosition(pos, params, dom, rect, size);
+                        },
+                        legend: {
+                            show: false
+                        },
+                        series: [{
+                            type: 'pie',
+                            radius: ['100%', '87%'],
+                            avoidLabelOverlap: false,
+                            hoverAnimation: false,
+                            itemStyle: {
+                                borderWidth: 2,
+                                borderColor: utils.getColor('gray-100')
+                            },
+                            label: {
+                                normal: {
+                                    show: false,
+                                    position: 'center',
+                                    textStyle: {
+                                        fontSize: '20',
+                                        fontWeight: '500',
+                                        color: utils.getGrays()['100']
+                                    }
+                                },
+                                emphasis: {
+                                    show: false
+                                }
+                            },
+                            labelLine: {
+                                normal: {
+                                    show: false
+                                }
+                            },
+                            data: [{
+                                value: {{ $successfulMonthOrders }},
+                                name: 'Thành Công'
+                            }, {
+                                value: {{ $cancelledMonthOrders }},
+                                name: 'Thất Bại'
+                            }, ]
+                        }]
+                    };
+                };
+                echartSetOption(chart, userOptions, getDefaultOptions);
+            }
+        };
+    </script>
 @endsection

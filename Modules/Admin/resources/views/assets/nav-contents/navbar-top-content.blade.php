@@ -7,7 +7,7 @@
                 src="{{ asset('theme/admin/img/icons/spot-illustrations/falcon.png') }}" alt=""
                 width="40" /><span class="font-sans-serif text-primary">falcon</span></div>
     </a>
-    <ul class="navbar-nav align-items-center d-none d-lg-block">
+    {{-- <ul class="navbar-nav align-items-center d-none d-lg-block">
         <li class="nav-item">
             <div class="search-box" data-list='{"valueNames":["title"]}'>
                 <form class="position-relative" data-bs-toggle="search" data-bs-display="static">
@@ -133,7 +133,7 @@
                 </div>
             </div>
         </li>
-    </ul>
+    </ul> --}}
     <ul class="navbar-nav navbar-nav-icons ms-auto flex-row align-items-center">
         <li class="nav-item ps-2 pe-0">
             <div class="dropdown theme-control-dropdown">

@@ -101,6 +101,9 @@
                                                 placeholder="Nhập mật khẩu" name="password" tabindex="0"
                                                 value="" required="" />
                                         </div>
+                                        @if (session('error'))
+                                            <label class="form-label text-danger">{{ session('error') }}</label>
+                                        @endif
                                         <div class="row flex-between-center">
                                             <div class="col-auto">
                                                 <div class="form-check mb-0">
