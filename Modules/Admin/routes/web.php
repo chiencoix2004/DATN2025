@@ -60,7 +60,7 @@ Route::get('admin-confirm-mail', [ForgotPasswordController::class, 'confirmMail'
 
 Route::prefix('admin')
     ->as('admin.')
-   // ->middleware('CheckAdmin')
+   ->middleware('CheckAdmin')
     ->group(function () {
         Route::get('/', function () {
             return view('admin::contents.dashboard');
@@ -74,7 +74,8 @@ Route::prefix('admin')
             ->group(function () {
                 Route::get('slider', 'slider')->name('slider');
                 Route::get('list', 'index')->name('list');
-                Route::put('update/{banner}', 'update')->name('update'); // Corrected Route::
+                Route::put('update/{banner}', 'update')->name('update');
+                Route::put('cap-nhat/{banner}', 'cap_nhat')->name('cap_nhat');
                 Route::get('delete/{id}', 'delete')->name('delete');
                 Route::post('add/{position}', 'add')->name('add');
             });
