@@ -59,6 +59,8 @@ class DashboardController extends Controller
         // Đảo ngược mảng để có thứ tự từ tháng 1 đến tháng 12
         $salesData = array_reverse($salesData);
 
+        
+
         // lấy 5 phiếu hõ trợ mới nhất
         $listTicket = CustomerSupport::query()
             ->select('ticket_title', 'ticket_id', 'ticket_status', 'user_id')
@@ -97,9 +99,21 @@ class DashboardController extends Controller
             ->where('status_order', 'Đã nhận hàng')
             ->count();
         
-      
+        $revenueOrder = Order::query()
+            ->whereNot('created_at', null)
+            ->where('status_order', 'Đã nhận hàng')
+            ->sum('total_price');
 
+        $listComment = Comment::query()
+            ->select('id', 'comments')
+            ->orderBy('comment_date', 'desc')
+            ->limit(5)
+            ->get();
         // dd($listTicket);
+
+        $listPending = Order::query()
+        ->where('status_order', 'Chờ xác nhận')
+        ->count();
 
 
 
@@ -120,6 +134,9 @@ class DashboardController extends Controller
                 'totalMonthOrders',
                 'delivering',
                 'received',
+                'revenueOrder',
+                'listComment',
+                'listPending'
             )
         );
     }

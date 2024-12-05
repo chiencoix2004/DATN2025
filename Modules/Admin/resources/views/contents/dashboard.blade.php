@@ -4,44 +4,25 @@
 @endsection
 @section('contents')
     <div class="row g-3 mb-3">
-        <div class="col-md-6 col-xxl-3">
+        <div class="col-md-6 col-xxl-4">
             <div class="card h-md-100 ecommerce-card-min-width">
                 <div class="card-header pb-0">
-                    <h6 class="mb-0 mt-2 d-flex align-items-center">Weekly Sales<span class="ms-1 text-400"
-                            data-bs-toggle="tooltip" data-bs-placement="top"
-                            title="Calculated according to last week's sales"><span class="far fa-question-circle"
-                                data-fa-transform="shrink-1"></span></span></h6>
+                    <h6 class="mb-0 mt-2 d-flex align-items-center">Doanh thu {{ $month }}<span class="ms-1 text-400"
+                            data-bs-toggle="tooltip" data-bs-placement="top" title="Calculated according to last week's sales">
+                            {{-- <span class="far fa-question-circle"
+                                data-fa-transform="shrink-1"></span> --}}
+                        </span></h6>
                 </div>
                 <div class="card-body d-flex flex-column justify-content-end">
                     <div class="row">
                         <div class="col">
-                            <p class="font-sans-serif lh-1 mb-1 fs-5">$47K</p><span
-                                class="badge badge-subtle-success rounded-pill fs-11">+3.5%</span>
+                            <p class="font-sans-serif lh-1 mb-1 fs-5"> {{ number_format($revenue, 0, ',', '.') }} VNĐ
+                            </p>
+                            {{-- <span
+                                class="badge badge-subtle-success rounded-pill fs-11">+3.5%</span> --}}
                         </div>
                         <div class="col-auto ps-0">
-                            <div class="echart-bar-weekly-sales h-100"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-6 col-xxl-3">
-            <div class="card h-md-100">
-                <div class="card-header pb-0">
-                    <h6 class="mb-0 mt-2">Tổng đơn hàng</h6>
-                </div>
-                <div class="card-body d-flex flex-column justify-content-end">
-                    <div class="row justify-content-between">
-                        <div class="col-auto align-self-end">
-                            <div class="fs-5 fw-normal font-sans-serif text-700 lh-1 mb-1">{{number_format($totalMonthOrders, 0, ',', '.')}}</div>
-                            {{-- <span class="badge rounded-pill fs-11 bg-200 text-primary"><span
-                                    class="fas fa-caret-up me-1"></span>13.6%</span> --}}
-                        </div>
-                        <div class="col-auto ps-0 mt-n4">
-                            {{-- <div class="echart-default-total-order"
-                                data-echarts='{"tooltip":{"trigger":"axis","formatter":"{b0} : {c0}"},"xAxis":{"data":["Week 4","Week 5","Week 6","Week 7"]},"series":[{"type":"line","data":[20,40,100,120],"smooth":true,"lineStyle":{"width":3}}],"grid":{"bottom":"2%","top":"2%","right":"10px","left":"10px"}}'
-                                data-echart-responsive="true"></div> --}}
-                                <div class="bg-holder bg-card"
+                            <div class="bg-holder bg-card"
                                 style="background-image:url({{ asset('theme/admin/img/icons/spot-illustrations/corner-3.png') }});">
                             </div>
                         </div>
@@ -49,7 +30,32 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-6 col-xxl-3">
+        <div class="col-md-6 col-xxl-4">
+            <div class="card h-md-100">
+                <div class="card-header pb-0">
+                    <h6 class="mb-0 mt-2">Đơn hàng tháng {{ $month }}</h6>
+                </div>
+                <div class="card-body d-flex flex-column justify-content-end">
+                    <div class="row justify-content-between">
+                        <div class="col-auto align-self-end">
+                            <div class="fs-5 fw-normal font-sans-serif text-700 lh-1 mb-1">
+                                {{ number_format($totalMonthOrders, 0, ',', '.') }}</div>
+                            {{-- <span class="badge rounded-pill fs-11 bg-200 text-primary"><span
+                                    class="fas fa-caret-up me-1"></span>13.6%</span> --}}
+                        </div>
+                        <div class="col-auto ps-0 mt-n4">
+                            {{-- <div class="echart-default-total-order"
+                                data-echarts='{"tooltip":{"trigger":"axis","formatter":"{b0} : {c0}"},"xAxis":{"data":["Week 4","Week 5","Week 6","Week 7"]},"series":[{"type":"line","data":[20,40,100,120],"smooth":true,"lineStyle":{"width":3}}],"grid":{"bottom":"2%","top":"2%","right":"10px","left":"10px"}}'
+                                data-echart-responsive="true"></div> --}}
+                            <div class="bg-holder bg-card"
+                                style="background-image:url({{ asset('theme/admin/img/icons/spot-illustrations/corner-3.png') }});">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 col-xxl-4">
             <div class="card h-md-100">
                 <div class="card-body">
                     <div class="row h-100 justify-content-between g-0">
@@ -79,7 +85,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-6 col-xxl-3">
+        {{-- <div class="col-md-6 col-xxl-3">
             <div class="card h-md-100">
                 <div class="card-header d-flex flex-between-center pb-0">
                     <h6 class="mb-0">Weather</h6>
@@ -118,7 +124,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> --}}
     </div>
     <div class="row g-3 mb-3">
         <div class="col-sm-6 col-md-4">
@@ -127,9 +133,10 @@
                     style="background-image:url({{ asset('theme/admin/img/icons/spot-illustrations/corner-1.png') }});">
                 </div>
                 <div class="card-body position-relative">
-                    <h6>Doanh thu tháng {{$month}}</h6>
+                    <h6>Đơn hàng chờ xác nhận</h6>
                     <div class="display-4 fs-5 mb-2 fw-normal font-sans-serif text-warning"
-                        data-countup='{"endValue":58.386,"decimalPlaces":2,"suffix":"k"}'> {{number_format($revenue, 0, ',', '.')}} VNĐ
+                        data-countup='{"endValue":58.386,"decimalPlaces":2,"suffix":"k"}'>
+                        {{ number_format($listPending, 0, ',', '.') }} 
                     </div>
                     {{-- <a class="fw-semi-bold fs-10 text-nowrap"
                         href="">Chi tiết<span
@@ -143,10 +150,11 @@
                     style="background-image:url({{ asset('theme/admin/img/icons/spot-illustrations/corner-2.png') }});">
                 </div>
                 <div class="card-body position-relative">
-                    <h6>Đơn hàng đang giao tháng {{$month}}</h6>
+                    <h6>Đơn hàng đang giao tháng {{ $month }}</h6>
                     <div class="display-4 fs-5 mb-2 fw-normal font-sans-serif text-info"
-                        data-countup='{"endValue":23.434,"decimalPlaces":2,"suffix":"k"}'>{{number_format($delivering, 0, ',', '.')}}</div>
-                        {{-- <a
+                        data-countup='{"endValue":23.434,"decimalPlaces":2,"suffix":"k"}'>
+                        {{ number_format($delivering, 0, ',', '.') }}</div>
+                    {{-- <a
                         class="fw-semi-bold fs-10 text-nowrap" href="">Chi
                         tiết <span class="fas fa-angle-right ms-1" data-fa-transform="down-1"></span></a> --}}
                 </div>
@@ -158,10 +166,10 @@
                     style="background-image:url({{ asset('theme/admin/img/icons/spot-illustrations/corner-3.png') }});">
                 </div>
                 <div class="card-body position-relative">
-                    <h6>Đơn hàng giao thành công tháng {{$month}}</h6>
+                    <h6>Đơn hàng giao thành công tháng {{ $month }}</h6>
                     <div class="display-4 fs-5 mb-2 fw-normal font-sans-serif"
-                        data-countup='{"endValue":43594,"prefix":"$"}'>{{number_format($received, 0, ',', '.')}}</div>
-                        {{-- <a
+                        data-countup='{"endValue":43594,"prefix":"$"}'>{{ number_format($received, 0, ',', '.') }}</div>
+                    {{-- <a
                         class="fw-semi-bold fs-10 text-nowrap"
                         href="">Chi tiết<span
                             class="fas fa-angle-right ms-1" data-fa-transform="down-1"></span></a> --}}
@@ -369,21 +377,25 @@
         <div class="col-lg-5 col-xl-4 ps-lg-2 mb-3">
             <div class="card h-100">
                 <div class="card-header d-flex flex-between-center bg-body-tertiary py-2">
-                    <h6 class="mb-0">Bình luận gần đây</h6><a class="py-1 fs-10 font-sans-serif" href="#!">Xem tất
+                    <h6 class="mb-0">Bình luận gần đây</h6><a class="py-1 fs-10 font-sans-serif" href="{{ route('admin.comment.listComment') }}">Xem tất
                         cả</a>
                 </div>
                 <div class="card-body pb-0">
+                    @foreach ($listComment as $item)
+                        <div class="d-flex mb-3 hover-actions-trigger align-items-center">
+                            {{-- <div class="file-thumbnail"><img class="border h-100 w-100 object-fit-cover rounded-2"
+                                    src="{{ asset('theme/admin/img/products/5-thumb.png') }}" alt="" /></div> --}}
+                            <div class="ms-3 flex-shrink-1 flex-grow-1">
+                                <h6 class="mb-1">
+                                    <a class="stretched-link text-900 fw-semi-bold"
+                                        href="{{ route('admin.comment.editComment', ['id'=>$item]) }}">{{ Str::limit($item->comments, 35, '...') }}</a>
+                                    </h6>
 
-                    <div class="d-flex mb-3 hover-actions-trigger align-items-center">
-                        <div class="file-thumbnail"><img class="border h-100 w-100 object-fit-cover rounded-2"
-                                src="{{ asset('theme/admin/img/products/5-thumb.png') }}" alt="" /></div>
-                        <div class="ms-3 flex-shrink-1 flex-grow-1">
-                            <h6 class="mb-1"><a class="stretched-link text-900 fw-semi-bold"
-                                    href="#!">apple-smart-watch.png</a></h6>
-
+                            </div>
                         </div>
-                    </div>
-                    <hr class="text-200" />
+                        <hr class="text-200" />
+                    @endforeach
+
 
                 </div>
             </div>
@@ -502,7 +514,7 @@
 @section('js-setting')
     <script src="{{ asset('theme/admin/vendors/echarts/echarts.min.js') }}"></script>
     <script src="{{ asset('theme/admin/js/echarts-example.js') }}"></script>
-    
+
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             echartsBasicBarChartInit();
@@ -711,5 +723,4 @@
             }
         };
     </script>
-
 @endsection
