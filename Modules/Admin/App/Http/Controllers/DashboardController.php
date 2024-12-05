@@ -50,7 +50,8 @@ class DashboardController extends Controller
         $salesData = [];
         for ($i = 0; $i < 12; $i++) {
             $month = Carbon::now()->subMonths($i)->format('Y-m'); // Lấy tháng hiện tại trừ đi i tháng
-            $sales = Order::where('date_create_order', 'like', $month . '%')
+            $sales = Order::where('created_at', 'like', $month . '%')
+                ->where('status_order', 'Đã nhận hàng')
                 ->sum('total_price'); // Tính tổng doanh thu cho tháng đó
 
             $salesData[] = $sales; // Lưu doanh thu theo tháng
@@ -65,7 +66,7 @@ class DashboardController extends Controller
             ->limit(5)
             ->get();
 
-
+        $month = Carbon::now()->format('m');
         $currentMonth = Carbon::now()->format('Y-m');
         // Lấy thống kê đơn hàng cho tháng hiện tại
         $totalMonthOrders = Order::where('created_at', 'like', $currentMonth . '%')
@@ -83,6 +84,21 @@ class DashboardController extends Controller
         $monthCancellationRate = $totalProcessedOrders > 0 ?
             round(($cancelledMonthOrders / $totalProcessedOrders) * 100, 2) : 0;
 
+        // lấy doanh thu tháng hiện tại
+        $revenue = Order::where('created_at', 'like', $currentMonth . '%')
+            ->where('status_order', 'Đã nhận hàng')
+            ->sum('total_price');
+            
+        $delivering = Order::where('created_at', 'like', $currentMonth . '%')
+            ->where('status_order', 'Đang giao hàng')
+            ->count();
+        
+        $received = Order::where('created_at', 'like', $currentMonth . '%')
+            ->where('status_order', 'Đã nhận hàng')
+            ->count();
+        
+      
+
         // dd($listTicket);
 
 
@@ -98,7 +114,12 @@ class DashboardController extends Controller
                 'listTicket',
                 'successfulMonthOrders',
                 'cancelledMonthOrders',
-                'currentMonth'
+                'currentMonth',
+                'month',
+                'revenue',
+                'totalMonthOrders',
+                'delivering',
+                'received',
             )
         );
     }

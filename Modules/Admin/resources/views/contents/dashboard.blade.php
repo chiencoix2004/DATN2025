@@ -28,19 +28,22 @@
         <div class="col-md-6 col-xxl-3">
             <div class="card h-md-100">
                 <div class="card-header pb-0">
-                    <h6 class="mb-0 mt-2">Total Order</h6>
+                    <h6 class="mb-0 mt-2">Tổng đơn hàng</h6>
                 </div>
                 <div class="card-body d-flex flex-column justify-content-end">
                     <div class="row justify-content-between">
                         <div class="col-auto align-self-end">
-                            <div class="fs-5 fw-normal font-sans-serif text-700 lh-1 mb-1">58.4K</div>
-                            <span class="badge rounded-pill fs-11 bg-200 text-primary"><span
-                                    class="fas fa-caret-up me-1"></span>13.6%</span>
+                            <div class="fs-5 fw-normal font-sans-serif text-700 lh-1 mb-1">{{number_format($totalMonthOrders, 0, ',', '.')}}</div>
+                            {{-- <span class="badge rounded-pill fs-11 bg-200 text-primary"><span
+                                    class="fas fa-caret-up me-1"></span>13.6%</span> --}}
                         </div>
                         <div class="col-auto ps-0 mt-n4">
-                            <div class="echart-default-total-order"
+                            {{-- <div class="echart-default-total-order"
                                 data-echarts='{"tooltip":{"trigger":"axis","formatter":"{b0} : {c0}"},"xAxis":{"data":["Week 4","Week 5","Week 6","Week 7"]},"series":[{"type":"line","data":[20,40,100,120],"smooth":true,"lineStyle":{"width":3}}],"grid":{"bottom":"2%","top":"2%","right":"10px","left":"10px"}}'
-                                data-echart-responsive="true"></div>
+                                data-echart-responsive="true"></div> --}}
+                                <div class="bg-holder bg-card"
+                                style="background-image:url({{ asset('theme/admin/img/icons/spot-illustrations/corner-3.png') }});">
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -51,7 +54,7 @@
                 <div class="card-body">
                     <div class="row h-100 justify-content-between g-0">
                         <div class="col-5 col-sm-6 col-xxl pe-2">
-                            <h6 class="mt-1">Tỉ lệ đặt hàng {{ \Carbon\Carbon::now()->format('m/Y') }}</h6>
+                            <h6 class="mt-1">Tỉ lệ đặt hàng tháng {{ \Carbon\Carbon::now()->format('m') }}</h6>
                             <div class="fs-11 mt-3">
                                 <div class="d-flex flex-between-center mb-1">
                                     <div class="d-flex align-items-center"><span class="dot bg-success"></span><span
@@ -68,8 +71,9 @@
                         <div class="col-auto position-relative">
                             <div class="echart-market-share"></div>
                             <div class="position-absolute top-50 start-50 translate-middle text-1100 fs-7">
-                                <span class="fas fa-shopping-cart"></span></div>
-                       
+                                <span class="fas fa-shopping-cart"></span>
+                            </div>
+
                         </div>
                     </div>
                 </div>
@@ -112,6 +116,55 @@
                             <div class="fs-10 text-800">32&deg; / 25&deg;</div>
                         </div>
                     </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row g-3 mb-3">
+        <div class="col-sm-6 col-md-4">
+            <div class="card overflow-hidden" style="min-width: 12rem">
+                <div class="bg-holder bg-card"
+                    style="background-image:url({{ asset('theme/admin/img/icons/spot-illustrations/corner-1.png') }});">
+                </div>
+                <div class="card-body position-relative">
+                    <h6>Doanh thu tháng {{$month}}</h6>
+                    <div class="display-4 fs-5 mb-2 fw-normal font-sans-serif text-warning"
+                        data-countup='{"endValue":58.386,"decimalPlaces":2,"suffix":"k"}'> {{number_format($revenue, 0, ',', '.')}} VNĐ
+                    </div>
+                    {{-- <a class="fw-semi-bold fs-10 text-nowrap"
+                        href="">Chi tiết<span
+                            class="fas fa-angle-right ms-1" data-fa-transform="down-1"></span></a> --}}
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-md-4">
+            <div class="card overflow-hidden" style="min-width: 12rem">
+                <div class="bg-holder bg-card"
+                    style="background-image:url({{ asset('theme/admin/img/icons/spot-illustrations/corner-2.png') }});">
+                </div>
+                <div class="card-body position-relative">
+                    <h6>Đơn hàng đang giao tháng {{$month}}</h6>
+                    <div class="display-4 fs-5 mb-2 fw-normal font-sans-serif text-info"
+                        data-countup='{"endValue":23.434,"decimalPlaces":2,"suffix":"k"}'>{{number_format($delivering, 0, ',', '.')}}</div>
+                        {{-- <a
+                        class="fw-semi-bold fs-10 text-nowrap" href="">Chi
+                        tiết <span class="fas fa-angle-right ms-1" data-fa-transform="down-1"></span></a> --}}
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card overflow-hidden" style="min-width: 12rem">
+                <div class="bg-holder bg-card"
+                    style="background-image:url({{ asset('theme/admin/img/icons/spot-illustrations/corner-3.png') }});">
+                </div>
+                <div class="card-body position-relative">
+                    <h6>Đơn hàng giao thành công tháng {{$month}}</h6>
+                    <div class="display-4 fs-5 mb-2 fw-normal font-sans-serif"
+                        data-countup='{"endValue":43594,"prefix":"$"}'>{{number_format($received, 0, ',', '.')}}</div>
+                        {{-- <a
+                        class="fw-semi-bold fs-10 text-nowrap"
+                        href="">Chi tiết<span
+                            class="fas fa-angle-right ms-1" data-fa-transform="down-1"></span></a> --}}
                 </div>
             </div>
         </div>
@@ -449,6 +502,7 @@
 @section('js-setting')
     <script src="{{ asset('theme/admin/vendors/echarts/echarts.min.js') }}"></script>
     <script src="{{ asset('theme/admin/js/echarts-example.js') }}"></script>
+    
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             echartsBasicBarChartInit();
@@ -584,77 +638,78 @@
                 echartSetOption(chart, userOptions, getDefaultOptions);
             }
         }
+
         function marketShareInit() {
             var ECHART_MARKET_SHARE = '.echart-market-share';
             var $echartMarketShare = document.querySelector(ECHART_MARKET_SHARE);
             if ($echartMarketShare) {
-            var userOptions = utils.getData($echartMarketShare, 'options');
-            var chart = window.echarts.init($echartMarketShare);
-            var getDefaultOptions = function getDefaultOptions() {
-                return {
-                color: [utils.getColors().success, utils.getColors().danger, utils.getGrays()[300]],
-                tooltip: {
-                    trigger: 'item',
-                    padding: [7, 10],
-                    backgroundColor: utils.getGrays()['100'],
-                    borderColor: utils.getGrays()['300'],
-                    textStyle: {
-                    color: utils.getGrays()['1100']
-                    },
-                    borderWidth: 1,
-                    transitionDuration: 0,
-                    formatter: function formatter(params) {
-                    return "<strong>".concat(params.data.name, ":</strong> ").concat(params.percent,
-                        "%");
-                    }
-                },
-                position: function position(pos, params, dom, rect, size) {
-                    return getPosition(pos, params, dom, rect, size);
-                },
-                legend: {
-                    show: false
-                },
-                series: [{
-                    type: 'pie',
-                    radius: ['100%', '87%'],
-                    avoidLabelOverlap: false,
-                    hoverAnimation: false,
-                    itemStyle: {
-                    borderWidth: 2,
-                    borderColor: utils.getColor('gray-100')
-                    },
-                    label: {
-                    normal: {
-                        show: false,
-                        position: 'center',
-                        textStyle: {
-                        fontSize: '20',
-                        fontWeight: '500',
-                        color: utils.getGrays()['100']
-                        }
-                    },
-                    emphasis: {
-                        show: false
-                    }
-                    },
-                    labelLine: {
-                    normal: {
-                        show: false
-                    }
-                    },
-                    data: [{
-                    value: {{ $successfulMonthOrders }},
-                    name: 'Thành Công'
-                    }, {
-                    value: {{ $cancelledMonthOrders }},
-                    name: 'Thất Bại'
-                    },
-                ]
-                }]
+                var userOptions = utils.getData($echartMarketShare, 'options');
+                var chart = window.echarts.init($echartMarketShare);
+                var getDefaultOptions = function getDefaultOptions() {
+                    return {
+                        color: [utils.getColors().success, utils.getColors().danger, utils.getGrays()[300]],
+                        tooltip: {
+                            trigger: 'item',
+                            padding: [7, 10],
+                            backgroundColor: utils.getGrays()['100'],
+                            borderColor: utils.getGrays()['300'],
+                            textStyle: {
+                                color: utils.getGrays()['1100']
+                            },
+                            borderWidth: 1,
+                            transitionDuration: 0,
+                            formatter: function formatter(params) {
+                                return "<strong>".concat(params.data.name, ":</strong> ").concat(params.percent,
+                                    "%");
+                            }
+                        },
+                        position: function position(pos, params, dom, rect, size) {
+                            return getPosition(pos, params, dom, rect, size);
+                        },
+                        legend: {
+                            show: false
+                        },
+                        series: [{
+                            type: 'pie',
+                            radius: ['100%', '87%'],
+                            avoidLabelOverlap: false,
+                            hoverAnimation: false,
+                            itemStyle: {
+                                borderWidth: 2,
+                                borderColor: utils.getColor('gray-100')
+                            },
+                            label: {
+                                normal: {
+                                    show: false,
+                                    position: 'center',
+                                    textStyle: {
+                                        fontSize: '20',
+                                        fontWeight: '500',
+                                        color: utils.getGrays()['100']
+                                    }
+                                },
+                                emphasis: {
+                                    show: false
+                                }
+                            },
+                            labelLine: {
+                                normal: {
+                                    show: false
+                                }
+                            },
+                            data: [{
+                                value: {{ $successfulMonthOrders }},
+                                name: 'Thành Công'
+                            }, {
+                                value: {{ $cancelledMonthOrders }},
+                                name: 'Thất Bại'
+                            }, ]
+                        }]
+                    };
                 };
-            };
-            echartSetOption(chart, userOptions, getDefaultOptions);
+                echartSetOption(chart, userOptions, getDefaultOptions);
             }
         };
     </script>
+
 @endsection
