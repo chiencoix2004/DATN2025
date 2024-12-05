@@ -10,6 +10,7 @@ use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Carbon;
+use App\Models\Shipping;
 use App\Models\OrderDetailModel;
 use App\Models\Wallet;
 use App\Models\Trx_history;
@@ -78,7 +79,77 @@ class MyAccountController extends Controller
             ->with("productVariant.product")
             ->where('order_id', $order->id)->get();
 
-        return response()->json([
+        // Biến chứa dữ liệu vận chuyển
+        $shippingDetails = [];
+        $deliveryDetails = [];
+
+        if ($order->status_order == 'Đang giao hàng') {
+            $shipping = new Shipping();
+            $data_ship = $shipping->getShipping($order->id);
+            $frist_location = $shipping->getOldestShipping($order->id);
+            $last_location = $shipping->getLastUpdateShipping($order->id);
+
+            // Chuẩn bị dữ liệu vận chuyển
+            $shippingDetails = [
+                'history' => $data_ship->map(function ($ship) {
+                    return [
+                        'updated_at' => $ship->updated_at,
+                        'status' => $ship->status,
+                        'location' => $ship->location,
+                    ];
+                }),
+                'first_location' => $frist_location ? [
+                    'location' => $frist_location->location,
+                    'updated_at' => $frist_location->updated_at,
+                ] : null,
+                'last_location' => $last_location ? [
+                    'location' => $last_location->location,
+                    'updated_at' => $last_location->updated_at,
+                ] : null,
+            ];
+
+            // Thêm thông tin giao hàng
+            $deliveryDetails = [
+                'shipping_method' => $order->shipping_method,
+                'order_id' => $order->id,
+                'current_status' => $last_location ? $last_location->status : 'Chưa có cập nhật',
+            ];
+        }
+
+        // return response()->json([
+        //     'id' => $order->id,
+        //     'user_note' => $order->user_note,
+        //     'status' => $order->status_order,
+        //     'items' => $orderItems->map(function ($item) {
+        //         return [
+        //             'name' => $item->product_name,
+        //             'image' => $item->product_avatar,
+        //             'size' => $item->productVariant->size->size_value,
+        //             'color' => $item->productVariant->color->color_value,
+        //             'quantity' => $item->product_quantity,
+        //             'price' => number_format($item->product_price_final, 2),
+        //             'total' => number_format($item->product_quantity * $item->product_price_final, 2)
+        //         ];
+        //     }),
+        //     'grand_total' => number_format($orderItems->sum(function ($item) {
+        //         return $item->product_quantity * $item->product_price_final;
+        //     }), 0, ',', '.') . ' VND',
+        //     'discount' => number_format($order->discount, 0, ',', '.') . ' VND',
+        //     'total' => number_format($order->total_price, 0, ',', '.') . ' VND',
+        //     'shipping' => [
+        //         'name' => $order->ship_user_name,
+        //         'address' => $order->ship_user_address,
+        //         'email' => $order->ship_user_email,
+        //         'phone' => $order->ship_user_phone,
+        //     ],
+        //     'billing' => [
+        //         'status_payment' => $order->status_payment,
+        //         'payment_method' => $order->payment_method,
+        //     ],
+        //     'delivery' => $deliveryDetails,
+        //     'shipping_details' => $shippingDetails,
+        // ]);
+       dd([
             'id' => $order->id,
             'user_note' => $order->user_note,
             'status' => $order->status_order,
@@ -93,7 +164,7 @@ class MyAccountController extends Controller
                     'total' => number_format($item->product_quantity * $item->product_price_final, 2)
                 ];
             }),
-            'grand_total'  => number_format($order->orderItems->sum(function ($item) {
+            'grand_total' => number_format($orderItems->sum(function ($item) {
                 return $item->product_quantity * $item->product_price_final;
             }), 0, ',', '.') . ' VND',
             'discount' => number_format($order->discount, 0, ',', '.') . ' VND',
@@ -108,12 +179,11 @@ class MyAccountController extends Controller
                 'status_payment' => $order->status_payment,
                 'payment_method' => $order->payment_method,
             ],
-            'delivery' => [
-                'shipping_method' => $order->shipping_method,
-                'order_id' => $order->id,
-            ],
+            'delivery' => $deliveryDetails,
+            'shipping_details' => $shippingDetails,
         ]);
     }
+
 
     public function downloadPDF($id)
     {
@@ -142,7 +212,7 @@ class MyAccountController extends Controller
         }
 
         // Tạo PDF sử dụng view và dữ liệu
-        $pdf = app(PDF::class)->loadView('client::emails.order', compact('order', 'orderItems'))->setOptions([
+        $pdf = app(PDF::class)->loadView('client::emails.pdf', compact('order', 'orderItems'))->setOptions([
             'isRemoteEnabled' => true,
             'chroot' => public_path(),
         ]);
@@ -152,7 +222,7 @@ class MyAccountController extends Controller
         $fileName = 'hóa đơn -' . $order->id . '-' . Str::slug($order->user_name) . "-$date" . '.pdf';
 
         // Trả về PDF dưới dạng file tải về
-        return $pdf->download($fileName);
+        return $pdf->stream($fileName);
     }
 
     public function cancelOrder($id)
@@ -382,6 +452,13 @@ class MyAccountController extends Controller
             ->with("productVariant.color")
             ->with("productVariant.product")
             ->where('order_id', $order->id)->get();
+            if($order->status_order == 'Đang giao hàng'){
+                $shipping = new Shipping();
+                $data_ship = $shipping->getShipping($order->id);
+                $frist_location = $shipping->getOldestShipping($order->id);
+                $last_location = $shipping->getLastUpdateShipping($order->id);
+                return view('client::contents.shops.orderDetail', compact('order', 'orderItems','data_ship','frist_location','last_location'));
+            }
 
         return view('client::contents.shops.orderDetail', compact('order', 'orderItems'));
     }
