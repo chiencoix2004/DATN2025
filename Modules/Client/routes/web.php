@@ -33,9 +33,9 @@ use Modules\Client\App\Http\Controllers\ReviewController;
 Route::controller(ClientController::class)
 ->group(function () {
     Route::get('/', 'index')->name('index');
-    Route::post('search', 'search')->name('search');
-    Route::post('shortingseach', 'shortingseach')->name('shortingseach');
-    Route::post('searchprice', 'searchprice')->name('searchprice');
+    Route::get('search', 'search')->name('search');
+    Route::get('shortingseach', 'shortingseach')->name('shortingseach');
+    Route::get('searchprice', 'searchprice')->name('searchprice');
     route::get('seach/category/{id}/{keywd}', 'seachcategory')->name('seachcategory');
 
     route::get(('search/{keywd}'), 'searchget')->name('searchget');
@@ -75,6 +75,7 @@ Route::get('/form-reg', [AuthController::class, 'form_reg'])->name('formReg');
 Route::get('/email/verify/{id}', [VerificationController::class, 'verify'])->name('verification.verify');
 
 
+
 // Route::get('/login', [LoginController::class, 'showLoginForm'])->name('showLoginForm');
 Route::post('/login', [LoginController::class, 'login'])->name('login');
 
@@ -102,7 +103,7 @@ Route::post('/reset-password', [ResetPasswordController::class, 'reset'])->name(
 // đăng nhập với google
 Route::get('auth/google', [LoginController::class, 'redirectToGoogle'])->name('auth.google');
 Route::get('auth/google/callback', [LoginController::class, 'handleGoogleCallback']);
-
+Route::get('map', [ClientController::class, 'map'])->name('map');
 //giỏ hàng
 Route::controller(TicketController::class)
 ->name('ticket.')
@@ -129,4 +130,4 @@ Route::post('/submit-review', [ReviewController::class, 'submitReview'])->name('
 Route::get('/invoice/{id}', [MyAccountController::class, 'invoiceDetail'])->name('client.invoice.show');
 
 Route::post('/send-notification', [CartController::class, 'sendNotification'])->name('send.notification');
-
+route::get('filterproduct', [ShopController::class, 'filterproduct'])->name('filterproduct');

@@ -23,4 +23,8 @@ class Category extends Model
     {
         return $this->hasMany(SubCategory::class);
     }
+    public function listcategory10()
+    {
+        return $this->query()->latest('id')->limit(10)->get();
+    }
 }

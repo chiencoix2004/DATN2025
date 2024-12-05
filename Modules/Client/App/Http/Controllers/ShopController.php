@@ -115,13 +115,85 @@ class ShopController extends Controller
         }
     }
 
+    public function filterproduct(Request $request)
+{
+    // Khởi tạo query cơ bản
+    $query = Product::query();
+
+     //join table
+     $query->join('sub_categories', 'products.sub_category_id', '=', 'sub_categories.id');
+     $query->join('categories', 'sub_categories.category_id', '=', 'categories.id');
+     $query->join('product_variants', 'products.id', '=', 'product_variants.product_id');
+     $query->join('color_attributes', 'product_variants.color_attribute_id', '=', 'color_attributes.id');
+     $query->join('size_attributes', 'product_variants.size_attribute_id', '=', 'size_attributes.id');
+     $query->where(['is_active' => 1]);
+    // Lọc theo giá
+    if ($request->filled('min_price')) {
+        $query->where('productsprice_sale', '>=', $request->min_price);
+    }
+
+    if ($request->filled('max_price')) {
+        $query->where('products.price_sale', '<=', $request->max_price);
+    }
+
+    // Lọc theo danh mục
+    if ($request->filled('categories')) {
+        $query->whereIn('category_id', $request->categories);
+    }
+    if ($request->filled('sub_categories')) {
+        $query->whereIn('sub_categories.id', $request->sub_categories);
+    }
+
+    // Lọc theo màu sắc
+    if ($request->filled('color')) {
+        $query->whereIn('color_attributes.id', $request->color);
+    }
+
+    // Lọc theo kích thước
+    if ($request->filled('size')) {
+        $query->whereIn('size_attributes.id', $request->size);
+    }
+
+    // Sắp xếp theo yêu cầu
+    if ($request->filled('short')) {
+        switch ($request->short) {
+            case 'price_asc':
+                $query->orderBy('products.price_regular', 'asc');
+                break;
+            case 'price_desc':
+                $query->orderBy('products.price_regular', 'desc');
+                break;
+            case 'name_asc':
+                $query->orderBy('products.name', 'asc');
+                break;
+            case 'name_desc':
+                $query->orderBy('products.name', 'desc');
+                break;
+            default:
+                $query->orderBy('products.created_at', 'desc');
+        }
+    }
+
+    // Lấy dữ liệu sau khi lọc
+    $data = $query->paginate(12)->appends($request->query());;
+    $tags = Tag::query()->get();
+    $categories = Category::query()->get();
+    $colors = ColorAttribute::query()->get();
+    $sizes = SizeAttribute::query()->get();
+  //  dd($products);
+
+  return view('client::contents.shops.shopIndex', compact('data', 'tags', 'categories', 'colors', 'sizes'));
+}
+
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit($id)
+    public function showproduct($kwd)
     {
-        return view('client::edit');
+       $product = new Product();
+       $data =  $product->fullproductdetail($kwd);
+       return response()->json($data);
     }
 
     /**

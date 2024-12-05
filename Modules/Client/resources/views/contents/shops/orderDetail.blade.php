@@ -7,6 +7,9 @@
     <link href="{{ Module::asset('wallet:css/icons.min.css') }}" rel="stylesheet" type="text/css" />
     <script src="{{ asset('dataTables/datatables.js') }}"></script>
     <script src="{{ asset('sweetalert2/sweetalert2.all.min.js') }}"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 @endsection
 @section('contents')
     <!-- Begin Kenne's Breadcrumb Area -->
@@ -131,14 +134,79 @@
             </div>
 
             <div class="row mb-3">
-                ô để map
-            </div>
+                @if ($order->status_order == 'Đang giao hàng')
+                    <div class="card-header">
+                        <h4 class="text-center mt-3">Trạng thái giao hàng</h3>
+                    </div>
+                    <div class="card-body">
+                        <!-- Card lồng -->
 
-            <div class="row mb-3">
-                trạng thái vận chuyển carrd comment
-            </div>
+                        <!-- Bản đồ -->
+                        <div class="table-responsive fs-10 mb-3">
+                            <div id="map" style="height: 500px; width: 100%;"></div>
+                        </div>
+                        <!-- Lịch sử giao hàng -->
+                        <div class="mt-2">
+                            <h5 class="text-center">Lịch sử giao hàng</h5>
+                            <div class="card">
+                                <div class="card-body">
+                                    @foreach ($data_ship as $ship)
+                                        <ul class="mb-1">
+                                            <li>
+                                                {{ $ship->updated_at }} - {{ $ship->status }}
+                                            </li>
+                                        </ul>
+                                    @endforeach
+                                </div>
+                            </div>
+                        </div>
 
-            <div class="row mb-5">
+                     @endif
+            </div>
+            <script>
+                @if ($order->status_order == 'Đang giao hàng')
+            document.addEventListener("DOMContentLoaded", function() {
+                // Lấy dữ liệu từ Blade
+                const firstLocation = {
+                    latitude: {{ $frist_location->latitude }},
+                    longitude: {{ $frist_location->longitude }}
+                };
+                const lastLocation = {
+                    latitude: {{ $last_location->latitude }},
+                    longitude: {{ $last_location->longitude }},
+                };
+
+                const routeCoordinates = @json($data_ship->map(fn($item) => ['latitude' => $item->latitude, 'longitude' => $item->longitude]));
+
+                // Khởi tạo bản đồ
+                map = L.map('map').setView([firstLocation.latitude, firstLocation.longitude], 13);
+
+                // Thêm tile layer
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    maxZoom: 19,
+                }).addTo(map);
+
+                // Tạo marker ban đầu
+                deliveryMarker = L.marker([lastLocation.latitude, lastLocation.longitude]) // Gán vào biến toàn cục
+                    .addTo(map)
+                    .bindPopup("{{ $last_location->status }}")
+                    .openPopup();
+
+                // Thêm tuyến ship
+                const coordinates = routeCoordinates.map(coord => [coord.latitude, coord.longitude]);
+                const route = L.polyline(coordinates, {
+                    color: 'blue',
+                    weight: 5,
+                    opacity: 0.7
+                }).addTo(map);
+
+                // Fit bản đồ theo tuyến
+                map.fitBounds(route.getBounds());
+            });
+        @endif
+                </script>
+
+            <div class="row mb-5 mt-3">
                 <h3>Thao tác</h3>
                 <div class="col-md-3 mb-3">
                     <a href="{{ route('orders.downloadPDF', ['id' => $order->id]) }}" class="kenne-btn kenne-btn_sm">In hóa
@@ -174,7 +242,7 @@
             // Kiểm tra xem có query parameter 'email' không
             const urlParams = new URLSearchParams(window.location.search);
             if (urlParams.get('email') === 'true') {
-                const id = {{ $order->id }}; 
+                const id = {{ $order->id }};
 
                 $.ajax({
                     url: '{{ route('send.notification') }}',

@@ -38,7 +38,7 @@ use Artesaos\SEOTools\Facades\SEOTools;
                                     <h5>Lọc bằng giá</h5>
                                 </div>
                                 <div class="price-filter">
-                                    <form action="{{ route('searchprice') }}" method="POST">
+                                    <form action="{{ route('searchprice') }}" method="GET">
                                         @csrf
                                         <div class="mb-3">
                                           <label for="lowPrice" class="form-label">Giá từ:</label>
@@ -128,7 +128,7 @@ use Artesaos\SEOTools\Facades\SEOTools;
                             <div class="product-item-selection_area">
                                 <div class="product-short">
                                     <label class="select-label">Lọc:</label>
-                                   <form action="{{ route('shortingseach') }}" method="POST">
+                                   <form action="{{ route('shortingseach') }}" method="GET">
                                     @csrf
                                     <select name="fliter" id="short" class="nice-select">
                                         <option value="0">Mặc định</option>
@@ -149,15 +149,15 @@ use Artesaos\SEOTools\Facades\SEOTools;
                                 <div class="product-item">
                                     <div class="single-product">
                                         <div class="product-img">
-                                            <a href="single-product.html">
+                                            <a href="{{ route('shop.productDetail', $list->slug) }}">
                                                 <img class="primary-img" src="{{ \Storage::url($list->image_avatar) }}" alt="Kenne's Product Image">
                                                 <img class="secondary-img" src="{{ \Storage::url($list->image_avatar) }}" alt="Kenne's Product Image">
                                             </a>
                                             <span class="sticker">-{{ $list->discount_percent }}%</span>
-                                            <div class="add-actions">
+                                            {{-- <div class="add-actions">
                                                 <ul>
-                                                    {{-- <li class="quick-view-btn" data-bs-toggle="modal" data-bs-target="#exampleModalCenter"><a href="javascript:void(0)" data-bs-toggle="tooltip" data-placement="right" title="Quick View"><i class="ion-ios-search"></i></a>
-                                                    </li> --}}
+                                                    <li class="quick-view-btn" data-bs-toggle="modal" data-bs-target="#exampleModalCenter"><a href="javascript:void(0)" data-bs-toggle="tooltip" data-placement="right" title="Quick View"><i class="ion-ios-search"></i></a>
+                                                    </li>
                                                     <li><a href="wishlist.html" data-bs-toggle="tooltip" data-placement="right" title="Add To Wishlist"><i
                                                             class="ion-ios-heart-outline"></i></a>
                                                     </li>
@@ -167,11 +167,11 @@ use Artesaos\SEOTools\Facades\SEOTools;
                                                     <li><a href="cart.html" data-bs-toggle="tooltip" data-placement="right" title="Add To cart"><i class="ion-bag"></i></a>
                                                     </li>
                                                 </ul>
-                                            </div>
+                                            </div> --}}
                                         </div>
                                         <div class="product-content">
                                             <div class="product-desc_info">
-                                                <h3 class="product-name"><a href="single-product.html">{{ $list->name }}</a></h3>
+                                                <h3 class="product-name"><a href="{{ route('shop.productDetail', $list->slug) }}">{{ $list->name }}</a></h3>
                                                 <div class="price-box">
                                                     <span class="new-price">{{ number_format(round($list->price_sale)) }} ₫</span>
                                                     <span class="old-price">{{ number_format(round($list->price_regular)) }} ₫</span>
@@ -193,7 +193,7 @@ use Artesaos\SEOTools\Facades\SEOTools;
                                 <div class="list-product_item">
                                     <div class="single-product">
                                         <div class="product-img">
-                                            <a href="single-product.html">
+                                            <a href="{{ route('shop.productDetail', $list->slug) }}">
                                                 <img src="{{ \Storage::url($list->image_avatar) }}" alt="huh">
                                             </a>
                                         </div>
@@ -203,7 +203,7 @@ use Artesaos\SEOTools\Facades\SEOTools;
                                                     <span class="new-price">{{ number_format(round($list->price_sale)) }} ₫</span>
                                                     <span class="old-price">{{ number_format(round($list->price_regular)) }} ₫</span>
                                                 </div>
-                                                <h6 class="product-name"><a href="single-product.html">{{ $list->name }}</a></h6>
+                                                <h6 class="product-name"><a href="{{ route('shop.productDetail', $list->slug) }}">{{ $list->name }}</a></h6>
                                                 <div class="rating-box">
                                                     <ul>
                                                         <li><i class="ion-ios-star"></i></li>
@@ -219,10 +219,10 @@ use Artesaos\SEOTools\Facades\SEOTools;
                                                     </p>
                                                 </div>
                                             </div>
-                                            <div class="add-actions">
+                                            {{-- <div class="add-actions">
                                                 <ul>
-                                                    {{-- <li class="quick-view-btn" data-bs-toggle="modal" data-bs-target="#exampleModalCenter"><a href="javascript:void(0)" data-bs-toggle="tooltip" data-placement="top" title="Quick View"><i class="ion-ios-search"></i></a>
-                                                    </li> --}}
+                                                    <li class="quick-view-btn" data-bs-toggle="modal" data-bs-target="#exampleModalCenter"><a href="javascript:void(0)" data-bs-toggle="tooltip" data-placement="top" title="Quick View"><i class="ion-ios-search"></i></a>
+                                                    </li>
                                                     <li><a href="wishlist.html" data-bs-toggle="tooltip" data-placement="top" title="Add To Wishlist"><i
                                                             class="ion-ios-heart-outline"></i></a>
                                                     </li>
@@ -231,12 +231,17 @@ use Artesaos\SEOTools\Facades\SEOTools;
                                                     <li><a href="cart.html" data-bs-toggle="tooltip" data-placement="top" title="Add To cart"><i class="ion-bag"></i></a>
                                                     </li>
                                                 </ul>
-                                            </div>
+                                            </div> --}}
                                         </div>
                                     </div>
                                 </div>
                             </div>
                             @endforeach
+                            <div class="row mt-3">
+                                <div class="col-lg-12">
+                                    {{ $products->links('pagination::bootstrap-5') }}
+                                </div>
+                            </div>
                         </div>
                         {{-- <div class="row">
                             <div class="col-lg-12">

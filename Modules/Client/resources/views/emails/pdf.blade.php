@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Hóa Đơn #{{ $data->id }}</title>
+    <title>Hóa Đơn #{{ $order->id }}</title>
     <style>
         @font-face {
             font-family: 'DejaVu Sans';
@@ -135,9 +135,9 @@
 <body>
     <div class="invoice-container">
         <div class="invoice-header">
-            <h1>Hóa Đơn #{{ $data->id }}</h1>
+            <h1>Hóa Đơn #{{ $order->id }}</h1>
             <div>
-                <strong>Ngày Tạo:</strong> {{ $data->date_create_order }}
+                <strong>Ngày Tạo:</strong> {{ $order->date_create_order }}
             </div>
         </div>
 
@@ -145,23 +145,23 @@
             <div class="invoice-info-block">
                 <h4>Thông Tin Người Nhận</h4>
                 <p>
-                    <strong>Tên:</strong> {{ $data->ship_user_name }}<br>
-                    <strong>Email:</strong> {{ $data->ship_user_email }}<br>
-                    <strong>Điện thoại:</strong> {{ $data->ship_user_phone }}<br>
-                    <strong>Địa chỉ:</strong> {{ $data->ship_user_address }}
+                    <strong>Tên:</strong> {{ $order->ship_user_name }}<br>
+                    <strong>Email:</strong> {{ $order->ship_user_email }}<br>
+                    <strong>Điện thoại:</strong> {{ $order->ship_user_phone }}<br>
+                    <strong>Địa chỉ:</strong> {{ $order->ship_user_address }}
                 </p>
             </div>
             <div class="invoice-info-block">
                 <h4>Thông Tin Thanh Toán</h4>
                 <p>
-                    <strong>Phương thức:</strong> {{ $data->payment_method }}<br>
+                    <strong>Phương thức:</strong> {{ $order->payment_method }}<br>
                     @php
                         $formatter = new NumberFormatter('vi_VN', NumberFormatter::SPELLOUT);
-                        $soTienBangChu = $formatter->format($data->total_price);
+                        $soTienBangChu = $formatter->format($order->total_price);
                         $soTienBangChu = ucfirst($soTienBangChu);
                     @endphp
                     <div class="total-amount">
-                        <strong>Tổng đơn hàng:</strong> {{ number_format($data->total_price, 0, ',', '.') }} VNĐ
+                        <strong>Tổng đơn hàng:</strong> {{ number_format($order->total_price, 0, ',', '.') }} VNĐ
                     </div>
                     <div class="amount-in-words">
                         {{ $soTienBangChu }} đồng.
@@ -186,7 +186,7 @@
                     @php
                         $stt = 1;
                     @endphp
-                    @foreach ($data->orderItems as $itemOrder)
+                    @foreach ($order->orderItems as $itemOrder)
                         <tr>
                             <td>{{ $stt }}</td>
                             <td>
@@ -210,7 +210,7 @@
                     @endforeach
                 </tbody>
                 <tfoot>
-                    {{-- @foreach ($data->orderItems as $itemOrder)
+                    {{-- @foreach ($order->orderItems as $itemOrder)
                         <tr class="tfoot">
                             <th colspan="5" style="text-align: right;">{{ $itemOrder->product_name }}:</th>
                             <td style="text-align: right;">
@@ -222,18 +222,18 @@
                     <tr class="tfoot">
                         <th colspan="5" style="text-align: right;">Ma Khuyen Mai:</th>
                         <td style="text-align: right;">
-                            {{ $data->code_coupon != '' ? $data->code_coupon : 'Khong Ap Dung' }}
+                            {{ $order->code_coupon != '' ? $order->code_coupon : 'Khong Ap Dung' }}
                         </td>
                     </tr>
                     <tr class="tfoot">
                         <th colspan="5" style="text-align: right;">Kieu Giam Gia:</th>
-                        <td style="text-align: right;">{{ $data->discount_type }}</td>
+                        <td style="text-align: right;">{{ $order->discount_type }}</td>
                     </tr> --}}
                     <tr class="tfoot">
                         <th colspan="5" style="text-align: right;">Giam Gia:</th>
                         <td style="text-align: right;">
-                            @if ($data->discount > 0)
-                                {{ $data->discount_type == 'Cố định' ? number_format($data->discount, 0, ',', '.') : $data->discount . '%' }}
+                            @if ($order->discount > 0)
+                                {{ $order->discount_type == 'Cố định' ? number_format($order->discount, 0, ',', '.') : $order->discount . '%' }}
                             @else
                               0 VND
                             @endif
@@ -242,7 +242,7 @@
                     <tr class="tfoot">
                         <th colspan="5" style="text-align: right; border-top: 2px solid #2c3e50;">Tong:</th>
                         <th style="text-align: right; border-top: 2px solid #2c3e50;">
-                            {{ number_format($data->total_price, 0, ',', '.') }} VND
+                            {{ number_format($order->total_price, 0, ',', '.') }} VND
                         </th>
                     </tr>
                 </tfoot>
