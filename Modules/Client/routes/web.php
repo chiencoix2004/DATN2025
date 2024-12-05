@@ -33,9 +33,9 @@ use Modules\Client\App\Http\Controllers\ReviewController;
 Route::controller(ClientController::class)
 ->group(function () {
     Route::get('/', 'index')->name('index');
-    Route::post('search', 'search')->name('search');
-    Route::post('shortingseach', 'shortingseach')->name('shortingseach');
-    Route::post('searchprice', 'searchprice')->name('searchprice');
+    Route::get('search', 'search')->name('search');
+    Route::get('shortingseach', 'shortingseach')->name('shortingseach');
+    Route::get('searchprice', 'searchprice')->name('searchprice');
     route::get('seach/category/{id}/{keywd}', 'seachcategory')->name('seachcategory');
 
     route::get(('search/{keywd}'), 'searchget')->name('searchget');
@@ -130,4 +130,4 @@ Route::post('/submit-review', [ReviewController::class, 'submitReview'])->name('
 Route::get('/invoice/{id}', [MyAccountController::class, 'invoiceDetail'])->name('client.invoice.show');
 
 Route::post('/send-notification', [CartController::class, 'sendNotification'])->name('send.notification');
-
+route::get('filterproduct', [ShopController::class, 'filterproduct'])->name('filterproduct');

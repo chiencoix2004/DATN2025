@@ -53,27 +53,38 @@ class Product extends Model
 
     public function searchproduct($keywd){
         return $this
-        ->join('categories','products.category_id','=','categories.id')
-
+        ->join('sub_categories', 'products.sub_category_id', '=', 'sub_categories.id')
+        ->join('categories', 'sub_categories.category_id', '=', 'categories.id')
+        ->join('product_variants', 'products.id', '=', 'product_variants.product_id')
+        ->join('color_attributes', 'product_variants.color_attribute_id', '=', 'color_attributes.id')
+        ->join('size_attributes', 'product_variants.size_attribute_id', '=', 'size_attributes.id')
         ->where('products.name','like','%'.$keywd.'%')
         ->orWhere('sku','like','%'.$keywd.'%')
         ->orWhere('categories.name','like','%'.$keywd.'%')
         ->select('products.*')
-        ->get();
+        ->paginate(12);
 
 
     }
     function searchproductbyprice($min,$max){
         return $this
-        ->join('categories','products.category_id','=','categories.id')
+        ->join('sub_categories', 'products.sub_category_id', '=', 'sub_categories.id')
+        ->join('categories', 'sub_categories.category_id', '=', 'categories.id')
+        ->join('product_variants', 'products.id', '=', 'product_variants.product_id')
+        ->join('color_attributes', 'product_variants.color_attribute_id', '=', 'color_attributes.id')
+        ->join('size_attributes', 'product_variants.size_attribute_id', '=', 'size_attributes.id')
 
         ->whereBetween('products.price_regular',[$min,$max])
         ->select('products.*')
-        ->get();
+        ->paginate(12);
     }
     function searchproductbycategory($id,$keywd){
         return $this
-        ->join('categories','products.category_id','=','categories.id')
+        ->join('sub_categories', 'products.sub_category_id', '=', 'sub_categories.id')
+       ->join('categories', 'sub_categories.category_id', '=', 'categories.id')
+       ->join('product_variants', 'products.id', '=', 'product_variants.product_id')
+       ->join('color_attributes', 'product_variants.color_attribute_id', '=', 'color_attributes.id')
+       ->join('size_attributes', 'product_variants.size_attribute_id', '=', 'size_attributes.id')
 
         ->where('categories.id',$id)
         ->where(function ($query) use ($keywd) {
@@ -82,25 +93,32 @@ class Product extends Model
                   ->orWhere('categories.name', 'like', '%' . $keywd . '%');
         })
         ->select('products.*')
-        ->get();
+        ->paginate(12);
     }
     function searchproductbytag($id){
         return $this
-        ->join('product_tag','products.id','=','product_tag.product_id')
-        ->join('tags','product_tag.tag_id','=','tags.id')
+        ->join('sub_categories', 'products.sub_category_id', '=', 'sub_categories.id')
+        ->join('categories', 'sub_categories.category_id', '=', 'categories.id')
+        ->join('product_variants', 'products.id', '=', 'product_variants.product_id')
+        ->join('color_attributes', 'product_variants.color_attribute_id', '=', 'color_attributes.id')
+        ->join('size_attributes', 'product_variants.size_attribute_id', '=', 'size_attributes.id')
 
         ->where('tags.id',$id)
         ->select('products.*')
-        ->get();
+        ->paginate(12);
     }
     function searchproductbypriceandcategory($min,$max,$id){
         return $this
-        ->join('categories','products.category_id','=','categories.id')
+        ->join('sub_categories', 'products.sub_category_id', '=', 'sub_categories.id')
+        ->join('categories', 'sub_categories.category_id', '=', 'categories.id')
+        ->join('product_variants', 'products.id', '=', 'product_variants.product_id')
+        ->join('color_attributes', 'product_variants.color_attribute_id', '=', 'color_attributes.id')
+        ->join('size_attributes', 'product_variants.size_attribute_id', '=', 'size_attributes.id')
 
         ->whereBetween('products.price_regular',[$min,$max])
         ->where('categories.id',$id)
         ->select('products.*')
-        ->get();
+        ->paginate(12);
     }
     function searchproductbypriceandtag($min,$max,$id){
         return $this
@@ -110,38 +128,48 @@ class Product extends Model
         ->whereBetween('products.price_regular',[$min,$max])
         ->where('tags.id',$id)
         ->select('products.*')
-        ->get();
+        ->paginate(12);
     }
     function seachproductatoz($keywd){
         return $this
-        ->join('categories','products.category_id','=','categories.id')
+        ->join('sub_categories', 'products.sub_category_id', '=', 'sub_categories.id')
+        ->join('categories as parent_categories', 'sub_categories.category_id', '=', 'parent_categories.id')
+        ->join('product_variants', 'products.id', '=', 'product_variants.product_id')
+        ->join('color_attributes', 'product_variants.color_attribute_id', '=', 'color_attributes.id')
+        ->join('size_attributes', 'product_variants.size_attribute_id', '=', 'size_attributes.id')
 
         ->where(function ($query) use ($keywd) {
             $query->where('products.name', 'like', '%' . $keywd . '%')
                   ->orWhere('products.sku', 'like', '%' . $keywd . '%')
-                  ->orWhere('categories.name', 'like', '%' . $keywd . '%');
+                  ->orWhere('parent_categories.name', 'like', '%' . $keywd . '%');
         })
         ->select('products.*')
         ->orderBy('products.name','asc')
-        ->get();
+        ->paginate(12);
     }
     function seachproductztoa($keywd){
         return $this
-        ->join('categories','products.category_id','=','categories.id')
-
+        ->join('sub_categories', 'products.sub_category_id', '=', 'sub_categories.id')
+        ->join('categories as parent_categories', 'sub_categories.category_id', '=', 'parent_categories.id')
+        ->join('product_variants', 'products.id', '=', 'product_variants.product_id')
+        ->join('color_attributes', 'product_variants.color_attribute_id', '=', 'color_attributes.id')
+        ->join('size_attributes', 'product_variants.size_attribute_id', '=', 'size_attributes.id')
         ->where(function ($query) use ($keywd) {
             $query->where('products.name', 'like', '%' . $keywd . '%')
                   ->orWhere('products.sku', 'like', '%' . $keywd . '%')
-                  ->orWhere('categories.name', 'like', '%' . $keywd . '%');
+                  ->orWhere('parent_categories.name', 'like', '%' . $keywd . '%');
         })
         ->select('products.*')
         ->orderBy('products.name','desc')
-        ->get();
+        ->paginate(12);
     }
     function seachproductrateprice($keywd){
         return $this
-        ->join('categories','products.category_id','=','categories.id')
-
+        ->join('sub_categories', 'products.sub_category_id', '=', 'sub_categories.id')
+        ->join('categories as parent_categories', 'sub_categories.category_id', '=', 'parent_categories.id')
+        ->join('product_variants', 'products.id', '=', 'product_variants.product_id')
+        ->join('color_attributes', 'product_variants.color_attribute_id', '=', 'color_attributes.id')
+        ->join('size_attributes', 'product_variants.size_attribute_id', '=', 'size_attributes.id')
         ->where(function ($query) use ($keywd) {
             $query->where('products.name', 'like', '%' . $keywd . '%')
                   ->orWhere('products.sku', 'like', '%' . $keywd . '%')
@@ -149,7 +177,7 @@ class Product extends Model
         })
         ->select('products.*')
         ->orderBy('products.price_regular','asc')
-        ->get();
+        ->paginate(12);
     }
 
     function searchhint($keywd){
@@ -159,38 +187,48 @@ class Product extends Model
         ->orWhere('description','like','%'.$keywd.'%')
         ->select('name')
         ->limit(5)
-        ->get();
+        ->paginate(12);
     }
     function seachproductpricelowtohigh($keywd){
         return $this
-        ->join('categories','products.category_id','=','categories.id')
-
-        ->where(function ($query) use ($keywd) {
-            $query->where('products.name', 'like', '%' . $keywd . '%')
-                  ->orWhere('products.sku', 'like', '%' . $keywd . '%')
-                  ->orWhere('categories.name', 'like', '%' . $keywd . '%');
-        })
-        ->select('products.*')
-        ->orderBy('products.price_sale','asc')
-        ->get();
+            ->join('sub_categories', 'products.sub_category_id', '=', 'sub_categories.id')
+            ->join('categories as parent_categories', 'sub_categories.category_id', '=', 'parent_categories.id')
+            ->join('product_variants', 'products.id', '=', 'product_variants.product_id')
+            ->join('color_attributes', 'product_variants.color_attribute_id', '=', 'color_attributes.id')
+            ->join('size_attributes', 'product_variants.size_attribute_id', '=', 'size_attributes.id')
+            ->where(function ($query) use ($keywd) {
+                $query->where('products.name', 'like', '%' . $keywd . '%')
+                      ->orWhere('products.sku', 'like', '%' . $keywd . '%')
+                      ->orWhere('parent_categories.name', 'like', '%' . $keywd . '%');
+            })
+            ->select('products.*')
+            ->orderBy('products.price_sale', 'asc')
+            ->paginate(12);
     }
     function seachproductpricehightolow($keywd){
         return $this
-        ->join('categories','products.category_id','=','categories.id')
-
-        ->where(function ($query) use ($keywd) {
-            $query->where('products.name', 'like', '%' . $keywd . '%')
-                  ->orWhere('products.sku', 'like', '%' . $keywd . '%')
-                  ->orWhere('categories.name', 'like', '%' . $keywd . '%');
-        })
-        ->select('products.*')
-        ->orderBy('products.price_sale','desc')
-        ->get();
+            ->join('sub_categories', 'products.sub_category_id', '=', 'sub_categories.id')
+            ->join('categories as parent_categories', 'sub_categories.category_id', '=', 'parent_categories.id')
+            ->join('product_variants', 'products.id', '=', 'product_variants.product_id')
+            ->join('color_attributes', 'product_variants.color_attribute_id', '=', 'color_attributes.id')
+            ->join('size_attributes', 'product_variants.size_attribute_id', '=', 'size_attributes.id')
+            ->where(function ($query) use ($keywd) {
+                $query->where('products.name', 'like', '%' . $keywd . '%')
+                      ->orWhere('products.sku', 'like', '%' . $keywd . '%')
+                      ->orWhere('parent_categories.name', 'like', '%' . $keywd . '%');
+            })
+            ->select('products.*')
+            ->orderBy('products.price_sale', 'desc')
+            ->paginate(12);
     }
     function searchproductprice($keywd, $min, $max) {
+
         return $this
-            ->join('categories', 'products.category_id', '=', 'categories.id')
-            ->join('product_images', 'products.id', '=', 'product_images.product_id')
+        ->join('sub_categories', 'products.sub_category_id', '=', 'sub_categories.id')
+        ->join('categories', 'sub_categories.category_id', '=', 'categories.id')
+        ->join('product_variants', 'products.id', '=', 'product_variants.product_id')
+        ->join('color_attributes', 'product_variants.color_attribute_id', '=', 'color_attributes.id')
+        ->join('size_attributes', 'product_variants.size_attribute_id', '=', 'size_attributes.id')
             ->where(function ($query) use ($keywd) {
                 $query->where('products.name', 'like', '%' . $keywd . '%')
                       ->orWhere('products.sku', 'like', '%' . $keywd . '%')
@@ -198,8 +236,22 @@ class Product extends Model
             })
             ->whereBetween('products.price_sale', [$min, $max])
             ->select('products.*')
-            ->get();
+            ->paginate(12);
     }
 
+    public function fullproductdetail($keywd){
+        return $this
+       ->join('sub_categories', 'products.sub_category_id', '=', 'sub_categories.id')
+       ->join('categories', 'sub_categories.category_id', '=', 'categories.id')
+       ->join('product_variants', 'products.id', '=', 'product_variants.product_id')
+       ->join('color_attributes', 'product_variants.color_attribute_id', '=', 'color_attributes.id')
+       ->join('size_attributes', 'product_variants.size_attribute_id', '=', 'size_attributes.id')
+       ->where(function ($query) use ($keywd) {
+        $query->where('products.name', 'like', '%' . $keywd . '%')
+              ->orWhere('products.sku', 'like', '%' . $keywd . '%')
+              ->orWhere('categories.name', 'like', '%' . $keywd . '%');
+    })
+       ->get();
+    }
 
 }

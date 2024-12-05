@@ -36,7 +36,7 @@
                 </a>
             </div>
             <div class="short-desc">
-                <p>Thời trang Phong cách Việt-Fashion là sự hòa quyện giữa truyền thống và hiện đại của văn hóa Việt. 
+                <p>Thời trang Phong cách Việt-Fashion là sự hòa quyện giữa truyền thống và hiện đại của văn hóa Việt.
                 </p>
             </div>
             {{-- <div class="offcanvas-component">
@@ -111,7 +111,7 @@
             <div class="container">
                 <a href="#" class="btn-close"><i class="ion-android-close"></i></a>
                 <div class="offcanvas-search">
-                    <form action="{{ route('search') }}" method="POST" class="hm-searchbox">
+                    <form action="{{ route('search') }}" method="GET" class="hm-searchbox">
                         @csrf
                         <input type="text" name="keywd" placeholder="Tìm kiếm tại đây ..."
                             onkeyup="searchCustomer()" autocomplete="off" id="searchbar" required>
