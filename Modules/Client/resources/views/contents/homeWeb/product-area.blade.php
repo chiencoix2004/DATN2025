@@ -52,13 +52,6 @@
                                                     <i class="ion-ios-search"></i>
                                                 </a>
                                             </li>
-                                            <li><a href="wishlist.html" data-bs-toggle="tooltip" data-placement="right"
-                                                    title="Thêm vào danh sách yêu thích"><i
-                                                        class="ion-ios-heart-outline"></i></a>
-                                            </li>
-                                            <li><a href="compare.html" data-bs-toggle="tooltip" data-placement="right"
-                                                    title="So sánh sản phẩm"><i class="ion-ios-reload"></i></a>
-                                            </li>
                                         </ul>
                                     </div>
                                 </div>
