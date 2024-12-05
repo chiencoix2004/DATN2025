@@ -1378,103 +1378,103 @@ var echartsWaterFallChartInit = function echartsWaterFallChartInit() {
 /*                             Echarts Bar Chart                             */
 /* -------------------------------------------------------------------------- */
 
-var echartsBasicBarChartInit = function echartsBasicBarChartInit() {
-  var $barChartEl = document.querySelector('.echart-basic-bar-chart-example');
-  if ($barChartEl) {
-    // Get options from data attribute
-    var userOptions = utils.getData($barChartEl, 'options');
-    var chart = window.echarts.init($barChartEl);
-    var months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-    var data = [1272, 1301, 1402, 1216, 1086, 1236, 1219, 1330, 1367, 1416, 1297, 1204];
-    var getDefaultOptions = function getDefaultOptions() {
-      return {
-        tooltip: {
-          trigger: 'axis',
-          padding: [7, 10],
-          backgroundColor: utils.getGrays()['100'],
-          borderColor: utils.getGrays()['300'],
-          textStyle: {
-            color: utils.getGrays()['1100']
-          },
-          borderWidth: 1,
-          formatter: tooltipFormatter,
-          transitionDuration: 0,
-          axisPointer: {
-            type: 'none'
-          }
-        },
-        xAxis: {
-          type: 'category',
-          data: months,
-          axisLine: {
-            lineStyle: {
-              color: utils.getGrays()['300'],
-              type: 'solid'
-            }
-          },
-          axisTick: {
-            show: false
-          },
-          axisLabel: {
-            color: utils.getGrays()['400'],
-            formatter: function formatter(value) {
-              return value.substring(0, 3);
-            },
-            margin: 15
-          },
-          splitLine: {
-            show: false
-          }
-        },
-        yAxis: {
-          type: 'value',
-          boundaryGap: true,
-          axisLabel: {
-            show: true,
-            color: utils.getGrays()['400'],
-            margin: 15
-          },
-          splitLine: {
-            show: true,
-            lineStyle: {
-              color: utils.getGrays()['200']
-            }
-          },
-          axisTick: {
-            show: false
-          },
-          axisLine: {
-            show: false
-          },
-          min: 600
-        },
-        series: [{
-          type: 'bar',
-          name: 'Total',
-          data: data,
-          lineStyle: {
-            color: utils.getColor('primary')
-          },
-          itemStyle: {
-            color: utils.getColor('primary'),
-            barBorderRadius: [3, 3, 0, 0]
-          },
-          showSymbol: false,
-          symbol: 'circle',
-          smooth: false,
-          hoverAnimation: true
-        }],
-        grid: {
-          right: '3%',
-          left: '10%',
-          bottom: '10%',
-          top: '5%'
-        }
-      };
-    };
-    echartSetOption(chart, userOptions, getDefaultOptions);
-  }
-};
+// var echartsBasicBarChartInit = function echartsBasicBarChartInit() {
+//   var $barChartEl = document.querySelector('.echart-basic-bar-chart-example');
+//   if ($barChartEl) {
+//     // Get options from data attribute
+//     var userOptions = utils.getData($barChartEl, 'options');
+//     var chart = window.echarts.init($barChartEl);
+//     var months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+//     var data = [1272, 1301, 1402, 1216, 1086, 1236, 1219, 1330, 1367, 1416, 1297, 1204];
+//     var getDefaultOptions = function getDefaultOptions() {
+//       return {
+//         tooltip: {
+//           trigger: 'axis',
+//           padding: [7, 10],
+//           backgroundColor: utils.getGrays()['100'],
+//           borderColor: utils.getGrays()['300'],
+//           textStyle: {
+//             color: utils.getGrays()['1100']
+//           },
+//           borderWidth: 1,
+//           formatter: tooltipFormatter,
+//           transitionDuration: 0,
+//           axisPointer: {
+//             type: 'none'
+//           }
+//         },
+//         xAxis: {
+//           type: 'category',
+//           data: months,
+//           axisLine: {
+//             lineStyle: {
+//               color: utils.getGrays()['300'],
+//               type: 'solid'
+//             }
+//           },
+//           axisTick: {
+//             show: false
+//           },
+//           axisLabel: {
+//             color: utils.getGrays()['400'],
+//             formatter: function formatter(value) {
+//               return value.substring(0, 3);
+//             },
+//             margin: 15
+//           },
+//           splitLine: {
+//             show: false
+//           }
+//         },
+//         yAxis: {
+//           type: 'value',
+//           boundaryGap: true,
+//           axisLabel: {
+//             show: true,
+//             color: utils.getGrays()['400'],
+//             margin: 15
+//           },
+//           splitLine: {
+//             show: true,
+//             lineStyle: {
+//               color: utils.getGrays()['200']
+//             }
+//           },
+//           axisTick: {
+//             show: false
+//           },
+//           axisLine: {
+//             show: false
+//           },
+//           min: 600
+//         },
+//         series: [{
+//           type: 'bar',
+//           name: 'Total',
+//           data: data,
+//           lineStyle: {
+//             color: utils.getColor('primary')
+//           },
+//           itemStyle: {
+//             color: utils.getColor('primary'),
+//             barBorderRadius: [3, 3, 0, 0]
+//           },
+//           showSymbol: false,
+//           symbol: 'circle',
+//           smooth: false,
+//           hoverAnimation: true
+//         }],
+//         grid: {
+//           right: '3%',
+//           left: '10%',
+//           bottom: '10%',
+//           top: '5%'
+//         }
+//       };
+//     };
+//     echartSetOption(chart, userOptions, getDefaultOptions);
+//   }
+// };
 
 /* -------------------------------------------------------------------------- */
 /*                             Echarts Bar Chart                             */
@@ -6818,7 +6818,7 @@ var echartsStepLineChartInit = function echartsStepLineChartInit() {
 // docReady(echartsLineChartInit);
 docReady(echartsLineAreaChartInit);
 docReady(echartsPieChartInit);
-docReady(echartsBasicBarChartInit);
+// docReady(echartsBasicBarChartInit);
 docReady(echartsDoughnutChartInit);
 docReady(echartsStackedLineChartInit);
 docReady(echartsStackedAreaChartInit);

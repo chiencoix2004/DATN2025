@@ -177,18 +177,71 @@
                             class="fas fa-chevron-right ms-1 fs-11"></span></a></div>
             </div>
         </div>
-        <div class="col-lg-12 ps-lg-2 mb-3">
-            <div class="card h-lg-100">
-                <div class="card-header">
-                    <div class="row flex-between-center">
-                        <div class="col-auto">
-                            <h6 class="mb-0">Doanh thu theo tháng</h6>
+        <div class="col-lg-6 pe-lg-2 mb-3">
+            <div class="card h-lg-100 overflow-hidden">
+                <div class="card-header bg-body-tertiary">
+                    <div class="row align-items-center">
+                        <div class="col">
+                            <h6 class="mb-0">Phiếu hỗ trợ gần đây</h6>
                         </div>
+                        {{-- <div class="col-auto text-center pe-x1"><select class="form-select form-select-sm">
+                                <option>Working Time</option>
+                                <option>Estimated Time</option>
+                                <option>Billable Time</option>
+                            </select></div> --}}
                     </div>
                 </div>
-                <div class="card-body h-100 pe-0">
-                    <!-- Find the JS file for the following chart at: src\js\charts\echarts\total-sales.js--><!-- If you are not using gulp based workflow, you can find the transpiled code at: public\assets\js\theme.js-->
-                    <div class="echart-line-chart-example" style="min-height: 300px;" data-echart-responsive="true">
+                <div class="card-body p-0">
+
+                        <div class="row g-0 align-items-center py-2 position-relative border-bottom border-200">
+                            <div class="col ps-x1 py-1 position-static">
+                                <div class="d-flex align-items-center">
+                                    {{-- <div class="avatar avatar-xl me-3">
+                                        <div class="avatar-name rounded-circle bg-primary-subtle text-dark">
+                                            <span class="fs-9 text-primary">F</span>
+                                        </div>
+                                    </div> --}}
+                                    <div class="flex-1">
+                                        <h6 class="mb-0 d-flex align-items-center"><a class="text-800 stretched-link"
+                                                href="">
+                                                </a>
+                                            {{-- <span
+                                                class="badge rounded-pill ms-2 bg-200 text-primary">38%</span> --}}
+                                        </h6>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col py-1">
+                                <div class="row flex-end-center g-0">
+                                    <div class="col-auto pe-2">
+                                        <span
+                                            class="badge rounded-pill ms-2 bg-200 text-primary"></span>
+                                        <span
+                                            class="badge rounded-pill ms-2 bg-200 text-primary"></span>
+                                    </div>
+                                    {{-- <div class="col-5 pe-x1 ps-2">
+                                        
+                                    </div> --}}
+                                </div>
+                            </div>
+                        </div>
+
+
+                </div>
+                <div class="card-footer bg-body-tertiary p-0"><a class="btn btn-sm btn-link d-block w-100 py-2"
+                        href="{{ route('admin.ticket.index') }}">Xem tất cả<span
+                            class="fas fa-chevron-right ms-1 fs-11"></span></a></div>
+            </div>
+        </div>
+    </div>
+    <div class="row g-0">
+        <div class="col-lg-12 col-xl-12 ps-lg-12 mb-3">
+            <div class="card h-100">
+                <div class="card-header d-flex flex-between-center bg-body-tertiary py-2">
+                    <h6 class="mb-0">Doanh thu theo các tháng</h6>
+                </div>
+                <div class="card-body pb-0">
+                    <div class="echart-basic-bar-chart-example" style="min-height: 300px;" data-echart-responsive="true">
                     </div>
                 </div>
             </div>
@@ -392,25 +445,42 @@
     <script src="{{ asset('theme/admin/js/echarts-example.js') }}"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            echartsLineChartInit();
+            echartsBasicBarChartInit();
         });
 
-        function echartsLineChartInit() {
-            var $lineChartEl = document.querySelector('.echart-line-chart-example');
-            if ($lineChartEl) {
+        function echartsBasicBarChartInit() {
+            var $barChartEl = document.querySelector('.echart-basic-bar-chart-example');
+            if ($barChartEl) {
                 // Get options from data attribute
-                var userOptions = utils.getData($lineChartEl, 'options');
-                var chart = window.echarts.init($lineChartEl);
-                var months = [
-                    'T1', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'T8', 'T9',
+                var userOptions = utils.getData($barChartEl, 'options');
+                var chart = window.echarts.init($barChartEl);
+                var months = ['T1', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'T8', 'T9',
                     'T10', 'T11', 'T12'
                 ];
-                var data = @json($salesData);
-                var _tooltipFormatter2 = function _tooltipFormatter2(params) {
-                    return "\n      <div>\n          <h6 class=\"fs-10 text-700 mb-0\">\n            <span class=\"fas fa-circle me-1\" style='color:"
-                        .concat(params[0].borderColor, "'></span>\n            ").concat(params[0].name, " : ")
-                        .concat(params[0].value, "\n          </h6>\n      </div>\n      ");
+                var data = @json($salesData); // Ensure this is an array of numbers
+
+                // Custom tooltip formatter function to format values as VND
+                var tooltipFormatter = function(params) {
+                    if (params && params.length > 0) {
+                        var month = months[params[0].dataIndex]; // Get the month from the data index
+                        var value = params[0].value; // Get the value for the corresponding month
+
+                        // Debugging: Log the value to check its type
+                        console.log('Value:', value, 'Type:', typeof value);
+
+                        // Ensure value is a number
+                        if (typeof value === 'number') {
+                            return month + ': ' + value.toLocaleString('vi-VN', {
+                                style: 'currency',
+                                currency: 'VND'
+                            }); // Format the value as VND
+                        } else {
+                            return month + ': ' + value; // Fallback if not a number
+                        }
+                    }
+                    return '';
                 };
+
                 var getDefaultOptions = function getDefaultOptions() {
                     return {
                         tooltip: {
@@ -422,11 +492,8 @@
                                 color: utils.getGrays()['1100']
                             },
                             borderWidth: 1,
-                            formatter: _tooltipFormatter2,
+                            formatter: tooltipFormatter, // Use the custom formatter
                             transitionDuration: 0,
-                            position: function position(pos, params, dom, rect, size) {
-                                return getPosition(pos, params, dom, rect, size);
-                            },
                             axisPointer: {
                                 type: 'none'
                             }
@@ -434,10 +501,10 @@
                         xAxis: {
                             type: 'category',
                             data: months,
-                            boundaryGap: false,
                             axisLine: {
                                 lineStyle: {
-                                    color: utils.getGrays()['300']
+                                    color: utils.getGrays()['300'],
+                                    type: 'solid'
                                 }
                             },
                             axisTick: {
@@ -445,8 +512,8 @@
                             },
                             axisLabel: {
                                 color: utils.getGrays()['400'],
-                                formatter: function formatter(value) {
-                                    return value.substring(0, 3);
+                                formatter: function(value) {
+                                    return value; // Keep the full month label
                                 },
                                 margin: 15
                             },
@@ -456,17 +523,23 @@
                         },
                         yAxis: {
                             type: 'value',
-                            splitLine: {
-                                lineStyle: {
-                                    type: 'dashed',
-                                    color: utils.getGrays()['200']
-                                }
-                            },
-                            boundaryGap: false,
+                            boundaryGap: true,
                             axisLabel: {
                                 show: true,
                                 color: utils.getGrays()['400'],
-                                margin: 15
+                                margin: 15,
+                                formatter: function(value) {
+                                    return value.toLocaleString('vi-VN', {
+                                        style: 'currency',
+                                        currency: 'VND'
+                                    }); // Format Y-axis labels as VND
+                                }
+                            },
+                            splitLine: {
+                                show: true,
+                                lineStyle: {
+                                    color: utils.getGrays()['200']
+                                }
                             },
                             axisTick: {
                                 show: false
@@ -477,19 +550,18 @@
                             min: 600
                         },
                         series: [{
-                            type: 'line',
+                            type: 'bar',
+                            name: 'Total',
                             data: data,
-                            itemStyle: {
-                                color: utils.getGrays()['100'],
-                                borderColor: utils.getColor('primary'),
-                                borderWidth: 2
-                            },
                             lineStyle: {
                                 color: utils.getColor('primary')
                             },
+                            itemStyle: {
+                                color: utils.getColor('primary'),
+                                barBorderRadius: [3, 3, 0, 0]
+                            },
                             showSymbol: false,
                             symbol: 'circle',
-                            symbolSize: 10,
                             smooth: false,
                             hoverAnimation: true
                         }],
@@ -501,8 +573,9 @@
                         }
                     };
                 };
+
                 echartSetOption(chart, userOptions, getDefaultOptions);
             }
-        };
+        }
     </script>
 @endsection
