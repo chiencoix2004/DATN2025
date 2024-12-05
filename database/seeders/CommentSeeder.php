@@ -20,7 +20,7 @@ class CommentSeeder extends Seeder
         $productIds = DB::table('products')->pluck('id')->toArray();
 
         if (!empty($userIds) && !empty($productIds)) {
-            for ($i = 1; $i <= 50; $i++) {
+            for ($i = 1; $i <= 3; $i++) {
                 DB::table('comments')->insert([
                     'users_id' => $userIds[array_rand($userIds)], // Chọn ngẫu nhiên users_id
                     'products_id' => $productIds[array_rand($productIds)], // Chọn ngẫu nhiên products_id
