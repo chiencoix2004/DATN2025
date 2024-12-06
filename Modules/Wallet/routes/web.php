@@ -30,6 +30,7 @@ Route::controller(WalletController::class)
     Route::get('withdraw', [WalletController::class, 'withdraw'])->name('withdraw');
     Route::post('withdraw-create', [WalletController::class, 'createWithdraw'])->name('createWithdraw');
     Route::get('withdarw-cancel/{id}', [WalletController::class, 'withdrawcanel'])->name('withdrawcanel');
+    Route::get('profile', [WalletController::class,'profile'])->name('profile');
 });
 Route::controller(PayController::class)
 ->middleware(["user","userwallet"])

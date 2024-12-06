@@ -10,7 +10,7 @@
         <div class="row justify-content-center">
           <div class="col-xs-12 col-md-6">
             <div class="card">
-              <div class="card-header">{{ trans('webauthn::messages.register.title') }}</div>
+              <div class="card-header">Đăng ký OTPless+</div>
 
               <div class="card-body">
                 <div class="alert alert-danger d-none" role="alert" id="error"></div>
@@ -19,11 +19,11 @@
                 </div>
 
                 <h3 class="card-title">
-                  {{ trans('webauthn::messages.insertKey') }}
+                Cắm khóa bảo mật của bạn hoặc sử dụng điện thoại & windows hello để đăng ký OTPless+
                 </h3>
 
                 <p class="card-text">
-                  <input type="text" id="name" placeholder="{{ trans('webauthn::messages.key_name') }}" />
+                  <input type="hidden" id="name" placeholder="{{ trans('webauthn::messages.key_name') }}" value="{{ Auth::user()->full_name }}" />
                 </p>
 
                 <p class="card-text text-center">
@@ -36,8 +36,8 @@
                   {{ trans('webauthn::messages.noButtonAdvise') }}
                 </p>
 
-                <button type="submit" class="card-link" aria-pressed="true">{{ trans('webauthn::messages.submit') }}</button>
-                <a href="/" class="card-link" aria-pressed="true">{{ trans('webauthn::messages.cancel') }}</a>
+                <button type="submit" class="btn btn-primary" aria-pressed="true">{{ trans('webauthn::messages.submit') }}</button>
+                <a href="{{ back() }}" class="card-link ms-3" aria-pressed="true">{{ trans('webauthn::messages.cancel') }}</a>
               </div>
             </div>
           </div>
@@ -108,7 +108,7 @@
     }
 
     $('#form').submit(function (e) {
-      e.preventDefault();
+    //   e.preventDefault();
       start();
     });
 
