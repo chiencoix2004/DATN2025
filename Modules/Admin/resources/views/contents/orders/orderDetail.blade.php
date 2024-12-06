@@ -199,7 +199,7 @@
         </div>
     </div>
     <div class="card mb-3">
-        @if ($data->status_order == 'Đang giao hàng')
+        @if ($data->status_order == 'Đang giao hàng' && isset($frist_location))
             <div class="card-header">
                 <h3 class="text-center mt-3">Trạng thái giao hàng</h3>
             </div>
@@ -253,7 +253,11 @@
             </div>
         @else
             <div class="card-body">
+                @if(isset($frist_location))
                 <p class="text-danger">Đơn hàng chưa được xác nhận hoặc đã hủy</p>
+                @else
+                <p class="text-danger">Đơn hàng chưa được tạo vận đơn</p>
+                @endif
                 @if (!in_array($data->status_order, ["Đơn hàng bị hủy", "Đặt lại hàng"]))
                     <button type="button" class="btn btn-primary btn-lg" data-bs-toggle="modal" data-bs-target="#modalId2">
                         Tạo đơn vận mới
@@ -293,7 +297,7 @@
         let deliveryMarker; // Khai báo biến toàn cục
         let map; // Khai báo biến toàn cục
 
-        @if ($data->status_order == 'Đang giao hàng')
+        @if (isset($frist_location))
             document.addEventListener("DOMContentLoaded", function() {
                 // Lấy dữ liệu từ Blade
                 const firstLocation = {
