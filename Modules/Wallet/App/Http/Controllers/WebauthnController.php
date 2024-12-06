@@ -37,7 +37,8 @@ class WebauthnController extends Controller
         ];
         return view('wallet::webauthn.register', compact('publicKey'));
     }
-    public function store(Request $request){
+    public function store(Request $request)
+    {
         $webautndata = [
             'user_id' => Auth::user()->id,
             'credentialId' => $request->id,
@@ -51,13 +52,20 @@ class WebauthnController extends Controller
             'trustPath' => "trustPath",
         ];
         $webauthn = new Webautn($webautndata);
-        try {
-            $webauthn->CreateAuthKey($webautndata);
-            return back()->with('success', 'Đăng ký thành công');
-        } catch (\Exception $e) {
-           dd($e->getMessage());
+        $keys = $webauthn->getUserKey(Auth::user()->id);
+
+        if ($keys->isNotEmpty()) {
+            return response()->json(['error' => 'Khóa của bạn đã được đăng ký và không thể thay đổi'], 400);
+        } else {
+            try {
+                $webauthn->CreateAuthKey($webautndata);
+                return response()->json(['callback' => route('wallet.profile')]);
+            } catch (\Exception $e) {
+                return response()->json(['error' => $e->getMessage()], 500);
+            }
         }
     }
+
 
     public function login()
     {
@@ -83,18 +91,19 @@ class WebauthnController extends Controller
         // Lấy các khóa đã đăng ký cho người dùng
         $webauthn = new Webautn();
         $keys = $webauthn->getUserKey(Auth::user()->id);
-        if(isset($request->id)){
-            //start check
-            if($request->rawId == $keys->first()->credentialPublicKey){
-                return true;
+            if(isset($request->id)){
+                //start check
+                if($request->rawId == $keys->first()->credentialPublicKey){
+                    return true;
+                } else {
+                    return false;
+                }
             } else {
                 return false;
             }
-        } else {
-            return false;
-        }
-
     }
+
+
 
     public function forgetkey(Request $request){
      $webauthn = new Webautn();

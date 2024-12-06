@@ -95,10 +95,12 @@
             ...data,
             name: $('#name').val(),
           })
-            .then(function (response) {
-              if (response.data.callback) {
+                    .then(function (response) {
+            if (response.data.callback) {
                 window.location.href = response.data.callback;
-              }
+            } else {
+                console.error('No callback URL provided in response.');
+            }
             })
             .catch(function (error) {
               console.log(error);

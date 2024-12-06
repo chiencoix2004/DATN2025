@@ -198,6 +198,62 @@
             </div>
         </div>
     </div>
+        <div class="card mb-3">
+            <div class="card-body">
+                <div class="table-responsive fs-10">
+                    <table class="table table-striped border-bottom">
+                        <thead class="bg-200">
+                            <tr>
+                                <th class="text-900 border-0">Sản phẩm</th>
+                                <th class="text-900 border-0 text-center">Ảnh</th>
+                                <th class="text-900 border-0 text-center">Option</th>
+                                <th class="text-900 border-0 text-center">Số lượng</th>
+                                <th class="text-900 border-0 text-end">Đơn giá (VNĐ)</th>
+                                <th class="text-900 border-0 text-end">Tổng</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($data->orderItems as $itemOrder)
+                                <tr class="border-200">
+                                    <td class="align-middle">
+                                        <h6 class="mb-0 text-nowrap">{{ $itemOrder->product_name }}</h6>
+                                        <p class="mb-0">{{ $itemOrder->product_sku }}</p>
+                                    </td>
+                                    <td class="align-middle text-center">
+                                        @php
+                                            $url = $itemOrder->product_avatar;
+                                            if (!\Str::contains($url, 'http')) {
+                                                $url = \Storage::url($url);
+                                            }
+                                        @endphp
+                                        <img src="{{ $url }}" alt="....." width="50px">
+                                    </td>
+                                    <td class="align-middle text-start">
+                                        @php
+                                            $prdV = \App\Models\ProductVariant::query()->findOrFail(
+                                                $itemOrder->product_variant_id,
+                                            );
+                                        @endphp
+                                        Màu: <span class="badge bg"
+                                            style="background-color: {{ $prdV->color['color_value'] }};">{{ $prdV->color['color_value'] }}</span>
+                                        <br>
+                                        Kích thước: <strong>{{ $prdV->size['size_value'] }}</strong>
+                                    </td>
+                                    <td class="align-middle text-center">{{ $itemOrder->product_quantity }}</td>
+                                    <td class="align-middle text-end">
+                                        {{ number_format((int) $itemOrder->product_price_final, 0, ',', '.') }}
+                                    </td>
+                                    <td class="align-middle text-end">
+                                        {{ number_format((int) $itemOrder->product_price_final * $itemOrder->product_quantity, 0, ',', '.') }}
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
     <div class="card mb-3">
         @if ($data->status_order == 'Đang giao hàng')
             <div class="card-header">
