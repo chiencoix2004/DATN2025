@@ -24,7 +24,7 @@ class OrderController extends Controller
      */
     public function listOrder()
     {
-        $data = Order::query()->paginate(10);
+        $data = Order::query()->orderby("id","desc")->paginate(20);
         $statusOrder = Order::STATUS_ORDER;
         $statusPayment = Order::STATUS_PAYMENT;
         return view('admin::contents.orders.orderlist', compact('data', 'statusOrder', 'statusPayment'));
