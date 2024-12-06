@@ -25,12 +25,12 @@
                                     <div class="card-body">
                                         <div class="row gx-2">
                                             <div class="col-12 mb-3">
-                                                <img class="img-fluid" src="{{ Storage::url($profile->user_image) }}" width ="200" alt="">
+                                                <img src="{{ Storage::url($profile->user_image) }}" class="img-fluid" width ="200" alt="Hình ảnh">
                                             </div>
                                         </div>  
                                         <div class="row gx-2">
                                             <div class="col-12 mb-3">
-                                                <input class="form-control" name="user_image" id="user_image" type="file" />
+                                                <input class="form-control" name="user_image" id="user_image" type="file"  />
                                             </div>
                                         </div>    
                                     </div>
@@ -48,30 +48,51 @@
                                             <div class="col-12 mb-3">
                                                 <label for="form-control" class="form-label">Họ và tên</label>
                                                 <input class="form-control" name="full_name" id="full_name" type="text" value="{{ $profile->full_name }}" />
+                                                    @error('full_name')
+                                                        <p class="text-danger">{{ $message }}</p>
+                                                    @enderror
                                             </div>
                                             <div class="col-12 mb-3">
                                                 <label for="form-control" class="form-label">Email</label>
                                                 <input class="form-control" name="email" id="email" type="email" value="{{ $profile->email }}" />
+                                                    @error('email')
+                                                        <p class="text-danger">{{ $message }}</p>
+                                                    @enderror
                                             </div>
                                             <div class="col-12 mb-3">
                                                 <label for="form-control" class="form-label">Số điện thoại</label>
                                                 <input class="form-control" name="phone" id="phone" type="text" value="{{ $profile->phone }}" />
+                                                    @error('phone')
+                                                        <p class="text-danger">{{ $message }}</p>
+                                                    @enderror
                                             </div>
                                             <div class="col-12 mb-3">
                                                 <label for="form-control" class="form-label">Địa chỉ</label>
-                                                <input class="form-control" name="address" id="address" type="text" value="{{ $profile->address }}" />
+                                                <input class="form-control" name="address" id="address" type="text" value="{{ $profile->address }}" />    
+                                                    @error('address')
+                                                        <p class="text-danger">{{ $message }}</p>
+                                                    @enderror
                                             </div>
                                             <div class="col-12 mb-3">
                                                 <label for="form-control" class="form-label">Mật khẩu hiện tại</label>
                                                 <input class="form-control"  name="current_password" id="password" type="password" />
+                                                    @error('current_password')
+                                                        <p class="text-danger">{{ $message }}</p>  
+                                                    @enderror
                                             </div>
                                             <div class="col-12 mb-3">
                                                 <label for="form-control" class="form-label">Mật khẩu mới</label>
                                                 <input class="form-control" name="new_password" id="new_password" type="password" />
+                                                    @error('new_password')
+                                                        <p class="text-danger">{{ $message }}</p>
+                                                    @enderror
                                             </div>
                                             <div class="col-12 mb-3">
                                                 <label for="form-control" class="form-label">Xác nhận mật khẩu mới</label>
                                                 <input class="form-control" name="new_password_confirmation" id="new_password_confirmation" type="password" />
+                                                    @error('new_password_confirmation')
+                                                        <p class="text-danger">{{ $message }}</p>
+                                                    @enderror
                                             </div>
 
                                         </div>

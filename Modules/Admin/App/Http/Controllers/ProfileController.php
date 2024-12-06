@@ -116,10 +116,9 @@ class ProfileController extends Controller
             $rules['new_password_confirmation'] = 'required_with:new_password|same:new_password';
         }
 
-        $validator = Validator::make($request->all(), $rules, $messages);
+        $request->validate($rules, $messages);
         
         $profile = User::find($request->id);
-
 
         if ($request->new_password != null) {
             $profile->password = Hash::make($request->new_password);
@@ -132,25 +131,37 @@ class ProfileController extends Controller
         if ($request->filled('address')) {
             $profile->address = $request->address;
         }
+         // Xử lý hình ảnh
+         $filePath = $profile->user_image; // Giữ nguyên hình ảnh cũ nếu có
+         if ($request->hasFile('user_image')) {
+             $filePath = $request->file('user_image')->store('/users_image', 'public');
 
-        $imageOld = $profile->user_image;
-        $data = $request->except("img");
-        if ($request->hasFile('img') && $request->file('img')->isValid()) {
-            $data['user_image'] = $this->uploadFile($request->file('img'));
-            $res = User::find($request->id)->update($data);
-            if ($res) {
-                if (isset($imageOld) && Storage::disk('public')->exists($imageOld)) {
-                    Storage::disk('public')->delete($imageOld);
-                }
-                return redirect()->route('admin.profile.index', ['id' => $request->id])->with('success', 'Sửa thành công');
-            }
-        } else {
-            $data['user_image'] = $imageOld;
-            $res = User::find($request->id)->update($data);
-            if ($res) {
-                return redirect()->route('admin.profile.index', ['id' => $request->id])->with('success', 'Sửa thành công');
-            }
-        }
+             // Xóa hình cũ nếu có hình ảnh mới đẩy lên
+             if ($profile->user_image && Storage::disk('public')->exists($profile->user_image)) {
+                 Storage::disk('public')->delete($profile->user_image);
+             }
+         }
+
+         $profile->user_image = $filePath;
+
+        // $imageOld = $profile->user_image;
+        // $data = $request->except("user_image");
+        // if ($request->hasFile('user_image') && $request->file('user_image')->isValid()) {
+        //     $data['user_image'] = $this->uploadFile($request->file('user_image'));
+        //     $res = User::find($request->id)->update($data);
+        //     if ($res) {
+        //         if (isset($imageOld) && Storage::disk('public')->exists($imageOld)) {
+        //             Storage::disk('public')->delete($imageOld);
+        //         }
+        //         return redirect()->route('admin.profile.index', ['id' => $request->id])->with('success', 'Sửa thành công');
+        //     }
+        // } else {
+        //     $data['user_image'] = $imageOld;
+        //     $res = User::find($request->id)->update($data);
+        //     if ($res) {
+        //         return redirect()->route('admin.profile.index', ['id' => $request->id])->with('success', 'Sửa thành công');
+        //     }
+        // }
 
         $profile->save();
 

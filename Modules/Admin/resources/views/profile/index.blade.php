@@ -76,6 +76,7 @@
                 @endswitch
             </option>
           </h5>
+          <h6 class="mb-2 ">{{ $profile->user_name }}</h6>
           <a href="{{ route('admin.profile.edit', ['id' => $profile->id]) }}" class="btn btn-falcon-primary btn-sm">Sửa thông tin</a>
           {{-- <button class="btn btn-falcon-default btn-sm px-3 ms-2" type="button">Message</button> --}}
           <div class="border-bottom border-dashed my-4 d-lg-none"></div>
@@ -110,7 +111,7 @@
       </div>
     </div>
   </div>
-  <div class="row g-0">
+  {{-- <div class="row g-0">
     <div class="col-lg-8 pe-lg-2">
       <div class="card mb-3">
         <div class="card-header bg-body-tertiary">
@@ -164,7 +165,7 @@
         </div>
       </div>
     </div>
-  </div>
+  </div> --}}
 @endsection
 @section('js-setting')
     <script src="{{ asset('theme/admin/vendors/echarts/echarts.min.js') }}"></script>
