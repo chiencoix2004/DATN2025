@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use Modules\Wallet\App\Http\Controllers\EkycController;
 use Modules\Wallet\App\Http\Controllers\PayController;
 use Modules\Wallet\App\Http\Controllers\WalletController;
+use Modules\Wallet\App\Http\Controllers\WebauthnController;
 
 /*
 |--------------------------------------------------------------------------
@@ -41,6 +42,7 @@ Route::controller(PayController::class)
     Route::post("charge", [PayController::class,"chagre"])->name("charge");
     Route::get("resendotp/{id}", [PayController::class,"resendtotp"])->name("resendtotp");
     Route::get('errorpayment', [PayController::class, 'errorpayment'])->name('errorpayment');
+    Route::get('cancel/{id}', [PayController::class,'cancel'])->name('cancel');
 
 });
 
@@ -58,5 +60,17 @@ Route::controller(EkycController::class)
     Route::get("step2skip", [EkycController::class,"step2skip"])->name("step2skip");
     Route::get("step3", [EkycController::class,"verifytos"])->name("verifytos");
     Route::post("submit", [EkycController::class,"registerwallet"])->name("registerwallet");
+
+});
+
+Route::controller(WebauthnController::class)
+->middleware(["user","userwallet"])
+->name("wallet.webautn.")
+->prefix("wallet/webauthn")
+->group(function(){
+    Route::get("/", [WebauthnController::class,"index"])->name("index");
+    Route::post("register", [WebauthnController::class,"store"])->name("store");
+    Route::get("login", [WebauthnController::class,"login"])->name("login");
+    route::post("checkvar", [WebauthnController::class,"checkvar"])->name("checkvar");
 
 });

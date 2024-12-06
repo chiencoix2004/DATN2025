@@ -164,6 +164,9 @@
     </style>
     <script src="{{ asset('sweetalert2/sweetalert2.all.min.js') }}"></script>
     <link rel="stylesheet" href="{{ asset('sweetalert2/sweetalert2.min.css') }}">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 @endsection
 @section('contents')
     <!-- Begin Kenne's Breadcrumb Area -->
@@ -172,10 +175,10 @@
             <div class="breadcrumb-content">
                 <h2 style="margin-top: 30px;">Thời trang Phong cách Việt</h2>
                 <ul>
-                
+
                             {{-- <li><a href="{{ route('home') }}">{{ sesssion('success') }}</a></li> --}}
                             <li class="active">Tài khoản</li>
-                    
+
                 </ul>
             </div>
         </div>
@@ -337,11 +340,11 @@
                                             </div>
                                             <div class="row mb-4">
                                                 <h4 class="header-title mb-3">google map</h4>
-                                                
+
                                             </div>
                                             <div class="row mb-4">
                                                 <h4 class="header-title mb-3">trạng thái vận chuyển</h4>
-                                                
+
                                             </div>
 
                                         </div>
@@ -366,13 +369,13 @@
                                         <div class="col">
                                             <h4 class="small-title">Địa chỉ thanh toán</h4>
                                             <address>
-                                                1234 Heaven Stress, Beverly Hill OldYork UnitedState of Lorem
+                                                {{ Auth::user()->address == null ? 'Chưa cập nhật!' : Auth::user()->address }}
                                             </address>
                                         </div>
                                         <div class="col">
                                             <h4 class="small-title">Địa chỉ giao hàng</h4>
                                             <address>
-                                                1234 Heaven Stress, Beverly Hill OldYork UnitedState of Lorem
+                                                {{ Auth::user()->address == null ? 'Chưa cập nhật!' : Auth::user()->address }}
                                             </address>
                                         </div>
                                     </div>
@@ -392,9 +395,33 @@
                                             </div>
                                             <div class="single-input">
                                                 <label for="account-details-address">Địa Chỉ*</label>
-                                                <input type="text" name="address" id="account-details-address"
+                                                <input type="text" name="address"id="address"
                                                     value="{{ $user->address }}">
                                                 <div class="error-message" id="error-address"></div>
+                                                <ul id="results" style="list-style: none; padding: 0; margin: 10px 0;"></ul>
+                                                <script>
+                                                    $('#address').on('input', function () {
+                                                      const query = $(this).val();
+                                                      if (query.length > 2) {
+                                                          // Gửi yêu cầu tới Nominatim API
+                                                          $.getJSON(`https://nominatim.openstreetmap.org/search?format=json&q=${query}`, function (data) {
+                                                          $('#results').empty();
+                                                          data.forEach(place => {
+                                                              $('#results').append(`<li data-lat="${place.lat}" data-lon="${place.lon}" style="cursor: pointer; padding: 5px; border: 1px solid #ccc;">${place.display_name}</li>`);
+                                                          });
+                                                          });
+                                                      }
+                                                      });
+
+                                                      // Khi người dùng chọn địa chỉ từ danh sách
+                                                      $('#results').on('click', 'li', function () {
+
+                                                      // Xóa danh sách kết quả
+                                                      $('#results').empty();
+                                                      $('#address').val($(this).text());
+                                                      });
+
+                                                  </script>
                                             </div>
                                             <div class="single-input">
                                                 <label for="account-details-phone">Số điện thoại*</label>
@@ -521,8 +548,8 @@
         </div>
     </div>
     <!-- Brand Area End Here -->
-    
-   
+
+
 @endsection
 @section('js-setting')
     <script>

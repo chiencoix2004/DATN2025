@@ -204,7 +204,7 @@ class PayController extends Controller
                  $link = route('handlewallet') . $querybuilder;
                 return redirect($link);
             } catch (Exception $e) {
-                dd($e->getMessage());
+               // dd($e->getMessage());
                 $querybuilder = "?status=failed&order_id=" . $decoded_data['order_id'] . "&ammount=" . $decoded_data['ammount']. "&user_id=" . $decoded_data['user_id'];
                 $link = route('handlewallet') . $querybuilder;
                 return redirect($link);
@@ -243,6 +243,25 @@ class PayController extends Controller
             }
 
         }
+    }
+    public function cancel($id){
+        if (empty($id)) {
+            return response()->json(['error' => 'missing token'], 400);
+        }
+
+        $decoded_data = json_decode(base64_decode($id), true);
+        $querybuilder = "?status=failed&order_id=" . $decoded_data['order_id'] . "&ammount=" . $decoded_data['ammount']. "&user_id=" . $decoded_data['user_id'];
+        $link = route('handlewallet') . $querybuilder;
+
+        if (json_last_error() !== JSON_ERROR_NONE) {
+            return response()->json(['error' => 'invalid token'], 400);
+        }
+        $time = now()->timestamp;
+        if($decoded_data['date_created'] < $time){
+            return response()->json(['error' => 'Expried session'], 400);
+        }
+
+        return redirect($link);
     }
 
 }
