@@ -16,7 +16,7 @@ class ProductSeeder extends Seeder
     public function run(): void
     {
         $sub = DB::table('sub_categories')->pluck('id')->toArray();
-        for ($i = 1; $i <= 200; $i++) {
+        for ($i = 1; $i <= 3; $i++) {
             DB::table('products')->insert([
                 'sub_category_id' => $sub[array_rand($sub)],
                 'name' => "Áo Cộc $i",
