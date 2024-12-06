@@ -7,6 +7,7 @@ use App\Models\Trx_history;
 use App\Models\Trx_history_detail;
 use App\Models\Vnpay;
 use App\Models\Wallet;
+use App\Models\Webautn;
 use App\Models\Withdraw;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -313,5 +314,19 @@ class WalletController extends Controller
         } catch(Exception $e){
             dd($e);
         }
+    }
+
+    public function profile(){
+        $wallet = new Wallet();
+        $user_id = auth()->user()->id;
+        $data = $wallet->getWallet($user_id);
+        $wallet_account_id = $data->wallet_account_id;
+        $trx_history = new Trx_history();
+        $trx_data = $trx_history->get20trx($wallet_account_id);
+        $withdraw = new Withdraw();
+        $webauthn = new Webautn();
+        $webauth_data = $webauthn->getUserKey(auth()->user()->id);
+        $withdraw_toal = $withdraw->countAmmountPed($wallet_account_id);
+        return view('wallet::profile.list   ', compact('data', 'trx_data', 'withdraw_toal','webauth_data'));
     }
 }

@@ -40,6 +40,10 @@ return [
             'driver' => 'session',
             'provider' => 'users',
         ],
+        'webauthn' => [
+            'driver' => 'session',
+            'provider' => 'webauthn_users',
+        ],
     ],
 
     /*
@@ -62,6 +66,10 @@ return [
     'providers' => [
         'users' => [
             'driver' => 'eloquent',
+            'model' => App\Models\User::class,
+        ],
+        'webauthn_users' => [
+           'driver' => 'webauthn',
             'model' => App\Models\User::class,
         ],
 

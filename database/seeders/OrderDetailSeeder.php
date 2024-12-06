@@ -18,13 +18,13 @@ class OrderDetailSeeder extends Seeder
         $productNames = DB::table('products')->pluck('name')->toArray();
         $productSkus = DB::table('products')->pluck('sku')->toArray();
 
-        for ($i = 1; $i <= 30; $i++) {
+        for ($i = 1; $i <= 3; $i++) {
             for ($j = 1; $j <= 2; $j++) {
                 $randomKey = array_rand($productIds);
                 DB::table('order_details')->insert([
                     'order_id' => $i,
                     'product_id' => $productIds[$randomKey],
-                    'product_variant_id' => rand(1, 20),
+                    'product_variant_id' => rand(1, 2),
                     'product_name' => $productNames[$randomKey],
                     'product_sku' => $productSkus[$randomKey],
                     'product_avatar' => "https://product.hstatic.net/1000392326/product/fas33679__k__968k_-_fjd31170__b__998k__1__f3577eb828354bdd9dd4dd48d632ea87_master.jpg",
