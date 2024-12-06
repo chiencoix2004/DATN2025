@@ -121,4 +121,26 @@ class WebauthnController extends Controller
            dd($e->getMessage());
         }
     }
+
+    public function action(Request $request){
+        if($request->filled('enable')){
+            $webauthn = new Webautn();
+            $data = $webauthn->getUserKey(Auth::user()->id);
+            if($data->isNotEmpty()){
+                return back()->with('error','Khóa của bạn đã được đăng ký và không thể thay đổi');
+            } else {
+                return  redirect()->route('wallet.webautn.index');
+            }
+        } else {
+            try{
+                $webauthn = new Webautn();
+                $data =  $webauthn->deletekey(Auth::user()->id);
+                return back()->with('success','Đã hủy kích hoạt OTPless+');
+
+            } catch (\Exception $e) {
+                dd($e->getMessage());
+            }
+
+        }
+    }
 }

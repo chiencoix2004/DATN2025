@@ -37,7 +37,7 @@
                 </p>
 
                 <button type="submit" class="btn btn-primary" aria-pressed="true">{{ trans('webauthn::messages.submit') }}</button>
-                <a href="{{ back() }}" class="card-link ms-3" aria-pressed="true">{{ trans('webauthn::messages.cancel') }}</a>
+                <a href="{{ route('wallet.profile') }}" class="card-link ms-3" aria-pressed="true">{{ trans('webauthn::messages.cancel') }}</a>
               </div>
             </div>
           </div>

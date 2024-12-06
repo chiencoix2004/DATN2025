@@ -73,5 +73,6 @@ Route::controller(WebauthnController::class)
     Route::post("register", [WebauthnController::class,"store"])->name("store");
     Route::get("login", [WebauthnController::class,"login"])->name("login");
     route::post("checkvar", [WebauthnController::class,"checkvar"])->name("checkvar");
+    Route::post("action", [WebauthnController::class,"action"])->name("action");
 
 });
