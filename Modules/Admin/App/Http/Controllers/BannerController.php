@@ -37,7 +37,7 @@ class BannerController extends Controller
             DB::beginTransaction();
             $img = $banner->img_banner;
             if ($request->hasFile('hinh_anh')) {
-                $img = Storage::put('slider/', $request->file('hinh_anh'));
+                $img = Storage::put('slider', $request->file('hinh_anh'));
             }
             $banner->update(
                 [
