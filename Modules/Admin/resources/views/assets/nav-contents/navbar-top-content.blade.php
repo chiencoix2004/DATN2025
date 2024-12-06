@@ -7,7 +7,7 @@
                 src="{{ asset('theme/admin/img/icons/spot-illustrations/falcon.png') }}" alt=""
                 width="40" /><span class="font-sans-serif text-primary">falcon</span></div>
     </a>
-    <ul class="navbar-nav align-items-center d-none d-lg-block">
+    {{-- <ul class="navbar-nav align-items-center d-none d-lg-block">
         <li class="nav-item">
             <div class="search-box" data-list='{"valueNames":["title"]}'>
                 <form class="position-relative" data-bs-toggle="search" data-bs-display="static">
@@ -133,7 +133,7 @@
                 </div>
             </div>
         </li>
-    </ul>
+    </ul> --}}
     <ul class="navbar-nav navbar-nav-icons ms-auto flex-row align-items-center">
         <li class="nav-item ps-2 pe-0">
             <div class="dropdown theme-control-dropdown">
@@ -208,15 +208,9 @@
             <div class="dropdown-menu dropdown-caret dropdown-caret dropdown-menu-end py-0"
                 aria-labelledby="navbarDropdownUser">
                 <div class="bg-white dark__bg-1000 rounded-2 py-2">
-                    <a class="dropdown-item fw-bold text-warning" href="#!"><span
-                            class="fas fa-crown me-1"></span><span>Go Pro</span></a>
                     <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" href="#!">Set status</a>
-                    <a class="dropdown-item" href="pages/user/profile.html">Profile &amp;
-                        account</a>
-                    <a class="dropdown-item" href="#!">Feedback</a>
+                    <a class="dropdown-item" href="{{ route('admin.profile.index') }}">chi tiết tài khoản</a>
                     <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" href="pages/user/settings.html">Settings</a>
                     <a class="dropdown-item" href="{{route('logout.admin')}}">Đăng xuất</a>
                 </div>
             </div>

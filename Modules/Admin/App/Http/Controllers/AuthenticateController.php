@@ -27,7 +27,7 @@ class AuthenticateController extends Controller
             return redirect()->route('admin.home'); 
         }
     
-        return redirect()->route('login.admin')->withErrors(['message' => 'Đăng nhập thất bại']);
+        return redirect()->route('login.admin')->with(['error' => 'Đăng nhập thất bại']);
     }
     
     public function logout()

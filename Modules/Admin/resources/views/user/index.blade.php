@@ -78,7 +78,7 @@
                     {
                         data: 'user_image',
                         render: function(data, row) {
-                            return `<img src="{{ Storage::url('${data.user_image}') }}" width="50" height="50">`;
+                            return data ? `<img src="{{ Storage::url('${data}') }}" width="50" height="50">` : 'không có ảnh';
                         }
                     },
 

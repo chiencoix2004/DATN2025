@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Modules\Admin\App\Http\Controllers\DashboardController;
 use Modules\Admin\App\Http\Controllers\TagController;
 use Modules\Admin\App\Http\Controllers\PostController;
 use Modules\Admin\App\Http\Controllers\UserController;
@@ -19,6 +20,7 @@ use Modules\Admin\App\Http\Controllers\StatisticalController;
 use Modules\Admin\App\Http\Controllers\NotificationController;
 use Modules\Admin\App\Http\Controllers\ForgotPasswordController;
 use Modules\Admin\App\Http\Controllers\AuthenticateController;
+use Modules\Admin\App\Http\Controllers\ProfileController;
 use Modules\Admin\App\Http\Controllers\WalletController;
 
 
@@ -62,12 +64,9 @@ Route::prefix('admin')
     ->as('admin.')
    ->middleware('CheckAdmin')
     ->group(function () {
-        Route::get('/', function () {
-            return view('admin::contents.dashboard');
-        })->name('home');
-        Route::get('/dashboard', function () {
-            return view('admin::contents.dashboard');
-        })->name('dashboard');
+        Route::get('/', [DashboardController::class, 'index'])->name('home');
+        
+        Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
         Route::controller(BannerController::class)
             ->prefix('banner')->as('banner.')
@@ -95,7 +94,7 @@ Route::prefix('admin')
 
         //walelt
 
-        Route::controller(WalletController::class)->prefix('wallet')->as('wallet.')->group(function (){
+        Route::controller(WalletController::class)->prefix('wallet')->as('wallet.')->group(function () {
 
             Route::get('list-withdraw', 'index')->name('list');
             Route::get('withdraw/{id}', 'withdraw')->name('withdraw');
@@ -117,7 +116,6 @@ Route::prefix('admin')
             Route::get('list-withdraw-ped', 'listwithdrawPed')->name('listwithdrawPed');
             Route::get('list-withdraw-approved', 'listwithdrawapp')->name('listwithdrawapp');
             Route::get('list-withdraw-reject', 'listwithdrawrej')->name('listwithdrawrej');
-
         });
 
 
@@ -146,15 +144,15 @@ Route::prefix('admin')
             Route::post('bulk-action', 'bulkAction')->name('bulkAction');
         });
 
-    // Route quản lý attributes
-    Route::controller(AttributeController::class)->prefix('attributes')->as('attributes.')->group(function () {
-        Route::get('list', 'listAttr')->name('listAttr');
-        Route::post('add', 'addAttr')->name('addAttr');
-        Route::get('{id}/delValueC', 'delValueC')->name('delValueC');
-        Route::get('{id}/delValueS', 'delValueS')->name('delValueS');
-        Route::get('{atrr}/edit', 'showFormEdit')->name('edit');
-        Route::put('{atrr}/update', 'update')->name('update');
-    });
+        // Route quản lý attributes
+        Route::controller(AttributeController::class)->prefix('attributes')->as('attributes.')->group(function () {
+            Route::get('list', 'listAttr')->name('listAttr');
+            Route::post('add', 'addAttr')->name('addAttr');
+            Route::get('{id}/delValueC', 'delValueC')->name('delValueC');
+            Route::get('{id}/delValueS', 'delValueS')->name('delValueS');
+            Route::get('{atrr}/edit', 'showFormEdit')->name('edit');
+            Route::put('{atrr}/update', 'update')->name('update');
+        });
 
         // Route quản lý attributes
         Route::controller(AttributeController::class)->prefix('attributes')->as('attributes.')->group(function () {
@@ -242,28 +240,28 @@ Route::prefix('admin')
             ->prefix('users')
             ->as('users.')
             ->group(function () {
-            Route::get('/', 'index')->name('index');
-            // Route::get('create', 'create')->name('create');
-            // Route::post('store', 'store')->name('store');
-            Route::get('/{id}/show', 'show')->name('show');
-            Route::put('{id}/updateStatus', 'updateStatus')->name('updateStatus');
-            // Route::get('/{id}/edit', 'edit')->name('edit');
-            // Route::put('{id}/update', 'update')->name('update');
-            // Route::delete('/{id}/destroy', 'destroy')->name('destroy');
-        });
+                Route::get('/', 'index')->name('index');
+                // Route::get('create', 'create')->name('create');
+                // Route::post('store', 'store')->name('store');
+                Route::get('/{id}/show', 'show')->name('show');
+                Route::put('{id}/updateStatus', 'updateStatus')->name('updateStatus');
+                // Route::get('/{id}/edit', 'edit')->name('edit');
+                // Route::put('{id}/update', 'update')->name('update');
+                // Route::delete('/{id}/destroy', 'destroy')->name('destroy');
+            });
 
         // Route quản lý posts
         Route::controller(PostController::class)->prefix('posts')->as('posts.')
             ->group(function () {
-            // Route::get('formPost', 'showForm')->name('show_form');
-            Route::get('list', 'index')->name('list');
-            Route::get('create', 'create')->name('create');
-            Route::post('store', 'store')->name('store');
-            Route::get('/show/{slug}', 'show')->name('showPost');
-            Route::get('/edit/{slug}', 'edit')->name('editPost');
-            Route::put('{id}update', 'update')->name('update');
-            Route::delete('/{id}/destroy', 'destroy')->name('destroy');
-        });
+                // Route::get('formPost', 'showForm')->name('show_form');
+                Route::get('list', 'index')->name('list');
+                Route::get('create', 'create')->name('create');
+                Route::post('store', 'store')->name('store');
+                Route::get('/show/{slug}', 'show')->name('showPost');
+                Route::get('/edit/{slug}', 'edit')->name('editPost');
+                Route::put('{id}update', 'update')->name('update');
+                Route::delete('/{id}/destroy', 'destroy')->name('destroy');
+            });
         Route::controller(SupportController::class)
             ->prefix('tickets')
             ->as('ticket.')
@@ -286,5 +284,14 @@ Route::prefix('admin')
             ->group(function () {
                 Route::get('/', 'index')->name('index');
                 Route::get('/read', 'read')->name('read');
+            });
+
+        Route::controller(ProfileController::class)
+            ->prefix('profile')
+            ->as('profile.')
+            ->group(function () {
+                Route::get('/', 'index')->name('index');
+                Route::get('/edit/{id}', 'edit')->name('edit');
+                Route::put('/update/{id}', 'update')->name('update');
             });
     });
