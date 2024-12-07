@@ -44,6 +44,7 @@ Route::controller(PayController::class)
     Route::get("resendotp/{id}", [PayController::class,"resendtotp"])->name("resendtotp");
     Route::get('errorpayment', [PayController::class, 'errorpayment'])->name('errorpayment');
     Route::get('cancel/{id}', [PayController::class,'cancel'])->name('cancel');
+    Route::post('OTPlessverify', [PayController::class,'chagreotpless'])->name('chagreotpless');
 
 });
 

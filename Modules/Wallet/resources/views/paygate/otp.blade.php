@@ -1,6 +1,9 @@
 @extends('wallet::layouts.css')
 
 @section('content')
+<script src="{!! secure_asset('vendor/webauthn/webauthn.js') !!}"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 @if ($errors->any())
 <div class="alert alert-danger">
     <ul>
@@ -62,7 +65,7 @@
                             </div>
                         </div>
                     </div>
-                    <input type="hidden" name="token" value="{{ $id }}">
+                    <input type="hidden" name="token" id="token_charge" value="{{ $id }}">
                     <div class="mt-3">
                         <button class="btn btn-primary w-100 waves-effect waves-light" type="submit">Xác nhận và thanh toán</button>
                     </div>
@@ -71,10 +74,55 @@
                 <div class="mt-4 text-center">
                     <p class="text-muted mb-0">Bạn chưa nhận được mã? <a href="{{ route('wallet.pay.resendtotp', ['id' => $id]) }}"
                         class="text-primary fw-semibold"> Gửi lại mã </a> </p>
+                        @if($user_key->isNotEmpty())
+                        <p class="text-muted mb-0">
+                          Hoặc xác thực bằng
+                          <a id="otpless" href="javascript:void(0)" class="text-primary fw-semibold">OTPless+</a>
+                        </p>
+                        @endif
                 </div>
             </div>
         </div>
     </div>
+   <script>
+    var publicKey = {!! json_encode($publicKey) !!};
+var webauthn = new WebAuthn((name, message) => {
+    error(errorMessage(name, message));
+});
+ var token_payment = document.getElementById('token_charge').value;
+
+document.getElementById('otpless').addEventListener('click', function () {
+    webauthn.sign(
+        publicKey,
+        function (data) {
+            $('#success').removeClass('d-none');
+            axios.post("{{ route('wallet.webautn.checkvar') }}", data)
+                .then(function (response) {
+                    if (response.data.success) {
+                        // Nếu thành công, điều hướng đến route POST charge
+                        axios.post("{{ route('wallet.pay.chagreotpless') }}", { token: token_payment })
+                            .then(function (chargeResponse) {
+                                if (chargeResponse.data.status === 'success') {
+                                    window.location.href = chargeResponse.data.redirectUrl;
+                                } else {
+                                    console.error('Payment failed:', chargeResponse.data.message);
+                                }
+                            })
+                            .catch(function (error) {
+                                console.error('Charge error:', error);
+                            });
+                    } else {
+                        console.error('Authentication failed');
+                        alert('Lỗi xác thực!');
+                    }
+                })
+                .catch(function (error) {
+                    console.error('Authentication error:', error);
+                });
+        }
+    );
+});
+</script>
 </div>
 
 <style>

@@ -86,21 +86,21 @@ class WebauthnController extends Controller
         return view('wallet::webauthn.login', compact('publicKey'));
     }
 
-    public function checkvar(Request $request){
-
+    public function checkvar(Request $request)
+    {
         // Lấy các khóa đã đăng ký cho người dùng
         $webauthn = new Webautn();
         $keys = $webauthn->getUserKey(Auth::user()->id);
-            if(isset($request->id)){
-                //start check
-                if($request->rawId == $keys->first()->credentialPublicKey){
-                    return true;
-                } else {
-                    return false;
-                }
+
+        if (isset($request->id)) {
+            if ($request->rawId === $keys->first()->credentialPublicKey) {
+                return response()->json(['success' => true]);
             } else {
-                return false;
+                return response()->json(['success' => false]);
             }
+        } else {
+            return response()->json(['success' => false]);
+        }
     }
 
 
