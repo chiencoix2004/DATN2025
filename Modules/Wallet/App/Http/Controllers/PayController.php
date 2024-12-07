@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Notifications\OtpEmail;
 use Exception;
 use App\Models\Order;
+use App\Models\Webautn;
 
 class PayController extends Controller
 {
@@ -111,6 +112,22 @@ class PayController extends Controller
         if (json_last_error() !== JSON_ERROR_NONE) {
             return response()->json(['error' => 'invalid token'], 400);
         }
+        $webauth = new Webautn() ;
+        $user_key = $webauth->getUserKey($user_id);
+        $publicKey = [
+            'challenge' => base64_encode(random_bytes(32)), // Thay bằng giá trị thực tế
+            'rp' => [
+                'name' => config('app.name'),
+            ],
+            'user' => [
+                'id' => base64_encode(Auth::user()->id),
+                'name' => Auth::user()->email,
+                'displayName' => Auth::user()->name,
+            ],
+            'pubKeyCredParams' => [
+                ['type' => 'public-key', 'alg' => -7], // ES256
+            ],
+        ];
         $user_id = Auth::user()->id;
         $user = Auth::user();
         $wallet = new Wallet();
@@ -128,7 +145,7 @@ class PayController extends Controller
             try{
                 $user = User::find($user_id);
                 $user->notify(new OtpEmail($data));
-                return view('wallet::paygate.otp', ['data' => $decoded_data, 'walletaccount' => $walletaccount], compact('id'));
+                return view('wallet::paygate.otp', ['data' => $decoded_data, 'walletaccount' => $walletaccount], compact('id','user_key','publicKey'));
             } catch (Exception $e) {
                 dd($e);
             }
@@ -222,6 +239,22 @@ class PayController extends Controller
             return response()->json(['error' => 'invalid token'], 400);
         }
         $user_id = Auth::user()->id;
+        $webauth = new Webautn() ;
+        $user_key = $webauth->getUserKey($user_id);
+        $publicKey = [
+            'challenge' => base64_encode(random_bytes(32)), // Thay bằng giá trị thực tế
+            'rp' => [
+                'name' => config('app.name'),
+            ],
+            'user' => [
+                'id' => base64_encode(Auth::user()->id),
+                'name' => Auth::user()->email,
+                'displayName' => Auth::user()->name,
+            ],
+            'pubKeyCredParams' => [
+                ['type' => 'public-key', 'alg' => -7], // ES256
+            ],
+        ];
         $user = Auth::user();
         $wallet = new Wallet();
         $walletaccount = $wallet->getWallet($user_id);
@@ -237,7 +270,7 @@ class PayController extends Controller
             try{
                 $user = User::find($user_id);
                 $user->notify(new OtpEmail($data));
-                return view('wallet::paygate.otp', ['data' => $decoded_data, 'walletaccount' => $walletaccount], compact('id'));
+                return view('wallet::paygate.otp', ['data' => $decoded_data, 'walletaccount' => $walletaccount], compact('id','user_key','publicKey'));
             } catch (Exception $e) {
                 dd($e);
             }
@@ -263,6 +296,79 @@ class PayController extends Controller
 
         return redirect($link);
     }
+    public function chagreotpless (Request $request){
 
-}
+        $id = $request->token;
+        if(empty($id)){
+            $id = $_GET['id'];
+        }
+
+        if (empty($id)) {
+            return response()->json(['error' => 'missing token'], 400);
+        }
+
+        $decoded_data = json_decode(base64_decode($id), true);
+
+        if (json_last_error() !== JSON_ERROR_NONE) {
+            return response()->json(['error' => 'invalid token'], 400);
+        }
+        $user_id = Auth::user()->id;
+        $wallet = new Wallet();
+        $walletaccount = $wallet->getWallet($user_id);
+            $key = env('VNP_HASH_SECRET'); // Replace with your actual secret key
+            $hashmac = hash_hmac('sha512', $id . date('Y-m-d H:i:s'), $key);
+            $data = [
+                'wallet_account_id' => $walletaccount->wallet_account_id,
+                'trx_type' => "deposit",
+                'trx_from' => "Wallet",
+                'trx_to' => "Shop",
+                'trx_amount' => ($decoded_data['ammount']),
+                'trx_balance_available' => $walletaccount->wallet_balance_available - ($decoded_data['ammount']),
+                'trx_hash_request' => $hashmac ,
+                'trx_status' => 1,
+                'created_at' => date('Y-m-d H:i:s'),
+                'updated_at' => date('Y-m-d H:i:s')
+            ];
+            $trx = new Trx_history();
+            $trx->createTrx($data);
+            $trx_id = $trx->getLasttrxid();
+            $trx_lastid = $trx_id->trx_id;
+            $data_trx_detail = [
+                'trx_id' => $trx_lastid,
+                'trx_detail_desc' => "Thanh toán đơn hàng " . $decoded_data['order_id']. " tại " . $decoded_data['shop_name'],
+                'trx_date_issue' => date('Y-m-d H:i:s'),
+                'vnp_SecureHash' => $hashmac,
+            ];
+            $noti_data = [
+                    'user_name' => Auth::user()->full_name,
+                    'amount' => $decoded_data['ammount'],
+                    'trx_id' => $trx_lastid,
+                    'request_time' => date('Y-m-d H:i:s'),
+                    'request_id' => $hashmac,
+                    'wallet_account_id' => $walletaccount->wallet_account_id,
+            ];
+            try {
+                $trx_detail = new Trx_history_detail();
+                $trx_detail->createTrxDetail($data_trx_detail);
+                $wallet->takeBalance($walletaccount->wallet_account_id, $decoded_data['ammount']);
+                $user = User::find($user_id);
+                $user->notify(new TransferNotifiaction($noti_data));
+                $querybuilder = "?status=success&order_id=" . $decoded_data['order_id'] . "&ammount=" . $decoded_data['ammount']. "&user_id=" . $decoded_data['user_id'];
+                 $link = route('handlewallet') . $querybuilder;
+                 return response()->json([
+                    'status' => 'success', // thêm status để client dễ kiểm tra
+                    'redirectUrl' => $link // đổi 'callback' thành 'redirectUrl'
+                ]);
+            } catch (Exception $e) {
+               // dd($e->getMessage());
+                $querybuilder = "?status=failed&order_id=" . $decoded_data['order_id'] . "&ammount=" . $decoded_data['ammount']. "&user_id=" . $decoded_data['user_id'];
+                $link = route('handlewallet') . $querybuilder;
+                return response()->json([
+                    'status' => 'success', // thêm status để client dễ kiểm tra
+                    'redirectUrl' => $link // đổi 'callback' thành 'redirectUrl'
+                ]);
+            }
+        }
+    }
+
 
