@@ -118,7 +118,7 @@
                             let productHTML = `
                           <li class="minicart-product">
                                 <a class="product-item_remove" href="javascript:void(0)" onclick="removeFromMiniCart(${item.id})"><i class="ion-android-close"></i></a>
-                                <div class="product-item_img" style="height: auto;">
+                                <div class="product-item_img"   >
                                      <img src="/storage/${product.image_avatar}" alt="${product.name}">
                                 </div>
                                 <div class="product-item_content">

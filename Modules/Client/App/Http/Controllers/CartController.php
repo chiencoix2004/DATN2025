@@ -69,7 +69,9 @@ class CartController extends Controller
         if ($productVariant->quantity == 0) {
             return response()->json(['message' => 'hết hàng'], 200);
         }
-
+        if($productVariant->quantity <  $request->quantity) {
+            return response()->json(['message'=> 'Số lượng hàng bạn mua đang bị vượt số lượng hàng hiện tại, vui lòng đểu chỉnh lại!'], 200);
+        }
         $quantity = $request->quantity;
         $total_amount = 0;
         $product_image = Product::find($productId)->image_avatar;
@@ -188,6 +190,7 @@ class CartController extends Controller
             return response()->json(['message' => 'bạn chưa đăng nhập!'], 200);
         }
     }
+
 
     public function index()
     {
