@@ -86,6 +86,10 @@ class CartController extends Controller
             $cart = Cart::firstOrCreate(['user_id' => auth()->id()]);
             $cartItem = $cart->cartItems()->firstOrCreate(['product_id' => $productId, 'product_variant_id' => $productVariantId], ['quantity' => 0, 'price' => 0, 'price_total' => 0]);
             $cartItem->increment('quantity', $quantity);
+            if ($cartItem->quantity > $productVariant->quantity) {
+                $cartItem->decrement('quantity', $quantity);
+                return response()->json(['message' => 'Số lượng hàng bạn mua đang bị vượt số lượng hàng hiện tại, vui lòng đểu chỉnh lại!'], 200);
+            }
             $cartItem->product_image = $product_image;
             $cartItem->save();
 
