@@ -54,8 +54,12 @@ class CartController extends Controller
             return response()->json(['message' => ' vui lòng kiểu sản phẩm'], 200);
         }
 
-
-
+        if ($request->quantity == null) {
+            return response()->json(['message' => ' vui lòng nhập số lượng sản phẩm'], 200);
+        }
+        if ($request->quantity <= 0) {
+            return response()->json(['message' => ' số lượng sản phẩm phải lớn hơn 0'], 200);
+        }
         $productId = $request->product_id;
         $productVariant = ProductVariant::where('product_id', '=', $productId)
             ->where('color_attribute_id', '=', $request->color_attribute_id)
@@ -65,17 +69,16 @@ class CartController extends Controller
         if (!$productVariantId) {
             return response()->json(['message' => 'Sản phẩm không tồn tại!'], 200);
         }
-
         if ($productVariant->quantity == 0) {
             return response()->json(['message' => 'hết hàng'], 200);
         }
         if($productVariant->quantity <  $request->quantity) {
             return response()->json(['message'=> 'Số lượng hàng bạn mua đang bị vượt số lượng hàng hiện tại, vui lòng đểu chỉnh lại!'], 200);
+
         }
         $quantity = $request->quantity;
         $total_amount = 0;
         $product_image = Product::find($productId)->image_avatar;
-
         // dd($productVariantId);
         if (auth()->check()) {
 
@@ -83,6 +86,8 @@ class CartController extends Controller
             $cart = Cart::firstOrCreate(['user_id' => auth()->id()]);
             $cartItem = $cart->cartItems()->firstOrCreate(['product_id' => $productId, 'product_variant_id' => $productVariantId], ['quantity' => 0, 'price' => 0, 'price_total' => 0]);
             $cartItem->increment('quantity', $quantity);
+            $cartItem->product_image = $product_image;
+            $cartItem->save();
 
             if ($cartItem) {
                 $productVariant = ProductVariant::find($productVariantId);
@@ -234,6 +239,12 @@ class CartController extends Controller
             if (!$cartItem) {
                 return response()->json(['error' => 'Sản phẩm không tồn tại trong giỏ hàng!'], 400);
             }
+            $productQuantity = ProductVariant::find($cartItem->product_variant_id)->quantity;
+            if ($request->quantity > $productQuantity) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Số lượng sản phẩm không đủ!'], 200);
+            }
             $cartItem->quantity = $request->quantity;
             $cartItem->total_price = $cartItem->quantity * $cartItem->price;
             $cartItem->save();
@@ -241,7 +252,6 @@ class CartController extends Controller
             $cart->total_amount = CartItem::where('cart_id', $cart->id)->sum('total_price');
             $cart->save();
             return response()->json([
-
                 'success' => 'Cập nhật giỏ hàng thành công!'
             ], 200);
         }

@@ -62,9 +62,9 @@
             <div class="col-lg-9 order-lg-2 order-1">
                 <div class="blog-item">
                     {{-- <div class="blog-img"> --}}
-                        <a href="{{ route('other.postDetail', $post->slug_post ) }}">
+                        {{-- <a href="{{ route('other.postDetail', $post->slug_post ) }}">
                             <img src="{{ Storage::url($post->image_post) }}" alt="{{ $post->title }}">
-                        </a>
+                        </a> --}}
                     {{-- </div> --}}
                     <div class="blog-content">
                         <h3 class="heading">

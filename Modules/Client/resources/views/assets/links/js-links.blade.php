@@ -83,12 +83,15 @@
                         let product = item.product_variant.product;
                         let quantity = item.quantity;
                         let price = item.price;
-
+                        let imgURL = item.product_image;
+                    if (!imgURL.includes('http')) {
+                        imgURL = `{{ Storage::url('${ item.product_image}') }}`;
+                    }
                         let productHTML = `
                           <li class="minicart-product">
                                 <a class="product-item_remove" href="javascript:void(0)" onclick="removeFromMiniCart(${item.id})"><i class="ion-android-close"></i></a>
                                 <div class="product-item_img">
-                                     <img src="{{ Storage::url('${product.image_avatar}') }}" alt="${product.name}">
+                                     <img src="${imgURL}" alt="${product.name}">
                                 </div>
                                 <div class="product-item_content">
                                      <a class="product-item_title" href="shop-left-sidebar.html">${product.name}</a>
@@ -108,6 +111,7 @@
                 },
                 error: function(xhr, status, error) {
                     $('#minicart').empty();
+                    $('#totalAmount').text(formatVND(0));
                     // console.error('Giỏ hàng của bạn đang trống!:', error);
                 }
             });
@@ -157,8 +161,6 @@
         loadCartItemCount();
         setInterval(loadCartItemCount, 60000);
         loadCartItems();
-
-
     });
 </script>
 @yield('js-setting')
