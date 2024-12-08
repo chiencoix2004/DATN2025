@@ -44,6 +44,7 @@ Route::controller(PayController::class)
     Route::get("resendotp/{id}", [PayController::class,"resendtotp"])->name("resendtotp");
     Route::get('errorpayment', [PayController::class, 'errorpayment'])->name('errorpayment');
     Route::get('cancel/{id}', [PayController::class,'cancel'])->name('cancel');
+    Route::post('OTPlessverify', [PayController::class,'chagreotpless'])->name('chagreotpless');
 
 });
 
@@ -73,5 +74,6 @@ Route::controller(WebauthnController::class)
     Route::post("register", [WebauthnController::class,"store"])->name("store");
     Route::get("login", [WebauthnController::class,"login"])->name("login");
     route::post("checkvar", [WebauthnController::class,"checkvar"])->name("checkvar");
+    Route::post("action", [WebauthnController::class,"action"])->name("action");
 
 });

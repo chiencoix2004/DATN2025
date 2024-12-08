@@ -327,6 +327,7 @@ class WalletController extends Controller
         $webauthn = new Webautn();
         $webauth_data = $webauthn->getUserKey(auth()->user()->id);
         $withdraw_toal = $withdraw->countAmmountPed($wallet_account_id);
+      //  dd($webauth_data);
         return view('wallet::profile.list   ', compact('data', 'trx_data', 'withdraw_toal','webauth_data'));
     }
 }

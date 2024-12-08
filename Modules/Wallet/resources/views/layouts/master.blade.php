@@ -621,7 +621,7 @@
                                         </a>
                                     </li>--}}
                                     <li>
-                                        <a href="index.html" class="nav-link ms-3">
+                                        <a href="{{ route('wallet.profile') }}" class="nav-link ms-3">
                                             <i class="bx bx-wallet-alt
                                             icon nav-icon"></i>
                                             <span data-key="t-dashboard">Cài đặt ví tiền </span>

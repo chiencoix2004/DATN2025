@@ -37,7 +37,8 @@ class WebauthnController extends Controller
         ];
         return view('wallet::webauthn.register', compact('publicKey'));
     }
-    public function store(Request $request){
+    public function store(Request $request)
+    {
         $webautndata = [
             'user_id' => Auth::user()->id,
             'credentialId' => $request->id,
@@ -51,13 +52,20 @@ class WebauthnController extends Controller
             'trustPath' => "trustPath",
         ];
         $webauthn = new Webautn($webautndata);
-        try {
-            $webauthn->CreateAuthKey($webautndata);
-            return back()->with('success', 'Đăng ký thành công');
-        } catch (\Exception $e) {
-           dd($e->getMessage());
+        $keys = $webauthn->getUserKey(Auth::user()->id);
+
+        if ($keys->isNotEmpty()) {
+            return response()->json(['error' => 'Khóa của bạn đã được đăng ký và không thể thay đổi'], 400);
+        } else {
+            try {
+                $webauthn->CreateAuthKey($webautndata);
+                return response()->json(['callback' => route('wallet.profile')]);
+            } catch (\Exception $e) {
+                return response()->json(['error' => $e->getMessage()], 500);
+            }
         }
     }
+
 
     public function login()
     {
@@ -78,23 +86,24 @@ class WebauthnController extends Controller
         return view('wallet::webauthn.login', compact('publicKey'));
     }
 
-    public function checkvar(Request $request){
-
+    public function checkvar(Request $request)
+    {
         // Lấy các khóa đã đăng ký cho người dùng
         $webauthn = new Webautn();
         $keys = $webauthn->getUserKey(Auth::user()->id);
-        if(isset($request->id)){
-            //start check
-            if($request->rawId == $keys->first()->credentialPublicKey){
-                return true;
+
+        if (isset($request->id)) {
+            if ($request->rawId === $keys->first()->credentialPublicKey) {
+                return response()->json(['success' => true]);
             } else {
-                return false;
+                return response()->json(['success' => false]);
             }
         } else {
-            return false;
+            return response()->json(['success' => false]);
         }
-
     }
+
+
 
     public function forgetkey(Request $request){
      $webauthn = new Webautn();
@@ -119,6 +128,28 @@ class WebauthnController extends Controller
             return back()->with('success', 'Đăng ký thành công');
         } catch (\Exception $e) {
            dd($e->getMessage());
+        }
+    }
+
+    public function action(Request $request){
+        if($request->filled('enable')){
+            $webauthn = new Webautn();
+            $data = $webauthn->getUserKey(Auth::user()->id);
+            if($data->isNotEmpty()){
+                return back()->with('error','Khóa của bạn đã được đăng ký và không thể thay đổi');
+            } else {
+                return  redirect()->route('wallet.webautn.index');
+            }
+        } else {
+            try{
+                $webauthn = new Webautn();
+                $data =  $webauthn->deletekey(Auth::user()->id);
+                return back()->with('success','Đã hủy kích hoạt OTPless+');
+
+            } catch (\Exception $e) {
+                dd($e->getMessage());
+            }
+
         }
     }
 }

@@ -4,6 +4,26 @@
 <?php
 use Carbon\Carbon;
 ?>
+ <div class="container-fluid">
+    @if ($errors->any())
+    <div class="alert alert-danger">
+        <ul>
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
+@if(session('success'))
+    <div class="alert alert-success">
+        {{session('success')}}
+    </div>
+@endif
+@if(session('error'))
+    <div class="alert alert-danger">
+        {{session('error')}}
+    </div>
+@endif
     <div class="card">
         <div class="card-header align-items-center d-flex">
             <h4 class="card-title mb-0 flex-grow-1">Cài đặt ví tiền</h4>
@@ -63,26 +83,30 @@ use Carbon\Carbon;
                 </div>
                 </div>
                 <div class="tab-pane" id="profile2" role="tabpanel">
-                   <form method="POST" >
                     <div class="mb-3">
                         <div class="col-md-6">
                             <div>
                              <h5 class="font-size-14 mb-3"><i class="mdi mdi-arrow-right text-primary me-1"></i> Xác thực giao dịch bằng OTPless+ </h5>
                              <p class="text-card"> OTPless+ là một giải pháp thay thế thay vì nhập mã xác thực gửi bằng email thì chỉ cần sử dụng Passkey để xác thực giao dịch </p>
-                             <form method="POST" action="#">
+                             <form method="POST" action="{{ route('wallet.webautn.action') }}">
+                                @csrf
                                 <div class="form-check form-switch mb-3" dir="ltr">
-                                    <input type="checkbox" name="enable" class="form-check-input" id="customSwitch1" @if (isset($webauth_data)) checked>
-                                    <label class="form-check-label" for="customSwitch1">Đang kích hoạt</label>
-                                    @endif
-                                    @if (!isset($webauth_data))
-                                    <label class="form-check-label" for="customSwitch1">Kích hoạt ngay</label>
-                                    @endif
+                                    <input type="checkbox" name="enable" class="form-check-input" id="customSwitch1"
+                                           @if ($webauth_data->isNotEmpty()) checked @endif>
+                                    <label class="form-check-label" for="customSwitch1">
+                                        @if ($webauth_data->isNotEmpty())
+                                            Đang kích hoạt
+                                        @else
+                                            Kích hoạt ngay
+                                        @endif
+                                    </label>
                                 </div>
-                               <button type="submit" class="btn btn-primary">Lưu thay đổi</button>
+                                <button type="submit" class="btn btn-primary">Lưu thay đổi</button>
                             </form>
+
                             </div>
                         </div>
-                    </form>
+
                 </div>
                 </div>
                 <div class="tab-pane" id="messages2" role="tabpanel">
