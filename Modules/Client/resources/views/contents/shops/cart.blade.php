@@ -111,12 +111,16 @@
                             let product = item.product_variant.product;
                             let quantity = item.quantity;
                             let price = item.price;
+                            let imgURL = item.product_image;
+                            if (!imgURL.includes('http')) {
+                                imgURL = `{{ Storage::url('${ item.product_image}') }}`;
+                            }
 
                             let productHTML = `
                           <li class="minicart-product">
                                 <a class="product-item_remove" href="javascript:void(0)" onclick="removeFromMiniCart(${item.id})"><i class="ion-android-close"></i></a>
                                 <div class="product-item_img">
-                                     <img src="{{ Storage::url('${product.image_avatar}') }}" alt="${product.name}">
+                                     <img src="${imgURL}" alt="${product.name}">
                                 </div>
                                 <div class="product-item_content">
                                      <a class="product-item_title" href="shop-left-sidebar.html">${product.name}</a>
@@ -203,7 +207,7 @@
             function displayCartItems(cartItems) {
                 $('#cart-table-body').empty(); // Xóa nội dung cũ của bảng giỏ hàng
                 cartItems.forEach(function(item) {
-                    var imgURL = item.product_image;
+                    let imgURL = item.product_image;
                     if (!imgURL.includes('http')) {
                         imgURL = `{{ Storage::url('${ item.product_image}') }}`;
                     }
@@ -296,15 +300,18 @@
                     },
                     success: function(response) {
                         if (response.success) { // Nếu cập nhật thành công
-                            console.log("Cập nhật số lượng thành công:", response.message);
+                            // console.log("Cập nhật số lượng thành công:", response.message);
+                            alert(response.message);
                             fetchCartItems(); // Tải lại danh sách giỏ hàng
                             updateCartTotal(); // Cập nhật tổng tiền
                         } else {
                             console.error("Lỗi khi cập nhật số lượng:", response.message);
+                            alert(response.message);
+                            fetchCartItems(); // Tải lại danh sách giỏ hàng
                             updateProductTotalPrice(itemId, quantity);
                         }
                     },
-                    error: function(jqXHR, textStatus, errorThrown) {
+                    error: function(jqXHR, textStatus, errorThrown, response) {
                         console.error("Lỗi khi cập nhật số lượng:", textStatus, errorThrown);
                     }
                 });
@@ -325,7 +332,7 @@
                             console.log("Xóa sản phẩm thành công:", response.message);
                             fetchCartItems(); // Tải lại danh sách giỏ hàng
                             updateCartTotal();
-                            
+
                         } else {
                             console.error("Lỗi khi xóa sản phẩm:", response.message);
                         }
@@ -387,7 +394,7 @@
                             }
                         },
                         error: function(jqXHR, textStatus, errorThrown) {
-                            
+
                             console.error("Lỗi khi áp dụng mã giảm giá:", textStatus,
                                 errorThrown);
                         }
