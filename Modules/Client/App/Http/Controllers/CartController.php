@@ -236,6 +236,12 @@ class CartController extends Controller
             if (!$cartItem) {
                 return response()->json(['error' => 'Sản phẩm không tồn tại trong giỏ hàng!'], 400);
             }
+            $productQuantity = ProductVariant::find($cartItem->product_variant_id)->quantity;
+            if ($request->quantity > $productQuantity) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Số lượng sản phẩm không đủ!'], 200);
+            }
             $cartItem->quantity = $request->quantity;
             $cartItem->total_price = $cartItem->quantity * $cartItem->price;
             $cartItem->save();
@@ -243,7 +249,6 @@ class CartController extends Controller
             $cart->total_amount = CartItem::where('cart_id', $cart->id)->sum('total_price');
             $cart->save();
             return response()->json([
-
                 'success' => 'Cập nhật giỏ hàng thành công!'
             ], 200);
         }

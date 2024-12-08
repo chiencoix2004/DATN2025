@@ -300,15 +300,18 @@
                     },
                     success: function(response) {
                         if (response.success) { // Nếu cập nhật thành công
-                            console.log("Cập nhật số lượng thành công:", response.message);
+                            // console.log("Cập nhật số lượng thành công:", response.message);
+                            alert(response.message);
                             fetchCartItems(); // Tải lại danh sách giỏ hàng
                             updateCartTotal(); // Cập nhật tổng tiền
                         } else {
                             console.error("Lỗi khi cập nhật số lượng:", response.message);
+                            alert(response.message);
+                            fetchCartItems(); // Tải lại danh sách giỏ hàng
                             updateProductTotalPrice(itemId, quantity);
                         }
                     },
-                    error: function(jqXHR, textStatus, errorThrown) {
+                    error: function(jqXHR, textStatus, errorThrown, response) {
                         console.error("Lỗi khi cập nhật số lượng:", textStatus, errorThrown);
                     }
                 });
