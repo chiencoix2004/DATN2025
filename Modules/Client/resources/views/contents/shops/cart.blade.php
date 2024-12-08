@@ -210,6 +210,7 @@
                     $('#cart-table-body').append(generateCartRow(item));
                 });
             }
+
             function generateCartRow(item) {
     var imgURL = item.product_image.includes('http') ? item.product_image : `/storage/${item.product_image}`;
     return `

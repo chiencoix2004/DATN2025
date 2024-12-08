@@ -22,7 +22,7 @@ class BannerSeeder extends Seeder
                 'img_banner' => "https://product.hstatic.net/1000392326/product/fas33679__k__968k_-_fjd31170__b__998k__1__f3577eb828354bdd9dd4dd48d632ea87_master.jpg"
             ]);
             DB::table('banners')->insert([
-                'banner_position'=> 2,
+                'banner_position'=> 3,
                 'title'=> 'tiêu đề1',
                 'description'=> 'mô tả1',
                 'offer_text' => 'nội dung1',
@@ -30,9 +30,9 @@ class BannerSeeder extends Seeder
             ]);
             DB::table('banners')->insert([
                 'banner_position'=> 3,
-                'title'=> 'tiêu đề1',
-                'description'=> 'mô tả1',
-                'offer_text' => 'nội dung1',
+                'title'=> 'tiêu đề2',
+                'description'=> 'mô tả2',
+                'offer_text' => 'nội dung3',
                 'img_banner' => "https://product.hstatic.net/1000392326/product/fas33679__k__968k_-_fjd31170__b__998k__1__f3577eb828354bdd9dd4dd48d632ea87_master.jpg"
             ]);
             DB::table('banners')->insert([
@@ -42,6 +42,6 @@ class BannerSeeder extends Seeder
                 'offer_text' => 'nội dung1',
                 'img_banner' => "https://product.hstatic.net/1000392326/product/fas33679__k__968k_-_fjd31170__b__998k__1__f3577eb828354bdd9dd4dd48d632ea87_master.jpg"
             ]);
-        
+
     }
 }
