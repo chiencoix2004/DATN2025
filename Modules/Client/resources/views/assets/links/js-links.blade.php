@@ -111,6 +111,7 @@
                 },
                 error: function(xhr, status, error) {
                     $('#minicart').empty();
+                    $('#totalAmount').text(formatVND(0));
                     // console.error('Giỏ hàng của bạn đang trống!:', error);
                 }
             });
@@ -160,8 +161,6 @@
         loadCartItemCount();
         setInterval(loadCartItemCount, 60000);
         loadCartItems();
-
-
     });
 </script>
 @yield('js-setting')
