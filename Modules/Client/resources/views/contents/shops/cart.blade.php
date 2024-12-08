@@ -301,7 +301,7 @@
                     success: function(response) {
                         if (response.success) { // Nếu cập nhật thành công
                             // console.log("Cập nhật số lượng thành công:", response.message);
-                            alert(response.message);
+                            alert(response.success);
                             fetchCartItems(); // Tải lại danh sách giỏ hàng
                             updateCartTotal(); // Cập nhật tổng tiền
                         } else {
