@@ -72,8 +72,9 @@ class CartController extends Controller
         if ($productVariant->quantity == 0) {
             return response()->json(['message' => 'hết hàng'], 200);
         }
-        if ($productVariant->quantity < $request->quantity) {
-            return response()->json(['message' => 'số lượng sản phẩm không đủ'], 200);
+        if($productVariant->quantity <  $request->quantity) {
+            return response()->json(['message'=> 'Số lượng hàng bạn mua đang bị vượt số lượng hàng hiện tại, vui lòng đểu chỉnh lại!'], 200);
+
         }
         $quantity = $request->quantity;
         $total_amount = 0;
@@ -133,6 +134,7 @@ class CartController extends Controller
 
                     if ($price !== null) {
                         $cartItem->price = $price;
+                        $cartItem->product_image = $product_image;
                         $cartItem->total_price = $cartItem->quantity * $price;
                         $cartItem->save();
                     };
@@ -194,8 +196,9 @@ class CartController extends Controller
         }
     }
 
+
     public function index()
-    {   
+    {
         Cart::firstOrCreate(['user_id' => auth()->id()]);
         return view('client::contents.shops.cart');
     }

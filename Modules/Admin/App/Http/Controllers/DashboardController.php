@@ -27,15 +27,15 @@ class DashboardController extends Controller
             ->limit(5)
             ->get();
         // Lấy 5 sản phẩm bán chạy nhất
-        $bestSell = Product::select('products.*')
-            ->join('order_details', 'products.id', '=', 'order_details.product_id')
-            ->join('orders', 'order_details.order_id', '=', 'orders.id')
-            ->where('orders.status_payment', 'Đã thanh toán')
-            ->groupBy('products.id')
-            ->selectRaw('products.*, SUM(order_details.product_quantity) as total_quantity')
-            ->orderByDesc('total_quantity')
-            ->limit(5)
-            ->get();
+        $bestSell = Product::select('products.id', 'products.name', 'products.price_sale', 'products.sub_category_id', 'products.created_at', 'products.updated_at')
+        ->join('order_details', 'products.id', '=', 'order_details.product_id')
+        ->join('orders', 'order_details.order_id', '=', 'orders.id')
+        ->where('orders.status_payment', 'Đã thanh toán')
+        ->groupBy('products.id', 'products.name', 'products.price_sale', 'products.sub_category_id', 'products.created_at', 'products.updated_at')
+        ->selectRaw('SUM(order_details.product_quantity) as total_quantity')
+        ->orderByDesc('total_quantity')
+        ->limit(5)
+        ->get();
         // lấy 5 user mới nhất
         $listUser = User::query()
             ->select('id', 'full_name', 'email', 'user_image')
@@ -61,7 +61,7 @@ class DashboardController extends Controller
         // Đảo ngược mảng để có thứ tự từ tháng 1 đến tháng 12
         $salesData = array_reverse($salesData);
 
-        
+
 
         // lấy 5 phiếu hõ trợ mới nhất
         $listTicket = CustomerSupport::query()
@@ -92,15 +92,15 @@ class DashboardController extends Controller
         $revenue = Order::where('created_at', 'like', $currentMonth . '%')
             ->where('status_order', 'Đã nhận hàng')
             ->sum('total_price');
-            
+
         $delivering = Order::where('created_at', 'like', $currentMonth . '%')
             ->where('status_order', 'Đang giao hàng')
             ->count();
-        
+
         $received = Order::where('created_at', 'like', $currentMonth . '%')
             ->where('status_order', 'Đã nhận hàng')
             ->count();
-        
+
         $revenueOrder = Order::query()
             ->whereNot('created_at', null)
             ->where('status_order', 'Đã nhận hàng')
@@ -129,9 +129,9 @@ class DashboardController extends Controller
             DB::raw('SUM(orders.total_price) as total_spend')
         )
         ->join('orders', 'users.id', '=', 'orders.users_id')
-        ->where('users.roles_id', 2) 
-        ->where('orders.status_order', 'Đã nhận hàng') 
-        ->groupBy('users.id', 'users.full_name')
+        ->where('users.roles_id', 2)
+        ->where('orders.status_order', 'Đã nhận hàng')
+        ->groupBy('users.id', 'users.full_name','users.email')
         ->orderBy('total_orders', 'desc')
         ->limit(5)
         ->get();
