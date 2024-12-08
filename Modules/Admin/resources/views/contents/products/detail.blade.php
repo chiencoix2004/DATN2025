@@ -10,7 +10,7 @@
     </div>
     <div class="card mb-3">
         <div class="card-body">
-            <div class="row">
+            <div class="row mb-8">
                 <div class="col-lg-6 mb-4 mb-lg-0">
                     <div class="product-slider" id="galleryTop">
                         <div class="swiper theme-slider position-lg-absolute all-0"

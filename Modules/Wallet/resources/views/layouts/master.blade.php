@@ -619,14 +619,14 @@
                                             icon nav-icon"></i>
                                             <span data-key="t-dashboard">Chuyển tiền </span>
                                         </a>
-                                    </li>
+                                    </li>--}}
                                     <li>
-                                        <a href="index.html" class="nav-link ms-3">
+                                        <a href="{{ route('wallet.profile') }}" class="nav-link ms-3">
                                             <i class="bx bx-wallet-alt
                                             icon nav-icon"></i>
                                             <span data-key="t-dashboard">Cài đặt ví tiền </span>
                                         </a>
-                                    </li> --}}
+                                    </li>
                                     {{-- <li class="nav-item dropdown">
                                         <a class="nav-link dropdown-toggle arrow-none" href="#" id="topnav-uielement" role="button"
                                             data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

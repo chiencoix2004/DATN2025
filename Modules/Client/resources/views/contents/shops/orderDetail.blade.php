@@ -134,7 +134,7 @@
             </div>
 
             <div class="row mb-3">
-                @if ($order->status_order == 'Đang giao hàng')
+                @if ($order->status_order == 'Đang giao hàng' && isset($frist_location))
                     <div class="card-header">
                         <h4 class="text-center mt-3">Trạng thái giao hàng</h3>
                     </div>
@@ -164,7 +164,7 @@
                      @endif
             </div>
             <script>
-                @if ($order->status_order == 'Đang giao hàng')
+                @if (isset($frist_location) )
             document.addEventListener("DOMContentLoaded", function() {
                 // Lấy dữ liệu từ Blade
                 const firstLocation = {

@@ -13,7 +13,7 @@ class SubCategorySeeder extends Seeder
      */
     public function run(): void
     {
-        for ($i = 0; $i < 20; $i++) {
+        for ($i = 0; $i < 2; $i++) {
             DB::table('sub_categories')->insert([
                 'category_id' => rand(1, 4),
                 'name' => fake()->name,

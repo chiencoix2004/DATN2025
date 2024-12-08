@@ -14,11 +14,11 @@ class ProductVariantSeeder extends Seeder
      */
     public function run(): void
     {
-        for ($i = 1; $i <= 200; $i++) {
+        for ($i = 1; $i <= 3; $i++) {
             DB::table('product_variants')->insert([
                 'product_id' => $i,
-                'color_attribute_id' => rand(1, 10),
-                'size_attribute_id' => rand(1, 5),
+                'color_attribute_id' => rand(1, 3),
+                'size_attribute_id' => rand(1, 3),
                 'price_default' => rand(100000, 1000000),
                 'price_sale' => rand(80000, 900000),
                 'start_date' => now(),

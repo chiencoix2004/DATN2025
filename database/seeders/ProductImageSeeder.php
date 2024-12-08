@@ -14,7 +14,7 @@ class ProductImageSeeder extends Seeder
      */
     public function run(): void
     {
-        for ($i = 1; $i <= 20; $i++) {
+        for ($i = 1; $i <= 2; $i++) {
             for ($j = 1; $j <= 3; $j++) { // Mỗi sản phẩm có 3 hình ảnh
                 DB::table('product_images')->insert([
                     'product_id' => $i,

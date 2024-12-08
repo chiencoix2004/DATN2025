@@ -124,7 +124,7 @@
                                     </td>
                                     <td class="py-2 align-middle">{{ $order->date_create_order }}</td>
                                     <td class="address py-2 align-middle white-space-nowrap">
-                                        {{ $order->ship_user_address }}
+                                        {{ \Illuminate\Support\Str::limit($order->ship_user_address, 20) }}...
                                     </td>
                                     <td class="status_order py-2 align-middle text-center fs-9 white-space-nowrap">
                                         <span

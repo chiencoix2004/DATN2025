@@ -55,7 +55,7 @@
                                 <input type="radio" class="form-check-input" id="vnpay" name="payment" value="vnpay" required>
                                 <label class="form-check-label" for="vnpay">VnPay</label>
                             </div>
-                            <div class="form-check">
+                            {{-- <div class="form-check">
                                 <input type="radio" class="form-check-input" id="creditcard" name="payment" value="creditcard" required>
                                 <label class="form-check-label" for="creditcard">Thẻ Tín dụng</label>
                                 <div class="valid-feedback"></div>
@@ -128,7 +128,7 @@
                                     </div>
 
                                 </div>
-                            </div>
+                            </div> --}}
                         </div>
                     </div>
                 </div>
