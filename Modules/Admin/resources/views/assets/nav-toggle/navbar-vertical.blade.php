@@ -13,7 +13,7 @@
         </div><a class="navbar-brand" href={{ route('admin.dashboard') }}>
             <div class="d-flex align-items-center py-3"><img class="me-2"
                     src="{{ asset('theme/admin/img/icons/spot-illustrations/falcon.png') }}" alt=""
-                    width="40" /><span class="font-sans-serif text-primary">falcon</span></div>
+                    width="200" /><span class="font-sans-serif text-primary"></span></div>
         </a>
     </div>
     <div class="collapse navbar-collapse" id="navbarVerticalCollapse">

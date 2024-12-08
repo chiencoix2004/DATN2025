@@ -222,7 +222,7 @@
                                             class="badge rounded-pill ms-2 bg-200 text-primary">{{ $item->status_payment }}</span>
                                     </div>
                                     {{-- <div class="col-5 pe-x1 ps-2">
-                                        
+
                                     </div> --}}
                                 </div>
                             </div>
@@ -277,7 +277,7 @@
                                 <div class="row flex-end-center g-0">
                                     <div class="col-auto pe-2">
                                         {{-- <span class="badge rounded-pill ms-2 bg-200 text-primary">
-                                        
+
                                         </span> --}}
                                         @if ($item->ticket_status == 1)
                                             <span class="badge bg-warning">Mở</span>
@@ -289,7 +289,7 @@
                                         {{-- <span  class="badge rounded-pill ms-2 bg-200 text-primary"></span> --}}
                                     </div>
                                     {{-- <div class="col-5 pe-x1 ps-2">
-                                        
+
                                     </div> --}}
                                 </div>
                             </div>
@@ -425,7 +425,7 @@
                     @foreach ($listUser as $item)
                         <div class="d-flex align-items-center position-relative mb-3">
                             <div class="avatar avatar-2xl">
-                                <img class="rounded-circle" src="{{ asset($item->user_image) }}" alt="" />
+                                <img class="rounded-circle" src="{{ Storage::url(Auth::user()->user_image) }}" alt="" />
                             </div>
                             <div class="flex-1 ms-3">
                                 <h6 class="mb-0 fw-semi-bold"><a class="stretched-link text-900"

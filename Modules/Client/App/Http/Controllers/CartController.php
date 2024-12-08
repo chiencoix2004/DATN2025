@@ -209,6 +209,10 @@ class CartController extends Controller
 
     public function list()
     {
+        //ham check nếu user khác thêm vào giỏ hàng mà sản phẩm đó đã hết hoặc trong giỏ hàng đã có sản phẩm đó mà sản phẩm đó đã hết
+        //thì xóa sản phẩm đó khỏi giỏ hàng -> thông báo cho user -> cập nhật lại giỏ hàng
+
+
         if (auth()->check()) {
             $cart = Cart::where('user_id', auth()->id())->first();
             $cartItems = CartItem::where('cart_id', $cart->id)

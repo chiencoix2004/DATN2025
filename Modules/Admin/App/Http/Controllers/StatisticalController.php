@@ -52,7 +52,7 @@ class StatisticalController extends Controller
         }
 
         if ($startDate && $endDate) {
-            $orders->whereBetween('date_create_order', [$startDate, $endDate]);
+            $orders->whereBetween('created_at', [$startDate, $endDate]);
         }
 
         $orders = $orders->paginate(10);
@@ -60,26 +60,26 @@ class StatisticalController extends Controller
         // dd($orders);
 
         // Thống kê doanh thu
-        $revenue = Order::whereBetween('date_create_order', [$startDate, $endDate])
+        $revenue = Order::whereBetween('created_at', [$startDate, $endDate])
         ->sum('total_price');
-        
+
 
         // Thống kê 5 user đặt hàng nhiều nhất
-        $topUsers = User::select('users.user_name', 
+        $topUsers = User::select('users.user_name',
             DB::raw('count(orders.users_id) as total_orders'),
             DB::raw('sum(orders.total_price) as total_amount')
             )
             ->join('orders', 'users.id', '=', 'orders.users_id')
-            ->whereBetween('orders.date_create_order', [$startDate, $endDate])
+            ->whereBetween('orders.created_at', [$startDate, $endDate])
             ->groupBy('users.user_name')
             ->orderBy('total_orders', 'desc')
             ->limit(5)
             ->get();
 
-        // Thống kê 5 sản phẩm bán chạy nhất 
+        // Thống kê 5 sản phẩm bán chạy nhất
         // $topProducts = ProductModel::withCount(['orderDetails' => function ($query) use ($startDate, $endDate) {
         //     $query->join('orders', 'order_details.order_id', '=', 'orders.id')
-        //         ->whereBetween('orders.date_create_order', [$startDate, $endDate]);
+        //         ->whereBetween('orders.created_at', [$startDate, $endDate]);
         // }])
         // ->orderBy('order_details_count', 'desc')
         // ->limit(5)
@@ -87,16 +87,16 @@ class StatisticalController extends Controller
         $topProducts = Product::select(
             'products.id',
             'products.name',
-            (DB::raw("(SELECT SUM(od.product_quantity) 
-                      FROM order_details od 
-                      JOIN orders o ON od.order_id = o.id 
-                      WHERE od.product_id = products.id 
-                      AND o.date_create_order BETWEEN '$startDate' AND '$endDate') as total_quantity")),
-            (DB::raw("(SELECT SUM(od.product_price_final * od.product_quantity) 
-                      FROM order_details od 
-                      JOIN orders o ON od.order_id = o.id 
-                      WHERE od.product_id = products.id 
-                      AND o.date_create_order BETWEEN '$startDate' AND '$endDate') as total_revenue"))
+            (DB::raw("(SELECT SUM(od.product_quantity)
+                      FROM order_details od
+                      JOIN orders o ON od.order_id = o.id
+                      WHERE od.product_id = products.id
+                      AND o.created_at BETWEEN '$startDate' AND '$endDate') as total_quantity")),
+            (DB::raw("(SELECT SUM(od.product_price_final * od.product_quantity)
+                      FROM order_details od
+                      JOIN orders o ON od.order_id = o.id
+                      WHERE od.product_id = products.id
+                      AND o.created_at BETWEEN '$startDate' AND '$endDate') as total_revenue"))
         )
         ->orderBy('total_quantity', 'desc')
         ->limit(5)
@@ -105,20 +105,20 @@ class StatisticalController extends Controller
 
 
         // Thống kê đơn hàng theo khoảng thời gian
-        $totalOrders = Order::whereBetween('date_create_order', [$startDate, $endDate])
+        $totalOrders = Order::whereBetween('created_at', [$startDate, $endDate])
             ->count();
 
-        // Thống kê tỷ lệ thành công của đơn hàng 
-        $successRate = Order::whereBetween('date_create_order', [$startDate, $endDate])
+        // Thống kê tỷ lệ thành công của đơn hàng
+        $successRate = Order::whereBetween('created_at', [$startDate, $endDate])
         ->whereHas('orderDetails', function ($query) {
 
             $query->where('status_order','like', 'Đã nhận hàng');
         })->count();
-        
+
 
         $successRate = $totalOrders > 0 ? ($successRate / $totalOrders) * 100 : 0;
         //dd($successRate);
-        
+
         // $statusOrder = Order::STATUS_ORDER;
         // $statusPayment = Order::STATUS_PAYMENT;
         return view('admin::contents.statistical.report', compact(
@@ -148,8 +148,8 @@ class StatisticalController extends Controller
 
     public function order(){
        //đơn hàng theo ngày
-       $orderData = Order::select(DB::raw('DATE(date_create_order) as date'), DB::raw('COUNT(*) as count'))
-       ->whereBetween('date_create_order', [Carbon::now()->subDays(6), Carbon::now()])
+       $orderData = Order::select(DB::raw('DATE(created_at) as date'), DB::raw('COUNT(*) as count'))
+       ->whereBetween('created_at', [Carbon::now()->subDays(6), Carbon::now()])
        ->groupBy('date')
        ->orderBy('date')
        ->get();
@@ -157,8 +157,8 @@ class StatisticalController extends Controller
         $orderLabels = $orderData->pluck('date');
         $orderValues = $orderData->pluck('count');
 
-        return view('admin::contents.statistical.order', compact( 
-            'orderLabels', 
+        return view('admin::contents.statistical.order', compact(
+            'orderLabels',
             'orderValues'
         ));
     }
@@ -167,17 +167,17 @@ class StatisticalController extends Controller
 
     public function success()
     {
-        $successRateData = Order::select(DB::raw('DATE(date_create_order) as date'))
-        ->whereBetween('date_create_order', [Carbon::now()->subDays(6), Carbon::now()])
+        $successRateData = Order::select(DB::raw('DATE(created_at) as date'))
+        ->whereBetween('created_at', [Carbon::now()->subDays(6), Carbon::now()])
         ->groupBy('date')
         ->orderBy('date')
         ->get();
-    
+
         $successRateLabels = $successRateData->pluck('date');
-        
+
         $successRateValues = $successRateData->map(function ($item) {
-            $totalOrders = Order::whereDate('date_create_order', $item->date)->count();
-            $successfulOrders = Order::whereDate('date_create_order', $item->date)
+            $totalOrders = Order::whereDate('created_at', $item->date)->count();
+            $successfulOrders = Order::whereDate('created_at', $item->date)
                 ->where('status_order', 'Đã nhận hàng')
                 ->count();
             return $totalOrders > 0 ? ($successfulOrders / $totalOrders) * 100 : 0;
@@ -194,7 +194,7 @@ class StatisticalController extends Controller
      */
     public function create()
     {
-        
+
         return view('admin::create');
     }
 
@@ -212,18 +212,18 @@ class StatisticalController extends Controller
     public function revenue()
     {
          //doanh thu theo ngày trong 7 ngày qua
-         $revenueData = Order::select(DB::raw('DATE(date_create_order) as date'), DB::raw('SUM(total_price) as total'))
-         ->whereBetween('date_create_order', [Carbon::now()->subDays(6), Carbon::now()])
+         $revenueData = Order::select(DB::raw('DATE(created_at) as date'), DB::raw('SUM(total_price) as total'))
+         ->whereBetween('created_at', [Carbon::now()->subDays(6), Carbon::now()])
          ->groupBy('date')
          ->orderBy('date')
          ->get();
- 
+
          $revenueLabels = $revenueData->pluck('date');
          $revenueValues = $revenueData->pluck('total');
- 
- 
+
+
          return view('admin::contents.statistical.revenue', compact(
-             'revenueLabels', 
+             'revenueLabels',
              'revenueValues'
          ));
     }

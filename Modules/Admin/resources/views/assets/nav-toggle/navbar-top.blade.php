@@ -12,8 +12,7 @@
             <a class="navbar-brand me-1 me-sm-3" href={{ route('admin.dashboard') }}>
                 <div class="d-flex align-items-center">
                     <img class="me-2" src="{{ asset('theme/admin/img/icons/spot-illustrations/falcon.png') }}"
-                        alt="" width="40" />
-                    <span class="font-sans-serif text-primary">falcon</span>
+                        alt="" width="100" />
                 </div>
             </a>
             {{-- FORM SEARCH --}}

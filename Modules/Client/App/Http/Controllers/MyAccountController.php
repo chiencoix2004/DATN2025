@@ -43,7 +43,7 @@ class MyAccountController extends Controller
 
         $perPage = 5;
 
-        $orders = Order::where('users_id', auth()->id())->orderBy('date_create_order', 'desc')->paginate($perPage);
+        $orders = Order::where('users_id', auth()->id())->orderBy('created_at', 'desc')->paginate($perPage);
 
         $formattedOrders = $orders->getCollection()->map(function ($order) {
 
@@ -51,7 +51,7 @@ class MyAccountController extends Controller
             $total_price = $order->total_price;
             return [
                 'id' => $order->id,
-                'date' => $order->date_create_order ? Carbon::parse($order->date_create_order)->format('d-m-Y') : null,
+                'date' => $order->created_at ? Carbon::parse($order->created_at)->format('d-m-Y') : null,
                 'status' => $order->status_order,
                 'total' => number_format($total_price, 0, ',', '.') . " VND cho {$items_count} sản phẩm"
             ];
@@ -218,7 +218,7 @@ class MyAccountController extends Controller
         ]);
 
         // Đặt tên file tùy chỉnh
-        $date = Carbon::parse($order->date_create_order)->format('d-m-Y');
+        $date = Carbon::parse($order->created_at)->format('d-m-Y');
         $fileName = 'hóa đơn -' . $order->id . '-' . Str::slug($order->user_name) . "-$date" . '.pdf';
 
         // Trả về PDF dưới dạng file tải về

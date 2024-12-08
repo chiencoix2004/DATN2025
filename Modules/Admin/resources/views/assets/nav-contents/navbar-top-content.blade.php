@@ -5,7 +5,7 @@
     <a class="navbar-brand me-1 me-sm-3" href={{ route('admin.dashboard') }}>
         <div class="d-flex align-items-center"><img class="me-2"
                 src="{{ asset('theme/admin/img/icons/spot-illustrations/falcon.png') }}" alt=""
-                width="40" /><span class="font-sans-serif text-primary">falcon</span></div>
+                width="80" />
     </a>
     {{-- <ul class="navbar-nav align-items-center d-none d-lg-block">
         <li class="nav-item">
@@ -168,7 +168,7 @@
                aria-expanded="false">
                <span class="fas fa-bell" data-fa-transform="shrink-6" style="font-size: 33px;"></span>
             </a>
-            
+
             <div class="dropdown-menu dropdown-caret dropdown-menu-end dropdown-menu-card dropdown-menu-notification dropdown-caret-bg"
                  aria-labelledby="navbarDropdownNotification">
                 <div class="card card-notification shadow-none">
@@ -182,26 +182,26 @@
                             </div>
                         </div>
                     </div>
-                    
+
                     <div class="scrollbar-overlay" style="max-height:19rem;">
                         <!-- Notification List Container -->
                         <div class="list-group list-group-flush fw-normal fs-10" id="list-group-flush">
                             <!-- Dynamic content will be loaded here by JavaScript -->
                         </div>
                     </div>
-                    
+
                     <div class="card-footer text-center border-top">
                         <a class="card-link d-block" href="{{ route('admin.notifications.index') }}">Xem tất cả</a>
                     </div>
                 </div>
             </div>
         </li>
-        
+
         <li class="nav-item dropdown">
             <a class="nav-link pe-0 ps-2" id="navbarDropdownUser" role="button" data-bs-toggle="dropdown"
                 aria-haspopup="true" aria-expanded="false">
                 <div class="avatar avatar-xl">
-                    <img class="rounded-circle" src="{{ asset('theme/admin/img/team/3-thumb.png') }}"
+                    <img class="rounded-circle" src="{{ Storage::url(Auth::user()->user_image) }}"
                         alt="" />
                 </div>
             </a>

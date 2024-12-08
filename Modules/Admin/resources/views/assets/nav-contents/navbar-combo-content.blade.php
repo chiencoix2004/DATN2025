@@ -10,8 +10,7 @@
     <a class="navbar-brand me-1 me-sm-3" href={{ route('admin.dashboard') }}>
         <div class="d-flex align-items-center">
             <img class="me-2" src="{{ asset('theme/admin/img/icons/spot-illustrations/falcon.png') }}" alt=""
-                width="40" />
-            <span class="font-sans-serif text-primary">falcon</span>
+                width="100" />
         </div>
     </a>
     <div class="collapse navbar-collapse scrollbar" id="navbarStandard">
@@ -197,7 +196,7 @@
                                 <a class="border-bottom-0 notification-unread  notification notification-flush"
                                     href="#!">
                                     <div class="notification-avatar">
-                                        <div class="avatar avatar-xl me-3">
+                                        <div class=" me-3">
                                             <img class="rounded-circle"
                                                 src="{{ asset('theme/admin/img/logos/oxford.png') }}"
                                                 alt="" />
@@ -216,7 +215,7 @@
                                     <div class="notification-avatar">
                                         <div class="avatar avatar-xl me-3">
                                             <img class="rounded-circle"
-                                                src="{{ asset('theme/admin/img/team/10.jpg') }}" alt="" />
+                                                src="{{ Storage::url(Auth::user()->user_image) }}" alt="" />
                                         </div>
                                     </div>
                                     <div class="notification-body">
@@ -239,7 +238,7 @@
             <a class="nav-link pe-0 ps-2" id="navbarDropdownUser" role="button" data-bs-toggle="dropdown"
                 aria-haspopup="true" aria-expanded="false">
                 <div class="avatar avatar-xl">
-                    <img class="rounded-circle" src="{{ asset('theme/admin/img/team/3-thumb.png') }}"
+                    <img class="rounded-circle" src="{{ Storage::url(Auth::user()->user_image) }}"
                         alt="" />
                 </div>
             </a>
