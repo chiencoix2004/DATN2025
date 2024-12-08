@@ -97,7 +97,9 @@
 @endsection
 
 @section('js-setting')
+
     <script>
+        const appurl = "{{ env('APP_URL') }}";
         $(document).ready(function() {
 
             function loadCartItems() {
@@ -106,6 +108,7 @@
                     method: 'GET',
                     dataType: 'json',
                     success: function(response) {
+                        console.log(response);
                         $('#minicart').empty();
                         response.cartItems.forEach(function(item) {
                             let product = item.product_variant.product;
@@ -115,8 +118,8 @@
                             let productHTML = `
                           <li class="minicart-product">
                                 <a class="product-item_remove" href="javascript:void(0)" onclick="removeFromMiniCart(${item.id})"><i class="ion-android-close"></i></a>
-                                <div class="product-item_img">
-                                     <img src="{{ Storage::url('${product.image_avatar}') }}" alt="${product.name}">
+                                <div class="product-item_img" style="height: auto;">
+                                     <img src="/storage/${product.image_avatar}" alt="${product.name}">
                                 </div>
                                 <div class="product-item_content">
                                      <a class="product-item_title" href="shop-left-sidebar.html">${product.name}</a>
@@ -170,6 +173,7 @@
                     dataType: 'json', // Định dạng dữ liệu trả về là JSON
                     success: function(response) {
                         if (response.message === "Lấy danh sách giỏ hàng thành công!") {
+                            // console.log(response.cartItems);
                             displayCartItems(response.cartItems); // Hiển thị các mặt hàng trong giỏ
                             // var itemCount = response.cartItems.length;
                             // $('.item-count').text(itemCount);
@@ -201,54 +205,49 @@
 
             // Hàm hiển thị danh sách sản phẩm trong giỏ hàng
             function displayCartItems(cartItems) {
-                $('#cart-table-body').empty(); // Xóa nội dung cũ của bảng giỏ hàng
-                cartItems.forEach(function(item) {
-                    var imgURL = item.product_image;
-                    if (!imgURL.includes('http')) {
-                        imgURL = `{{ Storage::url('${ item.product_image}') }}`;
-                    }
-                    var row = `
-                <tr>
-                    <td class="kenne-product-thumbnail">
-                        <a href="javascript:void(0)">
-                            <img src="${imgURL}" alt="${item.product_id} Thumbnail" width="160">
-                        </a>
-                    </td>
-                    <td class="kenne-product-name">
-                        <a href="{{ route('shop.productDetail', '') }}/${item.product_variant.product.slug}">
-                            ${item.product_variant.product.name}
-                        </a>
-                        <br>
-                        <div>
-                            - Size: ${item.product_variant.size.size_value}
-                            <br>
-                            - Màu: <input type="color" value="${item.product_variant.color.color_value}" disabled>
-                        </div>
-                    </td>
-                    <td class="kenne-product-price">
-                        <span class="amount">${formatPrice(item.price)}</span>
-                    </td>
-                    <td class="quantity">
-                        <label>Số lượng</label>
-                        <div class="cart-plus-minus">
-                            <input class="cart-plus-minus-box" data-id="${item.id}" value="${item.quantity}" type="number" min="1">
-                            <button class="dec qtybutton" data-id="${item.id}" data-action="decrease">-</button>
-                            <button class="inc qtybutton" data-id="${item.id}" data-action="increase">+</button>
-                        </div>
-                    </td>
-                    <td class="product-subtotal">
-                        <span class="amount">${formatPrice(item.total_price)}</span>
-                    </td>
-                    <td class="kenne-product-remove">
-                        <a href="javascript:void(0)" onclick="removeFromCart(${item.id})">
-                            <i class="fa fa-trash" title="Xóa"></i>
-                        </a>
-                    </td>
-                </tr>
-                `;
-                    $('#cart-table-body').append(row); // Thêm hàng vào bảng
+                $('#cart-table-body').empty();
+                cartItems.forEach(item => {
+                    $('#cart-table-body').append(generateCartRow(item));
                 });
             }
+            function generateCartRow(item) {
+    var imgURL = item.product_image.includes('http') ? item.product_image : `/storage/${item.product_image}`;
+    return `
+        <tr>
+            <td class="kenne-product-thumbnail">
+                <a href="javascript:void(0)">
+                    <img src="${imgURL}" alt="${item.product_id} Thumbnail" width="160">
+                </a>
+            </td>
+            <td class="kenne-product-name">
+                <a href="/shop/product-detail/${item.product_variant.product.slug}">
+                    ${item.product_variant.product.name}
+                </a>
+                <br>
+                <div>
+                    - Size: ${item.product_variant.size.size_value}
+                    <br>
+                    - Màu: <input type="color" value="${item.product_variant.color.color_value}" disabled>
+                </div>
+            </td>
+            <td class="kenne-product-price"><span class="amount">${formatPrice(item.price)}</span></td>
+            <td class="quantity">
+                <label>Số lượng</label>
+                <div class="cart-plus-minus">
+                    <input class="cart-plus-minus-box" data-id="${item.id}" value="${item.quantity}" type="number" min="1">
+                    <button class="dec qtybutton" data-id="${item.id}" data-action="decrease">-</button>
+                    <button class="inc qtybutton" data-id="${item.id}" data-action="increase">+</button>
+                </div>
+            </td>
+            <td class="product-subtotal"><span class="amount">${formatPrice(item.total_price)}</span></td>
+            <td class="kenne-product-remove">
+                <a href="javascript:void(0)" onclick="removeFromCart(${item.id})">
+                    <i class="fa fa-trash" title="Xóa"></i>
+                </a>
+            </td>
+        </tr>
+    `;
+}
 
             // Gắn sự kiện cho nút tăng/giảm số lượng bằng Event Delegation
             $('#cart-table-body').on('click', '.qtybutton', function() {
@@ -325,7 +324,7 @@
                             console.log("Xóa sản phẩm thành công:", response.message);
                             fetchCartItems(); // Tải lại danh sách giỏ hàng
                             updateCartTotal();
-                            
+
                         } else {
                             console.error("Lỗi khi xóa sản phẩm:", response.message);
                         }
@@ -387,7 +386,7 @@
                             }
                         },
                         error: function(jqXHR, textStatus, errorThrown) {
-                            
+
                             console.error("Lỗi khi áp dụng mã giảm giá:", textStatus,
                                 errorThrown);
                         }

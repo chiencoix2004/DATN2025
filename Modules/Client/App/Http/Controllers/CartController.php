@@ -127,6 +127,7 @@ class CartController extends Controller
 
                     if ($price !== null) {
                         $cartItem->price = $price;
+                        $cartItem->product_image = $product_image;
                         $cartItem->total_price = $cartItem->quantity * $price;
                         $cartItem->save();
                     };
@@ -189,7 +190,7 @@ class CartController extends Controller
     }
 
     public function index()
-    {   
+    {
         Cart::firstOrCreate(['user_id' => auth()->id()]);
         return view('client::contents.shops.cart');
     }
