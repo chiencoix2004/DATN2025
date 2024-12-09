@@ -126,6 +126,7 @@ class ShopController extends Controller
      $query->join('product_variants', 'products.id', '=', 'product_variants.product_id');
      $query->join('color_attributes', 'product_variants.color_attribute_id', '=', 'color_attributes.id');
      $query->join('size_attributes', 'product_variants.size_attribute_id', '=', 'size_attributes.id');
+     $query->select('products.*', 'sub_categories.name as sub_category_name', 'categories.name as category_name', 'color_attributes.color_value', 'size_attributes.size_value');
      $query->where(['is_active' => 1]);
     // Lọc theo giá
     if ($request->filled('min_price')) {
@@ -175,12 +176,12 @@ class ShopController extends Controller
     }
 
     // Lấy dữ liệu sau khi lọc
-    $data = $query->paginate(12)->appends($request->query());;
+    $data = $query->paginate(12)->appends($request->query());
     $tags = Tag::query()->get();
     $categories = Category::query()->get();
     $colors = ColorAttribute::query()->get();
     $sizes = SizeAttribute::query()->get();
-  //  dd($products);
+// dd($data);
 
   return view('client::contents.shops.shopIndex', compact('data', 'tags', 'categories', 'colors', 'sizes'));
 }
