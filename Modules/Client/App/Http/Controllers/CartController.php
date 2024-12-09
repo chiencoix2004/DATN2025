@@ -421,7 +421,7 @@ class CartController extends Controller
             if ($current_date < $coupon->date_start) {
                 return response()->json([
                     'success' => false,
-                    'message' => 'Mã giảm giá chưa có hiệu lực.'
+                    'message' => 'Mã giảm giá không tồn tại hoặc đã hết hạn.'
                 ], 200);
             } elseif ($current_date > $coupon->date_end) {
                 return response()->json([
@@ -432,11 +432,6 @@ class CartController extends Controller
                 return response()->json([
                     'success' => false,
                     'message' => 'Số tiền chi tiêu phải lớn hơn hoặc bằng ' . $coupon->minimum_spend . '.'
-                ], 200);
-            } elseif ($order_total > $coupon->maximum_spend) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Số tiền chi tiêu phải nhỏ hơn hoặc bằng ' . $coupon->maximum_spend . '.'
                 ], 200);
             } else {
                 // Tính toán giá trị giảm giá
