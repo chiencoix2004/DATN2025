@@ -132,7 +132,7 @@
                                     <div class="card-body">
                                         <div>
                                             <div class="fallback">
-                                                <input name="id_card_image_front" type="file" accept="image/png,image/jpeg" required>
+                                                <input name="id_card_image_back" type="file" accept="image/png,image/jpeg" required>
                                                 <div class="invalid-feedback">Vui lòng chọn ảnh</div>
                                             </div>
                                             <div class="dz-message needsclick">
