@@ -193,7 +193,7 @@ class ShopController extends Controller
     {
        $product = new Product();
        $data =  $product->fullproductdetail($kwd);
-       return response()->json($data);
+      dd($data);
     }
 
     /**

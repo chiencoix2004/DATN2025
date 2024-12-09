@@ -10,8 +10,8 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
-use Storage;
-
+use Illuminate\Support\Facades\Storage;
+use Exception;
 class BannerController extends Controller
 {
     /**
@@ -37,7 +37,7 @@ class BannerController extends Controller
             DB::beginTransaction();
             $img = $banner->img_banner;
             if ($request->hasFile('hinh_anh')) {
-                $img = Storage::put('slider', $request->file('hinh_anh'));
+                $img = Storage::put('public/slider', $request->file('hinh_anh'));
             }
             $banner->update(
                 [
@@ -77,8 +77,9 @@ class BannerController extends Controller
         try {
             DB::beginTransaction();
             if ($request->hasFile('hinh_anh')) {
-                $img = Storage::put('banner', $request->file('hinh_anh'));
-            }
+                $img = Storage::put('public/banner', $request->file('hinh_anh'));
+                //dd($img);
+            };
             $banner->update(
                 [
                     'img_banner' => $img,
@@ -98,6 +99,7 @@ class BannerController extends Controller
             Storage::delete($img);
             DB::rollBack();
             return redirect()->back()->with('error', $exception->getMessage());
+           // dd($exception->getMessage());
         }
     }
     public function delete($id)
@@ -115,7 +117,7 @@ class BannerController extends Controller
         try {
             DB::beginTransaction();
             if ($position == 1) {
-                $img = Storage::put('slider', $request->hinh_anh);
+                $img = Storage::put('public/slider', $request->hinh_anh);
                 $model = new Banner();
                 $model->Addbanner($img, $request->lien_ket, $position, $request->offer_text, $request->title, $request->description);
             }

@@ -254,8 +254,10 @@ class Product extends Model
        ->where(function ($query) use ($keywd) {
         $query->where('products.name', 'like', '%' . $keywd . '%')
               ->orWhere('products.sku', 'like', '%' . $keywd . '%')
-              ->orWhere('categories.name', 'like', '%' . $keywd . '%');
-    })
+              ->orWhere('categories.name', 'like', '%' . $keywd . '%')
+              ->orWhere('products.id', 'like', '%' . $keywd . '%')
+              ->orWhere('sub_categories.name', 'like', '%' . $keywd . '%');
+        })
        ->get();
     }
 
