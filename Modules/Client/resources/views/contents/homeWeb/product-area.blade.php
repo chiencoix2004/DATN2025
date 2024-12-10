@@ -72,7 +72,7 @@
                                                 </span>
                                             @endif
                                         </div>
-                                        <div class="rating-box">
+                                        {{-- <div class="rating-box">
                                             <ul>
                                                 <li><i class="ion-ios-star"></i></li>
                                                 <li><i class="ion-ios-star"></i></li>
@@ -82,7 +82,7 @@
                                                     <i class="ion-ios-star-outline"></i>
                                                 </li>
                                             </ul>
-                                        </div>
+                                        </div> --}}
                                     </div>
                                 </div>
                             </div>

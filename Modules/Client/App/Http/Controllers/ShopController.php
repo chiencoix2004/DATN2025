@@ -152,7 +152,6 @@ class ShopController extends Controller
         }
         if ($request->filled('sub_categories')) {
             $subCategories = array_map('intval', $request->sub_categories);
-            $query->whereIn('sub_categories.id', [4, 5, 6, 7, 8, 9, 10]);
             // dd($query->get());
         }
 
