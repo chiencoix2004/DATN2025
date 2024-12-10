@@ -25,7 +25,6 @@
                 {{-- sidebar --}}
                 <div class="col-xl-3 col-lg-4 order-2 order-lg-1">
                     <form method="GET" action="{{ route('filterproduct') }}">
-                        @csrf
                         <div class="kenne-sidebar-catagories_area">
                             <div class="kenne-sidebar_categories">
                                 <div class="kenne-categories_title first-child">

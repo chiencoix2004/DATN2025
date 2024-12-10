@@ -117,42 +117,49 @@ class ShopController extends Controller
 
     public function filterproduct(Request $request)
 {
+   //dd($request->all());
     // Khởi tạo query cơ bản
     $query = Product::query();
-
      //join table
      $query->join('sub_categories', 'products.sub_category_id', '=', 'sub_categories.id');
      $query->join('categories', 'sub_categories.category_id', '=', 'categories.id');
      $query->join('product_variants', 'products.id', '=', 'product_variants.product_id');
      $query->join('color_attributes', 'product_variants.color_attribute_id', '=', 'color_attributes.id');
      $query->join('size_attributes', 'product_variants.size_attribute_id', '=', 'size_attributes.id');
-     $query->select('products.*', 'sub_categories.name as sub_category_name', 'categories.name as category_name', 'color_attributes.color_value', 'size_attributes.size_value');
-     $query->where(['is_active' => 1]);
+     $query->select('products.*', 'sub_categories.name as sub_category_name', 'categories.name as category_name', 'color_attributes.color_value', 'size_attributes.size_value'  );
+    $query->where(['is_active' => 1]);
     // Lọc theo giá
     if ($request->filled('min_price')) {
-        $query->where('productsprice_sale', '>=', $request->min_price);
+       $query->where('products.price_sale', '>=', $request->min_price);
+      //  echo ('filled min_price');
     }
 
     if ($request->filled('max_price')) {
         $query->where('products.price_sale', '<=', $request->max_price);
+       // echo ('filled max_price');
     }
 
     // Lọc theo danh mục
     if ($request->filled('categories')) {
-        $query->whereIn('category_id', $request->categories);
+        $categories = array_map('intval', $request->categories);
+        $query->whereIn('category_id', $request->$categories);
     }
     if ($request->filled('sub_categories')) {
-        $query->whereIn('sub_categories.id', $request->sub_categories);
+        $subCategories = array_map('intval', $request->sub_categories);
+      //  $query->whereIn('sub_categories.id', [4,5,6,7,8,9,10]);
+       // dd($query->get());
     }
 
     // Lọc theo màu sắc
     if ($request->filled('color')) {
-        $query->whereIn('color_attributes.id', $request->color);
+        $color= array_map('intval', $request->color);
+        $query->whereIn('color_attributes.id', $color);
     }
 
     // Lọc theo kích thước
     if ($request->filled('size')) {
-        $query->whereIn('size_attributes.id', $request->size);
+        $size= array_map('intval', $request->size);
+        $query->whereIn('size_attributes.id', $size);
     }
 
     // Sắp xếp theo yêu cầu
@@ -175,16 +182,18 @@ class ShopController extends Controller
         }
     }
 
-    // Lấy dữ liệu sau khi lọc
+   // Lấy dữ liệu sau khi lọc
     $data = $query->paginate(12)->appends($request->query());
+    $data1 = $query->get();
     $tags = Tag::query()->get();
     $categories = Category::query()->get();
     $colors = ColorAttribute::query()->get();
     $sizes = SizeAttribute::query()->get();
-// dd($data);
+        dd($data1);
 
-  return view('client::contents.shops.shopIndex', compact('data', 'tags', 'categories', 'colors', 'sizes'));
+  //return view('client::contents.shops.shopIndex', compact('data', 'tags', 'categories', 'colors', 'sizes'));
 }
+
 
 
     /**
