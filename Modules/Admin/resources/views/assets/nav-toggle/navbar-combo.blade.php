@@ -239,7 +239,7 @@
         <li class="nav-item dropdown"><a class="nav-link pe-0 ps-2" id="navbarDropdownUser" role="button"
                 data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <div class="avatar avatar-xl">
-                    <img class="rounded-circle" src="{{ asset('theme/admin/img/team/3-thumb.png') }}"
+                    <img class="rounded-circle" src="{{ Storage::url(Auth::user()->user_image) }}"
                         alt="" />
                 </div>
             </a>

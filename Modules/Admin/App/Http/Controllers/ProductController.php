@@ -124,7 +124,7 @@ class ProductController extends Controller
             }
             $product = Product::query()->create(
                 [
-                    'category_id' => $request->prd_category,
+                    'sub_category_id' => $request->prd_category,
                     'name' => $dataProduct['prd_name'],
                     'sku' => $dataProduct['prd_sku'],
                     'slug' => $dataProduct['prd_slug'],
@@ -188,10 +188,11 @@ class ProductController extends Controller
     }
     public function updatePrd(ProductUpdate $request, Product $product)
     {
+       // dd($request->prd_category);
         $data = Product::query()->findOrFail($product->id);
         $dataProduct = [];
         $prd_img_temp = [];
-        $dataProduct['prd_category'] = $request->prd_category ??= null;
+        $dataProduct['prd_category'] = $request->prd_category;
         $dataProduct['prd_name'] = $request->prd_name;
         $dataProduct['prd_slug'] = $request->prd_slug;
         if ($request->prd_slug == $data->slug) {
@@ -270,14 +271,17 @@ class ProductController extends Controller
             $ctgr = Category::query()->where('id', $dataProduct['prd_category'])->first();
             if ($request->hasFile('prd_avatar')) {
                 $slugCategory = optional(Category::query()->find($request->prd_category))->slug ?? 'khong-phan-loai';
+
                 $viewpath = "products/image_avatar/$slugCategory/".$request->file('prd_avatar')->hashName();
+
                 $dataProduct['prd_avatar'] = Storage::put("public/products/image_avatar/$slugCategory", $request->file('prd_avatar'));
             } else {
-                $dataProduct['prd_avatar'] = $data->image_avatar;
+                $viewpath = $data->image_avatar;
             }
+            //dd($dataProduct['prd_category']);
             $data->update(
                 [
-                    'category_id' => $dataProduct['prd_category'],
+                    'sub_category_id' => $dataProduct['prd_category'],
                     'name' => $dataProduct['prd_name'],
                     'slug' => $dataProduct['prd_slug'],
                     'image_avatar' => $viewpath,

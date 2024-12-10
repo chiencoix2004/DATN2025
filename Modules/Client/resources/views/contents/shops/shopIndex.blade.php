@@ -25,7 +25,6 @@
                 {{-- sidebar --}}
                 <div class="col-xl-3 col-lg-4 order-2 order-lg-1">
                     <form method="GET" action="{{ route('filterproduct') }}">
-                        @csrf
                         <div class="kenne-sidebar-catagories_area">
                             <div class="kenne-sidebar_categories">
                                 <div class="kenne-categories_title first-child">
@@ -96,7 +95,7 @@
                                             $textColor = getContrastingColor($c->color_value);
                                         @endphp
                                         <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" value="{{ $c->id }}"
+                                            <input class="form-check-input" type="checkbox" value="{{ $c->name }}"
                                                 id="flexCheckDefault" name="color[]">
                                             <label class="form-check-label" for="flexCheckDefault">
                                                 <span class="badge"
@@ -129,7 +128,7 @@
                                 <ul class="sidebar-checkbox_list">
                                     @foreach ($sizes as $s)
                                         <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" value="{{ $s->id }}" id="size-{{ $s->id }}" name="sizes[]"
+                                            <input class="form-check-input" type="checkbox" value="{{ $s->name }}" id="size-{{ $s->id }}" name="sizes[]"
                                                 {{ in_array($s->id, request('sizes', [])) ? 'checked' : '' }}>
                                             <label class="form-check-label" for="size-{{ $s->id }}">{{ $s->size_value }}</label>
                                         </div>

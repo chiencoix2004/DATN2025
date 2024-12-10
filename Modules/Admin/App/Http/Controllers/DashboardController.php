@@ -27,11 +27,11 @@ class DashboardController extends Controller
             ->limit(5)
             ->get();
         // Lấy 5 sản phẩm bán chạy nhất
-        $bestSell = Product::select('products.id', 'products.name', 'products.price_sale', 'products.sub_category_id', 'products.created_at', 'products.updated_at')
+        $bestSell = Product::select('products.id', 'products.name', 'products.price_sale', 'products.sub_category_id', 'products.created_at', 'products.updated_at','products.slug')
         ->join('order_details', 'products.id', '=', 'order_details.product_id')
         ->join('orders', 'order_details.order_id', '=', 'orders.id')
         ->where('orders.status_payment', 'Đã thanh toán')
-        ->groupBy('products.id', 'products.name', 'products.price_sale', 'products.sub_category_id', 'products.created_at', 'products.updated_at')
+        ->groupBy('products.id', 'products.name', 'products.price_sale', 'products.sub_category_id', 'products.created_at', 'products.updated_at','products.slug')
         ->selectRaw('SUM(order_details.product_quantity) as total_quantity')
         ->orderByDesc('total_quantity')
         ->limit(5)
@@ -161,5 +161,6 @@ class DashboardController extends Controller
                 'bestCustomers'
             )
         );
+
     }
 }

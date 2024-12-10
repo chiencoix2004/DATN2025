@@ -86,6 +86,10 @@ class CartController extends Controller
             $cart = Cart::firstOrCreate(['user_id' => auth()->id()]);
             $cartItem = $cart->cartItems()->firstOrCreate(['product_id' => $productId, 'product_variant_id' => $productVariantId], ['quantity' => 0, 'price' => 0, 'price_total' => 0]);
             $cartItem->increment('quantity', $quantity);
+            if ($cartItem->quantity > $productVariant->quantity) {
+                $cartItem->decrement('quantity', $quantity);
+                return response()->json(['message' => 'Số lượng hàng bạn mua đang bị vượt số lượng hàng hiện tại, vui lòng đểu chỉnh lại!'], 200);
+            }
             $cartItem->product_image = $product_image;
             $cartItem->save();
 
@@ -205,6 +209,10 @@ class CartController extends Controller
 
     public function list()
     {
+        //ham check nếu user khác thêm vào giỏ hàng mà sản phẩm đó đã hết hoặc trong giỏ hàng đã có sản phẩm đó mà sản phẩm đó đã hết
+        //thì xóa sản phẩm đó khỏi giỏ hàng -> thông báo cho user -> cập nhật lại giỏ hàng
+
+
         if (auth()->check()) {
             $cart = Cart::where('user_id', auth()->id())->first();
             $cartItems = CartItem::where('cart_id', $cart->id)
@@ -443,7 +451,7 @@ class CartController extends Controller
             if ($current_date < $coupon->date_start) {
                 return response()->json([
                     'success' => false,
-                    'message' => 'Mã giảm giá chưa có hiệu lực.'
+                    'message' => 'Mã giảm giá không tồn tại hoặc đã hết hạn.'
                 ], 200);
             } elseif ($current_date > $coupon->date_end) {
                 return response()->json([
@@ -454,11 +462,6 @@ class CartController extends Controller
                 return response()->json([
                     'success' => false,
                     'message' => 'Số tiền chi tiêu phải lớn hơn hoặc bằng ' . $coupon->minimum_spend . '.'
-                ], 200);
-            } elseif ($order_total > $coupon->maximum_spend) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Số tiền chi tiêu phải nhỏ hơn hoặc bằng ' . $coupon->maximum_spend . '.'
                 ], 200);
             } else {
                 // Tính toán giá trị giảm giá

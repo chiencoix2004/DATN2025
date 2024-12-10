@@ -19,7 +19,6 @@
                                 <h5 class="mb-2 mb-md-0">Quản lý thuộc tính</h5>
                             @endif
                         @endif
-                        <a href="" class="btn btn-secondary">Thùng rác</a>
                     </div>
                 </div>
             </div>

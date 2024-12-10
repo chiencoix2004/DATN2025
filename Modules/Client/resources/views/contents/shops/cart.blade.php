@@ -220,48 +220,51 @@
                 $('#cart-table-body').empty();
                 cartItems.forEach(item => {
                     $('#cart-table-body').append(generateCartRow(item));
-                });
-            }
-    
-            function generateCartRow(item) {
-                var imgURL = item.product_image.includes('http') ? item.product_image : `/storage/${item.product_image}`;
-                return `
-                    <tr>
-                        <td class="kenne-product-thumbnail">
-                            <a href="javascript:void(0)">
-                                <img src="${imgURL}" alt="${item.product_id} Thumbnail" width="160">
-                            </a>
-                        </td>
-                        <td class="kenne-product-name">
-                            <a href="/shop/product-detail/${item.product_variant.product.slug}">
-                                ${item.product_variant.product.name}
-                            </a>
-                            <br>
-                            <div>
-                                - Size: ${item.product_variant.size.size_value}
-                                <br>
-                                - Màu: <input type="color" value="${item.product_variant.color.color_value}" disabled>
-                            </div>
-                        </td>
-                        <td class="kenne-product-price"><span class="amount">${formatPrice(item.price)}</span></td>
-                        <td class="quantity">
-                            <label>Số lượng</label>
-                            <div class="cart-plus-minus">
-                                <input class="cart-plus-minus-box" data-id="${item.id}" value="${item.quantity}" type="number" min="1">
-                                <button class="dec qtybutton" data-id="${item.id}" data-action="decrease">-</button>
-                                <button class="inc qtybutton" data-id="${item.id}" data-action="increase">+</button>
-                            </div>
-                        </td>
-                        <td class="product-subtotal"><span class="amount">${formatPrice(item.total_price)}</span></td>
-                        <td class="kenne-product-remove">
-                            <a href="javascript:void(0)" onclick="removeFromCart(${item.id})">
-                                <i class="fa fa-trash" title="Xóa"></i>
-                            </a>
-                        </td>
-                    </tr>
-                `;
-            }
-    
+            })
+
+
+        }
+        function generateCartRow(item) {
+    var imgURL = item.product_image.includes('http') ? item.product_image : `/storage/${item.product_image}`;
+    return `
+        <tr>
+            <td class="kenne-product-thumbnail">
+                <a href="javascript:void(0)">
+                    <img src="${imgURL}" alt="${item.product_id} Thumbnail" width="160">
+                </a>
+            </td>
+            <td class="kenne-product-name">
+                <a href="/shop/product-detail/${item.product_variant.product.slug}">
+                    ${item.product_variant.product.name}
+                </a>
+                <br>
+                <div>
+                    - Size: ${item.product_variant.size.size_value}
+                    <br>
+                    - Màu: <input type="color" value="${item.product_variant.color.color_value}" disabled>
+                </div>
+            </td>
+            <td class="kenne-product-price"><span class="amount">${formatPrice(item.price)}</span></td>
+            <td class="quantity">
+                <label>Số lượng</label>
+                <div class="cart-plus-minus">
+                    <input class="cart-plus-minus-box" data-id="${item.id}" value="${item.quantity}" type="number" min="1">
+                    <button class="dec qtybutton" data-id="${item.id}" data-action="decrease">-</button>
+                    <button class="inc qtybutton" data-id="${item.id}" data-action="increase">+</button>
+                </div>
+            </td>
+            <td class="product-subtotal"><span class="amount">${formatPrice(item.total_price)}</span></td>
+            <td class="kenne-product-remove">
+                <a href="javascript:void(0)" onclick="removeFromCart(${item.id})">
+                    <i class="fa fa-trash" title="Xóa"></i>
+                </a>
+            </td>
+        </tr>
+    `;
+}
+
+            // Gắn sự kiện cho nút tăng/giảm số lượng bằng Event Delegation
+
             $('#cart-table-body').on('click', '.qtybutton', function() {
                 const itemId = $(this).data('id');
                 const action = $(this).data('action');
