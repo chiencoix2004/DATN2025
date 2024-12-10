@@ -368,6 +368,36 @@ class CartController extends Controller
             ->with("productVariant.product")
             ->get();
 
+        $dataList = [];
+
+        foreach($cartItems as $item){
+            $productVariant = ProductVariant::find($item->product_variant_id);
+            if($item->quantity > $productVariant->quantity){
+                $dataList[] = [
+                    'product_name' => $item->productVariant->product->name,
+                    'size' => $item->productVariant->size->size_value,
+                    'color' => $item->productVariant->color->color_value,
+                ];
+            };
+        };
+
+        // $dataList[] = [
+        //     'product_name' => 'Áo sơ mi',
+        //     'size' => 'M',
+        //     'color' => 'Đỏ',
+        // ];
+
+        $message = '';
+        foreach ($dataList as $item) {
+            $message .= 'sản phẩm'.$item['product_name'] . ' - size:' . $item['size'] . ' -màu:' . $item['color'] . '\n';
+        };
+
+        if(count($dataList) > 0){
+            return redirect()->route('cart.index') 
+            ->with('messageSP', $message) 
+            ->with('errorSP', 'Số lượng sản phẩm không đủ!'); 
+        };
+
         if ($cartItems->count() == 0) {
             return redirect()->route('cart.index');
         }
