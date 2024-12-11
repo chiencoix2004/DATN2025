@@ -204,10 +204,12 @@
                                             data-product-id="{{ $data->id }}">Thêm vào giỏ hàng</button>
                                     </li>
                                     <li>
-                                        <a class="qty-wishlist_btn" href="wishlist.html" data-bs-toggle="tooltip"
+                                        <a class="qty-wishlist_btn add-to-wishlist " href="#"
+                                            data-product-id="{{ $data->id }}" data-bs-toggle="tooltip"
                                             title="Thêm vào yêu thích">
                                             <i class="ion-android-favorite-outline"></i>
                                         </a>
+
                                     </li>
                                 </ul>
                             </div>
@@ -775,5 +777,35 @@
                 label.classList.add('active');
             }
         });
+    </script>
+
+    <script>
+        $(document).ready(
+            function() {
+                $('.add-to-wishlist').click(function(e) {
+                    e.preventDefault();
+                    let productId = $(this).data('product-id');
+                    let productSize = $('#id_size').val();
+                    let productColor = $('input[name="product-color"]:checked').val();
+                    $.ajax({
+                        url: '{{ route('wishlist.add') }}',
+                        method: 'POST',
+                        data: {
+                            product_id: productId,
+                            size_attribute_id: productSize,
+                            color_attribute_id: productColor,
+                            _token: '{{ csrf_token() }}'
+                        },
+                        success: function(response) {
+                            alert(response.message);
+
+                        },
+                        error: function(error, response) {
+                            alert(response.message);
+                            console.error(error);
+                        }
+                    });
+                })
+            });
     </script>
 @endsection

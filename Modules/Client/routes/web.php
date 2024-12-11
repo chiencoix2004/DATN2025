@@ -16,6 +16,7 @@ use Modules\Client\App\Http\Controllers\VerificationController;
 use Modules\Client\App\Http\Controllers\ResetPasswordController;
 use Modules\Client\App\Http\Controllers\ForgotPasswordController;
 use Modules\Client\App\Http\Controllers\ReviewController;
+use Modules\Client\App\Http\Controllers\WishlistController;
 
 
 
@@ -131,3 +132,9 @@ Route::get('/invoice/{id}', [MyAccountController::class, 'invoiceDetail'])->name
 
 Route::post('/send-notification', [CartController::class, 'sendNotification'])->name('send.notification');
 route::get('filterproduct', [ShopController::class, 'filterproduct'])->name('filterproduct');
+
+Route::controller(WishlistController::class)->group(function () {
+    Route::get('/wishlist', 'index')->name('wishlist.index');
+    Route::post('/wishlist/add', 'add')->name('wishlist.add');
+   
+});
