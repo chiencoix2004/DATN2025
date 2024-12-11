@@ -105,11 +105,11 @@ class ShopController extends Controller
                 ->where('status', 2)
                 ->orderBy('comment_date', 'desc')
                 ->get();
-
-
+                $averageRating = ceil($comments->avg('rating'));
+            // dd($comments);
             $realedProducts = Product::query()->where(['sub_category_id' => $data->sub_category_id])->where('id', '!=', $data->id)->get();
             // dd($realedProducts);
-            return view('client::contents.shops.productDetail', compact('data', 'realedProducts', 'comments'));
+            return view('client::contents.shops.productDetail', compact('data', 'realedProducts', 'comments', 'averageRating'));
         } else {
             return abort(404);
         }
