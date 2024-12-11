@@ -186,9 +186,26 @@ class EkycController extends Controller
             } catch(Exception $e){
               return dd($e->getMessage());
             }
-        }
-        return redirect()->route('wallet.index');
+        } else{
+            $user = new UserEkyc();
+            $user->setfillCompleted(Auth::user()->id);
+            $user->setStasusCompletedBasic(Auth::user()->id);
+            $walletdata = [
+              'user_id' => Auth::user()->id,
+              'wallet_account_id' => random_int(100000,999999),
+              'wallet_balance_available' => 0,
+              'wallet_status' => 1,
+              'wallet_user_level' => 1,
 
+            ];
+            try{
+              $wallet = new Wallet();
+              $wallet->createWallet($walletdata);
+              return redirect()->route('wallet.index');
+            } catch(Exception $e){
+              return dd($e->getMessage());
+            }
+        }
         } else{
             return redirect()->back()->withErrors('Vui lòng chấp nhận điều khoản sử dụng');
          }
