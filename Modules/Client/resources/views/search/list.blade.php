@@ -176,7 +176,7 @@ use Artesaos\SEOTools\Facades\SEOTools;
                                                     <span class="new-price">{{ number_format(round($list->price_sale)) }} ₫</span>
                                                     <span class="old-price">{{ number_format(round($list->price_regular)) }} ₫</span>
                                                 </div>
-                                                <div class="rating-box">
+                                                {{-- <div class="rating-box">
                                                     <ul>
                                                         <li><i class="ion-ios-star"></i></li>
                                                         <li><i class="ion-ios-star"></i></li>
@@ -185,7 +185,7 @@ use Artesaos\SEOTools\Facades\SEOTools;
                                                         <li class="silver-color"><i class="ion-ios-star-outline"></i>
                                                         </li>
                                                     </ul>
-                                                </div>
+                                                </div> --}}
                                             </div>
                                         </div>
                                     </div>
@@ -204,7 +204,7 @@ use Artesaos\SEOTools\Facades\SEOTools;
                                                     <span class="old-price">{{ number_format(round($list->price_regular)) }} ₫</span>
                                                 </div>
                                                 <h6 class="product-name"><a href="{{ route('shop.productDetail', $list->slug) }}">{{ $list->name }}</a></h6>
-                                                <div class="rating-box">
+                                                {{-- <div class="rating-box">
                                                     <ul>
                                                         <li><i class="ion-ios-star"></i></li>
                                                         <li><i class="ion-ios-star"></i></li>
@@ -213,7 +213,7 @@ use Artesaos\SEOTools\Facades\SEOTools;
                                                         <li class="silver-color"><i class="ion-ios-star-outline"></i>
                                                         </li>
                                                     </ul>
-                                                </div>
+                                                </div> --}}
                                                 <div class="product-short_desc">
                                                     <p>{!! $list->description !!}
                                                     </p>

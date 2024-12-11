@@ -376,8 +376,6 @@ class CartController extends Controller
             ->with("productVariant.product")
             ->get();
 
-<<<<<<< Updated upstream
-=======
         $dataList = [];
 
         foreach($cartItems as $item){
@@ -403,12 +401,11 @@ class CartController extends Controller
         };
 
         if(count($dataList) > 0){
-            return redirect()->route('cart.index')
-            ->with('messageSP', $message)
-            ->with('errorSP', 'Số lượng sản phẩm không đủ!');
+            return redirect()->route('cart.index') 
+            ->with('messageSP', $message) 
+            ->with('errorSP', 'Số lượng sản phẩm không đủ!'); 
         };
 
->>>>>>> Stashed changes
         if ($cartItems->count() == 0) {
             return redirect()->route('cart.index');
         }

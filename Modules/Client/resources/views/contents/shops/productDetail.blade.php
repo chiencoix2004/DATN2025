@@ -94,15 +94,20 @@
                                 <h5><a href="{{ route('shop.productDetail', $data->slug) }}">{{ $data->name }}</a></h5>
                             </div>
                             <span class="reference">Mã sản phẩm: {{ $data->sku }}</span>
-                            <div class="rating-box">
-                                <ul>
-                                    <li><i class="ion-android-star"></i></li>
-                                    <li><i class="ion-android-star"></i></li>
-                                    <li><i class="ion-android-star"></i></li>
-                                    <li class="silver-color"><i class="ion-android-star"></i></li>
-                                    <li class="silver-color"><i class="ion-android-star"></i></li>
-                                </ul>
-                            </div>
+                            @if (count($comments) > 0)
+                                <div class="rating-box">
+                                    <ul>
+                                        @for ($i = 0; $i < $averageRating; $i++)
+                                            <li><i class="ion-android-star"></i></li>
+                                        @endfor
+                                    </ul>
+                                </div>
+                            @else
+                                <div class="rating-box">
+                                    <span class="reference text-warning">Hiện tại chưa có đánh giá nào cho sản phẩm
+                                        này!</span>
+                                </div>
+                            @endif
                             <div class="sp-essential_stuff">
                                 <ul class="load-infor" id="load-infor">
                                     <li>Số lượng: <a
@@ -271,8 +276,7 @@
                                 <li><a class="active" data-bs-toggle="tab" href="#description"><span>Mô tả sản
                                             phẩm</span></a>
                                 </li>
-                                {{-- <li><a data-bs-toggle="tab" href="#specification"><span>Thông tin khác</span></a></li> --}}
-                                <li><a data-bs-toggle="tab" href="#reviews"><span>Bình luận - Đánh giá (1)</span></a></li>
+                                <li><a data-bs-toggle="tab" href="#reviews"><span>Bình luận - Đánh giá</span></a></li>
                             </ul>
                         </div>
                         <div class="tab-content uren-tab_content">
@@ -281,92 +285,62 @@
                                     {!! $data->description !!}
                                 </div>
                             </div>
-                            {{-- <div id="specification" class="tab-pane" role="tabpanel">
-                                <table class="table table-bordered specification-inner_stuff">
-                                    <tbody>
-                                        <tr>
-                                            <td colspan="2"><strong>Memory</strong></td>
-                                        </tr>
-                                    </tbody>
-                                    <tbody>
-                                        <tr>
-                                            <td>test 1</td>
-                                            <td>8gb</td>
-                                        </tr>
-                                    </tbody>
-                                    <tbody>
-                                        <tr>
-                                            <td colspan="2"><strong>Processor</strong></td>
-                                        </tr>
-                                    </tbody>
-                                    <tbody>
-                                        <tr>
-                                            <td>No. of Cores</td>
-                                            <td>1</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div> --}}
-                            {{-- <div id="reviews" class="tab-pane" role="tabpanel">
+                            <div id="reviews" class="tab-pane" role="tabpanel">
                                 <div class="tab-pane active" id="tab-review">
+                                    <form class="form-horizontal" id="form-review" action="{{ route('submit-review') }}"
+                                        method="POST">
+                                        @csrf
                                         <div id="review">
-                                            <table class="table table-striped table-bordered">
-                                                <tbody>
-                                                    <tr>
-                                                        <td style="width: 50%;"><strong>Customer</strong></td>
-                                                        <td class="text-right">26/10/19</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td colspan="2">
-                                                            <p>Good product! Thank you very much</p>
-                                                            <div class="rating-box">
-                                                                <ul>
-                                                                    <li><i class="ion-android-star"></i></li>
-                                                                    <li><i class="ion-android-star"></i></li>
-                                                                    <li><i class="ion-android-star"></i></li>
-                                                                    <li><i class="ion-android-star"></i></li>
-                                                                    <li><i class="ion-android-star"></i></li>
-                                                                </ul>
-                                                            </div>
-                                                        </td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
-                                        </div> --}}
-
-                                        <div id="review">
-                                            <h3>Đánh giá sản phẩm</h3>
-                                            @if($comments->count() > 0)
+                                            <h2>Đánh giá sản phẩm</h2>
+                                            @if ($comments->count() > 0)
                                                 <table class="table table-striped table-bordered">
+                                                    <thead>
+                                                        <tr>
+                                                            <td>Email khách hàng</td>
+                                                            <td>Nội dung</td>
+                                                            <td>Đánh giá</td>
+                                                            <td>Ngày bình luận</td>
+                                                        </tr>
+                                                    </thead>
                                                     <tbody>
-                                                        @foreach($comments as $comment)
+                                                        @foreach ($comments as $comment)
                                                             <tr>
-                                                                <td>Email khách hàng</td>
-                                                                <td>Nội dung</td>
-                                                                <td>Đánh giá</td>
-                                                                <td>Ngày bình luận</td>
-                                                            </tr>
-                                                            <tr>
-                                                                {{-- <td style="width: 50%;"><strong>{{ $comment->user->email ?? 'Khách hàng' }}</strong></td> --}}
                                                                 <td style="width: 50%;"><strong>
-                                                                    @php
-                                                                      $email = $comment->user->email ?? 'Khách hàng';
-                                                                      // Kiểm tra nếu email có tồn tại
-                                                                      if (strpos($email, '@')) {
-                                                                          $username = substr($email, 0, strpos($email, '@')); // Lấy phần trước dấu "@"
-                                                                          $domain = substr($email, strpos($email, '@')); // Lấy phần sau dấu "@"
-                                                                          // Hiển thị 3 ký tự đầu và thay phần còn lại bằng dấu sao
-                                                                          $usernameMasked = substr($username, 0, 3) . str_repeat('*', strlen($username) - 3);
-                                                                          echo $usernameMasked . $domain;
-                                                                      } else {
-                                                                          echo $email; // Nếu không phải email, hiển thị "Khách hàng"
-                                                                      }
-                                                                    @endphp
-                                                                  </strong></td>
-                                                                  
-                                                                <td ><p>{{ $comment->comments }}</p></td>
-                                                                <td class="text-right">{{ $comment->rating }} <i class="ion-android-star"></i> </td>
-                                                                <td class="text-right">{{ \Carbon\Carbon::parse($comment->comment_date)->format('d/m/Y') }}</td>
+                                                                        @php
+                                                                            $email =
+                                                                                $comment->user->email ?? 'Khách hàng';
+                                                                            // Kiểm tra nếu email có tồn tại
+                                                                            if (strpos($email, '@')) {
+                                                                                $username = substr(
+                                                                                    $email,
+                                                                                    0,
+                                                                                    strpos($email, '@'),
+                                                                                ); // Lấy phần trước dấu "@"
+                                                                                $domain = substr(
+                                                                                    $email,
+                                                                                    strpos($email, '@'),
+                                                                                ); // Lấy phần sau dấu "@"
+                                                                                // Hiển thị 3 ký tự đầu và thay phần còn lại bằng dấu sao
+                                                                                $usernameMasked =
+                                                                                    substr($username, 0, 3) .
+                                                                                    str_repeat(
+                                                                                        '*',
+                                                                                        strlen($username) - 3,
+                                                                                    );
+                                                                                echo $usernameMasked . $domain;
+                                                                            } else {
+                                                                                echo $email; // Nếu không phải email, hiển thị "Khách hàng"
+                                                                            }
+                                                                        @endphp
+                                                                    </strong></td>
+                                                                <td>
+                                                                    <p>{{ $comment->comments }}</p>
+                                                                </td>
+                                                                <td class="text-right">{{ $comment->rating }} <i
+                                                                        class="ion-android-star"></i> </td>
+                                                                <td class="text-right">
+                                                                    {{ \Carbon\Carbon::parse($comment->comment_date)->format('d/m/Y') }}
+                                                                </td>
                                                             </tr>
                                                         @endforeach
                                                     </tbody>
@@ -375,16 +349,10 @@
                                                 <p>Hiện tại chưa có đánh giá nào cho sản phẩm này.</p>
                                             @endif
                                         </div>
-
-
-
-                                    @if (Auth::check())
-                                        <h2>Viết đánh giá</h2>
-                                        <form action="{{ route('submit-review') }}" method="POST">
-                                            @csrf
+                                        @if (Auth::check())
+                                            <h2>Viết đánh giá</h2>
                                             <input type="hidden" name="product_id" value="{{ $data->id }}">
                                             <!-- ID sản phẩm -->
-
                                             <div class="form-group required">
                                                 <div class="col-sm-12 p-0">
                                                     <label>Email của bạn <span class="required">*</span></label>
@@ -411,16 +379,16 @@
                                                         </select>
                                                     </div>
                                                 </div>
+                                                <div class="kenne-btn-ps_right">
+                                                    <button type="submit" class="kenne-btn">Gửi đánh giá</button>
+                                                </div>
                                             </div>
-                                            <div class="kenne-btn-ps_right">
-                                                <button type="submit" class="kenne-btn">Gửi đánh giá</button>
+                                        @else
+                                            <div class="login-required">
+                                                <p>Bạn cần đăng nhập để bình luận.</p>
                                             </div>
-                                        </form>
-                                    @else
-                                        <div class="login-required">
-                                            <p>Bạn cần đăng nhập để bình luận.</p>
-                                        </div>
-                                    @endif
+                                        @endif
+                                    </form>
                                 </div>
                             </div>
                         </div>
@@ -515,7 +483,7 @@
                                                     </span>
                                                 @endif
                                             </div>
-                                            <div class="rating-box">
+                                            {{-- <div class="rating-box">
                                                 <ul>
                                                     <li><i class="ion-ios-star"></i></li>
                                                     <li><i class="ion-ios-star"></i></li>
@@ -525,7 +493,7 @@
                                                         <i class="ion-ios-star-outline"></i>
                                                     </li>
                                                 </ul>
-                                            </div>
+                                            </div> --}}
                                         </div>
                                     </div>
                                 </div>

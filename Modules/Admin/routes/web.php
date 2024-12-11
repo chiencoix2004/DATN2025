@@ -65,7 +65,7 @@ Route::prefix('admin')
    ->middleware('CheckAdmin')
     ->group(function () {
         Route::get('/', [DashboardController::class, 'index'])->name('home');
-        
+
         Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
         Route::controller(BannerController::class)
