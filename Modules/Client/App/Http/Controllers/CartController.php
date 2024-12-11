@@ -376,6 +376,39 @@ class CartController extends Controller
             ->with("productVariant.product")
             ->get();
 
+<<<<<<< Updated upstream
+=======
+        $dataList = [];
+
+        foreach($cartItems as $item){
+            $productVariant = ProductVariant::find($item->product_variant_id);
+            if($item->quantity > $productVariant->quantity){
+                $dataList[] = [
+                    'product_name' => $item->productVariant->product->name,
+                    'size' => $item->productVariant->size->size_value,
+                    'color' => $item->productVariant->color->color_value,
+                ];
+            };
+        };
+
+        // $dataList[] = [
+        //     'product_name' => 'Áo sơ mi',
+        //     'size' => 'M',
+        //     'color' => 'Đỏ',
+        // ];
+
+        $message = '';
+        foreach ($dataList as $item) {
+            $message .= 'sản phẩm'.$item['product_name'] . ' - size:' . $item['size'] . ' -màu:' . $item['color'] . '\n';
+        };
+
+        if(count($dataList) > 0){
+            return redirect()->route('cart.index')
+            ->with('messageSP', $message)
+            ->with('errorSP', 'Số lượng sản phẩm không đủ!');
+        };
+
+>>>>>>> Stashed changes
         if ($cartItems->count() == 0) {
             return redirect()->route('cart.index');
         }
@@ -877,9 +910,26 @@ if ($payment_method == 'wallet') {
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function retrypayment($id)
     {
-        return view('client::create');
+        $order = Order::find($id);
+        if ($order) {
+            if ($order->payment_method == 'Thanh toán qua VNpay') {
+               // dd($order);
+
+            $vnpay = new Vnpay();
+            $link =  $vnpay->create_link_payment_url($order->total_price / 10, 'vn', "http://127.0.0.1:8000/api/v1/meanhxuyen?order_id=$order->id&user_id=$order->users_id");
+            return redirect($link);
+            } else {
+                $timestamp = now()->timestamp;
+                $querybuilder = "?user_id=$order->users_id&order_id=$order->id&ammount=$order->total_price&shop_name=PCV_FASHION&shop_desciprtion=Thanh toán qua ví điện tử&order_type=Create_payment_link&date_created=$timestamp";
+                $link = route('wallet.pay.index').$querybuilder;
+                return redirect($link);
+            }
+        }
+        else {
+            return response()->json(['error' => 'Đơn hàng không tồn tại!'], 400);
+        }
     }
 
     /**

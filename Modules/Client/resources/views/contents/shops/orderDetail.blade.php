@@ -212,7 +212,7 @@
                     <a href="{{ route('orders.downloadPDF', ['id' => $order->id]) }}" class="kenne-btn kenne-btn_sm">In hóa
                         đơn</a>
                 </div>
-                <div class="col-md-3 mb-3">
+                <div class="col-md-3 mb-4">
                     @if ($order->status_order == 'Chờ xác nhận' || $order->status_order == 'Đã xác nhận')
                         <button class="kenne-btn kenne-btn_sm" onclick="cancelOrder({{ $order->id }})">Hủy đơn
                             hàng</button>
@@ -229,7 +229,9 @@
                     @endif
                 </div>
                 <div class="col-md-3 mb-3">
-
+                    @if ($order->status_payment == 'Chưa thanh toán' && $order->payment_method !== 'Thanh toán khi nhận hàng')
+                    <a class="kenne-btn kenne-btn_sm" href="{{ route('retrypayment', ['id' => $order->id]) }}">Tiếp tục thanh toán đơn hàng</a>
+                    @endif
                 </div>
                 <div class="col-md-3 mb-3">
 

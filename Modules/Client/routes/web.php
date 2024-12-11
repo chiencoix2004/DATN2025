@@ -123,11 +123,12 @@ Route::controller(CartController::class)->group(function () {
     Route::post('/cart/apply-coupon', 'applyCoupon')->name('cart.applyCoupon');
     Route::get('/cart/checkout', 'order')->name('cart.checkout');
     Route::post('/cart/remove-discount-code', 'removeDiscountCode')->name('cart.removeDiscountCode');
+    route::get('retrypayment/{id}', 'retrypayment')->name('retrypayment');
 });
 
 Route::post('/submit-review', [ReviewController::class, 'submitReview'])->name('submit-review');
 
-Route::get('/invoice/{id}', [MyAccountController::class, 'invoiceDetail'])->name('client.invoice.show');
+Route::get('/invoice/{id}', [MyAccountController::class, 'invoiceDetail'])->name('client.invoice.show')->middleware('auth.checkLog');
 
 Route::post('/send-notification', [CartController::class, 'sendNotification'])->name('send.notification');
 route::get('filterproduct', [ShopController::class, 'filterproduct'])->name('filterproduct');
