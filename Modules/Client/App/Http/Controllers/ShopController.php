@@ -99,7 +99,7 @@ class ShopController extends Controller
         $realedProducts = Product::query()->where(['sub_category_id' => $data->sub_category_id])->where('id', '!=', $data->id)->get();
         $qproduct = new Product();
         $dataq = $qproduct->GetToalQuantity($slug);
-       // dd($dataq);
+      // dd($dataq);
         if ($data) {
             // Lấy danh sách bình luận và thông tin người dùng liên quan
             $comments = Comment::with('user') // Eager load quan hệ 'user'

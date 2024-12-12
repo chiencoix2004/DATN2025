@@ -268,6 +268,7 @@ class Product extends Model
         ->join('sub_categories', 'products.sub_category_id', '=', 'sub_categories.id')
         ->join('categories', 'sub_categories.category_id', '=', 'categories.id')
         ->join('product_variants', 'products.id', '=', 'product_variants.product_id')
+        ->whereNull('product_variants.deleted_at')
         ->select(
         DB::raw('SUM(product_variants.quantity) as total_variants_products')
     )
