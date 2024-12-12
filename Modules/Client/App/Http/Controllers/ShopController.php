@@ -105,7 +105,7 @@ class ShopController extends Controller
                 ->where('status', 2)
                 ->orderBy('comment_date', 'desc')
                 ->get();
-                $averageRating = ceil($comments->avg('rating'));
+            $averageRating = ceil($comments->avg('rating'));
             // dd($comments);
             $realedProducts = Product::query()->where(['sub_category_id' => $data->sub_category_id])->where('id', '!=', $data->id)->get();
             // dd($realedProducts);
@@ -187,19 +187,15 @@ class ShopController extends Controller
             }
         }
         $query->groupBy('products.id', 'sub_categories.name', 'categories.name','products.sub_category_id','products.name','products.sku','products.slug','products.image_avatar','products.price_regular','products.price_sale','products.discount_percent','products.description','products.material','products.is_active','products.quantity','products.views','products.start_date','products.end_date','products.created_at','products.updated_at','products.deleted_at');
-
         // Lấy dữ liệu sau khi lọc
         $data = $query->paginate(12)->appends($request->query());
-
         $data1 = $query->get();
         $tags = Tag::query()->get();
         $categories = Category::query()->get();
         $colors = ColorAttribute::query()->get();
         $sizes = SizeAttribute::query()->get();
-
         return view('client::contents.shops.shopIndex', compact('data', 'tags', 'categories', 'colors', 'sizes'));
     }
-
 
 
     /**
@@ -210,6 +206,7 @@ class ShopController extends Controller
         $product = new Product();
         $data =  $product->fullproductdetail($kwd);
         dd($data);
+        return response()->json($data);
     }
 
     /**
