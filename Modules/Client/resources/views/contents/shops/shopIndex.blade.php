@@ -95,7 +95,7 @@
                                             $textColor = getContrastingColor($c->color_value);
                                         @endphp
                                         <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" value="{{ $c->name }}"
+                                            <input class="form-check-input" type="checkbox" value="{{ $c->id }}"
                                                 id="flexCheckDefault" name="color[]">
                                             <label class="form-check-label" for="flexCheckDefault">
                                                 <span class="badge"
@@ -128,7 +128,7 @@
                                 <ul class="sidebar-checkbox_list">
                                     @foreach ($sizes as $s)
                                         <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" value="{{ $s->name }}" id="size-{{ $s->id }}" name="sizes[]"
+                                            <input class="form-check-input" type="checkbox" value="{{ $s->id }}" id="size-{{ $s->id }}" name="sizes[]"
                                                 {{ in_array($s->id, request('sizes', [])) ? 'checked' : '' }}>
                                             <label class="form-check-label" for="size-{{ $s->id }}">{{ $s->size_value }}</label>
                                         </div>
@@ -177,7 +177,7 @@
                                 </select>
                             </div>
                         </div> --}}
-                        <button type="submit" class="filter-btn">Áp dụng bộ lọc</button>
+                        <button type="submit" class=" kenne-btn filter-btn">Áp dụng bộ lọc</button>
                     </div>
                 </form>
                     <div class="shop-product-wrap grid gridview-3 row">

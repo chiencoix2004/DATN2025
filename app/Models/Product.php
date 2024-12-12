@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\DB;
 
 class Product extends Model
 {
@@ -56,21 +57,23 @@ class Product extends Model
         return $this->hasMany(OrderDetail::class, 'product_id');
     }
 
-    public function searchproduct($keywd){
+    public function searchproduct($keywd)
+    {
         return $this
-        ->join('sub_categories', 'products.sub_category_id', '=', 'sub_categories.id')
-        ->join('categories', 'sub_categories.category_id', '=', 'categories.id')
-        ->join('product_variants', 'products.id', '=', 'product_variants.product_id')
-        ->join('color_attributes', 'product_variants.color_attribute_id', '=', 'color_attributes.id')
-        ->join('size_attributes', 'product_variants.size_attribute_id', '=', 'size_attributes.id')
-        ->where('products.name','like','%'.$keywd.'%')
-        ->orWhere('sku','like','%'.$keywd.'%')
-        ->orWhere('categories.name','like','%'.$keywd.'%')
-        ->select('products.*')
-        ->paginate(12);
-
-
+            ->join('sub_categories', 'products.sub_category_id', '=', 'sub_categories.id')
+            ->join('categories', 'sub_categories.category_id', '=', 'categories.id')
+            ->join('product_variants', 'products.id', '=', 'product_variants.product_id')
+            ->join('color_attributes', 'product_variants.color_attribute_id', '=', 'color_attributes.id')
+            ->join('size_attributes', 'product_variants.size_attribute_id', '=', 'size_attributes.id')
+            ->where(function ($query) use ($keywd) {
+                $query->where('products.name', 'like', '%' . $keywd . '%')
+                    ->orWhere('sku', 'like', '%' . $keywd . '%')
+                    ->orWhere('categories.name', 'like', '%' . $keywd . '%');
+            })
+            ->select('products.*') // Các cột cần thiết
+            ->distinct(); // Loại bỏ các dòng trùng lặp;
     }
+
     function searchproductbyprice($min,$max){
         return $this
         ->join('sub_categories', 'products.sub_category_id', '=', 'sub_categories.id')
@@ -78,7 +81,6 @@ class Product extends Model
         ->join('product_variants', 'products.id', '=', 'product_variants.product_id')
         ->join('color_attributes', 'product_variants.color_attribute_id', '=', 'color_attributes.id')
         ->join('size_attributes', 'product_variants.size_attribute_id', '=', 'size_attributes.id')
-
         ->whereBetween('products.price_regular',[$min,$max])
         ->select('products.*')
         ->paginate(12);
@@ -261,4 +263,38 @@ class Product extends Model
        ->get();
     }
 
+    public function GetToalQuantity($slug){
+        return $this
+        ->join('sub_categories', 'products.sub_category_id', '=', 'sub_categories.id')
+        ->join('categories', 'sub_categories.category_id', '=', 'categories.id')
+        ->join('product_variants', 'products.id', '=', 'product_variants.product_id')
+        ->select(
+        DB::raw('SUM(product_variants.quantity) as total_variants_products')
+    )
+    ->where('products.slug', $slug)
+    ->groupBy(
+        'products.id',
+        'products.sub_category_id',
+        'products.name',
+        'products.sku',
+        'products.slug',
+        'products.image_avatar',
+        'products.price_regular',
+        'products.price_sale',
+        'products.discount_percent',
+        'products.description',
+        'products.material',
+        'products.views',
+        'products.quantity',
+        'products.start_date',
+        'products.end_date',
+        'products.is_active',
+        'sub_categories.name',
+        'products.created_at',
+        'products.updated_at',
+        'products.deleted_at',
+        'categories.name'
+    )
+    ->get('total_variants_products');
+    }
 }

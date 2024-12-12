@@ -32,9 +32,9 @@
             <p class="card-text">Phản hồi hệ thống: <strong>{{ $data->first()->admin_note }}</strong></p>
             <p class="card-text">Ngày khởi tạo: <strong>{{ $data->first()->request_date }}</strong></p>
             <p class="card-text">Ngày duyệt yêu cầu: <strong>{{ $data->first()->admin_response_date }}</strong></p>
-            @if ($data->first()->status == 3 || $data->first()->status == 4)
-            @else
+            @if ($data->first()->status == 3 && $data->first()->status == 4)
             <a href="{{ route('wallet.withdrawcanel', ['id'=>$data->first()->withdraw_request_id]) }}" class="btn btn-danger">Hủy yêu cầu rút tiền</a>
+            @else
             @endif
         </div>
     </div>

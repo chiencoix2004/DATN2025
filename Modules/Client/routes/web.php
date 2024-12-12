@@ -135,7 +135,7 @@ Route::post('/send-notification', [CartController::class, 'sendNotification'])->
 route::get('filterproduct', [ShopController::class, 'filterproduct'])->name('filterproduct');
 
 Route::controller(WishlistController::class)->group(function () {
-    Route::get('/wishlist', 'index')->name('wishlist.index');
-    Route::post('/wishlist/add', 'add')->name('wishlist.add');
-    Route::delete('/wishlist/remove/{id}', 'destroy')->name('wishlist.remove');
+    Route::get('/wishlist', 'index')->name('wishlist.index')->middleware('auth.checkLog');;
+    Route::post('/wishlist/add', 'add')->name('wishlist.add')->middleware('auth.checkLog');;
+    Route::delete('/wishlist/remove/{id}', 'destroy')->name('wishlist.remove')->middleware('auth.checkLog');;
 });

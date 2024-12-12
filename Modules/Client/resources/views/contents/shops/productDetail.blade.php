@@ -111,7 +111,7 @@
                             <div class="sp-essential_stuff">
                                 <ul class="load-infor" id="load-infor">
                                     <li>Số lượng: <a
-                                            href="javascript:void(0)">{{ $data->quantity != null ? $data->quantity : 0 }}</a>
+                                            href="javascript:void(0)">{{ $dataq->first()->total_variants_products != null ? $dataq->first()->total_variants_products : 0 }}</a>
                                     </li>
                                     <li>Tình trạng: <a href="javascript:void(0)">
                                             {{ $data->quantity < 5 && $data->quantity > 0

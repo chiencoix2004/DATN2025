@@ -28,7 +28,7 @@ class TicketController extends Controller
             'con_subject' => 'required',
             'con_message' => 'required',
         ]);
-        $ticket_reply = "Tạo vé trợ giúp thành công vui lòng chờ khách hàng phản hồi";
+        $ticket_reply = "Tạo vé trợ giúp thành công vui lòng chờ nhân viên phản hồi";
         $ticket_reply_by = "created by user";
         try {
             if ($attachment) {

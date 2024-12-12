@@ -55,7 +55,7 @@ use Artesaos\SEOTools\Facades\SEOTools;
                                           </div>
                                           <input type="hidden" name="keywd" value="{{ session()->get('keywd') }}">
                                         </div>
-                                        <button type="submit" class="btn-dark w-100 ">Lọc</button>
+                                        <button type="submit" class="kenne-btn btn-dark w-100 ">Lọc</button>
                                         {{-- show error valiate --}}
                                         @if ($errors->any())
                                         <div class="alert alert-danger mt-3">
@@ -83,37 +83,6 @@ use Artesaos\SEOTools\Facades\SEOTools;
                                     </ul>
                                 </div>
                             </div>
-                            {{-- <div class="kenne-sidebar_categories">
-                                <div class="kenne-categories_title">
-                                    <h5>Tìm kiếm Theo mầu sắc</h5>
-                                </div>
-                                <ul class="sidebar-checkbox_list">
-                                    <li>
-                                        <a href="javascript:void(0)">Đen (1)</a>
-                                    </li>
-                                    <li>
-                                        <a href="javascript:void(0)">Xanh (1)</a>
-                                    </li>
-                                    <li>
-                                        <a href="javascript:void(0)">Vàng (3)</a>
-                                    </li>
-                                </ul>
-                            </div> --}}
-                            {{-- <div class="kenne-sidebar_categories">
-                                <div class="kenne-categories_title kenne-tags_title">
-                                    <h5>Product Tags</h5>
-                                </div>
-                                <ul class="kenne-tags_list">
-                                    <li><a href="javascript:void(0)">Hoodie</a></li>
-                                    <li><a href="javascript:void(0)">Jacket</a></li>
-                                    <li><a href="javascript:void(0)">Frocks</a></li>
-                                    <li><a href="javascript:void(0)">Crochet</a></li>
-                                    <li><a href="javascript:void(0)">Scarf</a></li>
-                                    <li><a href="javascript:void(0)">Shirts</a></li>
-                                    <li><a href="javascript:void(0)">Men</a></li>
-                                    <li><a href="javascript:void(0)">Women</a></li>
-                                </ul>
-                            </div> --}}
                         </div>
                     </div>
                     <div class="col-lg-9 order-1">
@@ -214,10 +183,7 @@ use Artesaos\SEOTools\Facades\SEOTools;
                                                         </li>
                                                     </ul>
                                                 </div> --}}
-                                                <div class="product-short_desc">
-                                                    <p>{!! $list->description !!}
-                                                    </p>
-                                                </div>
+
                                             </div>
                                             {{-- <div class="add-actions">
                                                 <ul>
@@ -239,7 +205,7 @@ use Artesaos\SEOTools\Facades\SEOTools;
                             @endforeach
                             <div class="row mt-3">
                                 <div class="col-lg-12">
-                                    {{ $products->links('pagination::bootstrap-5') }}
+                                    {{ $products->appends(['keywd' => $keywd])->links('pagination::bootstrap-5') }}
                                 </div>
                             </div>
                         </div>

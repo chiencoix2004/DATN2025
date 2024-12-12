@@ -174,9 +174,25 @@ class PayController extends Controller
         $otpstring = $request->digit1 . $request->digit2 . $request->digit3 . $request->digit4 . $request->digit5;
         $otp = new OTP();
         $data = $otp->verifyOTP($otpstring);
+        $webauth = new Webautn() ;
+        $user_key = $webauth->getUserKey($user_id);
+        $publicKey = [
+            'challenge' => base64_encode(random_bytes(32)), // Thay bằng giá trị thực tế
+            'rp' => [
+                'name' => config('app.name'),
+            ],
+            'user' => [
+                'id' => base64_encode(Auth::user()->id),
+                'name' => Auth::user()->email,
+                'displayName' => Auth::user()->name,
+            ],
+            'pubKeyCredParams' => [
+                ['type' => 'public-key', 'alg' => -7], // ES256
+            ],
+        ];
         if (empty($data)) {
             $error = "Mã OTP không chính xác hoăc đã hết hạn";
-            return view('wallet::paygate.otp', ['data' => $decoded_data, 'walletaccount' => $walletaccount], compact('id','error'));
+            return view('wallet::paygate.otp', ['data' => $decoded_data, 'walletaccount' => $walletaccount], compact('id','error','user_key','publicKey'));
         } else {
             $otp->deleteCode($otpstring);
             $key = env('VNP_HASH_SECRET'); // Replace with your actual secret key

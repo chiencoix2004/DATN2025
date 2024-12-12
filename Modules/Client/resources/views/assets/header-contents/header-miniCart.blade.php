@@ -31,6 +31,9 @@
         <div class="minicart-btn_area">
             <a href="{{ route('cart.checkout') }}" class="kenne-btn kenne-btn_fullwidth">Thanh toán</a>
         </div>
+        <div class="minicart-btn_area">
+            <a href="{{ route('wishlist.index') }}" class="kenne-btn kenne-btn_fullwidth">Sản phẩm yêu thích</a>
+        </div>
     </div>
 </div>
 

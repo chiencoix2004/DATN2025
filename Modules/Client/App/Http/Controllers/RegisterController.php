@@ -24,24 +24,21 @@ class RegisterController extends Controller
             'full_name.required' => 'Vui lòng nhập họ và tên.',
             'full_name.string' => 'Họ và tên phải là chuỗi ký tự.',
             'full_name.max' => 'Họ và tên không được vượt quá 255 ký tự.',
-
             'email.required' => 'Vui lòng nhập địa chỉ email.',
             'email.email' => 'Địa chỉ email không hợp lệ.',
             'email.unique' => 'Email này đã được sử dụng.',
-
             'password.required' => 'Vui lòng nhập mật khẩu.',
             'password.string' => 'Mật khẩu phải là chuỗi ký tự.',
             'password.min' => 'Mật khẩu phải có ít nhất 8 ký tự.',
             'password.confirmed' => 'Xác nhận mật khẩu không khớp.',
             'password.regex' => 'Mật khẩu cần chứa ít nhất 1 chữ, 1 số và 1 ký tự đặc biệt',
-
             'password_confirmation.required_with' => 'Vui lòng xác nhận mật khẩu.',
             'password_confirmation.same' => 'Mật khẩu xác nhận không khớp với mật khẩu.',
         ];
         $validator = Validator::make($request->all(), [
             'full_name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email',
-            'password' => 'required|string|min:8|confirmed|regex:/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&#])[A-Za-z\d@$!%*?&#]{8,}$/',
+            'password' => 'required|string|min:8',
             'password_confirmation' => 'required_with:password|same:password'
         ], $message);
 
@@ -85,7 +82,7 @@ class RegisterController extends Controller
 
             // Gửi email xác nhận
             $user->notify(new VerifyEmail());
-            
+
             // return redirect()->route('verification.verify',$user->id);
         }
 
