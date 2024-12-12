@@ -143,7 +143,7 @@
                                         <img src="/storage/${product.image_avatar}" alt="${product.name}">
                                     </div>
                                     <div class="product-item_content">
-                                        <a class="product-item_title" href="shop-left-sidebar.html">${product.name}</a>
+                                        <a class="product-item_title" href="/shop/product-detail/${product.slug}">${product.name}</a>
                                         <div>
                                             - Size: ${item.product_variant.size.size_value}
                                             <br>

@@ -137,5 +137,5 @@ route::get('filterproduct', [ShopController::class, 'filterproduct'])->name('fil
 Route::controller(WishlistController::class)->group(function () {
     Route::get('/wishlist', 'index')->name('wishlist.index');
     Route::post('/wishlist/add', 'add')->name('wishlist.add');
-   
+    Route::delete('/wishlist/remove/{id}', 'destroy')->name('wishlist.remove');
 });

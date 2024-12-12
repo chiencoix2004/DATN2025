@@ -3,6 +3,7 @@
 namespace Modules\Client\App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Models\Product;
 use App\Models\ProductVariant;
 use App\Models\Wishlist;
 use Illuminate\Http\RedirectResponse;
@@ -64,24 +65,38 @@ class WishlistController extends Controller
             Wishlist::create([
                 'product_id' => $productId,
                 'product_variant_id' => $productVariantId,
-                'user_id' => auth()->id()
+                'user_id' => auth()->id(),
             ]);
             return response()->json(['message' => 'Thêm sản phẩm vào danh sách yêu thích thành công'], 200);
-        }
+        };
     }
 
 
 
-    public function show($id)
-    {
-        return view('client::show');
-    }
 
     /**
      * Remove the specified resource from storage.
      */
     public function destroy($id)
     {
-        //
+        $wishlist = Wishlist::query()->find($id);
+        if ($wishlist) {
+            $wishlist->delete();
+            return response()->json(
+                [
+                    'success' => true,
+                    'message' => 'Xóa sản phẩm khỏi danh sách yêu thích thành công'
+                ],
+                200
+            );
+        } else {
+            return response()->json(
+                [
+                    'success' => false,
+                    'message' => 'Xóa sản phẩm khỏi danh sách yêu thích thất bại'
+                ],
+                200
+            );
+        }
     }
 }
