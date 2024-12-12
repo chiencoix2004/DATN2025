@@ -5,9 +5,8 @@
 @endsection
 
 @section('css-setting')
-<script src="{{ asset('sweetalert2/sweetalert2.all.min.js') }}"></script>
-<link rel="stylesheet" href="{{ asset('sweetalert2/sweetalert2.min.css') }}">
-    
+    <script src="{{ asset('sweetalert2/sweetalert2.all.min.js') }}"></script>
+    <link rel="stylesheet" href="{{ asset('sweetalert2/sweetalert2.min.css') }}">
 @endsection
 @section('contents')
     <div class="breadcrumb-area">
@@ -71,6 +70,8 @@
                                     <input id="coupon_code" class="input-text" name="coupon_code" value=""
                                         placeholder="Mã giảm giá" type="text">
                                     <input class="button" name="apply_coupon" value="Áp dụng mã" type="submit">
+                                    <br>
+                                    <button class="button btn-coupon-delete kenne-register_btn">Xóa mã giảm giá</button>
                                 </div>
                             </div>
                         </div>
@@ -102,8 +103,6 @@
 @endsection
 
 @section('js-setting')
-    
-    
     @if (session('errorSP'))
         <script>
             Swal.fire({
@@ -118,7 +117,7 @@
     <script>
         const appurl = "{{ env('APP_URL') }}";
         $(document).ready(function() {
-    
+
             function loadCartItems() {
                 $.ajax({
                     url: '/cart/list',
@@ -135,7 +134,7 @@
                             if (!imgURL.includes('http')) {
                                 imgURL = `{{ Storage::url('${ item.product_image}') }}`;
                             }
-    
+
                             let productHTML = `
                                 <li class="minicart-product">
                                     <a class="product-item_remove" href="javascript:void(0)" onclick="removeFromMiniCart(${item.id})"><i class="ion-android-close"></i></a>
@@ -155,7 +154,7 @@
                             `;
                             $('#minicart').append(productHTML);
                         });
-    
+
                         $('#totalAmount').text(formatVND(response.totalAmount));
                     },
                     error: function(xhr, status, error) {
@@ -164,7 +163,7 @@
                     }
                 });
             }
-    
+
             function loadCartItemCount() {
                 $.ajax({
                     url: '/cart/list',
@@ -179,14 +178,14 @@
                     }
                 });
             }
-    
+
             function formatVND(amount) {
                 return amount.toLocaleString('vi-VN', {
                     style: 'currency',
                     currency: 'VND'
                 });
             }
-    
+
             function fetchCartItems() {
                 $.ajax({
                     url: '/cart/list',
@@ -211,22 +210,24 @@
                     }
                 });
             }
-    
+
             function formatPrice(price) {
                 return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".") + " VNĐ";
             }
-    
+
             function displayCartItems(cartItems) {
                 $('#cart-table-body').empty();
                 cartItems.forEach(item => {
                     $('#cart-table-body').append(generateCartRow(item));
-            })
+                })
 
 
-        }
-        function generateCartRow(item) {
-    var imgURL = item.product_image.includes('http') ? item.product_image : `/storage/${item.product_image}`;
-    return `
+            }
+
+            function generateCartRow(item) {
+                var imgURL = item.product_image.includes('http') ? item.product_image :
+                    `/storage/${item.product_image}`;
+                return `
         <tr>
             <td class="kenne-product-thumbnail">
                 <a href="javascript:void(0)">
@@ -261,7 +262,7 @@
             </td>
         </tr>
     `;
-}
+            }
 
             // Gắn sự kiện cho nút tăng/giảm số lượng bằng Event Delegation
 
@@ -270,7 +271,7 @@
                 const action = $(this).data('action');
                 const inputField = $(`input.cart-plus-minus-box[data-id="${itemId}"]`);
                 let currentQuantity = parseInt(inputField.val());
-    
+
                 if (action === "increase") {
                     currentQuantity++;
                 } else if (action === "decrease" && currentQuantity > 1) {
@@ -278,15 +279,15 @@
                 } else {
                     return;
                 }
-    
+
                 inputField.val(currentQuantity);
                 updateCartItemQuantity(itemId, currentQuantity);
             });
-    
+
             $('#cart-table-body').on('change', '.cart-plus-minus-box', function() {
                 const itemId = $(this).data('id');
                 const newQuantity = parseInt($(this).val());
-    
+
                 if (newQuantity > 0) {
                     updateCartItemQuantity(itemId, newQuantity);
                 } else {
@@ -295,7 +296,7 @@
                     updateCartItemQuantity(itemId, 1);
                 }
             });
-    
+
             function updateCartItemQuantity(itemId, quantity) {
                 $.ajax({
                     type: 'POST',
@@ -322,7 +323,7 @@
                     }
                 });
             }
-    
+
             window.removeFromCart = function(itemId) {
                 $.ajax({
                     type: 'POST',
@@ -346,7 +347,7 @@
                     }
                 });
             };
-    
+
             function updateCartTotal() {
                 $.ajax({
                     url: '/cart/list',
@@ -368,11 +369,11 @@
                     }
                 });
             }
-    
+
             $('.button[name="apply_coupon"]').on('click', function(e) {
                 e.preventDefault();
                 var couponCode = $('#coupon_code').val();
-    
+
                 if (couponCode) {
                     $.ajax({
                         type: 'POST',
@@ -390,16 +391,43 @@
                             }
                         },
                         error: function(jqXHR, textStatus, errorThrown) {
-                            console.error("Lỗi khi áp dụng mã giảm giá:", textStatus, errorThrown);
+                            console.error("Lỗi khi áp dụng mã giảm giá:", textStatus,
+                                errorThrown);
                         }
                     });
                 } else {
                     alert("Vui lòng nhập mã giảm giá!");
                 }
             });
-    
+
             updateCartTotal();
             fetchCartItems();
+        });
+
+        $(document).ready(function() {
+            $('.btn-coupon-delete').click(function() {
+                var tr = $(this).closest('tr');
+                if (confirm('Bạn có chắc chắn muốn xóa mã giảm giá này không?')) {
+                    $.ajax({
+                        url: "{{ route('cart.removeDiscountCode') }}",
+                        type: 'POST',
+                        data: {
+                            _token: "{{ csrf_token() }}",
+                        },
+                        success: function(response) {
+                            if (response.success) {
+                                alert('Mã giảm giá đã được xóa thành công.');
+                                location.reload();
+                            } else {
+                                alert('Có lỗi xảy ra khi xóa mã giảm giá.');
+                            }
+                        },
+                        error: function(jqXHR, textStatus, errorThrown) {
+                            console.error("Lỗi khi xóa mã giảm giá:", textStatus, errorThrown);
+                        }
+                    });
+                }
+            });
         });
     </script>
 @endsection
