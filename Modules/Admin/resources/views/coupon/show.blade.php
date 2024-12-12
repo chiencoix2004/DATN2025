@@ -115,11 +115,6 @@
                                     <input class="form-control" id="minimum_spend" name="minimum_spend" type="text" disabled value="{{ number_format($coupon->minimum_spend, 0, '.', ',') }} VND">
                                     @error('minimum_spend')<div class="alert alert-danger">{{ $message }}</div>@enderror
                                 </div>
-                                <div class="col-12">
-                                    <label class="form-label" for="maximum_spend">Chi tiêu tối đa:</label>
-                                    <input class="form-control" id="maximum_spend" name="maximum_spend" type="text" disabled value="{{ number_format($coupon->maximum_spend, 0, '.', ',') }} VND"></div>
-                                    @error('maximum_spend')<div class="alert alert-danger">{{ $message }}</div>@enderror
-                                </div>
                             </div>
                         </div>
                     </div>

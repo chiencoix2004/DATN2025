@@ -258,7 +258,7 @@ class WalletController extends Controller
 
             $wallet = new Wallet();
             $wallet->setLevelFullWallet($request->wallet_account_id);
-            return back()->with('success', 'Cập nhật thành công');
+            return redirect()->route('admin.wallet.listUserPending')->with('success', 'Cập nhật thành công');
 
         } else if($request->status == 2){
             if(isset($request->admin_note)){
@@ -271,7 +271,8 @@ class WalletController extends Controller
 
             $wallet = new Wallet();
             $wallet->setLevelBasicWallet($request->wallet_account_id);
-            return back()->with('success', 'Cập nhật thành công');
+            return redirect()->route('admin.wallet.listUserPending')->with('success', 'Cập nhật thành công');
+
         }
 
 

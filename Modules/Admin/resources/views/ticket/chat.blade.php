@@ -47,7 +47,7 @@
                         @endforeach
                         <!-- Repeat similar blocks for chat history -->
                     </div>
-
+                @if($chat->ticket_status == 1)
                     <!-- Text area for new customer response -->
                     <form action="{{ route('admin.ticket.updatemessage') }}" method="post">
                         @method('POST')
@@ -66,8 +66,13 @@
                         </div>
                         <button type="submit" class="btn btn-primary mt-2">Gửi</button>
                     </form>
+                    @else
+                    <div class="alert alert-danger" role="alert">
+                        Ticket đã hoàn thành hoặc bị spam, không thể trả lời thêm.
+                    </div>
+                    @endif
                 </div>
-
+                @if($chat->ticket_status == 1)
                 <!-- Ticket Status Options -->
                 <div class="d-flex justify-content-between">
                     <div class="form-check">
@@ -77,6 +82,11 @@
                         <a href="{{ route('admin.ticket.setSpam', ['id' => $detailticket->first()->ticket_id]) }}" class="btn btn-danger">Sửa thành spam</a>
                     </div>
                 </div>
+                @else
+                <div class="form-check">
+                    <a href="{{ route('admin.ticket.index')}}" class="btn btn-light">Quay lại</a>
+                </div>
+                @endif
             </div>
         </div>
     </div>

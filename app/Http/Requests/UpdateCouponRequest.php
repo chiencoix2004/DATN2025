@@ -21,7 +21,7 @@ class UpdateCouponRequest extends FormRequest
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
      */
     public function rules()
-    {   
+    {
         $couponId = $this->route('id');
 
         return [
@@ -49,16 +49,7 @@ class UpdateCouponRequest extends FormRequest
         'discount_type' => 'required|in:percent,fixed',
         'quantity' => 'required|integer|min:1',
         'minimum_spend' => 'required|numeric|min:0',
-        'maximum_spend' => [
-            'required',
-            'numeric',
-            'min:0',
-            function ($attribute, $value, $fail) {
-                if ($value <= $this->minimum_spend) {
-                    return $fail('Số tiền chi tiêu tối đa phải lớn hơn số tiền chi tiêu tối thiểu.');
-                }
-            },
-        ],
+
         ];
     }
 
@@ -71,7 +62,7 @@ class UpdateCouponRequest extends FormRequest
 
             'date_start.required' => 'Ngày bắt đầu là bắt buộc.',
             'date_start.date' => 'Ngày bắt đầu phải là một ngày hợp lệ.',
-    
+
             'date_end.required' => 'Ngày kết thúc là bắt buộc.',
             'date_end.date' => 'Ngày kết thúc phải là một ngày hợp lệ.',
             'date_end.after' => 'Ngày kết thúc phải sau ngày bắt đầu.',
@@ -99,10 +90,6 @@ class UpdateCouponRequest extends FormRequest
             'minimum_spend.required' => 'Số tiền chi tiêu tối thiểu là bắt buộc.',
             'minimum_spend.numeric' => 'Số tiền chi tiêu tối thiểu phải là một giá trị số.',
             'minimum_spend.min' => 'Số tiền chi tiêu tối thiểu không được nhỏ hơn 0.',
-
-            'maximum_spend.required' => 'Số tiền chi tiêu tối đa là bắt buộc.',
-            'maximum_spend.numeric' => 'Số tiền chi tiêu tối đa phải là một giá trị số.',
-            'maximum_spend.min' => 'Số tiền chi tiêu tối đa không được nhỏ hơn 0.',
 
         ];
     }

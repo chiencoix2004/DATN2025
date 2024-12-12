@@ -20,14 +20,14 @@
                             </div>
                         </form>
                         {{-- date to date --}}
-                        <form action="#" method="POST">
+                        {{-- <form action="#" method="POST">
                             @csrf
                             <div class="input-group mt-2">
                                 <input type="date" class="form-control" name="from_date">
                                 <input type="date" class="form-control" name="to_date">
                                 <button class="btn btn-outline-secondary" type="submit">Tìm kiếm theo ngày</button>
                             </div>
-                        </form>
+                        </form> --}}
                     </div>
                 </div>
                 <div class="col-md-6 text-end">

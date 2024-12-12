@@ -23,22 +23,49 @@
     </div>
     <div class="card mb-3">
         <div class="card-body">
-            <table class="table">
-                <tr>
-                    <th class="text-center">Banner 1</th>
-                    <th class="text-center">Banner 2</th>
-                </tr>
-                <tr>
-                    @foreach ($bannerMKT as $bn)
-                        <td>
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th class="text-center">Banner 1 và 2</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        @foreach ($bannerMKT as $bn)
+                            <td class="text-center">
+                                @php
+                                    $url = $bn->img_banner;
+                                    if (!\Str::contains($url, 'http')) {
+                                        $url = \Storage::url($url);
+                                    }
+                                @endphp
+                                <img src="{{ $url }}" alt="Banner" class="img-fluid rounded mb-3" style="max-height: 300px; object-fit: cover;">
+                                <form action="{{ route('admin.banner.cap_nhat', $bn) }}" method="post" enctype="multipart/form-data">
+                                    @csrf
+                                    @method('PUT')
+                                    <div class="mb-3">
+                                        <label class="form-label">Ảnh</label>
+                                        <input name="hinh_anh" type="file" class="form-control" accept="image/*">
+                                        @error('hinh_anh')
+                                            <label class="form-label text-danger">{{ $message }}</label>
+                                        @enderror
+                                    </div>
+                                    <input type="hidden" value="3" name="banner_position">
+                                    <button type="submit" class="btn btn-primary">Cập nhật</button>
+                                </form>
+                            </td>
+                        @endforeach
+                    </tr>
+                    <tr>
+                        <td class="text-center">
                             @php
-                                $url = $bn->img_banner;
+                                $url = $bannerMKT4->img_banner;
                                 if (!\Str::contains($url, 'http')) {
                                     $url = \Storage::url($url);
                                 }
                             @endphp
-                            <img src="{{ $url }}" alt="Error" width="100%" class="mb-3">
-                            <form action="{{ route('admin.banner.cap_nhat', $bn) }}" method="post"
+                            <img src="{{ $url }}" alt="Banner" class="img-fluid rounded mb-3" style="max-height: 300px; object-fit: cover;">
+                            <form action="{{ route('admin.banner.cap_nhat', $bannerMKT4) }}" method="post"
                                 enctype="multipart/form-data">
                                 @csrf
                                 @method('PUT')
@@ -52,40 +79,12 @@
                                         <label class="form-label text-danger">{{ $message }}</label>
                                     @enderror
                                 </div>
-                                <input type="hidden" value="3" name="banner_position">
+                                <input type="hidden" value="4" name="banner_position">
                                 <button type="submit" class="btn btn-primary">Cập nhật</button>
                             </form>
                         </td>
-                    @endforeach
-                </tr>
-                <tr>
-                    <td colspan="2">
-                        @php
-                            $url = $bannerMKT4->img_banner;
-                            if (!\Str::contains($url, 'http')) {
-                                $url = \Storage::url($url);
-                            }
-                        @endphp
-                        <img src="{{ $url }}" alt="Error" width="100%" class="mb-3">
-                        <form action="{{ route('admin.banner.cap_nhat', $bannerMKT4) }}" method="post"
-                            enctype="multipart/form-data">
-                            @csrf
-                            @method('PUT')
-                            <div class="mb-3">
-                                <label for="" class="form-label">Ảnh</label>
-                                <input name="hinh_anh" type="file" class="form-control" accept="image/*">
-                                @error('hinh_anh')
-                                    <label class="form-label text-danger">{{ $message }}</label>
-                                @enderror
-                                @error('banner_position')
-                                    <label class="form-label text-danger">{{ $message }}</label>
-                                @enderror
-                            </div>
-                            <input type="hidden" value="4" name="banner_position">
-                            <button type="submit" class="btn btn-primary">Cập nhật</button>
-                        </form>
-                    </td>
-                </tr>
+                    </tr>
+                </tbody>
             </table>
         </div>
     </div>
