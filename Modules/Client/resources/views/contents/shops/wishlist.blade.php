@@ -65,7 +65,9 @@
                                                 <td class="kenne-product-price">
                                                     @php
                                                         $price = 0;
-                                                        $productVariant = App\Models\ProductVariant::find($item->productVariant->id);
+                                                        $productVariant = App\Models\ProductVariant::find(
+                                                            $item->productVariant->id,
+                                                        );
                                                         if ($productVariant) {
                                                             $current_date = now();
                                                             $price_sale = $productVariant->price_sale;
@@ -158,7 +160,8 @@
                                                         @endif
                                                     </span>
                                                 </td>
-                                                <td class="kenne-cart_btn"><a href="$" class="add-to-cart-wishlist"
+                                                <td class="kenne-cart_btn"><a href="$"
+                                                        class="add-to-cart-wishlist add-to-cart-wishlist-delete"
                                                         data-color-id="{{ $item->productVariant->color->id }}"
                                                         data-size-id="{{ $item->productVariant->size->id }}"
                                                         data-product-id="{{ $item->product->id }}">Thêm vào giỏ hàng</a>
@@ -200,6 +203,26 @@
                             tr.remove();
                         } else {
                             alert(response.message);
+                        }
+                    }
+                });
+            });
+
+            $('.add-to-cart-wishlist-delete').click(function() {
+                var tr = $(this).closest('tr');
+                $.ajax({
+                    url: "{{ route('wishlist.index') }}/remove/" + tr.data('id'),
+                    type: 'POST',
+                    data: {
+                        _token: "{{ csrf_token() }}",
+                        _method: 'DELETE',
+                        id: tr.data('id')
+                    },
+                    success: function(response) {
+                        if (response.success) {
+                            tr.remove();
+                        } else {
+                            console.log(response.message);
                         }
                     }
                 });
