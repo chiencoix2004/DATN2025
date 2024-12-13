@@ -41,12 +41,12 @@ use Carbon\Carbon;
                             <span class="d-none d-sm-block">Bảo mật</span>
                         </a>
                     </li>
-                    <li class="nav-item">
+                    {{-- <li class="nav-item">
                         <a class="nav-link" data-bs-toggle="tab" href="#messages2" role="tab">
                             <span class="d-block d-sm-none"><i class="far fa-envelope"></i></span>
                             <span class="d-none d-sm-block">Thông tin cá nhân</span>
                         </a>
-                    </li>
+                    </li> --}}
                 </ul>
             </div>
         </div><!-- end card header -->
@@ -75,7 +75,7 @@ use Carbon\Carbon;
                         </p>
                         </div>
                         <div class="col-sm-4">
-                            <p class="text-dark">Trạng thái thông tin  <strong>@if ($data->status == "COMPLETED_BASIC") Cần hoàn thiện thêm thông tin @elseif($data->status == "COMPLETED")Đã hoàn thiện thông tin @else Cần hoàn thiện thêm thông tin @endif</strong></p>
+                            {{-- <p class="text-dark">Trạng thái thông tin  <strong>@if ($data->status == "COMPLETED_BASIC") Cần hoàn thiện thêm thông tin @elseif($data->status == "COMPLETED")Đã hoàn thiện thông tin @else Cần hoàn thiện thêm thông tin @endif</strong></p> --}}
                             <p class="text-dark">Ngày mở ví: <strong>{{$data->created_at }} ( mở được {{ Carbon::parse($data->created_at)->diffInDays() }} ngày)</strong></p>
                             <p class="text-dark">Chủ sở hữu: <strong>{{ $data->frist_name }} {{ $data->last_name }}</strong></p>
                             <p class="text-dark"><strong>{{ $data->admin_note }}</strong></p>

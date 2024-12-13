@@ -87,6 +87,15 @@ class EkycController extends Controller
         if($request->id_number == empty($request->id_number)){
             return redirect()->back()->withErrors(['id_number' => 'Vui lòng nhập số CMND/CCCD']);
         }
+        $validatedData = $request->validate([
+            'id_number' => 'required|string',
+            'id_card_image_front' => 'required|file|mimes:jpg,jpeg,png|max:2048',
+            'id_card_image_back' => 'required|file|mimes:jpg,jpeg,png|max:2048',
+        ], [
+            'id_number.required' => 'Vui lòng nhập số CMND/CCCD',
+            'id_card_image_front.required' => 'Vui lòng tải lên mặt trước của CMND/CCCD',
+            'id_card_image_back.required' => 'Vui lòng tải lên mặt sau của CMND/CCCD',
+        ]);
         $id_card_image_front = $request->file('id_card_image_front');
         $id_card_image_back = $request->file('id_card_image_back');
         $encypted_front = Crypt::encrypt(file_get_contents($id_card_image_front));
@@ -177,9 +186,26 @@ class EkycController extends Controller
             } catch(Exception $e){
               return dd($e->getMessage());
             }
-        }
-        return redirect()->route('wallet.index');
+        } else{
+            $user = new UserEkyc();
+            $user->setfillCompleted(Auth::user()->id);
+            $user->setStasusCompletedBasic(Auth::user()->id);
+            $walletdata = [
+              'user_id' => Auth::user()->id,
+              'wallet_account_id' => random_int(100000,999999),
+              'wallet_balance_available' => 0,
+              'wallet_status' => 1,
+              'wallet_user_level' => 1,
 
+            ];
+            try{
+              $wallet = new Wallet();
+              $wallet->createWallet($walletdata);
+              return redirect()->route('wallet.index');
+            } catch(Exception $e){
+              return dd($e->getMessage());
+            }
+        }
         } else{
             return redirect()->back()->withErrors('Vui lòng chấp nhận điều khoản sử dụng');
          }

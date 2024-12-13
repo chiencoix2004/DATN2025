@@ -36,11 +36,12 @@ class ClientController extends Controller
         $keywd = $request->keywd;
         $request->session()->put('keywd', $keywd);
         $product = new Product();
-        $products = $product->searchproduct($keywd);
+        // Sử dụng paginate thay vì get() để phân trang
+        $products = $product->searchproduct($keywd)->paginate(10); // Số sản phẩm trên mỗi trang
         $categories = new Category();
         $listcategory = $categories->listcategory10();
-        // dd($listcategory);
-        return view('client::search.list', compact('products', 'listcategory'));
+
+        return view('client::search.list', compact('products', 'listcategory', 'keywd'));
     }
 
     public function shortingseach(Request $request)
@@ -54,7 +55,7 @@ class ClientController extends Controller
                 $categories = new Category();
                 $listcategory = $categories->listcategory10();
                 // dd($listcategory);
-                return view('client::search.list', compact('products', 'listcategory'));
+                return view('client::search.list', compact('products', 'listcategory','keywd'));
 
 
             case '2':
@@ -63,7 +64,7 @@ class ClientController extends Controller
                 $categories = new Category();
                 $listcategory = $categories->listcategory10();
                 // dd($listcategory);
-                return view('client::search.list', compact('products', 'listcategory'));
+                return view('client::search.list', compact('products', 'listcategory','keywd'));
 
             case '3':
                 $product = new Product();
@@ -71,14 +72,14 @@ class ClientController extends Controller
                 $categories = new Category();
                 $listcategory = $categories->listcategory10();
                 // dd($listcategory);
-                return view('client::search.list', compact('products', 'listcategory'));
+                return view('client::search.list', compact('products', 'listcategory','keywd'));
             case '4':
                 $product = new Product();
                 $products = $product->seachproductpricehightolow($keywd);
                 $categories = new Category();
                 $listcategory = $categories->listcategory10();
                 // dd($listcategory);
-                return view('client::search.list', compact('products', 'listcategory'));
+                return view('client::search.list', compact('products', 'listcategory','keywd'));
 
                 // return ("4");
             default:
@@ -87,7 +88,7 @@ class ClientController extends Controller
                 $categories = new Category();
                 $listcategory = $categories->listcategory10();
                 // dd($listcategory);
-                return view('client::search.list', compact('products', 'listcategory'));
+                return view('client::search.list', compact('products', 'listcategory','keywd'));
         }
     }
     public function map()
@@ -118,7 +119,7 @@ class ClientController extends Controller
         $categories = new Category();
         $listcategory = $categories->listcategory10();
         // dd($products);
-        return view('client::search.list', compact('products', 'listcategory'));
+        return view('client::search.list', compact('products', 'listcategory','keywd'));
     }
 
     public function seachhint(Request $request)
@@ -134,7 +135,7 @@ class ClientController extends Controller
         $products = $product->searchproductbycategory($id, $keywd);
         $categories = new Category();
         $listcategory = $categories->listcategory10();
-        return view('client::search.list', compact('products', 'listcategory'));
+        return view('client::search.list', compact('products', 'listcategory','keywd'));
     }
     public function searchget($keywd)
     {
@@ -144,7 +145,7 @@ class ClientController extends Controller
         $categories = new Category();
         $listcategory = $categories->listcategory10();
         // dd($listcategory);
-        return view('client::search.list', compact('products', 'listcategory'));
+        return view('client::search.list', compact('products', 'listcategory','keywd'));
     }
 
 

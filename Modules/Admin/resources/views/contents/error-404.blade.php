@@ -36,8 +36,7 @@
                 <div class="col-sm-10 col-md-8 col-lg-6 col-xxl-5"><a class="d-flex flex-center mb-4"
                         href="{{ route('admin.dashboard') }}"><img class="me-2"
                             src="{{ asset('theme/admin/img/icons/spot-illustrations/falcon.png') }}" alt=""
-                            width="58" /><span
-                            class="font-sans-serif text-primary fw-bolder fs-4 d-inline-block">falcon</span></a>
+                            width="80" />
                     <div class="card">
                         <div class="card-body p-4 p-sm-5">
                             <div class="fw-black lh-1 text-300 fs-error">404</div>

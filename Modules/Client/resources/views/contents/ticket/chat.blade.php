@@ -93,7 +93,7 @@
                                     <input type="hidden" name="ticket_id" value="{{ $detailticket->first()->ticket_id }}">
                                     <input type="hidden" name="reply_by" value="customer">
                                 </div>
-                                <button type="submit" class="kenne-contact-form_btn">
+                                <button type="submit" class="kenne-btn">
                                     <i class="bi bi-send"></i> Gửi
                                 </button>
                             </form>

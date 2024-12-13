@@ -13,7 +13,7 @@
         </div>
         @elseif($data->wallet_user_level == 1)
         <div class="alert alert-warning" role="alert">
-           <p> <i class="mdi mdi-alert-outline me-2"></i>  Tài khoản của bạn đang ở mức độ xác thực thông tin cơ bản vui lòng <a href="{{ route('wallet.index') }}">cập nhật thông tin cá nhân</a> để nâng cấp tài khoản</p>
+           <p> <i class="mdi mdi-alert-outline me-2"></i>  Tài khoản của bạn đang ở mức độ xác thực thông tin cơ bản vui lòng <a href="{{ route('ekyc.index') }}">cập nhật thông tin cá nhân</a> để nâng cấp tài khoản</p>
            <p> Một số chức năng sẽ không thể sử dụng sau đây</p>
            <ul>
                 <li> Rút tiền</li>

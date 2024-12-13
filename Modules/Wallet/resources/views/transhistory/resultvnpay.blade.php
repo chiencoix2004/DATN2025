@@ -56,7 +56,7 @@
                     <h3 class="card-title text-center">Thông tin giao dịch</h3>
                     <p class="card-text ">Mã giao dịch: <strong>{{ $returndata['vnp_TxnRef'] }}</strong></p>
                     <p class="card-text">Mã tham chiếu: <strong>{{ $returndata['vnp_BankTranNo'] }}</strong></p>
-                    <p class="card-text">Số tiền: <strong>{{ number_format($returndata['Ammout'] / 10) }} VND</strong></p>
+                    <p class="card-text">Số tiền: <strong>{{ number_format($returndata['Ammout'] / 100) }} VND</strong></p>
                     <p class="card-text">Phương thức thanh toán: <strong>{{ $returndata['vnp_CardType'] }}</strong></p>
                     <p class="card-text">Ngày khởi tạo: <strong>{{ $returndata['vnp_PayDate'] }}</strong></p>
                     <p class="card-text text-muted">Request ID: <strong>{{ $returndata['vnp_SecureHash'] }}</strong></p>

@@ -42,11 +42,12 @@
                         <h3 class="card-title">QR chuyển khoản</h3>
                     </div>
                     <div class="card-body text-center">
-                        @if ($data->status != 2 || $data->status != 3)
-                        <p>Yêu cầu đã hoàn thành, không thể tạo mã QR</p>
-                        @else
+                        @if ($data->status != 2 && $data->status != 3)
                         <img src="https://img.vietqr.io/image/{{ $data->bank_name }}-{{ $data->bank_account_number }}-print.png?amount={{ $data->amount }}&accountName={{ $data->bank_account_name }}&addInfo=yeu cau rut tien {{ $data->withdraw_request_id }} tai PCV Fasion"
-                            alt="Ảnh CK" class="img-fluid">
+                        alt="Ảnh CK" class="img-fluid">
+
+                        @else
+                        <p>Yêu cầu đã hoàn thành, không thể tạo mã QR</p>
                         @endif
                     </div>
                 </div>

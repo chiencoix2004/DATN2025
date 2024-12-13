@@ -37,7 +37,7 @@
                                     $url = \Storage::url($url);
                                 }
                             @endphp
-                            <img src="{{ $url }}" alt="Error" width="100%" class="mb-3">
+                            <img src="{{ $url }}" alt="Banner" class="img-fluid rounded mb-3" style="max-height: 300px; object-fit: cover;">
                             <form action="{{ route('admin.banner.cap_nhat', $bn) }}" method="post"
                                 enctype="multipart/form-data">
                                 @csrf
@@ -66,7 +66,7 @@
                                 $url = \Storage::url($url);
                             }
                         @endphp
-                        <img src="{{ $url }}" alt="Error" width="100%" class="mb-3">
+                        <img src="{{ $url }}" alt="Banner" class="img-fluid rounded mb-3" style="max-height: 300px; object-fit: cover;">
                         <form action="{{ route('admin.banner.cap_nhat', $bannerMKT4) }}" method="post"
                             enctype="multipart/form-data">
                             @csrf

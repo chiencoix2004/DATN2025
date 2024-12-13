@@ -230,7 +230,7 @@
                                     <div class="rounded-top text-white d-flex flex-row mb-3"
                                         style="background-color: #000; height:200px;">
                                         <div class="ms-4 mt-5 d-flex flex-column" style="width: 150px;">
-                                            <img src="" alt="Bạn chưa cập nhật ảnh đại diện cho hồ sơ cá nhân"
+                                            <img src="{{ Storage::url(Auth::user()->user_image) }}" alt="Bạn chưa cập nhật ảnh đại diện cho hồ sơ cá nhân"
                                                 class="img-fluid img-thumbnail mt-4 mb-2" style="width: 150px; z-index: 1">
                                         </div>
                                         <div class="ms-3" style="margin-top: 130px;">
@@ -384,9 +384,15 @@
                             <div class="tab-pane fade" id="account-details" role="tabpanel"
                                 aria-labelledby="account-details-tab">
                                 <div class="myaccount-details">
-                                    <form id="changePasswordForm" class="kenne-form">
+                                    <form id="changePasswordForm" class="kenne-form" enctype="multipart/form-data">
                                         @csrf
                                         <div class="kenne-form-inner">
+                                            <div class="single-input">
+                                                <label for="account-details-firstname">Hình ảnh*</label>
+                                                <img src="{{ Storage::url($user->user_image) }}" width="100px" alt="">
+                                                <input name="user_image" id="user_image" type="file" >
+                                                <div class="error-message" id="error-full_name"></div>
+                                            </div>
                                             <div class="single-input">
                                                 <label for="account-details-firstname">Họ và tên*</label>
                                                 <input type="text" name="full_name" id="account-details-firstname"
@@ -421,7 +427,7 @@
                                                       $('#address').val($(this).text());
                                                       });
 
-                                                  </script>
+                                                </script>
                                             </div>
                                             <div class="single-input">
                                                 <label for="account-details-phone">Số điện thoại*</label>

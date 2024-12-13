@@ -69,9 +69,9 @@ class TagController extends Controller
     {
         $data = Tag::query()->where('slug', $slug)->firstOr();
         if ($data->delete()) {
-            return redirect()->route('admin.tags.list')->with(['success' => 'Xóa mềm 1 tag thành công!']);
+            return redirect()->route('admin.tags.list')->with(['success' => 'Xóa  1 tag thành công!']);
         } else {
-            return redirect()->back()->with(['error' => 'Xóa mềm 1 tag thất bại!']);
+            return redirect()->back()->with(['error' => 'Xóa 1 tag thất bại!']);
         }
     }
 }

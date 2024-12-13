@@ -130,12 +130,18 @@
                                         </thead>
                                         <tbody>
                                             @foreach ($orderItems as $key => $orderDetail)
+                                            @php
+ $url = $orderDetail->product_avatar;
+                                                        if (!\Str::contains($url, 'http')) {
+                                                            $url = \Storage::url($url);
+                                                        }
+                                        @endphp
                                                 <tr>
                                                     <td class="product-name">{{ $key + 1 }}</td>
                                                     <td class="product-thumbnail">
                                                         <a
                                                             href="{{ route('shop.productDetail', $orderDetail->productVariant->product->slug) }}"><img
-                                                                src="{{ asset($orderDetail->productVariant->product->product_avata) }}"
+                                                                src="{{ $url }}"
                                                                 alt="Kenne"></a>
                                                     </td>
                                                     <td class="product-name"><a

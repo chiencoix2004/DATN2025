@@ -72,8 +72,8 @@ class CartController extends Controller
         if ($productVariant->quantity == 0) {
             return response()->json(['message' => 'hết hàng'], 200);
         }
-        if ($productVariant->quantity < $request->quantity) {
-            return response()->json(['message' => 'số lượng sản phẩm không đủ'], 200);
+        if ($productVariant->quantity <  $request->quantity) {
+            return response()->json(['message' => 'Số lượng hàng bạn mua đang bị vượt số lượng hàng hiện tại, vui lòng đểu chỉnh lại!'], 200);
         }
         $quantity = $request->quantity;
         $total_amount = 0;
@@ -85,6 +85,10 @@ class CartController extends Controller
             $cart = Cart::firstOrCreate(['user_id' => auth()->id()]);
             $cartItem = $cart->cartItems()->firstOrCreate(['product_id' => $productId, 'product_variant_id' => $productVariantId], ['quantity' => 0, 'price' => 0, 'price_total' => 0]);
             $cartItem->increment('quantity', $quantity);
+            if ($cartItem->quantity > $productVariant->quantity) {
+                $cartItem->decrement('quantity', $quantity);
+                return response()->json(['message' => 'Số lượng hàng bạn mua đang bị vượt số lượng hàng hiện tại, vui lòng đểu chỉnh lại!'], 200);
+            }
             $cartItem->product_image = $product_image;
             $cartItem->save();
 
@@ -133,6 +137,7 @@ class CartController extends Controller
 
                     if ($price !== null) {
                         $cartItem->price = $price;
+                        $cartItem->product_image = $product_image;
                         $cartItem->total_price = $cartItem->quantity * $price;
                         $cartItem->save();
                     };
@@ -194,14 +199,19 @@ class CartController extends Controller
         }
     }
 
+
     public function index()
-    {   
+    {
         Cart::firstOrCreate(['user_id' => auth()->id()]);
         return view('client::contents.shops.cart');
     }
 
     public function list()
     {
+        //ham check nếu user khác thêm vào giỏ hàng mà sản phẩm đó đã hết hoặc trong giỏ hàng đã có sản phẩm đó mà sản phẩm đó đã hết
+        //thì xóa sản phẩm đó khỏi giỏ hàng -> thông báo cho user -> cập nhật lại giỏ hàng
+
+
         if (auth()->check()) {
             $cart = Cart::where('user_id', auth()->id())->first();
             $cartItems = CartItem::where('cart_id', $cart->id)
@@ -240,7 +250,8 @@ class CartController extends Controller
             if ($request->quantity > $productQuantity) {
                 return response()->json([
                     'success' => false,
-                    'message' => 'Số lượng sản phẩm không đủ!'], 200);
+                    'message' => 'Số lượng sản phẩm không đủ!'
+                ], 200);
             }
             $cartItem->quantity = $request->quantity;
             $cartItem->total_price = $cartItem->quantity * $cartItem->price;
@@ -315,11 +326,6 @@ class CartController extends Controller
                     'success' => false,
                     'message' => 'Số tiền chi tiêu phải lớn hơn hoặc bằng ' . $coupon->minimum_spend . '.'
                 ], 200);
-            } elseif ($order_total > $coupon->maximum_spend) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Số tiền chi tiêu phải nhỏ hơn hoặc bằng ' . $coupon->maximum_spend . '.'
-                ], 200);
             } else {
                 // Tính toán giá trị giảm giá
                 if ($coupon->discount_type == 'percent') {
@@ -364,6 +370,36 @@ class CartController extends Controller
             ->with("productVariant.color")
             ->with("productVariant.product")
             ->get();
+
+        $dataList = [];
+
+        foreach ($cartItems as $item) {
+            $productVariant = ProductVariant::find($item->product_variant_id);
+            if ($item->quantity > $productVariant->quantity) {
+                $dataList[] = [
+                    'product_name' => $item->productVariant->product->name,
+                    'size' => $item->productVariant->size->size_value,
+                    'color' => $item->productVariant->color->color_value,
+                ];
+            };
+        };
+
+        // $dataList[] = [
+        //     'product_name' => 'Áo sơ mi',
+        //     'size' => 'M',
+        //     'color' => 'Đỏ',
+        // ];
+
+        $message = '';
+        foreach ($dataList as $item) {
+            $message .= 'sản phẩm' . $item['product_name'] . ' - size:' . $item['size'] . ' -màu:' . $item['color'] . '\n';
+        };
+
+        if (count($dataList) > 0) {
+            return redirect()->route('cart.index')
+                ->with('messageSP', $message)
+                ->with('errorSP', 'Số lượng sản phẩm không đủ!');
+        };
 
         if ($cartItems->count() == 0) {
             return redirect()->route('cart.index');
@@ -410,7 +446,7 @@ class CartController extends Controller
             if ($current_date < $coupon->date_start) {
                 return response()->json([
                     'success' => false,
-                    'message' => 'Mã giảm giá chưa có hiệu lực.'
+                    'message' => 'Mã giảm giá không tồn tại hoặc đã hết hạn.'
                 ], 200);
             } elseif ($current_date > $coupon->date_end) {
                 return response()->json([
@@ -421,11 +457,6 @@ class CartController extends Controller
                 return response()->json([
                     'success' => false,
                     'message' => 'Số tiền chi tiêu phải lớn hơn hoặc bằng ' . $coupon->minimum_spend . '.'
-                ], 200);
-            } elseif ($order_total > $coupon->maximum_spend) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Số tiền chi tiêu phải nhỏ hơn hoặc bằng ' . $coupon->maximum_spend . '.'
                 ], 200);
             } else {
                 // Tính toán giá trị giảm giá
@@ -534,84 +565,84 @@ class CartController extends Controller
         // nếu người dùng không thanh toán thì cập nhật trạng thái đơn hàng thành chưa thanh toán -> tiến hành xóa đơn hàng và giữ lại giỏ hàng
 
 
-//wallet
-if ($payment_method == 'wallet') {
-    $cartItems = CartItem::where('cart_id', $cart->id)
-        ->with("productVariant")
-        ->with("productVariant.size")
-        ->with("productVariant.color")
-        ->with("productVariant.product")
-        ->get();
+        //wallet
+        if ($payment_method == 'wallet') {
+            $cartItems = CartItem::where('cart_id', $cart->id)
+                ->with("productVariant")
+                ->with("productVariant.size")
+                ->with("productVariant.color")
+                ->with("productVariant.product")
+                ->get();
 
-    foreach ($cartItems as $item) {
-        ProductVariant::where('id', $item->product_variant_id)->decrement('quantity', $item->quantity);
-    }
+            foreach ($cartItems as $item) {
+                ProductVariant::where('id', $item->product_variant_id)->decrement('quantity', $item->quantity);
+            }
 
-    $validator = Validator::make($request->all(), [
-        'user_address' => 'required',
-        'user_phone' => 'required|regex:/^[0-9]{10}$/',
-        'first_name' => ['required', 'max:50'],
-        'last_name' => ['required', 'max:50'],
-        'user_email' => 'required|email',
-        'payment_method' => 'required'
-    ], messages: $this->messages);
+            $validator = Validator::make($request->all(), [
+                'user_address' => 'required',
+                'user_phone' => 'required|regex:/^[0-9]{10}$/',
+                'first_name' => ['required', 'max:50'],
+                'last_name' => ['required', 'max:50'],
+                'user_email' => 'required|email',
+                'payment_method' => 'required'
+            ], messages: $this->messages);
 
-    if ($validator->fails()) {
-        return response()->json([
-            "type" => "error",
-            "message" => $validator->errors()
-        ], 400);
-    }
+            if ($validator->fails()) {
+                return response()->json([
+                    "type" => "error",
+                    "message" => $validator->errors()
+                ], 400);
+            }
 
 
-    $oder_detail = [];
+            $oder_detail = [];
 
-    $user_full_name = $user->full_name;
-    $user_phone = $user->phone;
-    $user_email = $user->email;
-    $user_address = $user->address;
+            $user_full_name = $user->full_name;
+            $user_phone = $user->phone;
+            $user_email = $user->email;
+            $user_address = $user->address;
 
-    $order = Order::create([
-        "users_id" => $userId,
-        "user_name" => $user_full_name,
-        "user_phone" => $user_phone,
-        "user_email" => $user_email,
-        "user_address" => $user_address,
-        "ship_user_name" => $ship_user_name,
-        "ship_user_phone" => $ship_user_phone,
-        "ship_user_email" => $ship_user_email,
-        "ship_user_address" => $ship_user_address,
-        "ship_user_note" => $ship_user_note,
-        'discount' => $discount_value,
-        'date_create_order' => now(),
-        "payment_method" => "Thanh toán ví tiền",
-        "status_order" => "Chờ xác nhận",
-        "status_payment" => "Chưa thanh toán",
-        "total_price" => $totalAmount
-    ]);
+            $order = Order::create([
+                "users_id" => $userId,
+                "user_name" => $user_full_name,
+                "user_phone" => $user_phone,
+                "user_email" => $user_email,
+                "user_address" => $user_address,
+                "ship_user_name" => $ship_user_name,
+                "ship_user_phone" => $ship_user_phone,
+                "ship_user_email" => $ship_user_email,
+                "ship_user_address" => $ship_user_address,
+                "ship_user_note" => $ship_user_note,
+                'discount' => $discount_value,
+                'date_create_order' => now(),
+                "payment_method" => "Thanh toán ví tiền",
+                "status_order" => "Chờ xác nhận",
+                "status_payment" => "Chưa thanh toán",
+                "total_price" => $totalAmount
+            ]);
 
-    foreach ($cartItems as $item) {
-        $oder_detail = OrderDetail::create([
-            "order_id" => $order->id,
-            "product_id" => $item->product_id,
-            "product_variant_id" => $item->product_variant_id,
-            "product_name" => $item->productVariant->product->name,
-            "product_sku" => $item->productVariant->product->sku,
-            "product_avatar" => $item->productVariant->product->image_avatar,
-            "product_price_final" => $item->price,
-            "product_quantity" => $item->quantity
-        ]);
-    }
-    $timestamp = now()->timestamp;
-    $querybuilder = "?user_id=$userId&order_id=$order->id&ammount=$totalAmount&shop_name=PCV_FASHION&shop_desciprtion=Thanh toán qua ví điện tử&order_type=Create_payment_link&date_created=$timestamp";
-    $link = route('wallet.pay.index').$querybuilder;
-    return response()->json([
-        "type" => "success",
-        "message" => "Đặt hàng thành công!",
-        'method' => 'wallet',
-        "link" => "$link",
-    ], 200);
-}
+            foreach ($cartItems as $item) {
+                $oder_detail = OrderDetail::create([
+                    "order_id" => $order->id,
+                    "product_id" => $item->product_id,
+                    "product_variant_id" => $item->product_variant_id,
+                    "product_name" => $item->productVariant->product->name,
+                    "product_sku" => $item->productVariant->product->sku,
+                    "product_avatar" => $item->productVariant->product->image_avatar,
+                    "product_price_final" => $item->price,
+                    "product_quantity" => $item->quantity
+                ]);
+            }
+            $timestamp = now()->timestamp;
+            $querybuilder = "?user_id=$userId&order_id=$order->id&ammount=$totalAmount&shop_name=PCV_FASHION&shop_desciprtion=Thanh toán qua ví điện tử&order_type=Create_payment_link&date_created=$timestamp";
+            $link = route('wallet.pay.index') . $querybuilder;
+            return response()->json([
+                "type" => "success",
+                "message" => "Đặt hàng thành công!",
+                'method' => 'wallet',
+                "link" => "$link",
+            ], 200);
+        }
 
         $cartItems = CartItem::where('cart_id', $cart->id)
             ->with("productVariant")
@@ -728,6 +759,7 @@ if ($payment_method == 'wallet') {
         //     ], 500);
         // }
 
+
         $link = route('client.invoice.show', ['id' => $order->id]);
         return response()->json([
             "type" => "success",
@@ -824,22 +856,23 @@ if ($payment_method == 'wallet') {
         return response()->json(['success' => true]);
     }
 
-    public function handlewallet(){
+    public function handlewallet()
+    {
         $status = $_GET['status'];
         $order_id = $_GET['order_id'];
         $ammount = $_GET['ammount'];
         $user_id = $_GET['user_id'];
         $returndata = [
-            'status'=> $status,
-            'ammount'=> $ammount,
-            'order_id '=> $order_id,
+            'status' => $status,
+            'ammount' => $ammount,
+            'order_id ' => $order_id,
             'user_id' => $user_id
         ];
         if ($status == 'failed') {
             $order = Order::query()->with('orderDetails')->find($order_id);
             $order->orderDetails()->forceDelete();
             $order->forceDelete();
-         return view('client::contents.shops.checkoutresponewallet', compact('returndata'));
+            return view('client::contents.shops.checkoutresponewallet', compact('returndata'));
         } else {
             $order = Order::find($order_id);
             $order->status_payment = "Đã thanh toán";
@@ -864,16 +897,31 @@ if ($payment_method == 'wallet') {
                 $user = User::find($user_id);
                 $user->notify(new Checkout($order, $orderItems));
             }
-            return view('client::contents.shops.checkoutresponewallet', compact('returndata','orderItems', 'order'));
+            return view('client::contents.shops.checkoutresponewallet', compact('returndata', 'orderItems', 'order'));
         }
-
     }
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function retrypayment($id)
     {
-        return view('client::create');
+        $order = Order::find($id);
+        if ($order) {
+            if ($order->payment_method == 'Thanh toán qua VNpay') {
+                // dd($order);
+
+                $vnpay = new Vnpay();
+                $link =  $vnpay->create_link_payment_url($order->total_price / 10, 'vn', "http://127.0.0.1:8000/api/v1/meanhxuyen?order_id=$order->id&user_id=$order->users_id");
+                return redirect($link);
+            } else {
+                $timestamp = now()->timestamp;
+                $querybuilder = "?user_id=$order->users_id&order_id=$order->id&ammount=$order->total_price&shop_name=PCV_FASHION&shop_desciprtion=Thanh toán qua ví điện tử&order_type=Create_payment_link&date_created=$timestamp";
+                $link = route('wallet.pay.index') . $querybuilder;
+                return redirect($link);
+            }
+        } else {
+            return response()->json(['error' => 'Đơn hàng không tồn tại!'], 400);
+        }
     }
 
     /**

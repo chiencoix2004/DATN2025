@@ -71,7 +71,7 @@ class AttributeController extends Controller
     {
         $valueC = ColorAttribute::query()->findOrFail($id);
         if ($valueC->delete()) {
-            return response()->json(['success' => 'Xóa mềm giá trị thuộc tính thành công!']);
+            return response()->json(['success' => 'Xóa giá trị thuộc tính thành công!']);
         } else {
             return response()->json(['error' => 'Không thể kết nối đến server!'], 500);
         }

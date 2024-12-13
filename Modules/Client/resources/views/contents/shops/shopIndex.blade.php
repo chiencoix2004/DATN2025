@@ -25,7 +25,6 @@
                 {{-- sidebar --}}
                 <div class="col-xl-3 col-lg-4 order-2 order-lg-1">
                     <form method="GET" action="{{ route('filterproduct') }}">
-                        @csrf
                         <div class="kenne-sidebar-catagories_area">
                             <div class="kenne-sidebar_categories">
                                 <div class="kenne-categories_title first-child">
@@ -166,7 +165,7 @@
                                 <i class="fa fa-th-list"></i>
                             </a>
                         </div>
-                        <div class="product-item-selection_area">
+                        {{-- {{-- <div class="product-item-selection_area">
                             <div class="product-short">
                                 <label class="select-label">Sắp xếp theo:</label>
                                 <select class="nice-select myniceselect" name="short">
@@ -177,8 +176,8 @@
                                     <option value="price_desc">Giá, từ cao đến thấp</option>
                                 </select>
                             </div>
-                        </div>
-                        <button type="submit" class="filter-btn">Áp dụng bộ lọc</button>
+                        </div> --}}
+                        <button type="submit" class=" kenne-btn filter-btn">Áp dụng bộ lọc</button>
                     </div>
                 </form>
                     <div class="shop-product-wrap grid gridview-3 row">
@@ -206,14 +205,6 @@
                                                             <i class="ion-ios-search"></i>
                                                         </a>
                                                     </li>
-                                                    <li><a href="wishlist.html" data-bs-toggle="tooltip"
-                                                            data-placement="right" title="Thêm vào danh sách yêu thích"><i
-                                                                class="ion-ios-heart-outline"></i></a>
-                                                    </li>
-                                                    <li><a href="compare.html" data-bs-toggle="tooltip"
-                                                            data-placement="right" title="So sánh sản phẩm"><i
-                                                                class="ion-ios-reload"></i></a>
-                                                    </li>
                                                 </ul>
                                             </div>
                                         </div>
@@ -234,7 +225,7 @@
                                                         </span>
                                                     @endif
                                                 </div>
-                                                <div class="rating-box">
+                                                {{-- <div class="rating-box">
                                                     <ul>
                                                         <li><i class="ion-ios-star"></i></li>
                                                         <li><i class="ion-ios-star"></i></li>
@@ -244,7 +235,7 @@
                                                             <i class="ion-ios-star-outline"></i>
                                                         </li>
                                                     </ul>
-                                                </div>
+                                                </div> --}}
                                             </div>
                                         </div>
                                     </div>
@@ -273,7 +264,7 @@
                                                     <a
                                                         href="{{ route('shop.productDetail', $product->slug) }}">{{ $product->name }}</a>
                                                 </h6>
-                                                <div class="rating-box">
+                                                {{-- <div class="rating-box">
                                                     <ul>
                                                         <li><i class="ion-ios-star"></i></li>
                                                         <li><i class="ion-ios-star"></i></li>
@@ -282,7 +273,7 @@
                                                         <li class="silver-color"><i class="ion-ios-star-outline"></i>
                                                         </li>
                                                     </ul>
-                                                </div>
+                                                </div> --}}
                                                 <div class="product-short_desc">
                                                     {!! $product->description !!}
                                                 </div>
@@ -295,14 +286,14 @@
                                                             <i class="ion-ios-search"></i>
                                                         </a>
                                                     </li>
-                                                    <li><a href="wishlist.html" data-bs-toggle="tooltip"
+                                                    {{-- <li><a href="wishlist.html" data-bs-toggle="tooltip"
                                                             data-placement="right" title="Thêm vào danh sách yêu thích"><i
                                                                 class="ion-ios-heart-outline"></i></a>
                                                     </li>
                                                     <li><a href="compare.html" data-bs-toggle="tooltip"
                                                             data-placement="right" title="So sánh sản phẩm"><i
                                                                 class="ion-ios-reload"></i></a>
-                                                    </li>
+                                                    </li> --}}
                                                 </ul>
                                             </div>
                                         </div>

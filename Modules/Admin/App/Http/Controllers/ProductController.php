@@ -119,11 +119,12 @@ class ProductController extends Controller
             DB::beginTransaction();
             if ($request->hasFile('prd_avatar')) {
                 $slugCategory = optional(Category::query()->find($request->prd_category))->slug ?? 'khong-phan-loai';
-                $dataProduct['prd_avatar'] = Storage::put("public/products/image_avatar/$slugCategory", $request->file('prd_avatar'));
+                Storage::put("public/products/image_avatar/$slugCategory", $request->file('prd_avatar'));
+                $dataProduct['prd_avatar'] = "products/image_avatar/$slugCategory/" . $request->file('prd_avatar')->hashName();
             }
             $product = Product::query()->create(
                 [
-                    'category_id' => $request->prd_category,
+                    'sub_category_id' => $request->prd_category,
                     'name' => $dataProduct['prd_name'],
                     'sku' => $dataProduct['prd_sku'],
                     'slug' => $dataProduct['prd_slug'],
@@ -142,10 +143,11 @@ class ProductController extends Controller
             if ($request->hasFile('prd_images')) {
                 $slugCategory = optional(Category::query()->find($request->prd_category))->slug ?? "khong-phan-loai";
                 foreach ($request->file('prd_images') as $key => $image) {
+                    Storage::put("public/products/image_galleries/$slugCategory", $image);
                     ProductImage::query()->create(
                         [
                             'product_id' => $product->id,
-                            'image_path' => $prd_img = Storage::put("public/products/image_galleries/$slugCategory", $image)
+                            'image_path' => $prd_img = "products/image_galleries/$slugCategory/".$image->hashName(),
                         ]
                     );
                     $prd_img_temp[$key] = $prd_img;
@@ -186,10 +188,11 @@ class ProductController extends Controller
     }
     public function updatePrd(ProductUpdate $request, Product $product)
     {
+       // dd($request->prd_category);
         $data = Product::query()->findOrFail($product->id);
         $dataProduct = [];
         $prd_img_temp = [];
-        $dataProduct['prd_category'] = $request->prd_category ??= null;
+        $dataProduct['prd_category'] = $request->prd_category;
         $dataProduct['prd_name'] = $request->prd_name;
         $dataProduct['prd_slug'] = $request->prd_slug;
         if ($request->prd_slug == $data->slug) {
@@ -268,16 +271,20 @@ class ProductController extends Controller
             $ctgr = Category::query()->where('id', $dataProduct['prd_category'])->first();
             if ($request->hasFile('prd_avatar')) {
                 $slugCategory = optional(Category::query()->find($request->prd_category))->slug ?? 'khong-phan-loai';
+
+                $viewpath = "products/image_avatar/$slugCategory/".$request->file('prd_avatar')->hashName();
+
                 $dataProduct['prd_avatar'] = Storage::put("public/products/image_avatar/$slugCategory", $request->file('prd_avatar'));
             } else {
-                $dataProduct['prd_avatar'] = $data->image_avatar;
+                $viewpath = $data->image_avatar;
             }
+            //dd($dataProduct['prd_category']);
             $data->update(
                 [
-                    'category_id' => $dataProduct['prd_category'],
+                    'sub_category_id' => $dataProduct['prd_category'],
                     'name' => $dataProduct['prd_name'],
                     'slug' => $dataProduct['prd_slug'],
-                    'image_avatar' => $dataProduct['prd_avatar'],
+                    'image_avatar' => $viewpath,
                     'price_regular' => $dataProduct['price_regular'],
                     'price_sale' => $dataProduct['price_sale'],
                     'discount_percent' => $dataProduct['discount_percent'],
@@ -292,13 +299,15 @@ class ProductController extends Controller
             if ($request->hasFile('prd_images')) {
                 $slugCategory = optional(Category::query()->find($request->prd_category))->slug ?? "khong-phan-loai";
                 foreach ($request->file('prd_images') as $key => $image) {
+                    Storage::put("public/products/image_galleries/$slugCategory", $image);
                     ProductImage::query()->create(
                         [
                             'product_id' => $data->id,
-                            'image_path' => $prd_img = Storage::put("public/products/image_galleries/$slugCategory", $image)
+                            'image_path' => $prd_img = "products/image_galleries/$slugCategory".$image->hashName(),
                         ]
                     );
                     $prd_img_temp[$key] = $prd_img;
+
                 }
             }
             if ($request->prd_tags != null) {

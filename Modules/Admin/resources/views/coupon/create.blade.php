@@ -117,11 +117,6 @@
                                     <input class="form-control" id="minimum_spend" name="minimum_spend" type="text">
                                     @error('minimum_spend')<label class="form-label text-danger">{{ $message }} </label>@enderror
                                 </div>
-                                <div class="col-12">
-                                    <label class="form-label" for="maximum_spend">Chi tiêu tối đa:</label>
-                                    <input class="form-control" id="maximum_spend" name="maximum_spend" type="text"></div>
-                                    @error('maximum_spend')<label class="form-label text-danger">{{ $message }} </label>@enderror
-                                </div>
                             </div>
                         </div>
                     </div>

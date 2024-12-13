@@ -50,7 +50,7 @@ use Carbon\Carbon;
                     <p>Nơi sinh:<strong> {{ $data->place_of_birth }}</strong></p>
                     <p>Nơi Ở hiện tại:<strong> {{ $data->place_of_residence }}</strong></p>
                     <p>Số điện thoại:<strong> {{ $data->phone_number }}</strong></p>
-                    <p>Ngày cấp:<strong> {{ date('d/m/Y', strtotime($data->date_of_issue)) }}</strong></p>
+                    <p>Ngày cấp:<strong> {{ date('d/m/Y', strtotime($data->issue_date)) }}</strong></p>
                     <p>Ngày hết hạn:<strong> {{ date('d/m/Y', strtotime($data->date_of_expiry)) }}</strong></p>
                     <p>Nơi cấp:<strong> {{ $data->place_of_issue }}</strong></p>
                 </div>
@@ -124,8 +124,8 @@ use Carbon\Carbon;
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <a href="{{ route('admin.wallet.SetBasicUser', ['id' => $data->wallet_account_id]) }}" class="btn btn-success mb-2">Xác Thực cơ bản</a>
-                    <a href="{{ route('admin.wallet.SetFullUser', ['id' => $data->wallet_account_id]) }}" class="btn btn-warning mb-2">Xác Thực Đầy đủ</a>
+                    <a href="{{ route('admin.wallet.SetBasicUser', ['id' => $data->wallet_account_id]) }}" class="btn btn-warning mb-2">Xác Thực cơ bản</a>
+                    <a href="{{ route('admin.wallet.SetFullUser', ['id' => $data->wallet_account_id]) }}" class="btn btn-success mb-2">Xác Thực Đầy đủ</a>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>

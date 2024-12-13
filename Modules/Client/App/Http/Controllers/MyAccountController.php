@@ -43,7 +43,7 @@ class MyAccountController extends Controller
 
         $perPage = 5;
 
-        $orders = Order::where('users_id', auth()->id())->orderBy('date_create_order', 'desc')->paginate($perPage);
+        $orders = Order::where('users_id', auth()->id())->orderBy('created_at', 'desc')->paginate($perPage);
 
         $formattedOrders = $orders->getCollection()->map(function ($order) {
 
@@ -51,7 +51,7 @@ class MyAccountController extends Controller
             $total_price = $order->total_price;
             return [
                 'id' => $order->id,
-                'date' => $order->date_create_order ? Carbon::parse($order->date_create_order)->format('d-m-Y') : null,
+                'date' => $order->created_at ? Carbon::parse($order->created_at)->format('d-m-Y') : null,
                 'status' => $order->status_order,
                 'total' => number_format($total_price, 0, ',', '.') . " VND cho {$items_count} sản phẩm"
             ];
@@ -218,7 +218,7 @@ class MyAccountController extends Controller
         ]);
 
         // Đặt tên file tùy chỉnh
-        $date = Carbon::parse($order->date_create_order)->format('d-m-Y');
+        $date = Carbon::parse($order->created_at)->format('d-m-Y');
         $fileName = 'hóa đơn -' . $order->id . '-' . Str::slug($order->user_name) . "-$date" . '.pdf';
 
         // Trả về PDF dưới dạng file tải về
@@ -394,48 +394,62 @@ class MyAccountController extends Controller
             'phone.regex' => 'Số điện thoại phải là dãy số hợp lệ.',
             'phone.max' => 'Số điện thoại không được vượt quá 15 ký tự.',
         ];
-
+    
         $rules = [
             'full_name' => 'required|string|max:255',
             'address' => 'nullable|string|max:255',
             'phone' => 'required|regex:/^\d{10,15}$/|max:15',
         ];
-
+    
         if ($request->new_password != null || $request->current_password != null) {
             $rules['current_password'] = 'required';
             $rules['new_password'] = 'required|string|min:8|confirmed|regex:/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&#])[A-Za-z\d@$!%*?&#]{8,}$/';
             $rules['new_password_confirmation'] = 'required_with:new_password|same:new_password';
         }
-
+    
         $validator = Validator::make($request->all(), $rules, $messages);
-
+    
         if ($validator->fails()) {
             return response()->json(['errors' => $validator->errors()], 422);
         }
-
+    
         $user = Auth::user();
-
+    
         if ($request->new_password != null && !Hash::check($request->current_password, $user->password)) {
             return response()->json(['error' => 'Mật khẩu cũ không đúng.'], 400);
         }
-
+    
         if ($request->new_password != null) {
             $user->password = Hash::make($request->new_password);
         }
         $user->full_name = $request->full_name;
+    
+        // Xử lý hình ảnh
+        $filePath = $user->user_image; // Giữ nguyên hình ảnh cũ nếu có
+        if ($request->hasFile('user_image')) {
+            $filePath = $request->file('user_image')->store('/users_image', 'public');
+    
+            // Xóa hình cũ nếu có hình ảnh mới đẩy lên
+            if ($user->user_image && Storage::disk('public')->exists($user->user_image)) {
+                Storage::disk('public')->delete($user->user_image);
+            }
+        }
+        $user->user_image = $filePath;
+    
+    
         $user->phone = $request->phone;
-
+    
         if ($request->filled('address')) {
             $user->address = $request->address;
         }
-
-        if ($user instanceof \Illuminate\Database\Eloquent\Model) {
-            $user->save();
-        } else {
-            return response()->json(['error' => 'User model not found.'], 400);
-        }
-
-        return response()->json(['success' => true, 'message' => 'Thông tin đã được cập nhật thành công.']);
+    
+        $user->save();
+    
+        return response()->json([
+            'success' => true, 
+            'message' => 'Thông tin đã được cập nhật thành công.',
+            'user_image' => $user->user_image // Trả về đường dẫn hình ảnh mới
+        ]);
     }
     public function logout()
     {
