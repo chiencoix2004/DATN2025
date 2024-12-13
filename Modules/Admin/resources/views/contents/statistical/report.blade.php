@@ -20,69 +20,64 @@
         <div class="card">
             <div class="card-header d-flex flex-between-center bg-body-tertiary py-2">
                 <h5 class="mb-0">Lọc </h5>
+                <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#filterCollapse" aria-expanded="false" aria-controls="filterCollapse">
+                    Hiện bộ lọc
+                </button>
             </div>
-            <div class="card-body">
-                <form action="{{ route('admin.statistical.listStatistical') }}" method="GET">
-                    <div class="row g-3">
-                        <div class="col-md-3">
-                            <div class="form-group">
-                                <label for="start_date">Ngày bắt đầu:</label>
-                                <div class="input-group">
-                                    <input type="date" class="form-control" id="start_date" name="start_date"
-                                        value="{{ $startDate }}">
-                                    <span class="input-group-text"><i class="fas fa-calendar-alt"></i></span>
+            <div class="collapse" id="filterCollapse">
+                <div class="card-body">
+                    <form action="{{ route('admin.statistical.listStatistical') }}" method="GET">
+                        <div class="row g-3">
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="start_date">Ngày bắt đầu:</label>
+                                    <div class="input-group">
+                                        <input type="date" class="form-control" id="start_date" name="start_date" value="{{ $startDate }}">
+                                        <span class="input-group-text"><i class="fas fa-calendar-alt"></i></span>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="col-md-3">
-                            <div class="form-group">
-                                <label for="end_date">Ngày kết thúc:</label>
-                                <div class="input-group">
-                                    <input type="date" class="form-control" id="end_date" name="end_date"
-                                        value="{{ $endDate }}">
-                                    <span class="input-group-text"><i class="fas fa-calendar-alt"></i></span>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="end_date">Ngày kết thúc:</label>
+                                    <div class="input-group">
+                                        <input type="date" class="form-control" id="end_date" name="end_date" value="{{ $endDate }}">
+                                        <span class="input-group-text"><i class="fas fa-calendar-alt"></i></span>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="status_order">Trạng thái đơn hàng:</label>
-                                <select class="form-select" id="status_order" name="status_order">
-                                    <option value="">Tất cả</option>
-                                    <option value="reorder" {{ request('status_order') == 'reorder' ? 'selected' : '' }}>Đặt
-                                        lại</option>
-                                    <option value="pending" {{ request('status_order') == 'pending' ? 'selected' : '' }}>Chờ
-                                        xử lý</option>
-                                    <option value="confirmed"
-                                        {{ request('status_order') == 'confirmed' ? 'selected' : '' }}>Đã xác nhận</option>
-                                    <option value="shipping" {{ request('status_order') == 'shipping' ? 'selected' : '' }}>
-                                        Đang giao</option>
-                                    <option value="received" {{ request('status_order') == 'received' ? 'selected' : '' }}>
-                                        Đã nhận</option>
-                                    <option value="canceled" {{ request('status_order') == 'canceled' ? 'selected' : '' }}>
-                                        Đã hủy</option>
-                                </select>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="status_order">Trạng thái đơn hàng:</label>
+                                    <select class="form-select" id="status_order" name="status_order">
+                                        <option value="">Tất cả</option>
+                                        <option value="reorder" {{ request('status_order') == 'reorder' ? 'selected' : '' }}>Đặt lại</option>
+                                        <option value="pending" {{ request('status_order') == 'pending' ? 'selected' : '' }}>Chờ xử lý</option>
+                                        <option value="confirmed" {{ request('status_order') == 'confirmed' ? 'selected' : '' }}>Đã xác nhận</option>
+                                        <option value="shipping" {{ request('status_order') == 'shipping' ? 'selected' : '' }}>Đang giao</option>
+                                        <option value="received" {{ request('status_order') == 'received' ? 'selected' : '' }}>Đã nhận</option>
+                                        <option value="canceled" {{ request('status_order') == 'canceled' ? 'selected' : '' }}>Đã hủy</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="phone">Số điện thoại:</label>
+                                    <input type="text" class="form-control" id="phone" name="phone" value="{{ request('phone') }}">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="email">Email:</label>
+                                    <input type="email" class="form-control" id="email" name="email" value="{{ request('email') }}">
+                                </div>
+                            </div>
+                            <div class="col-12 d-flex justify-content-end">
+                                <button type="submit" class="btn btn-primary">Thống kê</button>
                             </div>
                         </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="phone">Số điện thoại:</label>
-                                <input type="text" class="form-control" id="phone" name="phone"
-                                    value="{{ request('phone') }}">
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="email">Email:</label>
-                                <input type="email" class="form-control" id="email" name="email"
-                                    value="{{ request('email') }}">
-                            </div>
-                        </div>
-                        <div class="col-12 d-flex justify-content-end">
-                            <button type="submit" class="btn btn-primary">Thống kê</button>
-                        </div>
-                    </div>
-                </form>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
