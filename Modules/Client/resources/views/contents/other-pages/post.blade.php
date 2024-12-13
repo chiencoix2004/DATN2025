@@ -39,7 +39,7 @@
                                     <div class="recent-post">
                                         <div class="recent-post_thumb">
                                             <a href="{{ route('other.postDetail', $item->slug_post) }}">
-                                                <img class="img-full" src="{{ Storage::url($item->image_post) }}"
+                                                <img class="img-full" src="{{ Storage::url($item->image_post) }} "
                                                     alt="{{ $item->title }}">
                                             </a>
                                         </div>
@@ -99,7 +99,7 @@
                                             <div class="blog-img">
                                                 <a href="{{ route('other.postDetail', $item->slug_post) }}">
                                                     <img src="{{ Storage::url($item->image_post) }}"
-                                                        alt="{{ $item->title }}">
+                                                        alt="{{ $item->title }}" style="max-height: 200px; object-fit: cover;">
                                                 </a>
                                             </div>
                                             <div class="blog-content">

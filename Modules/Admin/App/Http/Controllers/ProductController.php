@@ -353,7 +353,7 @@ class ProductController extends Controller
             if ($request->hasFile('prd_avatar') && $tmpImgThumb && Storage::exists($tmpImgThumb)) {
                 Storage::delete($tmpImgThumb);
             }
-            return redirect()->back()->with(['success' => 'Cập nhật sản phẩm thành công!']);
+            return redirect()->route('admin.product.list')->with(['success' => 'Cập nhật sản phẩm thành công!']);
         } catch (\Exception $e) {
             if (isset($dataProduct['prd_avatar']) && $dataProduct['prd_avatar'] != null) {
                 Storage::delete($dataProduct['prd_avatar']);
