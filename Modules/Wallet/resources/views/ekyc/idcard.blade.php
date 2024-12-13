@@ -115,7 +115,7 @@
                                                 <div class="mb-3">
                                                     <i class="display-4 text-muted mdi mdi-cloud-upload"></i>
                                                 </div>
-                                                <h4>Kéo ảnh hoặc bấm vào để tải ảnh lên</h4>
+                                                <h4>Bấm vào để tải ảnh lên</h4>
                                             </div>
 
                                         </div>
@@ -139,7 +139,7 @@
                                                 <div class="mb-3">
                                                     <i class="display-4 text-muted mdi mdi-cloud-upload"></i>
                                                 </div>
-                                                <h4>Kéo ảnh hoặc bấm vào để tải ảnh lên.</h4>
+                                                <h4>Bấm vào để tải ảnh lên.</h4>
                                             </div>
 
                                         </div>
