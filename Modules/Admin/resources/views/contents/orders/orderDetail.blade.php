@@ -396,18 +396,19 @@
 
         // Xử lý tìm kiếm với Nominatim
         $('#location').on('input', function() {
-            const query = $(this).val();
+            clearTimeout(debounceTimer);
+        const query = $(this).val();
+        debounceTimer = setTimeout(() => {
             if (query.length > 2) {
                 // Gửi yêu cầu tới Nominatim API
-                $.getJSON(`https://nominatim.openstreetmap.org/search?format=json&q=${query}`, function(data) {
+                $.getJSON(`https://nominatim.openstreetmap.org/search?format=json&q=${query}`, function (data) {
                     $('#results').empty();
                     data.forEach(place => {
-                        $('#results').append(
-                            `<li data-lat="${place.lat}" data-lon="${place.lon}" style="cursor: pointer; padding: 5px; border: 1px solid #ccc;">${place.display_name}</li>`
-                            );
+                        $('#results').append(`<li data-lat="${place.lat}" data-lon="${place.lon}" style="cursor: pointer; padding: 5px; border: 1px solid #ccc;">${place.display_name}</li>`);
                     });
                 });
             }
+        }, 300); // Delay of 300ms
         });
 
         // Khi người dùng chọn địa chỉ từ danh sách
