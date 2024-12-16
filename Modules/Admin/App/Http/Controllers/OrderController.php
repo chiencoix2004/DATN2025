@@ -9,7 +9,7 @@ use App\Models\Wallet;
 use App\Models\Trx_history;
 use App\Models\Trx_history_detail;
 use App\Models\OrderDetail;
-use App\Models\ProductVariant ;
+use App\Models\ProductVariant;
 use App\Notifications\ReciveTransferNotification;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
@@ -24,7 +24,7 @@ class OrderController extends Controller
      */
     public function listOrder()
     {
-        $data = Order::query()->orderby("id","desc")->paginate(20);
+        $data = Order::query()->orderby("id", "desc")->paginate(20);
         $statusOrder = Order::STATUS_ORDER;
         $statusPayment = Order::STATUS_PAYMENT;
         return view('admin::contents.orders.orderlist', compact('data', 'statusOrder', 'statusPayment'));
@@ -35,14 +35,14 @@ class OrderController extends Controller
         $statusOrder = Order::STATUS_ORDER;
         $statusPayment = Order::STATUS_PAYMENT;
         // dd($data);
-        if($data->status_order == 'Đang giao hàng'){
+        if ($data->status_order == 'Đang giao hàng') {
             $shipping = new Shipping();
             $data_ship = $shipping->getShipping($order->id);
             $frist_location = $shipping->getOldestShipping($order->id);
             $last_location = $shipping->getLastUpdateShipping($order->id);
             //dd($last_location );
-            return view('admin::contents.orders.orderDetail', compact('data', 'statusOrder', 'statusPayment','data_ship','frist_location','last_location'));
-       }
+            return view('admin::contents.orders.orderDetail', compact('data', 'statusOrder', 'statusPayment', 'data_ship', 'frist_location', 'last_location'));
+        }
         return view('admin::contents.orders.orderDetail', compact('data', 'statusOrder', 'statusPayment'));
     }
     public function orderUpdate(Request $request, Order $order)
@@ -83,14 +83,14 @@ class OrderController extends Controller
         $user_id = $request->user_id;
         $full_name = $request->full_name;
         $toal_price = $request->total_price;
-       // dd($request->all());
+        // dd($request->all());
         $wallet = new Wallet();
         $trx = new Trx_history();
         $trx_detail = new Trx_history_detail();
         $user_wallet_data = $wallet->getWallet($user_id);
         $wallet_account_id = $user_wallet_data->wallet_account_id;
         if (empty($user_wallet_data)) {
-            $flags =  $wallet->createWallet($user_id);
+            $flags = $wallet->createWallet($user_id);
             if ($flags) {
                 $key = env('VNP_HASH_SECRET'); // Replace with your actual secret key
                 $hashmac = hash_hmac('sha512', $user_id . date('Y-m-d H:i:s'), $key);
@@ -200,31 +200,41 @@ class OrderController extends Controller
     }
     public function updateShip(Request $request)
     {
-        if( empty($request->status)){
-            return redirect()->back()->with(['error'=> 'Vui lòng chọn trạng thái giao hàng!']);
+        if (empty($request->status)) {
+            return redirect()->back()->with(['error' => 'Vui lòng chọn trạng thái giao hàng!']);
         }
         $data = [
-            'order_id'=> $request->order_id,
+            'order_id' => $request->order_id,
             'status' => $request->status,
             'latitude' => $request->latitude,
             'longitude' => $request->longitude,
             'updated_at' => now(),
         ];
         //dd($data);
-     try {
-        $shipping = new Shipping();
-        $shipping->updateShipping($data, $request->order_id);
-        return redirect()->back()->with(['success'=> 'Cập nhật trạng thái giao hàng thành công!']);
-     } catch(Exception $e) {
-      dd($e->getMessage());
-     }
+        try {
+            $shipping = new Shipping();
+            $shipping->updateShipping($data, $request->order_id);
+            return redirect()->back()->with(['success' => 'Cập nhật trạng thái giao hàng thành công!']);
+        } catch (Exception $e) {
+            dd($e->getMessage());
+        }
     }
-    public function createShip($id){
+    public function createShip($id)
+    {
         $shipping = new Shipping();
         $shipping->createShipping($id);
         $order = new Order();
         $order->setShipping($id);
-        return redirect()->back()->with(['success'=> 'Tạo trạng thái giao hàng thành công!']);
+        return redirect()->back()->with(['success' => 'Tạo trạng thái giao hàng thành công!']);
 
+    }
+    public function updatePayment(Order $order)
+    {
+        if ($order) {
+            $order->update(['status_payment' => Order::STATUS_PAYMENT['paid']]);
+            return redirect()->back()->with(['success' => 'Cập nhật thành công!']);
+        } else {
+            return redirect()->back()->with(['error' => 'Cập nhật thất bại!']);
+        }
     }
 }

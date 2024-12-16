@@ -110,7 +110,7 @@
                                                 @method('DELETE')
                                                 <button class="btn btn-danger"
                                                     onclick="return confirm('Có chắc chắn muốn xóa không?')"
-                                                    type="submit">Xóa mềm</button>
+                                                    type="submit">Xóa sản phẩm</button>
                                             </form>
                                         </div>
                                     </div>
