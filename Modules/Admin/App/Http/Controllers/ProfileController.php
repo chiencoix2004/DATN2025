@@ -5,6 +5,7 @@ namespace Modules\Admin\App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Models\RoleModel;
 use App\Models\User;
+use App\Models\Role;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -20,12 +21,12 @@ class ProfileController extends Controller
      * Display a listing of the resource.
      */
     public function index()
-    {   
-        // $profile = Auth::user(); 
-        // $roleType = $profile->roles->role_type; 
+    {
+        // $profile = Auth::user();
+        // $roleType = $profile->roles->role_type;
 
         // return view('admin::profile.index' , ['users' => $profile, 'role_type' => $roleType] );
-        $profile = User::query()
+        $user = User::query()
         ->select(
             'users.id as id',
             'users.user_name as user_name',
@@ -36,14 +37,19 @@ class ProfileController extends Controller
             'users.address as address',
             'users.user_image as user_image',
             'users.roles_id as roles_id',
-            'roles.role_type as role_type',
+            'roles.name as role_type',
             'users.status as status',
             'users.verify as verify'
         )
         ->join('roles', 'users.roles_id', '=', 'roles.id')
         ->where('users.id', '=', Auth::user()->id)
         ->first();
-        return view('admin::profile.index', compact('profile'));
+
+        $roles = Role::whereNotIn('id', [15])->get();
+        // Lấy các role mà người dùng hiện tại đang có (vì chúng là mối quan hệ many-to-many)
+        $userRoleIds = $user->roles->pluck('id')->toArray();
+        //dd($userRoleIds);
+        return view('admin::profile.index', compact('user','roles','userRoleIds'));
     }
 
     /**
@@ -57,10 +63,7 @@ class ProfileController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request): RedirectResponse
-    {
-        //
-    }
+
 
     /**
      * Show the specified resource.
@@ -75,8 +78,8 @@ class ProfileController extends Controller
      */
     public function edit($id)
     {
-        $profile = User::find($id); 
-        
+        $profile = User::find($id);
+
         return view('admin::profile.edit', compact('profile'));
     }
 
@@ -117,7 +120,7 @@ class ProfileController extends Controller
         }
 
         $request->validate($rules, $messages);
-        
+
         $profile = User::find($request->id);
 
         if ($request->new_password != null) {

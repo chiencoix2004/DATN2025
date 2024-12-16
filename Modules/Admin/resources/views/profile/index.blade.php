@@ -47,37 +47,70 @@
 <div class="card mb-3">
     <div class="card-header position-relative min-vh-25 mb-7">
       <div class="bg-holder rounded-3 rounded-bottom-0" style="background-image:url({{ asset('theme/admin/img/generic/4.jpg') }});"></div>
-      <div class="avatar avatar-5xl avatar-profile"><img class="rounded-circle img-thumbnail shadow-sm" src="{{ Storage::url($profile->user_image) }}" width="200" alt="" /></div>
+      <div class="avatar avatar-5xl avatar-profile"><img class="rounded-circle img-thumbnail shadow-sm" src="{{ Storage::url($user->user_image) }}" width="200" alt="" /></div>
     </div>
     <div class="card-body">
       <div class="row">
         <div class="col-lg-8">
-          <h4 class="mb-1">{{ $profile->full_name }}<span data-bs-toggle="tooltip" data-bs-placement="right" title="Verified"><small class="fa fa-check-circle text-primary" data-fa-transform="shrink-4 down-2"></small></span></h4>
-          <h5 class="fs-9 fw-normal">
-            <option value="{{ $profile->roles_id }}">
-                @switch($profile->role_type)
-                    @case('admin')
-                        Admin
+          <h4 class="mb-1">{{ $user->full_name }}<span data-bs-toggle="tooltip" data-bs-placement="right" title="Verified"><small class="fa fa-check-circle text-primary" data-fa-transform="shrink-4 down-2"></small></span></h4>
+          <h5 class="fs-9 fw-normal mt-3">
+            <p> Quyền hạn:</p>
+            <ul>
+            @foreach($userRoleIds as $role)
+            <li>
+                @switch($role)
+                    @case('1')
+                        Quản trị viên
                         @break
-                    @case('employee')
-                        Nhân viên
+                    @case('2')
+                        Quản lý bình luận.
                         @break
-                    @case('affiliate')
-                        Cộng tác viên
+                    @case('3')
+                        Quản lý mã giảm giá.
                         @break
-                    @case('employee_support')
-                        Nhân viên hỗ trợ
+                    @case('4')
+                        Quản lý danh mục sản phẩm hoặc bài viết.
                         @break
-                    @case('employee_stock_controller')
-                        Nhân viên quản lý kho
+                    @case('5')
+                        Quản lý bài viết.
+                        @break
+                    @case('6')
+                        Quản lý sản phẩm.
+                        @break
+                    @case('7')
+                        Quản lý thuộc tính sản phẩm.
+                        @break
+                    @case('8')
+                        Quản lý tags.
+                        @break
+                    @case('9')
+                        Quản lý ticket hỗ trợ khách hàng.
+                        @break
+                    @case('10')
+                        Quản lý banner.
+                        @break
+                    @case('11')
+                        Quản lý đơn hàng.
+                        @break
+                    @case('12')
+                        Quản lý ví và giao dịch.
+                        @break
+                    @case('13')
+                        Quản lý khách hàng.
+                        @break
+                    @case('14')
+                        Chỉ xem báo cáo và thống kê.
                         @break
                     @default
-                        {{ $profile->role_type }}
+                        {{ $role }}
                 @endswitch
-            </option>
+            </strong>
+        </li>
+        @endforeach
+            </ul>
           </h5>
-          <h6 class="mb-2 ">{{ $profile->user_name }}</h6>
-          <a href="{{ route('admin.profile.edit', ['id' => $profile->id]) }}" class="btn btn-falcon-primary btn-sm">Sửa thông tin</a>
+          <h6 class="mb-2 ">{{ $user->user_name }}</h6>
+          <a href="{{ route('admin.profile.edit', ['id' => $user->id]) }}" class="btn btn-falcon-primary btn-sm">Sửa thông tin</a>
           {{-- <button class="btn btn-falcon-default btn-sm px-3 ms-2" type="button">Message</button> --}}
           <div class="border-bottom border-dashed my-4 d-lg-none"></div>
         </div>
@@ -88,23 +121,23 @@
                 </div>
             </a> --}}
             <a class="d-flex align-items-center mb-2" href="#">
-                <i class="fas fa-phone align-self-center me-2"></i> 
+                <i class="fas fa-phone align-self-center me-2"></i>
                 <div class="flex-1">
-                    <h6 class="mb-0">{{ $profile->phone }}</h6> 
+                    <h6 class="mb-0">{{ $user->phone }}</h6>
                 </div>
             </a>
-            
+
             <a class="d-flex align-items-center mb-2" href="#">
-                <i class="fas fa-envelope align-self-center me-2"></i> 
+                <i class="fas fa-envelope align-self-center me-2"></i>
                 <div class="flex-1">
-                    <h6 class="mb-0">{{ $profile->email }}</h6> 
+                    <h6 class="mb-0">{{ $user->email }}</h6>
                 </div>
             </a>
-            
+
             <a class="d-flex align-items-center mb-2" href="#">
-                <i class="fas fa-map-marker-alt align-self-center me-2"></i> 
+                <i class="fas fa-map-marker-alt align-self-center me-2"></i>
                 <div class="flex-1">
-                    <h6 class="mb-0">{{ $profile->address }}</h6> 
+                    <h6 class="mb-0">{{ $user->address }}</h6>
                 </div>
             </a>
         </div>

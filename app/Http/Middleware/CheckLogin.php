@@ -16,6 +16,24 @@ class CheckLogin
      */
     public function handle(Request $request, Closure $next): Response
     {
-        return Auth::check() ? $next($request) : redirect()->route('showForm');
+        if (Auth::check()) {
+            // Kiểm tra role: 1 là admin
+            if (Auth::user()->roles_id !== 15) {
+              //logout immediately
+                Auth::logout();
+                return redirect()->route('showForm')->with([
+                    'Error' => 'Bạn phải đăng nhập trước'
+                ]);
+            } else {
+                return $next($request); // Tiếp tục với request nếu là admin
+                // Điều hướng về trang user nếu không phải admin
+
+            }
+        } else {
+            // Nếu chưa đăng nhập, điều hướng về trang login
+            return redirect()->route('showForm')->with([
+                'Error' => 'Bạn phải đăng nhập trước'
+            ]);
+        }
     }
 }

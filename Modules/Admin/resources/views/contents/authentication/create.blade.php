@@ -23,7 +23,7 @@
             <div class="card-body">
                 <div class="row flex-between-center">
                     <div class="col-md">
-                        <h5 class="mb-2 mb-md-0">Thêm mới tài khoản</h5>
+                        <h5 class="mb-2 mb-md-0">Thêm mới nhân viên</h5>
                     </div>
                     <div class="col-auto">
                         <a href="{{ route('admin.accounts.index') }}" class="btn btn-secondary">Danh sách</a>
@@ -154,39 +154,103 @@
                 <div class="sticky-sidebar">
                     <div class="card mb-3">
                         <div class="card-header bg-body-tertiary">
-                            <h6 class="mb-0">Loại tài khoản</h6>
+                            <h6 class="mb-0">Quyền hạn</h6>
                         </div>
                         <div class="card-body">
                             <div class="row gx-2">
                                 <div class="col-12 mb-3">
-                                    <label class="form-label" for="roles_id">Chọn loại tài khoản:</label>
-                                    <select class="form-select" id="roles_id" name="roles_id">
-                                        <option value="">chọn chức vụ</option>
-                                        @foreach ($roles as $role)
-                                            <option value="{{ $role->id }}">
-                                                @switch($role->role_type)
-                                                    @case('employee')
-                                                        Nhân viên
-                                                    @break
-
-                                                    @case('affiliate')
-                                                        Cộng tác viên
-                                                    @break
-
-                                                    @case('employee_support')
-                                                        Nhân viên hỗ trợ
-                                                    @break
-
-                                                    @case('employee_stock_controller')
-                                                        Nhân viên quản lý kho
-                                                    @break
-
-                                                    @default
-                                                        {{ $role->role_type }}
-                                                @endswitch
-                                            </option>
+                                    <div id="role-checkboxes">
+                                        @foreach($roles as $role)
+                                            <div class="form-check">
+                                                <input
+                                                    type="checkbox"
+                                                    class="form-check-input role-checkbox"
+                                                    id="role-{{ $role->id }}"
+                                                    name="roles[]"
+                                                    value="{{ $role->id }}"
+                                                    data-role-name="{{ $role->name }}"
+                                                >
+                                                <label class="form-check-label" for="role-{{ $role->id }}">
+                                                    @switch($role->name)
+                                                        @case('super_admin')
+                                                            Quản Trị Viên
+                                                            @break
+                                                        @case('comment_manager')
+                                                            Quản lý bình luận.
+                                                            @break
+                                                        @case('coupon_manager')
+                                                            Quản lý mã giảm giá.
+                                                            @break
+                                                        @case('category_manager')
+                                                            Quản lý danh mục sản phẩm.
+                                                            @break
+                                                        @case('post_manager')
+                                                            Quản lý bài viết.
+                                                            @break
+                                                        @case('product_manager')
+                                                            Quản lý sản phẩm.
+                                                            @break
+                                                        @case('attribute_manager')
+                                                            Quản lý thuộc tính sản phẩm.
+                                                            @break
+                                                        @case('tag_manager')
+                                                            Quản lý tags.
+                                                            @break
+                                                        @case('ticket_manager')
+                                                            Quản lý ticket hỗ trợ khách hàng.
+                                                            @break
+                                                        @case('banner_manager')
+                                                            Quản lý banner.
+                                                            @break
+                                                        @case('order_manager')
+                                                            Quản lý đơn hàng.
+                                                            @break
+                                                        @case('wallet_manager')
+                                                            Quản lý ví và giao dịch.
+                                                            @break
+                                                        @case('customer_manager')
+                                                            Quản lý khách hàng.
+                                                            @break
+                                                        @case('statistical_viewer')
+                                                            Chỉ xem báo cáo và thống kê.
+                                                            @break
+                                                        @default
+                                                            {{ $role->role_type }}
+                                                    @endswitch
+                                                </label>
+                                            </div>
                                         @endforeach
-                                    </select>
+                                    </div>
+
+                                    <script>
+                                        document.addEventListener('DOMContentLoaded', function () {
+                                            const roleCheckboxes = document.querySelectorAll('.role-checkbox');
+
+                                            roleCheckboxes.forEach(checkbox => {
+                                                checkbox.addEventListener('change', function () {
+                                                    const isSuperAdmin = this.dataset.roleName === 'super_admin';
+                                                    const isChecked = this.checked;
+
+                                                    if (isSuperAdmin && isChecked) {
+                                                        // Disable all other checkboxes
+                                                        roleCheckboxes.forEach(cb => {
+                                                            if (cb.dataset.roleName !== 'super_admin') {
+                                                                cb.checked = false;
+                                                                cb.disabled = true;
+                                                            }
+                                                        });
+                                                    } else if (isSuperAdmin && !isChecked) {
+                                                        // Enable all other checkboxes when Super Admin is unchecked
+                                                        roleCheckboxes.forEach(cb => {
+                                                            if (cb.dataset.roleName !== 'super_admin') {
+                                                                cb.disabled = false;
+                                                            }
+                                                        });
+                                                    }
+                                                });
+                                            });
+                                        });
+                                    </script>
                                     @error('roles_id')
                                         <label class="form-label text-danger">{{ $message }} </label>
                                     @enderror
