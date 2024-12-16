@@ -59,23 +59,23 @@ class InvoiceController extends Controller
                 // Trả về file zip để tải xuống
                 return response()->download($zipPath)->deleteFileAfterSend(true);
             }
-            $status = Order::STATUS_ORDER;
-            if ($request->slAction == 'confirmed') {
-                foreach ($request->idOrder as $id) {
-                    $data = Order::query()->find($id);
-                    if ($data->status_order != $status['confirmed'] && $data->status_order && $status['shipping'] && $data->status_order != $status['received'] && $data->status_order != $status['canceled']) {
-                        $data->update(['status_order' => $status['confirmed']]);
-                    }
-                }
-            }
-            if ($request->slAction == 'shipping') {
-                foreach ($request->idOrder as $id) {
-                    $data = Order::query()->find($id);
-                    if ($data->status_order == $status['confirmed']) {
-                        $data->update(['status_order' => $status['shipping']]);
-                    }
-                }
-            }
+            // $status = Order::STATUS_ORDER;
+            // if ($request->slAction == 'confirmed') {
+            //     foreach ($request->idOrder as $id) {
+            //         $data = Order::query()->find($id);
+            //         if ($data->status_order != $status['confirmed'] && $data->status_order && $status['shipping'] && $data->status_order != $status['received'] && $data->status_order != $status['canceled']) {
+            //             $data->update(['status_order' => $status['confirmed']]);
+            //         }
+            //     }
+            // }
+            // if ($request->slAction == 'shipping') {
+            //     foreach ($request->idOrder as $id) {
+            //         $data = Order::query()->find($id);
+            //         if ($data->status_order == $status['confirmed']) {
+            //             $data->update(['status_order' => $status['shipping']]);
+            //         }
+            //     }
+            // }
         } else {
             return redirect()->back()->with(['error' => 'Có lỗi trong quá trình thực hiện, vui lòng thử lại!']);
         }

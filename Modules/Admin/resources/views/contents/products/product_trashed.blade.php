@@ -42,8 +42,6 @@
                                 Số lượng
                             </th>
                             <th class="text-900 sort pe-1 align-middle white-space-nowrap">Thẻ</th>
-                            <th class="text-900 sort pe-1 align-middle white-space-nowrap" data-sort="status">Trạng thái
-                            </th>
                             <th class="text-900 no-sort pe-1 align-middle data-table-row-action">Hành động</th>
                         </tr>
                     </thead>
@@ -80,11 +78,6 @@
                                         </div>
                                     </div>
                                 </td>
-                                <td class="align-middle white-space-nowrap status">
-                                    {!! $item->is_active == 1
-                                        ? '<span class="badge rounded-pill badge-subtle-success">Đang hoạt động<span class="ms-1 fas fa-check" data-fa-transform="shrink-2"></span>'
-                                        : '<span class="badge rounded-pill badge-subtle-danger">Không hoạt động<span class="ms-1 fas fa-ban" data-fa-transform="shrink-2"></span>' !!}
-                                </td>
                                 <td class="align-middle white-space-nowrap">
                                     <div class="dropstart font-sans-serif position-static d-inline-block">
                                         <button class="btn btn-link text-600 btn-sm dropdown-toggle btn-reveal float-end"
@@ -96,22 +89,9 @@
                                         <div class="dropdown-menu dropdown-menu-end border py-2"
                                             aria-labelledby="dropdown-number-pagination-table-item-0">
                                             <a class="dropdown-item text-center"
-                                                href="{{ route('admin.product.detailP', $item->slug) }}">
-                                                <span class="btn btn-info">Chi tiết</span>
+                                                href="{{ route('admin.product.rtOne', $item->id) }}">
+                                                <span class="btn btn-info">Khôi phục sản phẩm</span>
                                             </a>
-                                            <a class="dropdown-item text-center"
-                                                href="{{ route('admin.product.edit', $item->slug) }}">
-                                                <span class="btn btn-warning">Cập nhật</span>
-                                            </a>
-                                            <div class="dropdown-divider"></div>
-                                            <form action="{{ route('admin.product.delP', $item) }}" method="post"
-                                                style="text-align: center;">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button class="btn btn-danger"
-                                                    onclick="return confirm('Có chắc chắn muốn xóa không?')"
-                                                    type="submit">Xóa mềm</button>
-                                            </form>
                                         </div>
                                     </div>
                                 </td>

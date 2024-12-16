@@ -38,6 +38,15 @@ class ProductController extends Controller
         $data = Product::onlyTrashed()->restore();
         return redirect()->route('admin.product.list')->with(['success' => 'Khôi phục tất cả sản phẩm đã xóa thành công!']);
     }
+    public function restoreOne(string $id)
+    {
+        $product = Product::withTrashed()->find($id);
+        if ($product && $product->trashed()) {
+            $product->restore();
+            return redirect()->back()->with('success', 'Sản phẩm đã được khôi phục thành công.');
+        }
+        return redirect()->back()->with('error', 'Sản phẩm không tồn tại hoặc không bị xóa.');
+    }
     public function showFormEdit(string $slug)
     {
         $data = Product::query()->with(['tags', 'images', 'sub_category'])->where('slug', $slug)->first();
@@ -147,7 +156,7 @@ class ProductController extends Controller
                     ProductImage::query()->create(
                         [
                             'product_id' => $product->id,
-                            'image_path' => $prd_img = "products/image_galleries/$slugCategory/".$image->hashName(),
+                            'image_path' => $prd_img = "products/image_galleries/$slugCategory/" . $image->hashName(),
                         ]
                     );
                     $prd_img_temp[$key] = $prd_img;
@@ -188,7 +197,7 @@ class ProductController extends Controller
     }
     public function updatePrd(ProductUpdate $request, Product $product)
     {
-       // dd($request->prd_category);
+        // dd($request->prd_category);
         $data = Product::query()->findOrFail($product->id);
         $dataProduct = [];
         $prd_img_temp = [];
@@ -272,7 +281,7 @@ class ProductController extends Controller
             if ($request->hasFile('prd_avatar')) {
                 $slugCategory = optional(Category::query()->find($request->prd_category))->slug ?? 'khong-phan-loai';
 
-                $viewpath = "products/image_avatar/$slugCategory/".$request->file('prd_avatar')->hashName();
+                $viewpath = "products/image_avatar/$slugCategory/" . $request->file('prd_avatar')->hashName();
 
                 $dataProduct['prd_avatar'] = Storage::put("public/products/image_avatar/$slugCategory", $request->file('prd_avatar'));
             } else {
@@ -303,7 +312,7 @@ class ProductController extends Controller
                     ProductImage::query()->create(
                         [
                             'product_id' => $data->id,
-                            'image_path' => $prd_img = "products/image_galleries/$slugCategory".$image->hashName(),
+                            'image_path' => $prd_img = "products/image_galleries/$slugCategory" . $image->hashName(),
                         ]
                     );
                     $prd_img_temp[$key] = $prd_img;
