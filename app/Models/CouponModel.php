@@ -22,7 +22,6 @@ class CouponModel extends Model
         'discount_type',
         'quantity',
         'minimum_spend',
-        'maximum_spend',
     ];
 
 }
