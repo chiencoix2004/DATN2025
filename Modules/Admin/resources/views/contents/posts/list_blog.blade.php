@@ -82,14 +82,14 @@
                                                 <span class="btn btn-warning">Cập nhật</span>
                                             </a>
                                             <div class="dropdown-divider"></div>
-                                            {{-- <form action="{{ route('admin.product.delP', $post) }}" method="post"
+                                            <form action="{{route('admin.posts.destroy', $item->id)}}" method="post"
                                                 style="text-align: center;">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button class="btn btn-danger"
                                                     onclick="return confirm('Có chắc chắn muốn xóa không?')"
                                                     type="submit">Xóa mềm</button>
-                                            </form> --}}
+                                            </form>
                                         </div>
                                     </div>
                                 </td>
