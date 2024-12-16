@@ -184,75 +184,72 @@
                         class="mb-0 fs-10 badge rounded-pill badge-subtle-{{ $badgeColors[$data->status_payment] }} fs-11">
                         {{ $data->status_payment }}
                     </div>
+                    @if ($data->status_payment == 'Chưa thanh toán')
+                        <form action="{{ route('admin.orders.udtPayment', $data) }}" method="post" class="mt-3">
+                            @csrf
+                            @method('PUT')
+                            <button type="submit" class="btn btn-success">Đã thanh toán</button>
+                        </form>
+                    @endif
                 </div>
-                {{-- <div class="col-md-6 col-lg-4">
-                    <h5 class="mb-3 fs-9">Payment Method</h5>
-                    <div class="d-flex"><img class="me-3" src="../../../assets/img/icons/visa.png" width="40"
-                            height="30" alt="" />
-                        <div class="flex-1">
-                            <h6 class="mb-0">Antony Hopkins</h6>
-                            <p class="mb-0 fs-10">**** **** **** 9809</p>
-                        </div>
-                    </div>
-                </div> --}}
             </div>
         </div>
     </div>
-        <div class="card mb-3">
-            <div class="card-body">
-                <div class="table-responsive fs-10">
-                    <table class="table table-striped border-bottom">
-                        <thead class="bg-200">
-                            <tr>
-                                <th class="text-900 border-0">Sản phẩm</th>
-                                <th class="text-900 border-0 text-center">Ảnh</th>
-                                <th class="text-900 border-0 text-center">Option</th>
-                                <th class="text-900 border-0 text-center">Số lượng</th>
-                                <th class="text-900 border-0 text-end">Đơn giá (VNĐ)</th>
-                                <th class="text-900 border-0 text-end">Tổng</th>
+    <div class="card mb-3">
+        <div class="card-body">
+            <div class="table-responsive fs-10">
+                <table class="table table-striped border-bottom">
+                    <thead class="bg-200">
+                        <tr>
+                            <th class="text-900 border-0">Sản phẩm</th>
+                            <th class="text-900 border-0 text-center">Ảnh</th>
+                            <th class="text-900 border-0 text-center">Option</th>
+                            <th class="text-900 border-0 text-center">Số lượng</th>
+                            <th class="text-900 border-0 text-end">Đơn giá (VNĐ)</th>
+                            <th class="text-900 border-0 text-end">Tổng</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($data->orderItems as $itemOrder)
+                            <tr class="border-200">
+                                <td class="align-middle">
+                                    <h6 class="mb-0 text-nowrap">{{ $itemOrder->product_name }}</h6>
+                                    <p class="mb-0">{{ $itemOrder->product_sku }}</p>
+                                </td>
+                                <td class="align-middle text-center">
+                                    @php
+                                        $url = $itemOrder->product_avatar;
+                                        if (!\Str::contains($url, 'http')) {
+                                            $url = \Storage::url($url);
+                                        }
+                                    @endphp
+                                    <img src="{{ $url }}" alt="....." width="50px">
+                                </td>
+                                <td class="align-middle text-start">
+                                    @php
+                                        $prdV = \App\Models\ProductVariant::query()->findOrFail(
+                                            $itemOrder->product_variant_id,
+                                        );
+                                    @endphp
+                                    Màu: <span class="badge bg"
+                                        style="background-color: {{ $prdV->color['color_value'] }};">{{ $prdV->color['color_value'] }}</span>
+                                    <br>
+                                    Kích thước: <strong>{{ $prdV->size['size_value'] }}</strong>
+                                </td>
+                                <td class="align-middle text-center">{{ $itemOrder->product_quantity }}</td>
+                                <td class="align-middle text-end">
+                                    {{ number_format((int) $itemOrder->product_price_final, 0, ',', '.') }}
+                                </td>
+                                <td class="align-middle text-end">
+                                    {{ number_format((int) $itemOrder->product_price_final * $itemOrder->product_quantity, 0, ',', '.') }}
+                                </td>
                             </tr>
-                        </thead>
-                        <tbody>
-                            @foreach ($data->orderItems as $itemOrder)
-                                <tr class="border-200">
-                                    <td class="align-middle">
-                                        <h6 class="mb-0 text-nowrap">{{ $itemOrder->product_name }}</h6>
-                                        <p class="mb-0">{{ $itemOrder->product_sku }}</p>
-                                    </td>
-                                    <td class="align-middle text-center">
-                                        @php
-                                            $url = $itemOrder->product_avatar;
-                                            if (!\Str::contains($url, 'http')) {
-                                                $url = \Storage::url($url);
-                                            }
-                                        @endphp
-                                        <img src="{{ $url }}" alt="....." width="50px">
-                                    </td>
-                                    <td class="align-middle text-start">
-                                        @php
-                                            $prdV = \App\Models\ProductVariant::query()->findOrFail(
-                                                $itemOrder->product_variant_id,
-                                            );
-                                        @endphp
-                                        Màu: <span class="badge bg"
-                                            style="background-color: {{ $prdV->color['color_value'] }};">{{ $prdV->color['color_value'] }}</span>
-                                        <br>
-                                        Kích thước: <strong>{{ $prdV->size['size_value'] }}</strong>
-                                    </td>
-                                    <td class="align-middle text-center">{{ $itemOrder->product_quantity }}</td>
-                                    <td class="align-middle text-end">
-                                        {{ number_format((int) $itemOrder->product_price_final, 0, ',', '.') }}
-                                    </td>
-                                    <td class="align-middle text-end">
-                                        {{ number_format((int) $itemOrder->product_price_final * $itemOrder->product_quantity, 0, ',', '.') }}
-                                    </td>
-                                </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-                </div>
+                        @endforeach
+                    </tbody>
+                </table>
             </div>
         </div>
+    </div>
 
     <div class="card mb-3">
         @if ($data->status_order == 'Đang giao hàng' && isset($frist_location))
@@ -309,13 +306,14 @@
             </div>
         @else
             <div class="card-body">
-                @if(isset($frist_location))
-                <p class="text-danger">Đơn hàng chưa được xác nhận hoặc đã hủy</p>
+                @if (isset($frist_location))
+                    <p class="text-danger">Đơn hàng chưa được xác nhận hoặc đã hủy</p>
                 @else
-                <p class="text-danger">Đơn hàng chưa được tạo vận đơn</p>
+                    <p class="text-danger">Đơn hàng chưa được tạo vận đơn</p>
                 @endif
-                @if (!in_array($data->status_order, ["Đơn hàng bị hủy", "Đặt lại hàng"]))
-                    <button type="button" class="btn btn-primary btn-lg" data-bs-toggle="modal" data-bs-target="#modalId2">
+                @if (!in_array($data->status_order, ['Đơn hàng bị hủy', 'Đặt lại hàng']))
+                    <button type="button" class="btn btn-primary btn-lg" data-bs-toggle="modal"
+                        data-bs-target="#modalId2">
                         Tạo đơn vận mới
                     </button>
                 @endif
@@ -329,16 +327,19 @@
                                 <h5 class="modal-title" id="modalTitleId">
                                     Tạo đơn vận mới
                                 </h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
                             </div>
                             <div class="modal-body">
-                                <div class="container-fluid">Nếu bạn tạo đơn vận mới, đơn hàng sẽ chuyển trạng thái "Đang vận chuyển".</div>
+                                <div class="container-fluid">Nếu bạn tạo đơn vận mới, đơn hàng sẽ chuyển trạng thái "Đang
+                                    vận chuyển".</div>
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
                                     Hủy
                                 </button>
-                                <a href="{{ route('admin.orders.createship', ['id' => $data->id]) }}" class="btn btn-primary">
+                                <a href="{{ route('admin.orders.createship', ['id' => $data->id]) }}"
+                                    class="btn btn-primary">
                                     Tạo vận đơn
                                 </a>
                             </div>
@@ -397,18 +398,21 @@
         // Xử lý tìm kiếm với Nominatim
         $('#location').on('input', function() {
             clearTimeout(debounceTimer);
-        const query = $(this).val();
-        debounceTimer = setTimeout(() => {
-            if (query.length > 2) {
-                // Gửi yêu cầu tới Nominatim API
-                $.getJSON(`https://nominatim.openstreetmap.org/search?format=json&q=${query}`, function (data) {
-                    $('#results').empty();
-                    data.forEach(place => {
-                        $('#results').append(`<li data-lat="${place.lat}" data-lon="${place.lon}" style="cursor: pointer; padding: 5px; border: 1px solid #ccc;">${place.display_name}</li>`);
+            const query = $(this).val();
+            debounceTimer = setTimeout(() => {
+                if (query.length > 2) {
+                    // Gửi yêu cầu tới Nominatim API
+                    $.getJSON(`https://nominatim.openstreetmap.org/search?format=json&q=${query}`, function(
+                        data) {
+                        $('#results').empty();
+                        data.forEach(place => {
+                            $('#results').append(
+                                `<li data-lat="${place.lat}" data-lon="${place.lon}" style="cursor: pointer; padding: 5px; border: 1px solid #ccc;">${place.display_name}</li>`
+                            );
+                        });
                     });
-                });
-            }
-        }, 300); // Delay of 300ms
+                }
+            }, 300); // Delay of 300ms
         });
 
         // Khi người dùng chọn địa chỉ từ danh sách

@@ -274,7 +274,7 @@
                     </div>
                     <div class="card mb-3">
                         <div class="card-header bg-body-tertiary">
-                            <h6 class="mb-0">Trạng thái - Số lượng</h6>
+                            <h6 class="mb-0">Trạng thái</h6>
                         </div>
                         <div class="card-body">
                             <div class="form-check form-switch">
@@ -282,14 +282,14 @@
                                     value="1" checked />
                                 <label class="form-check-label" for="is_active">Xuất bản</label>
                             </div>
-                            <div class="form-group">
+                            {{-- <div class="form-group">
                                 <label class="form-label" for="prd_quantity">Số lượng sản phẩm:</label>
                                 <input class="form-control" id="prd_quantity" type="number" name="prd_quantity"
                                     value="{{ old('prd_quantity') }}" />
                                 @error('prd_quantity')
                                     <label class="form-label text-danger">{{ $message }}</label>
                                 @enderror
-                            </div>
+                            </div> --}}
                         </div>
                     </div>
                 </div>

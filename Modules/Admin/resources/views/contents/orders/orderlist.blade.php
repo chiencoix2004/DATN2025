@@ -27,8 +27,8 @@
                             <div class="d-flex">
                                 <select class="form-select form-select-sm" name="slAction" aria-label="Bulk actions">
                                     <option value="sltNull" selected>Chọn hành động</option>
-                                    <option value="confirmed">Đã xác nhận</option>
-                                    <option value="shipping">Đang giao hàng</option>
+                                    {{-- <option value="confirmed">Đã xác nhận</option>
+                                    <option value="shipping">Đang giao hàng</option> --}}
                                     <option value="print_invoices">In hoá đơn</option>
                                 </select>
                                 <input type="submit" class="btn btn-falcon-default btn-sm ms-2" name="btnApply"
