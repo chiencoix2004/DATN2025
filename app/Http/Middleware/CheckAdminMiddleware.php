@@ -38,13 +38,14 @@ class CheckAdminMiddleware
         // Kiểm tra xem người dùng đã đăng nhập chưa
         if (Auth::check()) {
             // Kiểm tra role: 1 là admin
-            if (Auth::user()->roles_id == '1') {
-                return $next($request); // Tiếp tục với request nếu là admin
-            } else {
-                // Điều hướng về trang user nếu không phải admin
+            if (Auth::user()->roles_id == 15) {
                 return redirect()->route('index')->with([
                     'message' => 'Bạn không có quyền truy cập trang này'
                 ]);
+            } else {
+                return $next($request); // Tiếp tục với request nếu là admin
+                // Điều hướng về trang user nếu không phải admin
+
             }
         } else {
             // Nếu chưa đăng nhập, điều hướng về trang login

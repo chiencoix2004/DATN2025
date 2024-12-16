@@ -43,7 +43,7 @@ class LoginController extends Controller
                 $newUser = User::updateOrCreate(['email' => $user->email], [
                     'full_name' => $user->name,
                     'google_id' => $user->id,
-                    'roles_id' => 2,
+                    'roles_id' => 15,
                     'verify' => 1,
                     'status' => 'active',
                     'password' => encrypt($this->genPassGoogle()),

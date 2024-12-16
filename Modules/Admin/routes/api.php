@@ -26,6 +26,7 @@ Route::middleware(['auth:sanctum'])->prefix('v1')->name('api.')->group(function 
 Route::controller(CouponController::class)
     ->prefix('coupons')
     ->as('api.coupons.')
+    //->middleware(['role:super_admin|coupon_manager'])
     ->group(function () {
         Route::get('/', 'index')->name('index');
         // Route::post('/', 'store')->name('store');
@@ -35,6 +36,7 @@ Route::controller(CouponController::class)
     });
 Route::controller(AccountController::class)
     ->prefix('accounts')
+    //->middleware(['role:super_admin'])
     ->as('api.accounts.')
     ->group(function () {
         Route::get('/', 'index')->name('index');
@@ -47,6 +49,7 @@ Route::controller(AccountController::class)
 Route::controller(UserController::class)
     ->prefix('users')
     ->as('api.users.')
+    //->middleware(['role:super_admin|customer_manager'])
     ->group(function () {
         Route::get('/', 'index')->name('index');
         // Route::post('/', 'store')->name('store');
@@ -57,6 +60,7 @@ Route::controller(UserController::class)
 
 Route::controller(SupportController::class)
     ->prefix('supports')
+    //->middleware(['role:super_admin|ticket_manager'])
     ->as('api.supports.')
     ->group(function () {
         Route::post('customer', 'seachcustomer')->name('seachcustomer');

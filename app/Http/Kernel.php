@@ -3,6 +3,8 @@
 namespace App\Http;
 
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
+use Spatie\Permission\Middleware\RoleMiddleware;
+use \Spatie\Permission\Middleware\PermissionMiddleware;
 
 class Kernel extends HttpKernel
 {
@@ -67,5 +69,7 @@ class Kernel extends HttpKernel
         'CheckAdmin' => \App\Http\Middleware\CheckAdminMiddleware::class,
         'user' => \App\Http\Middleware\User::class,
         'userwallet' => \App\Http\Middleware\CheckVaildUserWallet::class,
+        'role' => RoleMiddleware::class,
+        'permission' => PermissionMiddleware::class,
     ];
 }

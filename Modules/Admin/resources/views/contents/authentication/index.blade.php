@@ -31,18 +31,48 @@
                         <option value="">Tất cả chức vụ</option>
                         @foreach($roles as $role)
                             <option value="{{ $role->id }}">
-                                @switch($role->role_type)
-                                    @case('employee')
-                                        Nhân viên
+                                @switch($role->name)
+                                    @case('super_admin')
+                                        Quản Trị Viên
                                         @break
-                                    @case('affiliate')
-                                        Cộng tác viên
+                                    @case('comment_manager')
+                                        Quản lý bình luận.
                                         @break
-                                    @case('employee_support')
-                                        Nhân viên hỗ trợ
+                                    @case('coupon_manager')
+                                        Quản lý mã giảm giá.
                                         @break
-                                    @case('employee_stock_controller')
-                                        Nhân viên quản lý kho
+                                    @case('category_manager')
+                                        Quản lý danh mục sản phẩm.
+                                        @break
+                                    @case('post_manager')
+                                        Quản lý bài viết.
+                                        @break
+                                    @case('product_manager')
+                                        Quản lý sản phẩm.
+                                        @break
+                                    @case('attribute_manager')
+                                        Quản lý thuộc tính sản phẩm.
+                                        @break
+                                    @case('tag_manager')
+                                        Quản lý tags.
+                                        @break
+                                    @case('ticket_manager')
+                                        Quản lý ticket hỗ trợ khách hàng.
+                                        @break
+                                    @case('banner_manager')
+                                        Quản lý banner.
+                                        @break
+                                    @case('order_manager')
+                                        Quản lý đơn hàng.
+                                        @break
+                                    @case('wallet_manager')
+                                        Quản lý ví và giao dịch.
+                                        @break
+                                    @case('customer_manager')
+                                        Quản lý khách hàng.
+                                        @break
+                                    @case('statistical_viewer')
+                                        Chỉ xem báo cáo và thống kê.
                                         @break
                                     @default
                                         {{ $role->role_type }}
@@ -52,6 +82,7 @@
                     </select>
                     <button type="button" id="filter" class="btn btn-secondary">Lọc</button>
                 </div>
+
             </div>
 
             <table class="table table-bordered" id="example">
@@ -69,7 +100,7 @@
             </table>
         </div>
     </div>
-    
+
     <script type="text/javascript">
         $(document).ready(function() {
             var table = $('#example').DataTable({
@@ -106,24 +137,58 @@
                         }
                     },
                     {
-                        data: 'roles_id',
-                        render: function(data, type, row) {
-                            switch(data) {
+                    data: 'roles_id',
+                    render: function(data, type, row) {
+                        var roles = data.split(','); // Tách chuỗi role_id thành một mảng
+                        var roleNames = roles.map(function(roleId) {
+                            roleId = roleId.trim(); // Loại bỏ dấu cách thừa
+                            switch (parseInt(roleId)) {
+                                case 1:
+                                    return 'Quản trị viên';
+                                case 2:
+                                    return 'Quản lý bình luận.';
                                 case 3:
-                                    return 'Nhân viên';
+                                    return 'Quản lý mã giảm giá.';
                                 case 4:
-                                    return 'Cộng tác viên';
+                                    return 'Quản lý danh mục sản phẩm';
                                 case 5:
-                                    return 'Nhân viên hỗ trợ';
+                                    return 'Quản lý bài viết.';
                                 case 6:
-                                    return 'Nhân viên quản lý kho';
+                                    return 'Quản lý sản phẩm.';
+                                case 7:
+                                    return 'Quản lý thuộc tính sản phẩm.';
+                                case 8:
+                                    return 'Quản lý tags.';
+                                case 9:
+                                    return 'Quản lý ticket hỗ trợ khách hàng.';
+                                case 10:
+                                    return 'Quản lý banner.';
+                                case 11:
+                                    return 'Quản lý đơn hàng.';
+                                case 12:
+                                    return 'Quản lý ví và giao dịch.';
+                                case 13:
+                                    return 'Quản lý khách hàng.';
+                                case 14:
+                                    return 'Chỉ xem báo cáo và thống kê.';
                                 default:
-                                    return data;
+                                    return 'Chưa xác định'; // Nếu không có vai trò khớp
                             }
-                        },
-                        orderable: false,
-                        searchable: false
+                        });
+
+                        var maxRoles = 2; // Số lượng vai trò tối đa hiển thị
+                            if (roleNames.length > maxRoles) {
+                                roleNames = roleNames.slice(0, maxRoles); // Cắt bớt vai trò nếu quá số lượng tối đa
+                                roleNames.push('...'); // Thêm dấu ba chấm
+                            }
+
+                            // Trả về chuỗi vai trò nối với dấu phẩy và không có dấu cách thừa
+                            return roleNames.join(', ');
                     },
+                    orderable: false,
+                    searchable: false
+                },
+
                     {
                         data: null,
                         render: function(data, type, row) {

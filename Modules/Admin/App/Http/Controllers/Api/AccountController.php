@@ -18,20 +18,32 @@ class AccountController extends Controller
     {
         // Create the base query
         $query = User::query();
-        $query->whereNotIn('roles_id', ['1', '2']);
+
+        // Eager load the roles relationship to avoid N+1 query problem
+        $query->with('roles');
+
+        // Exclude the role with ID 15
+        $query->whereDoesntHave('roles', function ($query) {
+            $query->where('id', 15);
+        });
+
+        // Only get users who have roles assigned
+        $query->whereHas('roles'); // Ensures the user has at least one role
+
         $query->select(
             'id',
             'full_name',
             'user_name',
             'phone',
             'email',
-            'user_image',
-            'roles_id'
+            'user_image'
         );
 
         // Filter by role if provided
         if ($request->has('role') && !empty($request->role)) {
-            $query->where('roles_id', '=', $request->role);
+            $query->whereHas('roles', function ($query) use ($request) {
+                $query->where('roles.id', '=', $request->role);
+            });
         }
 
         // Filter by search keyword if provided
@@ -44,14 +56,20 @@ class AccountController extends Controller
                     ->orWhere('phone', 'like', "%{$search}%");
             });
         }
-        
 
         // Return data for AJAX and non-AJAX requests
-        return datatables($query)->make(true);
-
-        // Uncomment to debug the output
-        // dd(datatables($query)->make(true));
+        return datatables()->eloquent($query)
+            ->addColumn('roles_id', function ($user) {
+                // Get role IDs instead of role names
+                return $user->roles->pluck('id')->implode(', ');
+            })
+            ->make(true);
     }
+
+
+
+
+
 
     /**
      * Show the form for creating a new resource.
@@ -64,40 +82,5 @@ class AccountController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request): RedirectResponse
-    {
-        //
-    }
 
-    /**
-     * Show the specified resource.
-     */
-    public function show($id)
-    {
-        return view('admin::show');
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit($id)
-    {
-        return view('admin::edit');
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, $id): RedirectResponse
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy($id)
-    {
-        //
-    }
 }

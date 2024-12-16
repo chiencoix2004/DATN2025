@@ -24,7 +24,7 @@ class UserSeeder extends Seeder
                 'password' => bcrypt('pw12345678'),
                 'address' => "Ba Vì $i",
                 'user_image' => "https://mcdn.coolmate.me/image/January2023/pho-thoi-trang-870_220.jpg",
-                'roles_id' => rand(1, 6),
+                'roles_id' => 15,
                 'full_name' => "Đỗ Phương Uy $i",
                 'verify' => 1,
                 'status' => 'active',
