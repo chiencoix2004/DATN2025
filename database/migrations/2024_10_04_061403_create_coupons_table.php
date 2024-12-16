@@ -22,7 +22,6 @@ return new class extends Migration
             $table->enum('discount_type',['percent','fixed']);
             $table->integer('quantity');
             $table->integer('minimum_spend');
-            $table->integer('maximum_spend');
             $table->timestamps();
             $table->softDeletes();
         });

@@ -321,11 +321,6 @@ class CartController extends Controller
                     'success' => false,
                     'message' => 'Mã giảm giá đã hết hạn.'
                 ], 200);
-            } elseif ($order_total < $coupon->minimum_spend) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Số tiền chi tiêu phải lớn hơn hoặc bằng ' . $coupon->minimum_spend . '.'
-                ], 200);
             } else {
                 // Tính toán giá trị giảm giá
                 if ($coupon->discount_type == 'percent') {
@@ -452,11 +447,6 @@ class CartController extends Controller
                 return response()->json([
                     'success' => false,
                     'message' => 'Mã giảm giá đã hết hạn.'
-                ], 200);
-            } elseif ($order_total < $coupon->minimum_spend) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Số tiền chi tiêu phải lớn hơn hoặc bằng ' . $coupon->minimum_spend . '.'
                 ], 200);
             } else {
                 // Tính toán giá trị giảm giá
