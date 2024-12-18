@@ -25,7 +25,8 @@ class ProductController extends Controller
 {
     public function listProduct()
     {
-        $data = Product::query()->with(['tags', 'product_variants'])->latest('id')->paginate(10);
+        $product = new Product();
+        $data = $product->GetToalQuantityinf();
         return view('admin::contents.products.listProduct', compact('data'));
     }
     public function trashed()

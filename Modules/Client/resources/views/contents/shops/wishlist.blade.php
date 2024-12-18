@@ -11,7 +11,7 @@
             <div class="breadcrumb-content">
                 <h2>Thời trang Phong cách Việt</h2>
                 <ul>
-                    <li><a href="{{ route('home') }}">Trang Chủ</a></li>
+                    <li><a href="{{ route('index') }}">Trang Chủ</a></li>
                     <li class="active">Yêu thích</li>
                 </ul>
             </div>

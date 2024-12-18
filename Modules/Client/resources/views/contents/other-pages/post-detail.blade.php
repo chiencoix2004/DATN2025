@@ -10,7 +10,7 @@
             <div class="breadcrumb-content">
                 <h2 style="margin-top: 30px;">Thời trang Phong cách Việt</h2>
                 <ul>
-                    <li><a href="{{ route('home') }}">Trang chủ</a></li>
+                    <li><a href="{{ route('index') }}">Trang chủ</a></li>
                     <li class="active">Tin tức</li>
                     <li class="active">{{$post->title}}</li>
                 </ul>
@@ -32,7 +32,7 @@
                                 <button type="submit" class="search-btn"><i class="ion-ios-search"></i></button>
                             </form>
                         </div>
-                    </div> 
+                    </div>
                     <!-- All Posts -->
                     <div class="kenne-blog-sidebar">
                         <h4 class="kenne-blog-sidebar-title">Tất cả bài viết</h4>
@@ -58,7 +58,7 @@
                     </div>
                 </div>
             </div>
-            
+
             <div class="col-lg-9 order-lg-2 order-1">
                 <div class="blog-item">
                     {{-- <div class="blog-img"> --}}

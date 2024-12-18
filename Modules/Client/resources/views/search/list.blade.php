@@ -168,11 +168,15 @@ use Artesaos\SEOTools\Facades\SEOTools;
                                         </div>
                                         <div class="product-content">
                                             <div class="product-desc_info">
+
                                                 <div class="price-box">
                                                     <span class="new-price">{{ number_format(round($list->price_sale)) }} ₫</span>
                                                     <span class="old-price">{{ number_format(round($list->price_regular)) }} ₫</span>
                                                 </div>
                                                 <h6 class="product-name"><a href="{{ route('shop.productDetail', $list->slug) }}">{{ $list->name }}</a></h6>
+                                                <div class="product-short_desc">
+                                                    {!! $list->description !!}
+                                                </div>
                                                 {{-- <div class="rating-box">
                                                     <ul>
                                                         <li><i class="ion-ios-star"></i></li>
@@ -199,6 +203,7 @@ use Artesaos\SEOTools\Facades\SEOTools;
                                                 </ul>
                                             </div> --}}
                                         </div>
+
                                     </div>
                                 </div>
                             </div>

@@ -10,7 +10,7 @@
             <div class="breadcrumb-content">
                 <h2 style="margin-top: 30px;">Thời trang Phong cách Việt</h2>
                 <ul>
-                    <li><a href="{{ route('home') }}">Trang chủ</a></li>
+                    <li><a href="{{ route('index') }}">Trang chủ</a></li>
                     <li class="active">Tin tức</li>
                 </ul>
             </div>

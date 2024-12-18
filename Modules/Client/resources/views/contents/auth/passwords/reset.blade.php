@@ -10,7 +10,7 @@
             <div class="breadcrumb-content">
                 <h2 style="margin-top: 30px;">Thời trang Phong cách Việt</h2>
                 <ul>
-                    <li><a href="{{ route('home') }}">Trang chủ</a></li>
+                    <li><a href="{{ route('index') }}">Trang chủ</a></li>
                     {{-- <li class="active">Đăng nhập - Đăng ký</li> --}}
                 </ul>
             </div>
@@ -23,7 +23,7 @@
         <div class="container">
             <div class="row">
                 <div class="d-flex justify-content-center align-items-center ">
-                    
+
                     <!-- Login Form s-->
                     <form action="{{ route('password.update') }}" method="POST" class="col-md-6">
                         @csrf
@@ -57,7 +57,7 @@
                             </div>
                         </div>
                     </form>
-                   
+
                 </div>
             </div>
         </div>

@@ -10,7 +10,7 @@
             <div class="breadcrumb-content">
                 <h2 style="margin-top: 30px;">Thời trang Phong cách Việt</h2>
                 <ul>
-                    <li><a href="{{ route('home') }}">Trang chủ</a></li>
+                    <li><a href="{{ route('index') }}">Trang chủ</a></li>
                     <li class="active">Quên mật khẩu</li>
                 </ul>
             </div>
@@ -32,7 +32,7 @@
                                 <div class="col-md-12 col-12">
                                     <label>Email : </label>
                                     <input type="email" name='email' placeholder="Email Address">
-                                    
+
                                 </div>
                                 <div class="col-md-12 d-flex justify-content-between align-items-center">
                                     <button class="kenne-login_btn" type="submit">Quên mật khẩu</button>

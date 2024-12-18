@@ -10,7 +10,7 @@
             <div class="breadcrumb-content">
                 <h2 style="margin-top: 30px;">Thời trang Phong cách Việt</h2>
                 <ul>
-                    <li><a href="{{ route('home') }}">Trang chủ</a></li>
+                    <li><a href="{{ route('index') }}">Trang chủ</a></li>
                     <li class="active">Đăng nhập</li>
                 </ul>
             </div>
@@ -37,7 +37,7 @@
                                 <div class="col-12 mb--20">
                                     <label>Mật Khẩu</label>
                                     <input type="password" name='password' placeholder="Password">
-                                    <span class="toggle-password" onclick="togglePassword('login-password')">👁️</span>  
+                                    <span class="toggle-password" onclick="togglePassword('login-password')">👁️</span>
                                 </div>
                                 <div style="color: red">
                                     @error('Error')
@@ -64,14 +64,14 @@
                                                 <i class="ri-google-fill me-1"></i> Google
                                             </a>
                                         </div>
-                                    
+
                                         <div class="mt-4 text-center">
                                             <p class="mb-0">Bạn chưa có tài khoản rồi <a href="{{ route('formReg') }}"
                                                     class="fw-semibold text-primary text-decoration-underline"> Đăng ký </a> </p>
                                         </div>
                                     </div>
                                 </div>
-                                
+
 
                             </div>
                         </div>

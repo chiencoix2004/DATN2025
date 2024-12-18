@@ -41,7 +41,7 @@
                             <div class="single-product">
                                 <div class="product-img">
                                     <a href="{{ route('shop.productDetail', $product->slug) }}">
-                                        <img class="primary-img" src="{{ $avt }}" alt="Kenne's Product Image">
+                                        <img class="primary-img" src="{{ $avt }}" alt="Kenne's Product Image" style="max-height: 300px; object-fit: cover;">
                                     </a>
                                     {!! $product->discount_percent > 0 ? "<span class='sticker'>- $product->discount_percent%</span>" : '' !!}
                                     <div class="add-actions">

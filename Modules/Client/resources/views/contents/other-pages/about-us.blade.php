@@ -10,7 +10,7 @@
             <div class="breadcrumb-content">
                 <h2 style="margin-top: 30px;">Thời trang Phong cách Việt</h2>
                 <ul>
-                    <li><a href="{{ route('home') }}">Trang chủ</a></li>
+                    <li><a href="{{ route('index') }}">Trang chủ</a></li>
                     <li class="active">Giới thiệu</li>
                 </ul>
             </div>
@@ -44,7 +44,7 @@
                     </div>
                 </div>
             </div>
-        
+
             <!-- Sứ mệnh và Tầm nhìn -->
             <div class="row mb-5">
                 <!-- Sứ mệnh -->
@@ -66,7 +66,7 @@
                     </div>
                 </div>
             </div>
-        </div>    
+        </div>
     </div>
 
 
@@ -84,17 +84,17 @@
                 <!-- Nội dung bài viết được truyền vào đây -->
                 <div class="article-content">
                     <p>
-                        Thời trang Phong cách Việt ra đời với mong muốn giúp khách hàng không chỉ đẹp mà còn tự tin 
-                        hơn trong cuộc sống. Chúng tôi kết hợp những tinh hoa thời trang quốc tế với sự tinh tế, thanh lịch 
+                        Thời trang Phong cách Việt ra đời với mong muốn giúp khách hàng không chỉ đẹp mà còn tự tin
+                        hơn trong cuộc sống. Chúng tôi kết hợp những tinh hoa thời trang quốc tế với sự tinh tế, thanh lịch
                         của phong cách Việt, mang đến các sản phẩm không chỉ là quần áo mà còn là một phần của câu chuyện cá nhân bạn.
                     </p>
                     <p>
-                        Với đội ngũ thiết kế tài năng và tận tâm, mỗi sản phẩm tại Fashion đều được chăm chút tỉ mỉ từ khâu chọn nguyên liệu 
-                        cho đến từng đường kim mũi chỉ. Chúng tôi tin rằng, thời trang không chỉ là sự lựa chọn mà còn là cách để bạn bộc lộ 
+                        Với đội ngũ thiết kế tài năng và tận tâm, mỗi sản phẩm tại Fashion đều được chăm chút tỉ mỉ từ khâu chọn nguyên liệu
+                        cho đến từng đường kim mũi chỉ. Chúng tôi tin rằng, thời trang không chỉ là sự lựa chọn mà còn là cách để bạn bộc lộ
                         cá tính, tỏa sáng và ghi dấu ấn riêng trong mọi khoảnh khắc.
                     </p>
                     <p>
-                        Hãy cùng chúng tôi lan tỏa thông điệp về phong cách sống hiện đại và sự tự tin từ bên trong. Tại Fashion, chúng tôi không chỉ 
+                        Hãy cùng chúng tôi lan tỏa thông điệp về phong cách sống hiện đại và sự tự tin từ bên trong. Tại Fashion, chúng tôi không chỉ
                         bán sản phẩm mà còn đồng hành cùng bạn trên hành trình định hình phong cách sống.
                     </p>
                 </div>
@@ -139,7 +139,7 @@
                 <!-- Nội dung bài viết được truyền vào đây -->
                 <div class="article-content">
                     <p>
-                        Fashion luôn hướng đến việc trở thành thương hiệu thời trang được yêu thích nhất 
+                        Fashion luôn hướng đến việc trở thành thương hiệu thời trang được yêu thích nhất
                         tại Việt Nam, giúp khách hàng tự tin khẳng định phong cách và giá trị riêng của mình.
                     </p>
                 </div>
