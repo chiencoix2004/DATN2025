@@ -268,7 +268,7 @@
                                             <option value="" selected>Trống</option>
                                             @foreach ($categories as $item)
                                                 <option value="{{ $item->id }}"
-                                                    {{ $data->category_id == $item->id ? 'selected' : '' }}>
+                                                    {{ $data->sub_category_id == $item->id ? 'selected' : '' }}>
                                                     {{ $item->name }}</option>
                                             @endforeach
                                         </select>
@@ -388,7 +388,7 @@
                             <div class="form-group">
                                 <label class="form-label" for="prd_quantity">Số lượng sản phẩm:</label>
                                 <input class="form-control" id="prd_quantity" type="number" name="prd_quantity"
-                                    value="{{ old('prd_quantity') ? old('prd_quantity') : $data->quantity }}" />
+                                    value="{{ old('prd_quantity') ? old('prd_quantity') : $quantityPRD->first()->total_variants_products }}" />
                                 @error('prd_quantity')
                                     <label class="form-label text-danger">{{ $message }}</label>
                                 @enderror

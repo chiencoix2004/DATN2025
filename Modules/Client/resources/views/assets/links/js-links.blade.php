@@ -63,10 +63,10 @@
                 }
             });
         });
-        
+
         $('.add-to-cart-wishlist').click(function(e) {
                 e.preventDefault(); // Ngăn form submit mặc định
-            
+
                 let productId = $(this).data('product-id');
                 let productSize = $(this).data('size-id');
                 let productColor = $(this).data('color-id');
@@ -85,7 +85,7 @@
                         alert(response.message);
                         loadCartItems();
                         loadCartItemCount();
-                        
+
                     },
                     error: function(error, response) {
                         console.error(error);
