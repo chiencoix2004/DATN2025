@@ -213,32 +213,31 @@
                                                             thể</a>
                                                     </div>
                                                     <div class="col-6 mb-4">
-                                                        <label class="form-label" for="price_default">Price
-                                                            regular:</label>
+                                                        <label class="form-label" for="price_default">Giá mặc định:</label>
                                                         <input class="form-control" type="number" min="0"
                                                             name="updateV[{{ $item->id }}]['price_default']"
                                                             value="{{ $item->price_default }}" />
                                                     </div>
                                                     <div class="col-6 mb-4">
-                                                        <label class="form-label" for="price_sale">Price sale:</label>
+                                                        <label class="form-label" for="price_sale">Giá khuyến mại:</label>
                                                         <input class="form-control" type="number" min="0"
                                                             name="updateV[{{ $item->id }}]['price_sale']"
                                                             value="{{ $item->price_sale }}" />
                                                     </div>
                                                     <div class="col-6 mb-4">
-                                                        <label class="form-label" for="">Start date:</label>
+                                                        <label class="form-label" for="">Ngày bắt đầu:</label>
                                                         <input class="form-control" type="date"
                                                             name="updateV[{{ $item->id }}]['start_date']"
                                                             value="{{ $item->start_date != null ? date('Y-m-d', strtotime($item->start_date)) : 'null' }}" />
                                                     </div>
                                                     <div class="col-6 mb-4">
-                                                        <label class="form-label" for="">End date:</label>
+                                                        <label class="form-label" for="">Ngày kết thúc:</label>
                                                         <input class="form-control" type="date"
                                                             name="updateV[{{ $item->id }}]['end_date']"
                                                             value="{{ $item->end_date != null ? date('Y-m-d', strtotime($item->end_date)) : 'null' }}" />
                                                     </div>
                                                     <div class="col-12 mb-4">
-                                                        <label class="form-label" for="">Quantity:</label>
+                                                        <label class="form-label" for="">Số lượng:</label>
                                                         <input class="form-control" type="number"
                                                             name="updateV[{{ $item->id }}]['quantity']"
                                                             value="{{ $item->quantity }}" />

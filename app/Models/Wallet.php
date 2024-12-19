@@ -54,6 +54,12 @@ class Wallet extends Model
         ->join('user_wallet_detail' ,'user_wallet_detail.user_id','=','wallet.user_id')
         ->where('wallet.user_id', $user_id)->first();
     }
+    public function getwalleuid($user_id)
+    {
+        return $this
+        ->select('wallet_account_id')
+        ->where('user_id', $user_id)->first();
+    }
 
     public function addBalance($wallet_account_id, $amount)
     {

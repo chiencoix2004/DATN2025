@@ -115,7 +115,7 @@ class ClientController extends Controller
             'highprice.numeric' => 'Giá cao phải là số',
         ]);
         $product = new Product();
-        $products = $product->searchproductprice($keywd, $lowprice, $highprice)->paginate(10);
+        $products = $product->searchproductprice($keywd, $lowprice, $highprice);
         $categories = new Category();
         $listcategory = $categories->listcategory10();
         // dd($products);

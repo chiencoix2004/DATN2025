@@ -537,7 +537,7 @@ class CartController extends Controller
                 ]);
             }
             $vnpay = new Vnpay();
-            $link =  $vnpay->create_link_payment_url($totalAmount / 10, 'vn', "https://ae39-14-232-74-190.ngrok-free.app/api/v1/meanhxuyen?order_id=$order->id&user_id=$userId");
+            $link =  $vnpay->create_link_payment_url($totalAmount / 10, 'vn', "http://127.0.0.1:8000/api/v1/meanhxuyen?order_id=$order->id&user_id=$userId");
             return response()->json([
                 "type" => "success",
                 "message" => "Đặt hàng thành công!",

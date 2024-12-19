@@ -253,25 +253,26 @@ class Product extends Model
             ->paginate(12);
     }
     function searchproductprice($keywd, $min, $max) {
-
         return $this
-        ->join('sub_categories', 'products.sub_category_id', '=', 'sub_categories.id')
-        ->join('categories', 'sub_categories.category_id', '=', 'categories.id')
-        ->join('product_variants', 'products.id', '=', 'product_variants.product_id')
-        ->join('color_attributes', 'product_variants.color_attribute_id', '=', 'color_attributes.id')
-        ->join('size_attributes', 'product_variants.size_attribute_id', '=', 'size_attributes.id')
+            ->join('sub_categories', 'products.sub_category_id', '=', 'sub_categories.id')
+            ->join('categories', 'sub_categories.category_id', '=', 'categories.id')
+            ->join('product_variants', 'products.id', '=', 'product_variants.product_id')
+            ->join('color_attributes', 'product_variants.color_attribute_id', '=', 'color_attributes.id')
+            ->join('size_attributes', 'product_variants.size_attribute_id', '=', 'size_attributes.id')
             ->where(function ($query) use ($keywd) {
                 $query->where('products.name', 'like', '%' . $keywd . '%')
                       ->orWhere('products.sku', 'like', '%' . $keywd . '%')
                       ->orWhere('categories.name', 'like', '%' . $keywd . '%');
             })
-            ->whereBetween('products.price_sale', [$min, $max])
+            ->where(function ($query) use ($min, $max) {
+                $query->whereBetween('products.price_sale', [$min, $max])
+                      ->orWhereBetween('products.price_regular', [$min, $max]);
+            })
             ->select('products.*')
             ->distinct()
             ->whereNotIn('is_active', [0])
             ->paginate(12);
     }
-
     public function fullproductdetail($keywd){
         return $this
        ->join('sub_categories', 'products.sub_category_id', '=', 'sub_categories.id')
