@@ -71,6 +71,8 @@ class Product extends Model
                     ->orWhere('categories.name', 'like', '%' . $keywd . '%');
             })
             ->select('products.*') // Các cột cần thiết
+            ->whereNotIn('is_active', [0])
+           // ->appends(['keywd' => $keywd])
             ->distinct(); // Loại bỏ các dòng trùng lặp;
     }
 
@@ -83,6 +85,8 @@ class Product extends Model
         ->join('size_attributes', 'product_variants.size_attribute_id', '=', 'size_attributes.id')
         ->whereBetween('products.price_regular',[$min,$max])
         ->select('products.*')
+        ->distinct()
+        ->whereNotIn('is_active', [0])
         ->paginate(12);
     }
     function searchproductbycategory($id,$keywd){
@@ -100,6 +104,8 @@ class Product extends Model
                   ->orWhere('categories.name', 'like', '%' . $keywd . '%');
         })
         ->select('products.*')
+        ->distinct()
+        ->whereNotIn('is_active', [0])
         ->paginate(12);
     }
     function searchproductbytag($id){
@@ -112,6 +118,8 @@ class Product extends Model
 
         ->where('tags.id',$id)
         ->select('products.*')
+        ->distinct()
+        ->whereNotIn('is_active', [0])
         ->paginate(12);
     }
     function searchproductbypriceandcategory($min,$max,$id){
@@ -125,6 +133,8 @@ class Product extends Model
         ->whereBetween('products.price_regular',[$min,$max])
         ->where('categories.id',$id)
         ->select('products.*')
+        ->distinct()
+        ->whereNotIn('is_active', [0])
         ->paginate(12);
     }
     function searchproductbypriceandtag($min,$max,$id){
@@ -135,6 +145,8 @@ class Product extends Model
         ->whereBetween('products.price_regular',[$min,$max])
         ->where('tags.id',$id)
         ->select('products.*')
+        ->distinct()
+        ->whereNotIn('is_active', [0])
         ->paginate(12);
     }
     function seachproductatoz($keywd){
@@ -152,6 +164,8 @@ class Product extends Model
         })
         ->select('products.*')
         ->orderBy('products.name','asc')
+        ->distinct()
+        ->whereNotIn('is_active', [0])
         ->paginate(12);
     }
     function seachproductztoa($keywd){
@@ -168,6 +182,8 @@ class Product extends Model
         })
         ->select('products.*')
         ->orderBy('products.name','desc')
+        ->distinct()
+        ->whereNotIn('is_active', [0])
         ->paginate(12);
     }
     function seachproductrateprice($keywd){
@@ -184,6 +200,8 @@ class Product extends Model
         })
         ->select('products.*')
         ->orderBy('products.price_regular','asc')
+        ->distinct()
+        ->whereNotIn('is_active', [0])
         ->paginate(12);
     }
 
@@ -194,6 +212,8 @@ class Product extends Model
         ->orWhere('description','like','%'.$keywd.'%')
         ->select('name')
         ->limit(5)
+        ->distinct()
+        ->whereNotIn('is_active', [0])
         ->paginate(12);
     }
     function seachproductpricelowtohigh($keywd){
@@ -210,6 +230,8 @@ class Product extends Model
             })
             ->select('products.*')
             ->orderBy('products.price_sale', 'asc')
+            ->distinct()
+            ->whereNotIn('is_active', [0])
             ->paginate(12);
     }
     function seachproductpricehightolow($keywd){
@@ -226,26 +248,31 @@ class Product extends Model
             })
             ->select('products.*')
             ->orderBy('products.price_sale', 'desc')
+            ->distinct()
+            ->whereNotIn('is_active', [0])
             ->paginate(12);
     }
     function searchproductprice($keywd, $min, $max) {
-
         return $this
-        ->join('sub_categories', 'products.sub_category_id', '=', 'sub_categories.id')
-        ->join('categories', 'sub_categories.category_id', '=', 'categories.id')
-        ->join('product_variants', 'products.id', '=', 'product_variants.product_id')
-        ->join('color_attributes', 'product_variants.color_attribute_id', '=', 'color_attributes.id')
-        ->join('size_attributes', 'product_variants.size_attribute_id', '=', 'size_attributes.id')
+            ->join('sub_categories', 'products.sub_category_id', '=', 'sub_categories.id')
+            ->join('categories', 'sub_categories.category_id', '=', 'categories.id')
+            ->join('product_variants', 'products.id', '=', 'product_variants.product_id')
+            ->join('color_attributes', 'product_variants.color_attribute_id', '=', 'color_attributes.id')
+            ->join('size_attributes', 'product_variants.size_attribute_id', '=', 'size_attributes.id')
             ->where(function ($query) use ($keywd) {
                 $query->where('products.name', 'like', '%' . $keywd . '%')
                       ->orWhere('products.sku', 'like', '%' . $keywd . '%')
                       ->orWhere('categories.name', 'like', '%' . $keywd . '%');
             })
-            ->whereBetween('products.price_sale', [$min, $max])
+            ->where(function ($query) use ($min, $max) {
+                $query->whereBetween('products.price_sale', [$min, $max])
+                      ->orWhereBetween('products.price_regular', [$min, $max]);
+            })
             ->select('products.*')
+            ->distinct()
+            ->whereNotIn('is_active', [0])
             ->paginate(12);
     }
-
     public function fullproductdetail($keywd){
         return $this
        ->join('sub_categories', 'products.sub_category_id', '=', 'sub_categories.id')
@@ -297,5 +324,39 @@ class Product extends Model
         'categories.name'
     )
     ->get('total_variants_products');
+    }
+    public function GetToalQuantityinf(){
+        return $this
+        ->join('sub_categories', 'products.sub_category_id', '=', 'sub_categories.id')
+        ->join('categories', 'sub_categories.category_id', '=', 'categories.id')
+        ->join('product_variants', 'products.id', '=', 'product_variants.product_id')
+        ->whereNull('product_variants.deleted_at')
+        ->select(
+        DB::raw('SUM(product_variants.quantity) as total_variants_products'), 'products.*'
+    )
+    ->groupBy(
+        'products.id',
+        'products.sub_category_id',
+        'products.name',
+        'products.sku',
+        'products.slug',
+        'products.image_avatar',
+        'products.price_regular',
+        'products.price_sale',
+        'products.discount_percent',
+        'products.description',
+        'products.material',
+        'products.views',
+        'products.quantity',
+        'products.start_date',
+        'products.end_date',
+        'products.is_active',
+        'sub_categories.name',
+        'products.created_at',
+        'products.updated_at',
+        'products.deleted_at',
+        'categories.name'
+    )
+    ->paginate(10);
     }
 }

@@ -20,7 +20,7 @@ class CheckVaildUserWallet
         if (Auth::check()) {
           $wallet = new Wallet();
           $userid = Auth::user()->id;
-          $walletcheck = $wallet->checkWalletVaild($userid);
+          $walletcheck = $wallet->getWallet($userid);
           if ($walletcheck) {
             return $next($request);
           }

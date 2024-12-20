@@ -123,19 +123,7 @@
                 </div>
             </div>
         </div>
-        {{-- <div class="card mt-3">
-            <div class="card-body">
-                <div class="row justify-content-between align-items-center">
-                    <div class="col-md">
-                        <h5 class="mb-2 mb-md-0"></h5>
-                    </div>
-                    <div class="col-auto"> <button class="btn btn-link text-secondary p-0 me-3 fw-medium" role="button">Hủy</button><button
-                        type="submit" class="btn btn-primary" role="button">Thêm mã giảm giá
-                    </button>
-                    </div>
-                </div>
-            </div>
-        </div> --}}
+
     </form>
 @endsection
 @section('js-libs')

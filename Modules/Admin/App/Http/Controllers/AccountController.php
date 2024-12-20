@@ -12,7 +12,7 @@ use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
-
+use App\Models\model_has_roles;
 class AccountController extends Controller
 {
     /**
@@ -20,8 +20,8 @@ class AccountController extends Controller
      */
     public function index()
     {
-        $roles = Role::whereNotIn('id', ['1', '2'])->get();
-        
+        $roles = Role::whereNotIn('id', [15])->get();
+      // dd($roles);
         return view('admin::contents.authentication.index', compact('roles'));
     }
 
@@ -30,7 +30,7 @@ class AccountController extends Controller
      */
     public function create()
     {
-        $roles = Role::whereNotIn('id', ['1', '2'])->get();
+        $roles = Role::whereNotIn('id', [15])->get();
         return view('admin::contents.authentication.create', compact('roles'));
     }
 
@@ -45,25 +45,36 @@ class AccountController extends Controller
         $data = $request->all();
         $data = $request->except('img');
         $data = $request->except('password');
+
+        $roleIds = $request->input('roles', []); // Get the selected role IDs
+
         if ($request->hasFile('img') && $request->file('img')->isValid()) {
             $data['user_image'] = $this->uploadFile($request->file('img'));
         } else {
             $data['user_image'] = null;
         }
+
         $data['status'] = 'active';
         $data['verify'] = '1';
         $data['password'] = Hash::make($request->password);
-        // dd($data);
-
+ //get first array in role
+        $data['roles_id'] = $roleIds[0];
         $res = User::create($data);
+
         if ($res) {
-            // Redirect về trang danh sách với thông báo thành công
-            return redirect()->route('admin.accounts.index')->with('success', ' account đã được thêm mới!');
+            // Attach roles to the newly created user
+            if (!empty($roleIds)) {
+                $res->roles()->sync($roleIds); // Use sync() to assign roles, or attach() if you want to add without removing others
+            }
+
+            // Redirect back with success message
+            return redirect()->route('admin.accounts.index')->with('success', 'Account đã được thêm mới!');
         } else {
-            // Redirect về trang danh sách với thông báo không thành công
-            return redirect()->route('admin.accounts.index')->with('error', ' account không được thêm mới!');
+            // Redirect back with error message
+            return redirect()->route('admin.accounts.index')->with('error', 'Account không được thêm mới!');
         }
     }
+
 
     public function show($id)
     {
@@ -78,7 +89,7 @@ class AccountController extends Controller
                 'users.address as address',
                 'users.user_image as user_image',
                 'users.roles_id as roles_id',
-                'roles.role_type as role_type',
+                'roles.name as role_type',
                 'users.status as status',
                 'users.verify as verify'
             )
@@ -86,49 +97,70 @@ class AccountController extends Controller
             ->where('users.id', '=', $id)
             ->first();
 
-        // dd($user);
+            $roles = Role::whereNotIn('id', [15])->get();
+
+            // Lấy các role mà người dùng hiện tại đang có (vì chúng là mối quan hệ many-to-many)
+            $userRoleIds = $user->roles->pluck('id')->toArray();
+        //dd($user);
         if ($user) {
-            return view('admin::contents.authentication.show', compact('user'));
+            return view('admin::contents.authentication.show', compact('roles', 'user','userRoleIds'));
+        } else {
+            return redirect()->route('admin.accounts.index')->with('info', 'Tài khoản không tồn tại.');
+        }
+    }
+    public function edit($id)
+    {
+        // Tìm người dùng
+        $user = User::find($id);
+
+        // Lấy tất cả các role, trừ role có id là 15
+        $roles = Role::whereNotIn('id', [15])->get();
+
+        // Lấy các role mà người dùng hiện tại đang có (vì chúng là mối quan hệ many-to-many)
+        $userRoleIds = $user->roles->pluck('id')->toArray();
+
+        if ($user) {
+            return view('admin::contents.authentication.edit', compact('roles', 'user', 'userRoleIds'));
         } else {
             return redirect()->route('admin.accounts.index')->with('info', 'Tài khoản không tồn tại.');
         }
     }
 
-    public function edit($id)
-    {
-        $user = User::find($id);
-        $roles = Role::whereNotIn('id', ['1', '2'])->get();
-        if ($user) {
-            return view('admin::contents.authentication.edit', compact('roles', 'user'));
-        } else {
-            return redirect()->route('admin.accounts.index')->with('info', 'Tài khoản không tồn tại.');
-        }
-    }
 
     public function update(Request $request, $id): RedirectResponse
     {
-        $check = User::find($id);
-        $imageOld = $check->user_image;
-        $data = $request->except("img");
-        if ($check) {
-            if ($request->hasFile('img') && $request->file('img')->isValid()) {
-                $data['user_image'] = $this->uploadFile($request->file('img'));
-                $res = User::find($id)->update($data);
-                if ($res) {
-                    if (isset($imageOld) && Storage::disk('public')->exists($imageOld)) {
-                        Storage::disk('public')->delete($imageOld);
-                    }
-                    return redirect()->route('admin.accounts.edit', ['id' => $id])->with('success', 'Sửa thành công');
-                }
-            } else {
-                $data['user_image'] = $imageOld;
-                $res = User::find($id)->update($data);
-                if ($res) {
-                    return redirect()->route('admin.accounts.edit', ['id' => $id])->with('success', 'Sửa thành công');
-                }
-            }
-        } else {
+        $check = User::find($id); // Tìm người dùng
+        if (!$check) {
             return redirect()->route('admin.accounts.index')->with('info', 'Không tìm thấy tài khoản');
         }
+
+        $imageOld = $check->user_image;
+        $data = $request->except('img');
+        $roleIds = $request->input('roles', []); // Lấy danh sách các role đã chọn
+
+        // Cập nhật ảnh nếu có
+        if ($request->hasFile('img') && $request->file('img')->isValid()) {
+            $data['user_image'] = $this->uploadFile($request->file('img'));
+        } else {
+            $data['user_image'] = $imageOld; // Giữ lại ảnh cũ nếu không thay đổi
+        }
+
+        // Cập nhật thông tin người dùng
+        $res = $check->update($data);
+
+        if ($res) {
+            // Cập nhật vai trò cho người dùng
+            $check->syncRoles($roleIds);
+
+            // Xóa ảnh cũ nếu đã thay đổi
+            if (isset($imageOld) && Storage::disk('public')->exists($imageOld)) {
+                Storage::disk('public')->delete($imageOld);
+            }
+
+            return redirect()->route('admin.accounts.edit', ['id' => $id])->with('success', 'Sửa thành công');
+        } else {
+            return redirect()->route('admin.accounts.edit', ['id' => $id])->with('error', 'Không thể cập nhật tài khoản');
+        }
     }
+
 }

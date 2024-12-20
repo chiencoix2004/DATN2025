@@ -98,8 +98,8 @@
     </main>
     <!-- ===============================================--><!--    End of Main Content--><!-- ===============================================-->
 
-    @include('admin::assets.footer.settings-panel')
-    @include('admin::assets.footer.setting-toggle')
+    {{-- @include('admin::assets.footer.settings-panel') --}}
+    {{-- @include('admin::assets.footer.setting-toggle') --}}
     @yield('js-libs')
     {{-- @include('admin.assets.link-assets.link-js') --}}
     @include('admin::assets.link-assets.link-js')

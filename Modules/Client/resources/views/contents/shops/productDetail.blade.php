@@ -10,7 +10,7 @@
             <div class="breadcrumb-content">
                 <h2 style="margin-top: 30px;">Thời trang Phong cách Việt</h2>
                 <ul>
-                    <li><a href="{{ route('home') }}">Trang chủ</a></li>
+                    <li><a href="{{ route('index') }}">Trang chủ</a></li>
                     <li class="active">Chi tiết sản phẩm</li>
                 </ul>
             </div>
@@ -114,9 +114,9 @@
                                             href="javascript:void(0)">{{ $dataq->first()->total_variants_products != null ? $dataq->first()->total_variants_products : 0 }}</a>
                                     </li>
                                     <li>Tình trạng: <a href="javascript:void(0)">
-                                            {{ $data->quantity < 5 && $data->quantity > 0
+                                            {{ $dataq->first()->total_variants_productsy > 5 && $dataq->first()->total_variants_products > 0
                                                 ? 'Sắp hết hàng'
-                                                : ($data->quantity == 0
+                                                : ($dataq->first()->total_variants_products == 0
                                                     ? 'Hết hàng'
                                                     : 'Còn hàng') }}
                                         </a>
@@ -155,9 +155,9 @@
                                 </ul>
                             </div>
                             <div class="color-list_area row">
-                                <div class="color-list_heading">
+                                {{-- <div class="color-list_heading">
                                     <h4>Tùy chọn biến thể</h4>
-                                </div>
+                                </div> --}}
                                 <div class="col-lg-6 pe-lg-2">
                                     <label class="form-label">Kích thước</label>
                                     <div class="product-size_box">

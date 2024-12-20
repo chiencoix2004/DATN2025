@@ -24,8 +24,7 @@ class CouponSeeder extends Seeder
                 'discount_amount' => rand(10, 50),
                 'discount_type' => 'percent',
                 'quantity' => 100,
-                'minimum_spend' => rand(100000, 500000),
-                'maximum_spend' => rand(500000, 1000000)
+                'minimum_spend' => rand(100000, 500000)
             ]);
         }
 

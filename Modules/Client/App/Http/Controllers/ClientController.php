@@ -68,14 +68,14 @@ class ClientController extends Controller
 
             case '3':
                 $product = new Product();
-                $products = $product->seachproductpricelowtohigh($keywd);
+                $products = $product->seachproductpricehightolow($keywd);
                 $categories = new Category();
                 $listcategory = $categories->listcategory10();
                 // dd($listcategory);
                 return view('client::search.list', compact('products', 'listcategory','keywd'));
             case '4':
                 $product = new Product();
-                $products = $product->seachproductpricehightolow($keywd);
+                $products = $product->seachproductpricelowtohigh($keywd);
                 $categories = new Category();
                 $listcategory = $categories->listcategory10();
                 // dd($listcategory);
@@ -84,7 +84,7 @@ class ClientController extends Controller
                 // return ("4");
             default:
                 $product = new Product();
-                $products = $product->searchproduct($keywd);
+                $products = $product->searchproduct($keywd)->paginate(10);
                 $categories = new Category();
                 $listcategory = $categories->listcategory10();
                 // dd($listcategory);
@@ -141,7 +141,7 @@ class ClientController extends Controller
     {
         session()->put('keywd', $keywd);
         $product = new Product();
-        $products = $product->searchproduct($keywd);
+        $products = $product->searchproduct($keywd)->paginate(10);
         $categories = new Category();
         $listcategory = $categories->listcategory10();
         // dd($listcategory);

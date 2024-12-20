@@ -176,7 +176,7 @@
                 <h2 style="margin-top: 30px;">Thời trang Phong cách Việt</h2>
                 <ul>
 
-                            {{-- <li><a href="{{ route('home') }}">{{ sesssion('success') }}</a></li> --}}
+                            {{-- <li><a href="{{ route('index') }}">{{ sesssion('success') }}</a></li> --}}
                             <li class="active">Tài khoản</li>
 
                 </ul>

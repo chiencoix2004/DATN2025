@@ -6,28 +6,43 @@
     {{-- @include('client::contents.homeWeb.slider-area') --}}
     <!-- Begin Slider Area -->
     <!-- Begin Slider Area -->
+    @foreach ($slider as $key => $items)
+        @php
+            $url = $items->img_banner;
+            if (!\Str::contains($url, 'http')) {
+                $url = \Storage::url($url);
+            }
+
+        @endphp
+        <style>
+            .bg-{{ $loop->iteration }} {
+                background-image: url('{{ $url }}');
+            }
+        </style>
+    @endforeach
+
     <div class="slider-area">
         <div class="kenne-element-carousel home-slider arrow-style"
             data-slick-options='{
-        "slidesToShow": 1,
-        "slidesToScroll": 1,
-        "infinite": true,
-        "arrows": true,
-        "dots": false,
-        "autoplay" : true,
-        "fade" : true,
-        "autoplaySpeed" : 7000,
-        "pauseOnHover" : false,
-        "pauseOnFocus" : false
-        }'
+            "slidesToShow": 1,
+            "slidesToScroll": 1,
+            "infinite": true,
+            "arrows": true,
+            "dots": false,
+            "autoplay" : true,
+            "fade" : true,
+            "autoplaySpeed" : 7000,
+            "pauseOnHover" : false,
+            "pauseOnFocus" : false
+            }'
             data-slick-responsive='[
-        {"breakpoint":768, "settings": {
-        "slidesToShow": 1
-        }},
-        {"breakpoint":575, "settings": {
-        "slidesToShow": 1
-        }}
-    ]'>
+            {"breakpoint":768, "settings": {
+            "slidesToShow": 1
+            }},
+            {"breakpoint":575, "settings": {
+            "slidesToShow": 1
+            }}
+        ]'>
             @foreach ($slider as $key => $items)
                 @php
                     $url = $items->img_banner;
@@ -35,8 +50,8 @@
                         $url = \Storage::url($url);
                     }
                 @endphp
-                <div class="slide-item animation-style-01"
-                    style="background-image: url('{{ $url }}'); background-repeat: no-repeat; background-position: center center; background-size: cover; min-height: 1000px;">
+
+                <div class="slide-item bg-1 animation-style-01" style="background-image: url('{{ $url }}');">
                     <div class="slider-progress"></div>
                     <div class="container">
                         <div class="slide-content">

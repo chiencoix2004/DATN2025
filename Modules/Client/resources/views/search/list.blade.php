@@ -44,14 +44,14 @@ use Artesaos\SEOTools\Facades\SEOTools;
                                           <label for="lowPrice" class="form-label">Giá từ:</label>
                                           <div class="input-group">
                                             <span class="input-group-text">₫</span>
-                                            <input type="number" class="form-control" id="lowPrice" name="lowprice" placeholder="Giá thấp nhất">
+                                            <input type="number" class="form-control" id="lowPrice" name="lowprice" placeholder="Giá thấp nhất" value="@if(isset($_GET['lowprice'])){{ $_GET['lowprice'] }}@endif">
                                           </div>
                                         </div>
                                         <div class="mb-3">
                                           <label for="highPrice" class="form-label">Đến:</label>
                                           <div class="input-group">
                                             <span class="input-group-text">₫</span>
-                                            <input type="number" class="form-control" id="highPrice" name="highprice" placeholder="Giá cao nhất">
+                                            <input type="number" class="form-control" id="highPrice" name="highprice" placeholder="Giá cao nhất" value="@if(isset($_GET['highprice'])){{ $_GET['highprice'] }}@endif">
                                           </div>
                                           <input type="hidden" name="keywd" value="{{ session()->get('keywd') }}">
                                         </div>
@@ -142,8 +142,15 @@ use Artesaos\SEOTools\Facades\SEOTools;
                                             <div class="product-desc_info">
                                                 <h3 class="product-name"><a href="{{ route('shop.productDetail', $list->slug) }}">{{ $list->name }}</a></h3>
                                                 <div class="price-box">
-                                                    <span class="new-price">{{ number_format(round($list->price_sale)) }} ₫</span>
-                                                    <span class="old-price">{{ number_format(round($list->price_regular)) }} ₫</span>
+                                                    <span class="new-price">
+                                                        {{ number_format((int) ($list->discount_percent > 0 ? $list->price_regular * (1 - $list->discount_percent / 100) : ($list->price_sale > 0 ? $list->price_sale : $list->price_regular)), 0, ',', '.') }}
+                                                        (VND)
+                                                    </span>
+                                                    @if ($list->discount_percent > 0 || $list->price_sale > 0)
+                                                        <span class="old-price">
+                                                            {{ number_format((int) $list->price_regular, 0, ',', '.') }}
+                                                        </span>
+                                                    @endif
                                                 </div>
                                                 {{-- <div class="rating-box">
                                                     <ul>
@@ -168,11 +175,22 @@ use Artesaos\SEOTools\Facades\SEOTools;
                                         </div>
                                         <div class="product-content">
                                             <div class="product-desc_info">
+
                                                 <div class="price-box">
-                                                    <span class="new-price">{{ number_format(round($list->price_sale)) }} ₫</span>
-                                                    <span class="old-price">{{ number_format(round($list->price_regular)) }} ₫</span>
+                                                    <span class="new-price">
+                                                        {{ number_format((int) ($list->discount_percent > 0 ? $list->price_regular * (1 - $list->discount_percent / 100) : ($list->price_sale > 0 ? $list->price_sale : $list->price_regular)), 0, ',', '.') }}
+                                                        (VND)
+                                                    </span>
+                                                    @if ($list->discount_percent > 0 || $list->price_sale > 0)
+                                                        <span class="old-price">
+                                                            {{ number_format((int) $list->price_regular, 0, ',', '.') }}
+                                                        </span>
+                                                    @endif
                                                 </div>
                                                 <h6 class="product-name"><a href="{{ route('shop.productDetail', $list->slug) }}">{{ $list->name }}</a></h6>
+                                                <div class="product-short_desc">
+                                                    {!! $list->description !!}
+                                                </div>
                                                 {{-- <div class="rating-box">
                                                     <ul>
                                                         <li><i class="ion-ios-star"></i></li>
@@ -199,6 +217,7 @@ use Artesaos\SEOTools\Facades\SEOTools;
                                                 </ul>
                                             </div> --}}
                                         </div>
+
                                     </div>
                                 </div>
                             </div>

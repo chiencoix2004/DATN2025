@@ -87,11 +87,26 @@ class OrderController extends Controller
         $wallet = new Wallet();
         $trx = new Trx_history();
         $trx_detail = new Trx_history_detail();
-        $user_wallet_data = $wallet->getWallet($user_id);
-        $wallet_account_id = $user_wallet_data->wallet_account_id;
+        $user_wallet_data = $wallet->getwalleuid($user_id);
+
+        if(!empty($user_wallet_data)){
+            $wallet_account_id = $user_wallet_data->wallet_account_id;
+        }
+
         if (empty($user_wallet_data)) {
-            $flags = $wallet->createWallet($user_id);
+            $walletdata = [
+                'user_id' => $user_id,
+                'wallet_account_id' => random_int(100000,999999),
+                'wallet_balance_available' => 0,
+                'wallet_status' => 1,
+                'wallet_user_level' => 1,
+
+              ];
+            $flags = $wallet->createWallet($walletdata);
             if ($flags) {
+                $user_wallet_data = $wallet->getwalleuid($user_id);
+                $wallet_account_id = $user_wallet_data->wallet_account_id;
+
                 $key = env('VNP_HASH_SECRET'); // Replace with your actual secret key
                 $hashmac = hash_hmac('sha512', $user_id . date('Y-m-d H:i:s'), $key);
                 $data_trx = [
@@ -117,6 +132,9 @@ class OrderController extends Controller
                     'vnp_SecureHash' => $hashmac,
                 ];
                 try {
+                    $user_wallet_data = $wallet->getwalleuid($user_id);
+                    $wallet_account_id = $user_wallet_data->wallet_account_id;
+
                     $trx_detail = new Trx_history_detail();
                     $trx_detail->createTrxDetail($data_trx_detail);
                     $wallet->addBalance($wallet_account_id, $toal_price);
@@ -146,6 +164,9 @@ class OrderController extends Controller
                 return redirect()->back()->with(['error' => 'Tạo ví thất bại!']);
             }
         } else {
+            $user_wallet_data = $wallet->getwalleuid($user_id);
+            $wallet_account_id = $user_wallet_data->wallet_account_id;
+
             $key = env('VNP_HASH_SECRET'); // Replace with your actual secret key
             $hashmac = hash_hmac('sha512', $user_id . date('Y-m-d H:i:s'), $key);
             $data_trx = [

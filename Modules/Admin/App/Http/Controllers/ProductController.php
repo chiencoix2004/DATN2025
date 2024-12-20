@@ -25,7 +25,8 @@ class ProductController extends Controller
 {
     public function listProduct()
     {
-        $data = Product::query()->with(['tags', 'product_variants'])->latest('id')->paginate(10);
+        $product = new Product();
+        $data = $product->GetToalQuantityinf();
         return view('admin::contents.products.listProduct', compact('data'));
     }
     public function trashed()
@@ -49,6 +50,8 @@ class ProductController extends Controller
     }
     public function showFormEdit(string $slug)
     {
+        $product = new Product();
+        $quantityPRD = $product->GetToalQuantity($slug);
         $data = Product::query()->with(['tags', 'images', 'sub_category'])->where('slug', $slug)->first();
         $variantPRD = ProductVariant::query()->where('product_id', $data->id)->get();
         $warningDate = '';
@@ -74,6 +77,7 @@ class ProductController extends Controller
                 'sizeAttr',
                 'warningDate',
                 'variantPRD',
+                'quantityPRD',
             )
         );
     }

@@ -61,7 +61,7 @@
                                     {{ number_format((int) $item->price_regular, 0, ',', '.') }}
                                 </td>
                                 <td class="align-middle text-start view">{{ $item->views }}</td>
-                                <td class="align-middle text-start quantity">{{ $item->quantity }}</td>
+                                <td class="align-middle text-start quantity">{{ $item->total_variants_products}}</td>
                                 <td class="align-middle white-space-nowrap">
                                     <div class="dropstart font-sans-serif position-static d-inline-block">
                                         <button class="btn btn-link text-600 btn-sm dropdown-toggle btn-reveal float-end"

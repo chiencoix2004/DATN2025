@@ -10,7 +10,7 @@
             <div class="breadcrumb-content">
                 <h2 style="margin-top: 30px;">Thời trang Phong cách Việt</h2>
                 <ul>
-                    <li><a href="{{ route('home') }}">Trang chủ</a></li>
+                    <li><a href="{{ route('index') }}">Trang chủ</a></li>
                     <li class="active">Đăng ký</li>
                 </ul>
             </div>
@@ -65,14 +65,14 @@
                                                 <i class="ri-google-fill me-1"></i> Google
                                             </a>
                                         </div>
-                                    
+
                                         <div class="mt-4 text-center">
                                             <p class="mb-0">Bạn đã có tài khoản rồi <a href="{{ route('showForm') }}"
                                                     class="fw-semibold text-primary text-decoration-underline"> Đăng nhập </a> </p>
                                         </div>
                                     </div>
                                 </div>
-                                
+
                             </div>
                         </div>
                     </form>

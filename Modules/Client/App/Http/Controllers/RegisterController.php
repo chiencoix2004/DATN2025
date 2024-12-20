@@ -55,7 +55,7 @@ class RegisterController extends Controller
             'verify' => '1',
             'status' => 'deactive',
             'user_image' => null,
-            'roles_id' => 2,
+            'roles_id' => 15,
             'phone' => null,
             'address' => null,
         ]);

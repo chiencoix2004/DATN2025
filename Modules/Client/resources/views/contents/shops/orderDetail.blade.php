@@ -218,10 +218,10 @@
                             hàng</button>
                     @endif
 
-                    @if ($order->status_order == 'Đơn hàng bị hủy')
+                    {{-- @if ($order->status_order == 'Đơn hàng bị hủy')
                         <button class="kenne-btn kenne-btn_sm" onclick="resetOrder({{ $order->id }})">Đặt lại đơn
                             hàng</button>
-                    @endif
+                    @endif --}}
 
                     @if ($order->status_order == 'Đang giao hàng')
                         <button class="kenne-btn kenne-btn_sm" onclick="markOrderAsReceived({{ $order->id }})">Đã nhận
